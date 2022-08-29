@@ -12,14 +12,6 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
     # --------------------------------------------------------------------------
     # iterate in the global cut pool, identify + stock the violated cuts indexes
     # --------------------------------------------------------------------------
-    # @info "node $(node.num) loadingCutInPool ... pred = $(node.pred.num)"
-    # println("pred.cutpool : ")
-    # for (k,v) in node.pred.cutpool.hashMap
-    #     println(k, " => ", size(v, 1))
-    # end
-    # println("pred.cutrefs : \n", node.pred.cuts_ref)
-
-
     l = 1 ; LBS = node.RBS.natural_order_vect.sols
 
     while l ≤ length(LBS)
@@ -37,8 +29,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                         α = cut.row
                         violationₗ = maximum([ (xₗ_star'*α[2:end] - α[1]), 0.0 ])
                         if violationₗ > 0.0
-                            # ineq = Cut(α)
-                            if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), violationₗ, k))
+                            if push!(node.cutpool, cut)
                                 con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
                             end
                         end
@@ -60,8 +51,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                         viol = maximum([violationₗ, violationᵣ])
                         if viol > 0.0
                             applied = true
-                            # ineq = Cut(α)
-                            if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), viol, k))
+                            if push!(node.cutpool, cut)
                                 con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
                             end
                         end
