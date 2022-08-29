@@ -37,9 +37,9 @@ function compute_LBS(node::Node, pb::BO01Problem, round_results, verbose ; args.
     end
 
     # construct/complete the relaxed bound set
-    node.RBS = RelaxedBoundSet() #; node.objs = Vector{JuMP.GenericAffExpr}()
+    node.RBS = RelaxedBoundSet()
     for i = 1:length(vd_LP.Y_N)
-        push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]))
+        push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i])) #TODO: filtered=true
     end
     for i=1:length(node.RBS.natural_order_vect)-1
         node.RBS.segments[node.RBS.natural_order_vect.sols[i]] = true
@@ -83,7 +83,6 @@ function SP_cut_off(i::Int64, node::Node, pb::BO01Problem, round_results, verbos
     pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
 
     if length(cuts) > 0
-        # @info " ------------------------- cut found "
         for cut in cuts
             viol = sum(cut[j+1]*(1-x_star[j]) for j = 1:length(cut)-1 )
             start_pool = time()
@@ -102,25 +101,75 @@ function SP_cut_off(i::Int64, node::Node, pb::BO01Problem, round_results, verbos
 end
 
 
+"""
+Given two points `yₗ` and `yᵣ`, compute the extreme points between `yₗ` and `yᵣ`.
+
+Return a list of extreme solutions in a natural ordered.
+"""
+function local_dichotomy(pb::BO01Problem, yₗ::Vector{Float64}, yᵣ::Vector{Float64}, round_results, verbose; args...)
+    vd = getvOptData(pb.m)
+    empty!(vd.Y_N) ; empty!(vd.X_E)
+    f1Sense, f2Sense = vd.objSenses
+    localSols = NaturalOrderVector()
+
+    # store the beginning extreme pts 
+    yr_1 = yₗ[1] ; yr_2 = yₗ[2]
+    ys_1 = yᵣ[1] ; ys_2 = yᵣ[2]
+    dichoRecursion(pb.m, yr_1, yr_2, ys_1, ys_2, pb.varArray, round_results, verbose ; args...)
+
+    # #Sort X_E and Y_N
+    # s = sortperm(vd.Y_N, by = first)
+    # vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
+    # R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    # R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    # weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
+
+    # #Filter X_E and Y_N :
+    # inds = Int[]
+    # for i = 1:length(vd.Y_N)-1
+    #     if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
+    #         push!(inds, i+1)
+    #     elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i])
+    #         push!(inds, i)
+    #     end
+    # end
+    # deleteat!(vd.Y_N, inds) ; deleteat!(vd.X_E, inds)
+
+    for i = 1:length(vd.Y_N)
+        push!(localSols, Solution(vd.X_E[i], vd.Y_N[i]), filtered=true)
+    end
+    empty!(vd.Y_N) ; empty!(vd.X_E)
+    return localSols
+end
 
 function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ; args...)  
-    LBS = node.RBS.natural_order_vect.sols
+    componentLBS = Vector{Vector{Solution}}() ; push!(componentLBS, node.RBS.natural_order_vect.sols)
+    componentColored = Vector{Vector{Bool}}() ; new_extreme_Sols = NaturalOrderVector()
+    # LBS = node.RBS.natural_order_vect.sols #; colored = [false for _ in LBS]
 
     ite = 0
-    while ite < loop_limit 
+    while ite < 1 # TODO : only for testing
         ite += 1 ; pb.info.cuts_infos.ite_total += 1 
-
+        ptsCounter = 0 ; ptsTotal = 0
         # ------------------------------------------------------------------------------
         # 1. generate multi-point cuts if has any, or single-point cut off
         # ------------------------------------------------------------------------------
-        # TODO : send subset of LBS consecutive to be cut off 
-        BO_cutting_planes(node, pb, LBS, round_results, verbose ; args...)
+        # TODO : for each subset of LBS 
+        for LBS in componentLBS
+            colored = BO_cutting_planes(node, pb, LBS, round_results, verbose ; args...) ; ptsTotal += length(LBS)
+            push!(componentColored, colored) ; ptsCounter += sum(colored)
 
+            for i=1:length(LBS)
+                if !colored[i]      # not cut off
+                    push!(new_extreme_Sols, LBS[i], filtered=true)
+                end
+            end
+        end
 
         # --------------------------------------------------
         # 2. stop if no more valid cut can be found
         # --------------------------------------------------
-        if cut_counter/length(LBS) < 0.4
+        if ptsCounter/ptsTotal < 0.4
             return false 
         end
 
@@ -128,7 +177,12 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
         # 3. otherwise, re-optimize by solving dicho -> LBS
         # ---------------------------------------------------
         start_dicho = time()
+        # TODO : re-optimize only in the directions where extreme pts are cut off 
+        local_dichotomy(pb, )
+
+
         pruned = compute_LBS(node, pb, round_results, verbose; args)
+
         pb.info.cuts_infos.times_calling_dicho += (time() - start_dicho)
         LBS = node.RBS.natural_order_vect.sols
 
@@ -159,7 +213,8 @@ one corresponding vector `x` in decision space.
 Return ture if the node is infeasible after adding cuts.
 """
 function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, round_results, verbose ; args...)
-    l = 1 ; cut_counter = 0
+    l = 1 #; cut_counter = 0
+    colored = [false for _ in LBS]
 
     while l ≤ length(LBS)
         if LBS[l].is_binary 
@@ -170,7 +225,7 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
             if ∇ == 0
                 # @info "MP_cutting_planes calling `SP_cut_off`"
                 (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
-                if new_cut cut_counter += 1 end 
+                if new_cut colored[l] = true end # cut_counter += 1 
                 l += 1
             else 
                 r = l+∇
@@ -199,8 +254,8 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
                 pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
 
                 if length(cuts) > 0
-                    cut_counter += (∇+1)
-                    # @info " ------------------------------ cut found "
+                    for i =l:r colored[i] = true end 
+                    # cut_counter += (∇+1)
                     for cut in cuts
                         viol_l = sum(cut[j+1]*(1-LBS[l].xEquiv[1][j]) for j = 1:length(cut)-1 )
                         viol_r = sum(cut[j+1]*(1-LBS[r].xEquiv[1][j]) for j = 1:length(cut)-1 )
@@ -222,7 +277,7 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
 
         end
     end
-
-
+    return colored
+    # return cut_counter
 end
 
