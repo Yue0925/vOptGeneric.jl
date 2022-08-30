@@ -81,7 +81,7 @@ end
 
 function main()
     folder = "../../results/smallExamples"
-    for method in [:bb, :bc] #  :dicho, 
+    for method in [:bc] #  :dicho, :bb
         result_dir = method≠:bb ? folder * "/" * string(method) : folder * "/" * string(method) * "/default"
             if !isdir(result_dir)
                 mkdir(result_dir)
@@ -113,3 +113,34 @@ end
 # run_epsilon_ctr(ARGS[1])
 
 main()
+
+# vars = 20 ; constr = 1 
+#  # informations of B&B algorithm : 
+# total_times_used = 24.85 
+# total_nodes = 5245 
+# pruned_nodes = 2623 
+# GAP = 0.0 
+# relaxation_time = 3.5 
+# test_dominance_time = 0.05 
+# update_incumbent_time = 0.0 
+# tree_size = 12.645 
+
+
+#  # ----------- info about cuts : 
+# ite_total = 21267 
+# cuts_applied = 8821 
+# sp_cuts = 2173 
+# mp_cuts = 6648 
+# cuts_total = 8821 
+# times_calling_dicho = 18.16 
+# times_calling_separators = 0.25 
+# times_oper_cutPool = 0.65 
+# times_total_for_cuts = 20.23 
+# times_add_retrieve_cuts = 0.54 
+
+
+
+# size_Y_N = 11
+# Y_N = [[918.0, 984.0], [924.0, 975.0], [927.0, 972.0], [934.0, 971.0], [935.0, 947.0], [940.0, 943.0], [943.0, 940.0], [948.0, 939.0], [949.0, 915.0], [952.0, 909.0], [955.0, 906.0]]
+
+# size_X_E = 11

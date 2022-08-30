@@ -101,7 +101,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, round_results, verbose ; ar
 
         elseif length(node.RBS.natural_order_vect) == 1
             pb.info.cuts_infos.ite_total += 1 
-            (new_x, cut_found) = SP_cut_off(1, node, pb, round_results, verbose ; args...)
+            (new_x, cut_found) = SP_cut_off(node.RBS.natural_order_vect.sols[1], node, pb, round_results, verbose ; args...)
             if cut_found && new_x != node.RBS.natural_order_vect.sols[1].xEquiv[1]
                 node.RBS.natural_order_vect.sols[1].xEquiv[1] = new_x[:]
                 node.RBS.natural_order_vect.sols[1].y = [pb.c[1, 1] + pb.c[1, 2:end]'*new_x , pb.c[2, 1] + pb.c[2, 2:end]'*new_x]
@@ -119,14 +119,6 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, round_results, verbose ; ar
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
         pb.info.cuts_infos.times_total_for_cuts += (time() - start_cuts)
-
-        # println("-----------------------------------")
-        # @info "node $(node.num) cutpool !"
-        # for (k,v) in node.cutpool.hashMap
-        #     println(k, " => ", size(v, 1))
-        # end
-        # @info " node $(node.num) cuts : $(length(node.con_cuts))"
-        # println("-----------------------------------")
     end
 
     removeBounds(pb, assignment)

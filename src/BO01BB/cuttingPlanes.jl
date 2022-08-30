@@ -41,9 +41,9 @@ function compute_LBS(node::Node, pb::BO01Problem, round_results, verbose ; args.
     for i = 1:length(vd_LP.Y_N)
         push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i])) #TODO: filtered=true
     end
-    for i=1:length(node.RBS.natural_order_vect)-1
-        node.RBS.segments[node.RBS.natural_order_vect.sols[i]] = true
-    end
+    # for i=1:length(node.RBS.natural_order_vect)-1
+    #     node.RBS.segments[node.RBS.natural_order_vect.sols[i]] = true
+    # end
 
     return false
 end
@@ -56,9 +56,9 @@ Returns :
     - the fractional/integer point
     - true, if new cut(s) has benn found 
 """
-function SP_cut_off(i::Int64, node::Node, pb::BO01Problem, round_results, verbose ; args...)
-    x_star = node.RBS.natural_order_vect.sols[i].xEquiv[1]
-    if node.RBS.natural_order_vect.sols[i].is_binary return (x_star, false) end 
+function SP_cut_off(sol::Solution, node::Node, pb::BO01Problem, round_results, verbose ; args...)
+    x_star = sol.xEquiv[1]
+    if sol.is_binary return (x_star, false) end 
 
     # call generator
     # @info "Calling SP_CG_separator ..."
@@ -142,51 +142,54 @@ function local_dichotomy(pb::BO01Problem, LBS::Vector{Solution}, idx_l::Int64, i
 
     dichoRecursion(pb.m, yr_1, yr_2, ys_1, ys_2, pb.varArray, round_results, verbose ; args...)
 
-    # #Sort X_E and Y_N
-    # s = sortperm(vd.Y_N, by = first)
-    # vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
-    # R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    # R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    # weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
+    #Sort X_E and Y_N
+    s = sortperm(vd.Y_N, by = first)
+    vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
+    R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
 
-    # #Filter X_E and Y_N :
-    # inds = Int[]
-    # for i = 1:length(vd.Y_N)-1
-    #     if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
-    #         push!(inds, i+1)
-    #     elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i])
-    #         push!(inds, i)
-    #     end
-    # end
-    # deleteat!(vd.Y_N, inds) ; deleteat!(vd.X_E, inds)
+    #Filter X_E and Y_N :
+    inds = Int[]
+    for i = 1:length(vd.Y_N)-1
+        if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
+            push!(inds, i+1)
+        elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i])
+            push!(inds, i)
+        end
+    end
+    deleteat!(vd.Y_N, inds) ; deleteat!(vd.X_E, inds)
 
     for i = 1:length(vd.Y_N)
-        push!(localSols, Solution(vd.X_E[i], vd.Y_N[i]), filtered=true) # TODO : 
+        push!(localSols, Solution(vd.X_E[i], vd.Y_N[i])) # TODO : , filtered=true
     end
     empty!(vd.Y_N) ; empty!(vd.X_E)
     return localSols
 end
 
+
 function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ; args...)  
+    # println("----------------")
+    # @info "node $(node.num)"
+    # println("----------------")
+
     componentLBS = Vector{Vector{Solution}}() ; push!(componentLBS, node.RBS.natural_order_vect.sols)
-    componentColored = Vector{Vector{Bool}}() ; new_extreme_Sols = NaturalOrderVector()
-    # LBS = node.RBS.natural_order_vect.sols #; colored = [false for _ in LBS]
+    componentColored = Vector{Vector{Bool}}() ; node.RBS = RelaxedBoundSet()
 
     ite = 0
-    while ite < 1 # TODO : stop here only for testing
+    while ite < loop_limit 
         ite += 1 ; pb.info.cuts_infos.ite_total += 1 
         ptsCounter = 0 ; ptsTotal = 0
         # ------------------------------------------------------------------------------
-        # 1. generate multi-point cuts if has any, or single-point cut off
+        # 1. generate multi-point cuts for each subset of LBS
         # ------------------------------------------------------------------------------
-        # TODO : generate cuts for each subset of LBS 
         for LBS in componentLBS
             colored = BO_cutting_planes(node, pb, LBS, round_results, verbose ; args...) ; ptsTotal += length(LBS)
             push!(componentColored, colored) ; ptsCounter += sum(colored)
 
             for i=1:length(LBS)
                 if !colored[i]      # pt not cut off
-                    push!(new_extreme_Sols, LBS[i], filtered=true)
+                    push!(node.RBS.natural_order_vect, LBS[i]) # , filtered=true
                 end
             end
         end
@@ -202,12 +205,11 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
         # 3. otherwise, re-optimize by solving dicho -> LBS
         # ---------------------------------------------------
         start_dicho = time() ; len = size(componentLBS, 1)
-        # TODO : re-optimize only in the directions where extreme pts are cut off 
         for _ in 1:len
             LBS = popfirst!(componentLBS) ; colored = popfirst!(componentColored)
             idx_l = colored[1] ? 0 : -1 ; idx_r = -1
             # println("début idx_l = $idx_l  ->  idx_r = $idx_r")
-        
+            # println("colored : ", colored)
             for i = 1:length(colored)
                 if colored[i] continue end 
         
@@ -217,7 +219,9 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
         
                 if idx_l != -1 && idx_r==-1
                     idx_r = i ; localSols = local_dichotomy(pb, LBS, idx_l, idx_r, round_results, verbose; args...)
-
+                    if length(localSols) > 0 push!(componentLBS, localSols.sols) end 
+                    # println("find interval idx_l = $idx_l  ->  idx_r = $idx_r")
+                    # println("new sols : ", localSols)
                     if (i+1)≤ length(colored) && colored[i+1]
                         idx_l = i ; idx_r = -1
                     else
@@ -229,29 +233,45 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
                 idx_r = length(colored)+1
                 # println("find interval idx_l = $idx_l  ->  idx_r = $idx_r")
                 localSols = local_dichotomy(pb, LBS, idx_l, idx_r, round_results, verbose; args...)
+                if length(localSols) > 0 push!(componentLBS, localSols.sols) end 
+                # println("new sols : ", localSols)
             end
         end
         
-        # pruned = compute_LBS(node, pb, round_results, verbose; args) #TODO : infeasible 
-
         pb.info.cuts_infos.times_calling_dicho += (time() - start_dicho)
-        LBS = node.RBS.natural_order_vect.sols
 
-        # in case of infeasibility
-        if pruned return true end
+        # in case of infeasibility #TODO : infeasible 
+        if length(node.RBS.natural_order_vect)==0 && size(componentLBS, 1)==0 return true end
 
-        # in case of integrity
+        # in case of integrity # TODO : integrity
         all_integers = true
+        for LBS in componentLBS
+            for sol in LBS
+                if !sol.is_binary 
+                    all_integers = false ; break 
+                end
+            end
+        end
         for sol in node.RBS.natural_order_vect.sols
             if !sol.is_binary 
                 all_integers = false ; break 
             end
         end
-        if all_integers return false end
-
+        if all_integers
+            for LBS in componentLBS
+                for sol in LBS  
+                    push!(node.RBS.natural_order_vect, sol) # , filtered=true
+                end
+            end
+            return false 
+        end
 
     end # end loop while limit 
-    exit()
+    for LBS in componentLBS
+        for sol in LBS  
+            push!(node.RBS.natural_order_vect, sol) # , filtered=true
+        end
+    end
     return false 
 end
 
@@ -276,7 +296,7 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
         for ∇ = max_step:-1:0 
             if ∇ == 0
                 # @info "MP_cutting_planes calling `SP_cut_off`"
-                (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
+                (_, new_cut) = SP_cut_off(LBS[l], node, pb, round_results, verbose ; args...) 
                 if new_cut colored[l] = true end # cut_counter += 1 
                 l += 1
             else 

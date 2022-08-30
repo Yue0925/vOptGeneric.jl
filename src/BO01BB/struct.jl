@@ -329,11 +329,11 @@ with a boolean if s and the next/adjacent point in right forms a segment.
 """
 mutable struct RelaxedBoundSet
     natural_order_vect::NaturalOrderVector
-    segments::Dict{Solution, Bool}        
+    # segments::Dict{Solution, Bool}        
 end
 
 function RelaxedBoundSet()
-    return RelaxedBoundSet(NaturalOrderVector(), Dict{Solution, Bool}())
+    return RelaxedBoundSet(NaturalOrderVector())
 end
 
 
