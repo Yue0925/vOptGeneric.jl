@@ -1,0 +1,42 @@
+\begin{sidewaystable}[h]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccccccccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{Nodes}} & \multicolumn{2}{c}{\textbf{CP iterations}} & \multicolumn{3}{c}{\textbf{Cuts applied}} & \textbf{Cuts} & \multicolumn{5}{c}{\textbf{CP Time(s)}} & \textbf{B\&C Time(s)} & \textbf{$|\mathcal{Y}_N|$}
+\\
+\cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-10} \cmidrule(r){12-16}
+~ & ~ & ~ & \textbf{total} & \textbf{pruned} & \textbf{total} & \textbf{average} & \textbf{total} & \textbf{sp} & \textbf{mp} & ~ & \textbf{total} & \textbf{dichotomy} & \textbf{pool oper} & \textbf{separators} & \textbf{cuts oper} & ~ & ~ \\
+\midrule
+
+W7BI-rnd1-1800.DAT & 10 & 2 & 57 & 29 & 138 & 2.42 & 73 & 25 & 48 & 73 & 0.84 & 0.24 & 0.18 & 0.01 & 0.27 & 6.64 & 5\\
+W7BI-rnd1-3000.DAT & 10 & 2 & 1 & 1 & 5 & 5.0 & 5 & 2 & 3 & 0 & 0.72 & 0.1 & 0.19 & 0.0 & 0.27 & 5.95 & 1\\
+W7BI-tube1-1800.DAT & 10 & 2 & 111 & 56 & 300 & 2.7 & 97 & 24 & 73 & 97 & 0.81 & 0.21 & 0.18 & 0.01 & 0.28 & 6.7 & 8\\
+W7BI-tube1-3000.DAT & 10 & 2 & 19 & 10 & 68 & 3.58 & 30 & 7 & 23 & 30 & 0.75 & 0.14 & 0.18 & 0.0 & 0.28 & 6.61 & 3\\
+W7BI-tube1-asyn.DAT & 10 & 2 & 55 & 28 & 148 & 2.69 & 48 & 8 & 40 & 48 & 0.8 & 0.19 & 0.18 & 0.0 & 0.27 & 6.64 & 2\\
+W7BI-tube2-1800.DAT & 10 & 2 & 163 & 82 & 362 & 2.22 & 115 & 42 & 73 & 115 & 0.85 & 0.24 & 0.18 & 0.01 & 0.27 & 6.78 & 7\\
+Wcollage-tube.DAT & 10 & 2 & 25 & 13 & 75 & 3.0 & 93 & 21 & 72 & 93 & 0.8 & 0.2 & 0.18 & 0.0 & 0.27 & 6.63 & 1\\
+\cline{1-18} \textbf{avg} & \textbf{10} & \textbf{2} & \textbf{61.57} & \textbf{31.29} & \textbf{156.57} & \textbf{3.09} & \textbf{65.86} & \textbf{18.43} & \textbf{47.43} & \textbf{65.14} & \textbf{0.19} & \textbf{0.8} & \textbf{0.18} & \textbf{0.0} & \textbf{0.27} & \textbf{6.56} & \textbf{3.86} \\ \cline{1-18}
+W7BI-rnd1-1800.DAT & 20 & 2 & 1 & 1 & 1 & 1.0 & 2 & 0 & 2 & 0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.01 & 1\\
+W7BI-rnd1-3000.DAT & 20 & 2 & 215 & 108 & 810 & 3.77 & 183 & 37 & 146 & 183 & 1.27 & 1.22 & 0.0 & 0.02 & 0.01 & 2.04 & 4\\
+W7BI-tube1-1800.DAT & 20 & 2 & 905 & 453 & 3904 & 4.31 & 1777 & 352 & 1425 & 1777 & 5.24 & 4.97 & 0.03 & 0.12 & 0.04 & 6.09 & 5\\
+W7BI-tube1-3000.DAT & 20 & 2 & 143 & 72 & 540 & 3.78 & 153 & 27 & 126 & 153 & 0.75 & 0.72 & 0.0 & 0.01 & 0.01 & 0.87 & 10\\
+W7BI-tube1-asyn.DAT & 20 & 2 & 191 & 96 & 718 & 3.76 & 142 & 21 & 121 & 142 & 0.85 & 0.81 & 0.0 & 0.02 & 0.01 & 1.01 & 13\\
+W7BI-tube2-1800.DAT & 20 & 2 & 769 & 385 & 3190 & 4.15 & 1254 & 317 & 937 & 1254 & 3.32 & 3.16 & 0.02 & 0.07 & 0.03 & 3.89 & 5\\
+Wcollage-tube.DAT & 20 & 2 & 1 & 1 & 3 & 3.0 & 18 & 0 & 18 & 0 & 0.02 & 0.01 & 0.0 & 0.0 & 0.0 & 0.02 & 1\\
+\cline{1-18} \textbf{avg} & \textbf{20} & \textbf{2} & \textbf{317.86} & \textbf{159.43} & \textbf{1309.43} & \textbf{3.4} & \textbf{504.14} & \textbf{107.71} & \textbf{396.43} & \textbf{501.29} & \textbf{1.56} & \textbf{1.64} & \textbf{0.01} & \textbf{0.03} & \textbf{0.01} & \textbf{1.99} & \textbf{5.57} \\ \cline{1-18}
+W7BI-rnd1-1800.DAT & 30 & 2 & 3761 & 1881 & 17002 & 4.52 & 6461 & 1048 & 5413 & 6461 & 30.42 & 28.92 & 0.15 & 0.72 & 0.21 & 35.03 & 7\\
+W7BI-rnd1-3000.DAT & 30 & 2 & 431 & 216 & 2025 & 4.7 & 648 & 87 & 561 & 648 & 4.33 & 4.14 & 0.01 & 0.1 & 0.02 & 4.9 & 2\\
+W7BI-tube1-1800.DAT & 30 & 2 & 2459 & 1230 & 11098 & 4.51 & 4432 & 797 & 3635 & 4432 & 17.07 & 16.23 & 0.1 & 0.4 & 0.12 & 19.67 & 27\\
+W7BI-tube1-3000.DAT & 30 & 2 & 641 & 321 & 2669 & 4.16 & 714 & 70 & 644 & 714 & 6.55 & 6.27 & 0.02 & 0.15 & 0.04 & 7.45 & 12\\
+W7BI-tube1-asyn.DAT & 30 & 2 & 3651 & 1826 & 16418 & 4.5 & 6028 & 882 & 5146 & 6028 & 32.88 & 31.26 & 0.16 & 0.66 & 0.19 & 37.06 & 17\\
+W7BI-tube2-1800.DAT & 30 & 2 & 2749 & 1375 & 12288 & 4.47 & 4890 & 804 & 4086 & 4890 & 19.6 & 18.54 & 0.1 & 0.55 & 0.15 & 22.72 & 25\\
+Wcollage-tube.DAT & 30 & 2 & 9279 & 4640 & 42868 & 4.62 & 65993 & 7059 & 58934 & 65993 & 192.94 & 183.62 & 1.16 & 3.02 & 1.97 & 219.02 & 40\\
+\cline{1-18} \textbf{avg} & \textbf{30} & \textbf{2} & \textbf{3281.57} & \textbf{1641.29} & \textbf{14909.71} & \textbf{4.5} & \textbf{12738.0} & \textbf{1535.29} & \textbf{11202.71} & \textbf{12738.0} & \textbf{41.28} & \textbf{43.4} & \textbf{0.24} & \textbf{0.8} & \textbf{0.39} & \textbf{49.41} & \textbf{18.57} \\ \cline{1-18}
+\bottomrule
+\end{tabular}%
+}%
+\caption{.}
+\label{tab:table_bc}
+\end{sidewaystable}
+

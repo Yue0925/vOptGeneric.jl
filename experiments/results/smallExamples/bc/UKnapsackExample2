@@ -1,50 +1,26 @@
 vars = 20 ; constr = 1 
  # informations of B&B algorithm : 
-<<<<<<< Updated upstream
-total_times_used = 44.39 
-total_nodes = 7055 
-pruned_nodes = 3528 
+total_times_used = 23.44 
+total_nodes = 4159 
+pruned_nodes = 2080 
 GAP = 0.0 
-relaxation_time = 10.52 
-test_dominance_time = 0.08 
+relaxation_time = 6.41 
+test_dominance_time = 0.02 
 update_incumbent_time = 0.02 
-tree_size = 12.862 
+tree_size = 7.877 
 
 
  # ----------- info about cuts : 
-ite_total = 27457 
-cuts_applied = 10860 
-sp_cuts = 2834 
-mp_cuts = 8026 
-cuts_total = 10860 
-times_calling_dicho = 28.03 
-times_calling_separators = 0.49 
-times_oper_cutPool = 0.63 
-times_total_for_cuts = 30.83 
-times_add_retrieve_cuts = 0.87 
-=======
-total_times_used = 42.74 
-total_nodes = 7225 
-pruned_nodes = 3613 
-GAP = 0.0 
-relaxation_time = 10.56 
-test_dominance_time = 0.05 
-update_incumbent_time = 0.02 
-tree_size = 12.8 
-
-
- # ----------- info about cuts : 
-ite_total = 27805 
-cuts_applied = 10674 
-sp_cuts = 2662 
-mp_cuts = 8012 
-cuts_total = 10674 
-times_calling_dicho = 25.77 
-times_calling_separators = 0.41 
-times_oper_cutPool = 0.53 
-times_total_for_cuts = 28.22 
-times_add_retrieve_cuts = 0.77 
->>>>>>> Stashed changes
+ite_total = 15647 
+cuts_applied = 6707 
+sp_cuts = 1674 
+mp_cuts = 5033 
+cuts_total = 6707 
+times_calling_dicho = 13.22 
+times_calling_separators = 0.24 
+times_oper_cutPool = 0.27 
+times_total_for_cuts = 14.63 
+times_add_retrieve_cuts = 0.51 
 
 
 
