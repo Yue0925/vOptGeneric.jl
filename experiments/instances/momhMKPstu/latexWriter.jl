@@ -304,8 +304,8 @@ function MOBC_perform(instances::String)
         println(fout, "\\cline{1-18} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) * "} & \\textbf{" *
             string(avg_totalNodes) * "} & \\textbf{" * string(avg_prunedNodes) * "} & \\textbf{" * string(avg_totalIte) * "} & \\textbf{" *
             string(avg_pernodesIte) * "} & \\textbf{" * string(avg_totalCuts) * "} & \\textbf{" * string(avg_spCuts) * "} & \\textbf{" *
-            string(avg_mpCuts) * "} & \\textbf{" * string(avg_Cuts) * "} & \\textbf{" * string(avg_dichoT) *"} & \\textbf{" *
-            string(avg_totalT) * "} & \\textbf{" * string(avg_poolT) * "} & \\textbf{" * string(avg_sepaT) * "} & \\textbf{" *
+            string(avg_mpCuts) * "} & \\textbf{" * string(avg_Cuts) * "} & \\textbf{" * string(avg_totalT) *"} & \\textbf{" *
+            string(avg_dichoT) * "} & \\textbf{" * string(avg_poolT) * "} & \\textbf{" * string(avg_sepaT) * "} & \\textbf{" *
             string(avg_cutsT) * "} & \\textbf{" * string(avg_BCtime) * "} & \\textbf{" * string(avg_YN) * "} " * "\\\\ \\cline{1-18}")
     end
 

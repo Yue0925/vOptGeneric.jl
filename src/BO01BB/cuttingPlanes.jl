@@ -39,7 +39,7 @@ function compute_LBS(node::Node, pb::BO01Problem, round_results, verbose ; args.
     # construct/complete the relaxed bound set
     node.RBS = RelaxedBoundSet()
     for i = 1:length(vd_LP.Y_N)
-        push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i])) #TODO: filtered=true
+        push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]))
     end
     # for i=1:length(node.RBS.natural_order_vect)-1
     #     node.RBS.segments[node.RBS.natural_order_vect.sols[i]] = true
@@ -85,8 +85,8 @@ function SP_cut_off(sol::Solution, node::Node, pb::BO01Problem, round_results, v
 
     if length(cuts) > 0
         for cut in cuts
-            viol = sum(cut[j+1]*(1-x_star[j]) for j = 1:length(cut)-1 )
-            if viol > violation violation = viol end 
+            # viol = sum(cut[j+1]*(1-x_star[j]) for j = 1:length(cut)-1 )
+            # if viol > violation violation = viol end 
             start_pool = time()
             ineq = Cut(cut)
             if push!(node.cutpool, ineq)
@@ -117,14 +117,12 @@ function local_dichotomy(pb::BO01Problem, ptl::Solution, ptr::Solution, round_re
 
     # store the beginning extreme pts
     if length(ptr.y) == 0
-        # println("calculating ptr")
         JuMP.set_objective(pb.m, f1Sense, f1) ; JuMP.optimize!(pb.m, ignore_optimize_hook=true)
         status = JuMP.termination_status(pb.m)
         if status == MOI.OPTIMAL
             yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
             push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2]) ; push!(vd.X_E, JuMP.value.(pb.varArray))
             ptr = Solution(vd.X_E[1], vd.Y_N[1])
-            # println("ptr : ", ptr)
         else
             return localSols
         end
@@ -132,15 +130,12 @@ function local_dichotomy(pb::BO01Problem, ptl::Solution, ptr::Solution, round_re
         yr_1 = ptr.y[1] ; yr_2 = ptr.y[2]
     end
 
-    if length(ptl.y) == 0 #|| ptr == ptl
-        # println("calculating ptl")
-
+    if length(ptl.y) == 0 
         JuMP.set_objective(pb.m, f2Sense, f2) ; JuMP.optimize!(pb.m, ignore_optimize_hook=true)
         status = JuMP.termination_status(pb.m)
         if status == MOI.OPTIMAL
             ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2]) ; push!(vd.X_E, JuMP.value.(pb.varArray))
-            # println("ptl : ", [ys_1, ys_2])
         else
             return localSols
         end
@@ -169,85 +164,11 @@ function local_dichotomy(pb::BO01Problem, ptl::Solution, ptr::Solution, round_re
     deleteat!(vd.Y_N, inds) ; deleteat!(vd.X_E, inds)
 
     for i = 1:length(vd.Y_N)
-        push!(localSols, Solution(vd.X_E[i], vd.Y_N[i])) # TODO : , filtered=true
+        push!(localSols, Solution(vd.X_E[i], vd.Y_N[i])) 
     end
     empty!(vd.Y_N) ; empty!(vd.X_E)
     return localSols
 end
-
-
-
-
-
-
-
-# function local_dichotomy(pb::BO01Problem, ptl::Solution, ptr::Solution, round_results, verbose; args...)
-#     vd = getvOptData(pb.m)
-#     empty!(vd.Y_N) ; empty!(vd.X_E)
-#     f1, f2 = vd.objs
-#     f1Sense, f2Sense = vd.objSenses
-#     localSols = NaturalOrderVector()
-
-#     # store the beginning extreme pts
-#     if length(ptl.y) == 0
-#         println("calculating ptl")
-#         JuMP.set_objective(pb.m, f2Sense, f2) ; JuMP.optimize!(pb.m, ignore_optimize_hook=true)
-#         status = JuMP.termination_status(pb.m)
-#         if status == MOI.OPTIMAL
-#             yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
-#             push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2]) ; push!(vd.X_E, JuMP.value.(pb.varArray))
-#             ptl = Solution(vd.X_E[1], vd.Y_N[1])
-#             println("ptl : ", ptl)
-#         else
-#             return localSols
-#         end
-#     else
-#         yr_1 = ptl.y[1] ; yr_2 = ptl.y[2]
-#     end
-
-#     if length(ptr.y) == 0 #|| ptr == ptl
-#         println("calculating ptr")
-
-#         JuMP.set_objective(pb.m, f1Sense, f1) ; JuMP.optimize!(pb.m, ignore_optimize_hook=true)
-#         status = JuMP.termination_status(pb.m)
-#         if status == MOI.OPTIMAL
-#             ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
-#             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2]) ; push!(vd.X_E, JuMP.value.(pb.varArray))
-#             println("ptr : ", [ys_1, ys_2])
-#         else
-#             return localSols
-#         end
-#     else
-#         ys_1 = ptr.y[1] ; ys_2 = ptr.y[2]
-#     end
-
-#     dichoRecursion(pb.m, yr_1, yr_2, ys_1, ys_2, pb.varArray, round_results, verbose ; args...)
-
-#     #Sort X_E and Y_N
-#     s = sortperm(vd.Y_N, by = first)
-#     vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
-#     R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-#     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-#     weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
-
-#     #Filter X_E and Y_N :
-#     inds = Int[]
-#     for i = 1:length(vd.Y_N)-1
-#         if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
-#             push!(inds, i+1)
-#         elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i])
-#             push!(inds, i)
-#         end
-#     end
-#     deleteat!(vd.Y_N, inds) ; deleteat!(vd.X_E, inds)
-
-#     for i = 1:length(vd.Y_N)
-#         push!(localSols, Solution(vd.X_E[i], vd.Y_N[i])) # TODO : , filtered=true
-#     end
-#     empty!(vd.Y_N) ; empty!(vd.X_E)
-#     return localSols
-# end
-
 
 
 
@@ -256,22 +177,19 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
     ptsTotal = length(node.RBS.natural_order_vect)
     componentColored = Vector{Vector{Bool}}() ; node.RBS = RelaxedBoundSet()
     componentExtreme = Vector{Vector{Solution}}() ; push!(componentExtreme, [Solution(), Solution()])
-    max_viol = 0.0 ; min_viol = 0.0
+    max_viol = 0.0 # ; min_viol = 0.0
 
     ite = 0
-    # println("---------------------")
-    # @info "node $(node.num) "
-    # println("---------------------")
     while ite < loop_limit
         ite += 1 ; pb.info.cuts_infos.ite_total += 1
-        ptsCounter = 0 #; ptsTotal = 0
+        ptsCounter = 0 
         # ------------------------------------------------------------------------------
         # 1. generate multi-point cuts for each subset of LBS
         # ------------------------------------------------------------------------------
         for LBS in componentLBS
             (colored, violation) = BO_cutting_planes(node, pb, LBS, round_results, verbose ; args...) ; 
             push!(componentColored, colored) ; ptsCounter += sum(colored)
-            if maximum(violation) > max_viol max_viol = maximum(violation) end 
+            # if maximum(violation) > max_viol max_viol = maximum(violation) end 
             # if min_viol == 0.0 
             #     min_viol = minimum(violation)
             # elseif minimum(violation) < min_viol
@@ -279,16 +197,16 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
             # end
 
             # println("node $(node.num) max_viol = $max_viol ; min_viol = $min_viol ")
-            # println("colored : ", colored)
+
             for i=1:length(LBS)
                 if !colored[i]      # pt not cut off
-                    push!(node.RBS.natural_order_vect, LBS[i], filtered=true) # ,
-                    # println("push RBS sol : ", LBS[i])
-                elseif violation[i] < (max_viol)/3
-                    colored[i] = true ; push!(node.RBS.natural_order_vect, LBS[i], filtered=true)
+                    push!(node.RBS.natural_order_vect, LBS[i]) # , filtered=true
+
+                    # elseif violation[i] < (max_viol)/3
+                #     colored[i] = true ; push!(node.RBS.natural_order_vect, LBS[i], filtered=true)
                 end
             end
-            # println("RBS " , node.RBS.natural_order_vect)
+
         end
 
         # --------------------------------------------------
@@ -307,7 +225,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
             LBS = popfirst!(componentLBS) ; colored = popfirst!(componentColored)
             extremPts = popfirst!(componentExtreme)
             idx_l = colored[1] ? 0 : -1 ; idx_r = -1
-            # println("colored : ", colored)
+
             for i = 1:length(colored)
                 if colored[i] continue end
 
@@ -318,13 +236,13 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
                 if idx_l != -1 && idx_r==-1
                     idx_r = i ;
                     ptl = (idx_l == 0) ? extremPts[1] : LBS[idx_l] ; ptr = LBS[idx_r]
-                    # println("find interval idx_l = $idx_l  ->  idx_r = $idx_r")
+
                     localSols = local_dichotomy(pb, ptl, ptr, round_results, verbose; args...)
                     if length(localSols) > 0
                         push!(componentLBS, localSols.sols)
                         push!(componentExtreme, [ptl, ptr])
                     end
-                    # println("new sols size : ", length(localSols))
+
                     if (i+1)≤ length(colored) && colored[i+1]
                         idx_l = i ; idx_r = -1
                     else
@@ -335,13 +253,13 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
             if idx_l != -1 && idx_r == -1
                 ptl = (idx_l == 0) ? extremPts[1] : LBS[idx_l] ; ptr = extremPts[2]
                 idx_r = length(colored)+1
-                # println("find interval idx_l = $idx_l  ->  idx_r = $idx_r")
+
                 localSols = local_dichotomy(pb, ptl, ptr, round_results, verbose; args...)
                 if length(localSols) > 0
                     push!(componentLBS, localSols.sols)
                     push!(componentExtreme, [ptl, ptr])
                 end
-                # println("new sols size : ", length(localSols))
+
             end
         end
 
@@ -380,14 +298,11 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
         # end
 
     end # end loop while limit
-    # println("finally ... ")
     for LBS in componentLBS
-        # println("new LBS : ", LBS)
         for sol in LBS
-            push!(node.RBS.natural_order_vect, sol, filtered=true) # ,
+            push!(node.RBS.natural_order_vect, sol) # ,filtered=true
         end
     end
-    # println("RBS : ", node.RBS.natural_order_vect)
     return false
 end
 
@@ -401,7 +316,7 @@ one corresponding vector `x` in decision space.
 Return ture if the node is infeasible after adding cuts.
 """
 function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, round_results, verbose ; args...)
-    l = 1 #; cut_counter = 0
+    l = 1
     colored = [false for _ in LBS] ; violation = [0.0 for _ in LBS] 
 
     while l ≤ length(LBS)
@@ -414,8 +329,8 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
                 # @info "MP_cutting_planes calling `SP_cut_off`"
                 (_, new_cut, viol) = SP_cut_off(LBS[l], node, pb, round_results, verbose ; args...)
                 if new_cut 
-                    colored[l] = true ; violation[l] = viol
-                end # cut_counter += 1
+                    colored[l] = true #; violation[l] = viol
+                end 
                 l += 1
             else
                 r = l+∇
@@ -427,7 +342,6 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
                 # pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
 
                 # if isValidCut
-                #     cut_counter += (∇+1)
                 #     @info " ---------------------------- cut found "
                 #     start_pool = time()
                 #     push!(pb.cpool, α) && push_cutScore(node.cuts_ref, CutScore(size(pb.cpool.tab, 1), viol, 0)) # push cut reference
@@ -438,19 +352,17 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
                 #     l = r + 1 ; break
                 # end
 
-                # @info "Calling MP_KP_heurSeparator ..."
                 start_sep = time()
                 cuts = MP_KP_heurSeparator2(LBS[l].xEquiv[1], LBS[r].xEquiv[1], pb.A, pb.b)
                 pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
 
                 if length(cuts) > 0
                     for i =l:r colored[i] = true end
-                    # cut_counter += (∇+1)
                     for cut in cuts
-                        for i =l:r 
-                            viol = sum(cut[j+1]*(1-LBS[i].xEquiv[1][j]) for j = 1:length(cut)-1 )
-                            if viol > violation[i] violation[i] = viol end 
-                        end
+                        # for i =l:r 
+                        #     viol = sum(cut[j+1]*(1-LBS[i].xEquiv[1][j]) for j = 1:length(cut)-1 )
+                        #     if viol > violation[i] violation[i] = viol end 
+                        # end
                         
                         start_pool = time()
                         ineq = Cut(cut)
@@ -469,6 +381,5 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
         end
     end
     return (colored, violation)
-    # return cut_counter
 end
 
