@@ -85,8 +85,8 @@ function SP_cut_off(sol::Solution, node::Node, pb::BO01Problem, round_results, v
 
     if length(cuts) > 0
         for cut in cuts
-            # viol = sum(cut[j+1]*(1-x_star[j]) for j = 1:length(cut)-1 )
-            # if viol > violation violation = viol end 
+            viol = sum(cut[j+1]*(1-x_star[j]) for j = 1:length(cut)-1 )
+            if viol > violation violation = viol end 
             start_pool = time()
             ineq = Cut(cut)
             if push!(node.cutpool, ineq)
@@ -189,7 +189,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
         for LBS in componentLBS
             (colored, violation) = BO_cutting_planes(node, pb, LBS, round_results, verbose ; args...) ; 
             push!(componentColored, colored) ; ptsCounter += sum(colored)
-            # if maximum(violation) > max_viol max_viol = maximum(violation) end 
+            if maximum(violation) > max_viol max_viol = maximum(violation) end 
             # if min_viol == 0.0 
             #     min_viol = minimum(violation)
             # elseif minimum(violation) < min_viol
@@ -202,8 +202,8 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
                 if !colored[i]      # pt not cut off
                     push!(node.RBS.natural_order_vect, LBS[i]) # , filtered=true
 
-                    # elseif violation[i] < (max_viol)/3
-                #     colored[i] = true ; push!(node.RBS.natural_order_vect, LBS[i], filtered=true)
+                elseif violation[i] < (max_viol)/3
+                    colored[i] = true ; push!(node.RBS.natural_order_vect, LBS[i], filtered=true)
                 end
             end
 
@@ -266,37 +266,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
         pb.info.cuts_infos.times_calling_dicho += (time() - start_dicho)
 
         # in case of infeasibility
-        if length(node.RBS.natural_order_vect)==0 && size(componentLBS, 1)==0
-            @info "infeasible ! "
-            return true
-        end
-
-        # # in case of integrity # TODO : integrity
-        # all_integers = true
-        # for LBS in componentLBS
-        #     for sol in LBS
-        #         if !sol.is_binary
-        #             all_integers = false ; break
-        #         end
-        #     end
-        # end
-        # for sol in node.RBS.natural_order_vect.sols
-        #     if !sol.is_binary
-        #         all_integers = false ; break
-        #     end
-        # end
-        # if all_integers
-        #     for LBS in componentLBS
-        #         println("new LBS : ", LBS)
-        #         for sol in LBS
-        #             push!(node.RBS.natural_order_vect, sol ) # , filtered=true
-        #         end
-        #     end
-        #     @info "integrity ! |RBS| = $(length(node.RBS.natural_order_vect))"
-        #     println(node.RBS.natural_order_vect)
-        #     return false
-        # end
-
+        if length(node.RBS.natural_order_vect)==0 && size(componentLBS, 1)==0 return true end
     end # end loop while limit
     for LBS in componentLBS
         for sol in LBS
@@ -329,7 +299,7 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
                 # @info "MP_cutting_planes calling `SP_cut_off`"
                 (_, new_cut, viol) = SP_cut_off(LBS[l], node, pb, round_results, verbose ; args...)
                 if new_cut 
-                    colored[l] = true #; violation[l] = viol
+                    colored[l] = true ; violation[l] = viol
                 end 
                 l += 1
             else
@@ -359,10 +329,10 @@ function BO_cutting_planes(node::Node, pb::BO01Problem, LBS::Vector{Solution}, r
                 if length(cuts) > 0
                     for i =l:r colored[i] = true end
                     for cut in cuts
-                        # for i =l:r 
-                        #     viol = sum(cut[j+1]*(1-LBS[i].xEquiv[1][j]) for j = 1:length(cut)-1 )
-                        #     if viol > violation[i] violation[i] = viol end 
-                        # end
+                        for i =l:r 
+                            viol = sum(cut[j+1]*(1-LBS[i].xEquiv[1][j]) for j = 1:length(cut)-1 )
+                            if viol > violation[i] violation[i] = viol end 
+                        end
                         
                         start_pool = time()
                         ineq = Cut(cut)
