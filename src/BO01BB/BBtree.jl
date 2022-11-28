@@ -204,7 +204,7 @@ end
 """
 Given a un-dominated nadir point, add the correspond EPB objective bound.
 """
-function setObjBound(pb::BO01Problem, nadirPt::Vector{Float64}, duplication_bound::Float64=NONE)
+function setObjBound(pb::BO01Problem, nadirPt::Vector{Float64}, duplication_bound::Float64)
     cons_obj = []
     # for i=1:2 
         con = JuMP.@constraint(pb.m, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray ≤ nadirPt[1]) ; push!(cons_obj, con)

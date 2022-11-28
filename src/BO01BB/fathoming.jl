@@ -303,12 +303,13 @@ function fullyExplicitDominanceTest(node::Node, global_incumbent::IncumbentSet, 
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
-                else
+                else 
                     push!(node.localNadirPts, u.y) ; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
-                end
-            else 
+                end 
+            else
                 return fathomed
             end
+            
         end
 
         if !compared && (u.y[1] ≥ ptr.y[1] && u.y[2] ≥ ptl.y[2])

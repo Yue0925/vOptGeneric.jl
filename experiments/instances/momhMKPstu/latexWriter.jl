@@ -7,37 +7,31 @@ function comparisonThreeMethods(instances::String)
 
     fout = open(work_dir * "/comparisonTable.tex", "w")
 
-    latex = raw"""\begin{table}[h]
+    latex = raw"""\begin{table}[!ht]
     \centering
     \resizebox{\columnwidth}{!}{%
-    \hspace*{-1cm}\begin{tabular}{lcccccccccccc}
+    \begin{tabular}{lcccccccccccc}
     \toprule
-    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{Dichotomy}} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{3}{c}{\textbf{Branch-and-bound}} & \multicolumn{3}{c}{\textbf{Branch-and-cut}}
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{classical B\&B}} & \multicolumn{2}{c}{\textbf{classical B\&C}} & 
+    \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C}}
     \\
-    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-10} \cmidrule(r){11-13}
-    ~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$|\mathcal{X}_E|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$|\mathcal{X}_E|$} \\
+    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13}
+    ~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
     \midrule
     """
     println(fout, latex)
-    methods = ["epsilon", "B&B", "B&C"] ; record_n = []
+    methods = ["epsilon", "classical B&B", "classical B&C" , "EPB B&B", "EPB B&C"] ; record_n = []
     record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods[2:end])
 
     for folder_n in readdir(work_dir * "/dicho") # ∀ filder_n
         count = 0
-        avg_n = 0
-        avg_m = 0
-        avg_dicho_T = 0.0
-        avg_dicho_Y = 0.0
-        avg_ϵ_T = 0.0
-        avg_ϵ_Y = 0.0
-        avg_bb_T = 0.0
-        avg_bb_Y = 0.0
-        avg_bb_X = 0.0
-        avg_bb_node = 0.0
-        avg_bc_T = 0.0
-        avg_bc_Y = 0.0
-        avg_bc_X = 0.0
-        avg_bc_node = 0.0
+        avg_n = 0 ; avg_m = 0
+        avg_ϵ_T = 0.0 ; avg_ϵ_Y = 0.0
+        avg_bb_T = 0.0 ; avg_bb_Y = 0.0
+        avg_bc_T = 0.0 ; avg_bc_Y = 0.0
+        avg_bbEPB_T = 0.0 ; avg_bbEPB_Y = 0.0
+        avg_bcEPB_T = 0.0 ; avg_bcEPB_Y = 0.0
+        avg_bb_node = 0.0 ; avg_bc_node = 0.0
 
         for file in readdir(work_dir * "/dicho/" * string(folder_n) * "/") # ∀ file in dicho
             if split(file, ".")[end] == "png"
@@ -45,118 +39,113 @@ function comparisonThreeMethods(instances::String)
             end
 
             print(fout, file * " & ")
-            times = []
-            pts = [] ; X = []
+            times = [] ; pts = []
 
             # write dichotomy result 
             include(work_dir * "/dicho/" * string(folder_n) * "/" * file)
-            print(fout, string(vars) * " & " * string(constr) * " & ")
-            # print(fout, string(total_times_used)* " & " * string(size_Y_N) * " & ")
-            push!(times, total_times_used); push!(pts, size_Y_N)
+            print(fout, string(vars) * " & " * string(constr) * " ")
 
             count += 1
-            avg_n += vars
-            avg_m += constr
-            avg_dicho_T += total_times_used
-            avg_dicho_Y += size_Y_N
+            avg_n += vars ; avg_m += constr
 
-            # write ϵ-constraint result (ϵ = 0.5 by default)
+            # write ϵ-constraint result (ϵ = 1 by default)
             if isfile(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
                 include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
-                # print(fout, string(total_times_used)* " & " * string(size_Y_N) * " & ")
                 push!(times, total_times_used); push!(pts, size_Y_N)
 
-                avg_ϵ_T += total_times_used
-                avg_ϵ_Y += size_Y_N
+                avg_ϵ_T += total_times_used ; avg_ϵ_Y += size_Y_N
             else
-                # print(fout, "- & - & ")
                 push!(times, -1); push!(pts, -1)
             end
 
             # write B&B result 
             if isfile(work_dir * "/bb/" * string(folder_n) * "/" * file)
                 include(work_dir * "/bb/" * string(folder_n) * "/" * file)
-                # print(fout, string(total_times_used)* " & " * string(size_Y_N) * " & ")
                 push!(times, total_times_used); push!(pts, size_Y_N) 
-                push!(X, size_X_E)
 
-                avg_bb_T += total_times_used
-                avg_bb_Y += size_Y_N
-                avg_bb_X += size_X_E
+                avg_bb_T += total_times_used ; avg_bb_Y += size_Y_N
                 avg_bb_node += total_nodes
             else
-                # print(fout, "- & - & ")
                 push!(times, -1); push!(pts, -1)
-                push!(X, -1)
             end
 
             # write B&C result 
             if isfile(work_dir * "/bc/" * string(folder_n) * "/" * file)
                 include(work_dir * "/bc/" * string(folder_n) * "/" * file)
-                # print(fout, string(total_times_used)* " & " * string(size_Y_N) * " & ")
                 push!(times, total_times_used); push!(pts, size_Y_N) 
-                push!(X, size_X_E)
 
-                avg_bc_T += total_times_used
-                avg_bc_Y += size_Y_N
-                avg_bc_X += size_X_E
+                avg_bc_T += total_times_used ; avg_bc_Y += size_Y_N
                 avg_bc_node += total_nodes
             else
-                # print(fout, "- & - & ")
                 push!(times, -1); push!(pts, -1)
-                push!(X, -1)
             end
 
-            for i=1:4
+            # write EPB B&B result 
+            if isfile(work_dir * "/bb_EPB/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bb_EPB/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+
+                avg_bbEPB_T += total_times_used ; avg_bbEPB_Y += size_Y_N
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+
+            # write EPB B&C result 
+            if isfile(work_dir * "/bc_EPB/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bc_EPB/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+
+                avg_bcEPB_T += total_times_used ; avg_bcEPB_Y += size_Y_N
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+
+            for i=1:5
                 if times[i] == -1
-                    print(fout, " - & ")
+                    print(fout, " & - ")
                 elseif times[i] == minimum(times)
-                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                    print(fout, " & \\textcolor{blue2}{" * string(times[i]) * "} ")
                 else
-                    print(fout, string(times[i]) * " & ")
+                    print(fout, " & " * string(times[i]) )
                 end
     
                 if pts[i] == -1
-                    print(fout, " - & ")
+                    print(fout, " & - ")
                 elseif pts[i] == maximum(pts)
-                    print(fout, " \\textbf{" * string(pts[i]) * "} & ")
+                    print(fout, " & \\textbf{" * string(pts[i]) * "} ")
                 else
-                    print(fout, string(pts[i]) * " & ")
+                    print(fout, " & " * string(pts[i]))
                 end
 
-                if i==3
-                    X[1]==-1 ? print(fout, " - & ") : print(fout, string(X[1]) * " & ")
-                elseif i==4
-                    X[2]==-1 ? println(fout, " - \\\\") : println(fout, string(X[2]) * " \\\\")
+                if i==5
+                    println(fout, " \\\\ ")
                 end
             end
     
         end
 
-        avg_n = round(Int, avg_n/count)
-        avg_m = round(Int, avg_m/count)
-        avg_dicho_T = round(avg_dicho_T/count, digits = 2)
-        avg_dicho_Y = round(avg_dicho_Y/count, digits = 2)
-        avg_ϵ_T = round(avg_ϵ_T/count, digits = 2)
-        avg_ϵ_Y = round(avg_ϵ_Y/count, digits = 2)
-        avg_bb_T = round(avg_bb_T/count, digits = 2)
-        avg_bb_Y = round(avg_bb_Y/count, digits = 2)
-        avg_bb_X = round(avg_bb_X/count, digits = 2)
-        avg_bb_node = round(avg_bb_node/count, digits = 2)
-        avg_bc_T = round(avg_bc_T/count, digits = 2)
-        avg_bc_Y = round(avg_bc_Y/count, digits = 2)
-        avg_bc_X = round(avg_bc_X/count, digits = 2)
-        avg_bc_node = round(avg_bc_node/count, digits = 2)
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        avg_ϵ_T = round(avg_ϵ_T/count, digits = 2) ; avg_ϵ_Y = round(avg_ϵ_Y/count, digits = 2)
+        avg_bb_T = round(avg_bb_T/count, digits = 2) ; avg_bb_Y = round(avg_bb_Y/count, digits = 2)
+        avg_bc_T = round(avg_bc_T/count, digits = 2) ; avg_bc_Y = round(avg_bc_Y/count, digits = 2)
+        avg_bbEPB_T = round(avg_bbEPB_T/count, digits = 2) ; avg_bbEPB_Y = round(avg_bbEPB_Y/count, digits = 2)
+        avg_bcEPB_T = round(avg_bcEPB_T/count, digits = 2) ; avg_bcEPB_Y = round(avg_bcEPB_Y/count, digits = 2)
 
         append!(record_n, avg_n)
-        append!(record_times["epsilon"], avg_ϵ_T) ; append!(record_times["B&B"], avg_bb_T) ; append!(record_times["B&C"], avg_bc_T) 
-        append!(record_nodes["B&B"], avg_bb_node) ; append!(record_nodes["B&C"], avg_bc_node)
+        append!(record_times["epsilon"], avg_ϵ_T) ; append!(record_times["classical B&B"], avg_bb_T) ; append!(record_times["classical B&C"], avg_bc_T) 
+        append!(record_times["EPB B&B"], avg_bbEPB_T) ; append!(record_times["EPB B&C"], avg_bcEPB_T) 
+        
+
+
+        avg_bb_node = round(avg_bb_node/count, digits = 2) ; avg_bc_node = round(avg_bc_node/count, digits = 2)
+        append!(record_nodes["classical B&B"], avg_bb_node) ; append!(record_nodes["classical B&C"], avg_bc_node)
 
 
         println(fout, "\\cline{1-13} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) * "} & \\textbf{" *
-            string(avg_dicho_T) * "} & \\textbf{" * string(avg_dicho_Y) * "} & \\textbf{" * string(avg_ϵ_T) * "} & \\textbf{" *
-            string(avg_ϵ_Y) * "} & \\textbf{" * string(avg_bb_T) * "} & \\textbf{" * string(avg_bb_Y) * "} & \\textbf{" * string(avg_bb_X) *
-            "} & \\textbf{" * string(avg_bc_T) * "} & \\textbf{" * string(avg_bc_Y) * "} & \\textbf{" * string(avg_bc_X) * "} \\\\ \\cline{1-13}")
+            string(avg_ϵ_T) * "} & \\textbf{" * string(avg_ϵ_Y) * "} & \\textbf{" * string(avg_bb_T) * "} & \\textbf{" * string(avg_bb_Y) *
+            "} & \\textbf{" * string(avg_bc_T) * "} & \\textbf{" * string(avg_bc_Y) * "} & \\textbf{" * string(avg_bbEPB_T) *
+            "} & \\textbf{" * string(avg_bbEPB_Y) * "} & \\textbf{" * string(avg_bcEPB_T) * "} & \\textbf{" * string(avg_bcEPB_Y) * "} \\\\ \\cline{1-13}"
+        )
 
     end
 
@@ -169,11 +158,13 @@ function comparisonThreeMethods(instances::String)
     println(fout, "\\end{table}")
     close(fout)
 
-    labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
+    labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.2 # the width of the bars
 
-    plt.bar(loc .- width, record_times["epsilon"], width, label="epsilon")
-    plt.bar(loc, record_times["B&B"], width, label="B&B")
-    plt.bar(loc .+ width, record_times["B&C"], width, label="B&C")
+    plt.bar(loc .- 2*width, record_times["epsilon"], width, label="epsilon")
+    plt.bar(loc .- width, record_times["classical B&B"], width, label="classical B&B")
+    plt.bar(loc, record_times["classical B&C"], width, label="classical B&C")
+    plt.bar(loc .+ width, record_times["EPB B&B"], width, label="EPB B&B")
+    plt.bar(loc .+ 2*width, record_times["EPB B&C"], width, label="EPB B&C")
     plt.xticks(loc, labels)
     plt.xlabel("Number of variables")
     plt.ylabel("Computation time(s)", fontsize=14)
@@ -182,17 +173,27 @@ function comparisonThreeMethods(instances::String)
 
     pos = loc .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["epsilon"][i]+0.5, s = record_times["epsilon"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_times["epsilon"][i]+0.5, s = record_times["epsilon"][i], size = 5)
     end
 
     pos = loc .+ (width) .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["B&B"][i]+0.5, s = record_times["B&B"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_times["classical B&B"][i]+0.5, s = record_times["classical B&B"][i], size = 5)
     end
 
     pos = loc .+ (2 * width) .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["B&C"][i]+0.5, s = record_times["B&C"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_times["classical B&C"][i]+0.5, s = record_times["classical B&C"][i], size = 5)
+    end
+
+    pos = loc .+ (3 * width) .+ (width/2)
+    for i =1:4
+        plt.text(x = pos[i]-0.6 , y = record_times["EPB B&B"][i]+0.5, s = record_times["EPB B&B"][i], size = 5)
+    end
+
+    pos = loc .+ (4 * width) .+ (width/2)
+    for i =1:4
+        plt.text(x = pos[i]-0.6 , y = record_times["EPB B&C"][i]+0.5, s = record_times["EPB B&C"][i], size = 5)
     end
     title("Influence of instance size on different algorithms' performance", fontsize=14)
     savefig(work_dir * "/comparisonTable.png")
@@ -200,8 +201,8 @@ function comparisonThreeMethods(instances::String)
 
     # ---------------
     width = 0.4
-    plt.bar(loc .- width/2, record_nodes["B&B"], width, label="B&B", color="darkorange")
-    plt.bar(loc .+ width/2, record_nodes["B&C"], width, label="B&C", color="forestgreen")
+    plt.bar(loc .- width/2, record_nodes["classical B&B"], width, label="classical B&B", color="darkorange")
+    plt.bar(loc .+ width/2, record_nodes["classical B&C"], width, label="classical B&C", color="forestgreen")
     plt.xticks(loc, labels)
     plt.xlabel("Number of variables")
     plt.ylabel("Number of explored nodes", fontsize=14)
@@ -209,12 +210,12 @@ function comparisonThreeMethods(instances::String)
 
     pos = loc .+ (width)/2# .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_nodes["B&B"][i]+0.5, s = record_nodes["B&B"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_nodes["classical B&B"][i]+0.5, s = record_nodes["classical B&B"][i], size = 7)
     end
 
     pos = loc .+ (3 *width)/2# .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_nodes["B&C"][i]+0.5, s = record_nodes["B&C"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_nodes["classical B&C"][i]+0.5, s = record_nodes["classical B&C"][i], size = 7)
     end
     title("Influence of instance size on different algorithms' tree size", fontsize=14)
     savefig(work_dir * "/comparisonNodes.png")
@@ -473,8 +474,8 @@ end
 
 
 
-detailedMOBB_perform("momhMKPstu/MOBKP/set3")
+# detailedMOBB_perform("momhMKPstu/MOBKP/set3")
 
 comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 
-MOBC_perform("momhMKPstu/MOBKP/set3")
+# MOBC_perform("momhMKPstu/MOBKP/set3")

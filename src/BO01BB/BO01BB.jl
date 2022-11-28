@@ -163,7 +163,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     #-----------------------------------------
     if !isRoot(node)
         # if exists non-explored child, don't liberate
-        if node.EPB || hasNonExploredChild(node.pred)       #todo : why EPB node no liberation ???
+        if node.EPB || hasNonExploredChild(node.pred) 
         # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
         elseif length(node.pred.RBS.natural_order_vect) > 0
@@ -171,7 +171,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
                 if pb.param.cut_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
                 end
-            end
+        end
     end
 
     #-----------------------------------------
@@ -179,7 +179,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     #-----------------------------------------
     if pb.param.EPB && length(node.localNadirPts) > 0
         for i = 1:length(node.localNadirPts)
-            pt =  node.localNadirPts[i] ; duplicationBound_z1 = 0.0
+            pt =  node.localNadirPts[i] ; duplicationBound_z1 = Inf
             if i < length(node.localNadirPts) duplicationBound_z1 = node.localNadirPts[i+1][1] end
             nodeChild = Node(
                 pb.info.nb_nodes + 1, node.depth + 1, 
