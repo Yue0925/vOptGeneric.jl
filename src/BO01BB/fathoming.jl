@@ -238,15 +238,18 @@ function fullyExplicitDominanceTest(node::Node, global_incumbent::IncumbentSet, 
 
     # Case 1 :  if only one feasible point in UBS 
     if length(incumbent.natural_order_vect) == 1 
-        # who dominates the ideal point 
-        if incumbent.natural_order_vect.sols[1].y[1] ≤ ptr.y[1] && incumbent.natural_order_vect.sols[1].y[2] ≤ ptl.y[2]
-            return true
-        else
-            # Pareto branching 
-            #TODO : check => Pareto branching ... 
-            return false 
-        end
-        # return false 
+        # # who dominates the ideal point 
+        # if incumbent.natural_order_vect.sols[1].y[1] ≤ ptr.y[1] && incumbent.natural_order_vect.sols[1].y[2] ≤ ptl.y[2]
+        #     return true
+        # else
+        #     # Pareto branching 
+        #     #TODO : check => Pareto branching ... 
+        #     if EPB 
+        #         push!(node.localNadirPts, incumbent.natural_order_vect.sols[1].y) 
+        #     end 
+        #     return false 
+        # end
+        return false 
     end
 
     # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
