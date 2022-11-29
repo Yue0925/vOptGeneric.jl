@@ -64,11 +64,12 @@ mutable struct StatInfo
     cuts_infos::CutsInfo
     nb_nodes_EPB::Int64
     nb_nodes_VB::Int64
+    root_relax::Bool
     # status::MOI.TerminationStatusCode 
 end
 
 function StatInfo()
-    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0)
+    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false)
 end
 
 function Base.:show(io::IO, info::StatInfo)
@@ -82,7 +83,8 @@ function Base.:show(io::IO, info::StatInfo)
         "update_incumbent_time = $(info.update_incumb_time) \n",
         "tree_size = $(info.tree_size) \n",
         "nb_nodes_EPB = $(info.nb_nodes_EPB) \n",
-        "nb_nodes_VB = $(info.nb_nodes_VB) "
+        "nb_nodes_VB = $(info.nb_nodes_VB) \n",
+        "root_relax = $(info.root_relax) "
     )
     if info.cuts_activated println(io, info.cuts_infos) end
 end
@@ -97,10 +99,11 @@ mutable struct BBparam
     branching::Symbol       # branching strategy
     cut_activated::Bool     # if apply cuts at each node
     EPB::Bool               # if consider the EP branching 
+    root_relax::Bool        # use the relaxation value at root in an IP solver 
 end
 
 function BBparam()
-    return BBparam(300, :bfs, :arbitrary, false, false)
+    return BBparam(300, :bfs, :arbitrary, false, false, false)
 end
 
 

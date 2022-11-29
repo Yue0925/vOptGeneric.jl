@@ -147,14 +147,26 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     # test dominance 
     #--------------------
     start = time()
-    if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
-        prune!(node, DOMINANCE)
-        if verbose
-            @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
+    if pb.param.root_relax
+        if ( @timeit tmr "dominance" fullyExplicitDominanceTestNonConvex(node, incumbent, worst_nadir_pt, pb.param.EPB) )
+            prune!(node, DOMINANCE)
+            if verbose
+                @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
+            end
+            pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
+            return
         end
-        pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-        return
+    else
+        if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
+            prune!(node, DOMINANCE)
+            if verbose
+                @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
+            end
+            pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
+            return
+        end
     end
+
     pb.info.test_dom_time += (time() - start)
 
 
@@ -284,10 +296,14 @@ function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results
 
     standard_form(problem) ; problem.param.EPB = EPB
     if cut
-        problem.param.cut_activated = cut ; problem.info.cuts_activated = cut 
+        # problem.param.cut_activated = cut ; problem.info.cuts_activated = cut 
+        problem.param.root_relax = cut ; problem.info.root_relax = cut 
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
     end
-    # relaxation LP
-    undo_relax = JuMP.relax_integrality(problem.m)
+    # # relaxation LP
+    # undo_relax = JuMP.relax_integrality(problem.m)
+    function undo_relax() end 
+    if !cut undo_relax = JuMP.relax_integrality(problem.m) end 
 
     # initialize the incumbent list by heuristics or with Inf
     incumbent = IncumbentSet() 
@@ -306,7 +322,8 @@ function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results
         end
         post_processing(m, problem, incumbent, round_results, verbose; args...)
         problem.info.total_times = round(time() - start, digits = 2)
-        undo_relax()
+        # undo_relax()
+        if !cut undo_relax() end 
         return problem.info
     end
 
@@ -339,7 +356,8 @@ function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results
 
     problem.info.tree_size = round(Base.summarysize(root)/MB, digits = 3)
     
-    undo_relax()
+    # undo_relax()
+    if !cut undo_relax() end 
     show(tmr)
 
     problem.info.cuts_infos.cuts_total = problem.info.cuts_infos.cuts_applied
