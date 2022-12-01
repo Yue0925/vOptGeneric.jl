@@ -20,7 +20,11 @@ function compute_LBS(node::Node, pb::BO01Problem, round_results, verbose ; args.
     #------------------------------------------------------------------------------
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
-    solve_dicho(pb.m, round_results, false ; args...)
+    if pb.info.root_relax
+        solve_dicho_callback(pb.m, round_results, false ; args...)
+    else
+        solve_dicho(pb.m, round_results, false ; args...)
+    end
     vd_LP = getvOptData(pb.m)
 
     #-------------------------------------------------------------------------------

@@ -293,8 +293,10 @@ function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results
         false, JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}(), false,
         JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}()
     )
-
+    
     standard_form(problem) ; problem.param.EPB = EPB
+    # JuMP.unset_silent(problem.m)
+
     if cut
         # problem.param.cut_activated = cut ; problem.info.cuts_activated = cut 
         problem.param.root_relax = cut ; problem.info.root_relax = cut 
