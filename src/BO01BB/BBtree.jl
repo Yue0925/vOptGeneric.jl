@@ -24,7 +24,6 @@ mutable struct Node
     deleted::Bool               # if the node is supposed to be deleted
     con_cuts::Vector{ConstraintRef}             
     cutpool::CutPool
-    assign::Dict{Int64, Int64}
 
     Node() = new()
 
@@ -56,7 +55,6 @@ mutable struct Node
         # n.cuts_ref = Vector{CutScore}()
         n.con_cuts = Vector{ConstraintRef}()
         n.cutpool = CutPool()
-        n.assign = Dict{Int64, Int64}()
     
         f(t) = nothing # @async println("Finalizing node $(t.num).")
         finalizer(f, n)
@@ -123,27 +121,6 @@ function getPartialAssign(actual::Node)
         if !actual.EPB assignment[actual.var] = actual.var_bound end 
     end
     return assignment
-end
-
-function setPartialAssign(actual::Node)
-    actual.assign = Dict{Int64, Int64}() # var index => bound value
-    if isRoot(actual) # the actual node is the root 
-        return actual.assign
-    end
-    predecessor = actual.pred
-    if !actual.EPB actual.assign[actual.var] = actual.var_bound end 
-
-    while !isRoot(predecessor)     
-        actual = predecessor ; predecessor = actual.pred
-        if !actual.EPB actual.assign[actual.var] = actual.var_bound end 
-    end
-end
-
-function verifyAssign(x::Vector{Float64}, node::Node)
-    for (i, v) in node.assign
-        if abs(x[i] - v) > 0.0001 return false end
-    end
-    return true 
 end
 
 

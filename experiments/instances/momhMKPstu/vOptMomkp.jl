@@ -117,11 +117,17 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
     elseif method == :bc_rootRelax 
       infos = vSolve( Bi01IP, method=:bc_rootRelax, verbose=false )
       println(infos)
+    elseif method == :bc_rootRelaxCP 
+      infos = vSolve( Bi01IP, method=:bc_rootRelaxCP, verbose=false )
+      println(infos)
     elseif method == :bb_EPB
       infos = vSolve( Bi01IP, method=:bb_EPB, verbose=false )
       println(infos)
     elseif method == :bc_rootRelaxEPB
       infos = vSolve( Bi01IP, method=:bc_rootRelaxEPB, verbose=false )
+      println(infos)
+    elseif method == :bc_rootRelaxCPEPB
+      infos = vSolve( Bi01IP, method=:bc_rootRelaxCPEPB, verbose=false )
       println(infos)
     end
 
@@ -169,7 +175,7 @@ function main(fname::String)
   end
 
   solverSelected = CPLEX.Optimizer
-  for method in [ :bb, :bc_rootRelax, :bb_EPB, :bc_rootRelaxEPB] # :dicho, :epsilon, 
+  for method in [ :bb, :bc_rootRelax, :bc_rootRelaxCP , :bb_EPB, :bc_rootRelaxEPB, :bc_rootRelaxCPEPB] # :dicho, :epsilon, 
     vSolveBi01IP(solverSelected, dat.C, dat.A, dat.b, fname, method) 
   end
 

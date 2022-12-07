@@ -230,15 +230,6 @@ Return `true` if the given node is fathomed by dominance.
 function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
     @assert length(node.RBS.natural_order_vect) > 0 "relaxed bound set is empty for node $(node.num)"
 
-    # incumbent = IncumbentSet()
-    # for sol in global_incumbent.natural_order_vect.sols
-    #     if verifyAssign(sol.xEquiv[1], node)
-    #         push!(incumbent.natural_order_vect, sol)
-    #     end
-    # end
-    # @info "|local_UBS| = $(length(incumbent.natural_order_vect))"
-
-
     # we can't compare the LBS and UBS if the incumbent set is empty
     if length(incumbent.natural_order_vect) == 0 return false end
 
@@ -325,8 +316,8 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
-                else
-                    push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
+                else 
+                    push!(node.localNadirPts, u.y) ; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
                 end 
             else
                 return fathomed
@@ -356,15 +347,6 @@ end
 # -------------------------------------------
 function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
     @assert length(node.RBS.natural_order_vect) > 0 "relaxed bound set is empty for node $(node.num)"
-
-    # incumbent = IncumbentSet()
-    # for sol in global_incumbent.natural_order_vect.sols
-    #     if verifyAssign(sol.xEquiv[1], node)
-    #         push!(incumbent.natural_order_vect, sol)
-    #     end
-    # end
-
-    # @info "|local_UBS| = $(length(incumbent.natural_order_vect))"
 
     # we can't compare the LBS and UBS if the incumbent set is empty
     if length(incumbent.natural_order_vect) == 0 return false end
@@ -453,7 +435,7 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
-                else
+                else 
                     push!(node.localNadirPts, u.y)
                 end 
             else
@@ -468,7 +450,7 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
                 if EPB
                     if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                         node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
-                    else
+                    else 
                         push!(node.localNadirPts, u.y)
                     end 
                 else

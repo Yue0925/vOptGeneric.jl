@@ -142,7 +142,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     # get the actual node
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
-    setPartialAssign(node)
 
     #--------------------
     # test dominance 
@@ -180,7 +179,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
         elseif length(node.pred.RBS.natural_order_vect) > 0
-                node.pred.RBS = RelaxedBoundSet() ; node.pred.assign = Dict{Int64, Int64}()
+                node.pred.RBS = RelaxedBoundSet() 
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
                 end
@@ -209,8 +208,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         end
     else
         # unchanged... variable branching 
-        # assignment = getPartialAssign(node) ; 
-        var_split = pickUpAFreeVar(node.assign, pb)
+        assignment = getPartialAssign(node) ; var_split = pickUpAFreeVar(assignment, pb)
         if var_split == 0 return end       # is a leaf
 
         node1 = Node(
@@ -281,7 +279,6 @@ end
 """
 A bi-objective binary(0-1) branch and bound algorithm.
 """
-#TODO : param
 function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results, verbose; args...)
     start = time()
 

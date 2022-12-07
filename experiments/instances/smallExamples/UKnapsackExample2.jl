@@ -16,7 +16,7 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
     fout = open(outputName, "w")
     println(fout, "vars = $vars ; constr = $constr ")
   
-    if method == :bb || method == :bc_rootRelax || method == :bb_EPB || method == :bc_rootRelaxEPB
+    if method != :dicho && method != :epsilon
         println(fout, infos)
     else
       println(fout, "total_times_used = $total_time")
@@ -57,7 +57,11 @@ function BOUKP(method, fname; step=0.5)
     elseif method == :bb_EPB
         infos = vSolve( m, method=:bb_EPB, verbose=false )
     elseif method == :bc_rootRelaxEPB
-        infos = vSolve( m, method=:bc_rootRelaxEPB, verbose=false )
+        infos = vSolve( m, method=:bc_rootRelaxEPB, verbose=false ) #
+    elseif method == :bc_rootRelaxCP
+        infos = vSolve( m, method=:bc_rootRelaxCP, verbose=false )
+    elseif method == :bc_rootRelaxCPEPB
+        infos = vSolve( m, method=:bc_rootRelaxCPEPB, verbose=false )
     elseif method == :dicho 
         start = time()
         vSolve( m, method=:dicho, verbose=false )
@@ -76,7 +80,7 @@ function BOUKP(method, fname; step=0.5)
     X_E = getX_E( m )
 
 
-    (method == :bb || method == :bc_rootRelax || method == :bb_EPB || method == :bc_rootRelaxEPB) ? 
+    (method != :dicho && method != :epsilon) ? 
         writeResults(size, 1, "UKnapsackExample2", fname, method, Y_N, X_E; infos) : 
         writeResults(size, 1, "UKnapsackExample2", fname, method, Y_N, X_E; total_time)
 
@@ -85,7 +89,7 @@ end
 
 function main()
     folder = "../../results/smallExamples"
-    for method in [:bb, :bc_rootRelax, :bb_EPB, :bc_rootRelaxEPB] #  :dicho, 
+    for method in [:bc_rootRelaxCP, :bc_rootRelaxCPEPB] #  :dicho,  :bb, :bc_rootRelax, :bb_EPB, :bc_rootRelaxEPB
         result_dir = folder * "/" * string(method)
             if !isdir(result_dir)
                 mkdir(result_dir)
