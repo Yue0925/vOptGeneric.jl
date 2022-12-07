@@ -17,13 +17,14 @@ mutable struct Node
     EPB::Bool                   # if this node is (extended) pareto branched 
     nadirPt::Vector{Float64}    # if EPB, indicate the pt branched from  
     duplicationBound::Float64   # an additional bound on objective z₁ (maybe redundant) to avoid duplicated search area during EPB 
-    RBS::RelaxedBoundSet        # local relaxed bound set              
+    RBS::RelaxedBoundSet        # local relaxed bound set    
     activated::Bool             # if the node is active
     pruned::Bool                # if the node is pruned
     prunedType::PrunedType      # if the node is fathomed, restore pruned type
     deleted::Bool               # if the node is supposed to be deleted
     con_cuts::Vector{ConstraintRef}             
     cutpool::CutPool
+    assign::Dict{Int64, Int64}
 
     Node() = new()
 
@@ -55,6 +56,7 @@ mutable struct Node
         # n.cuts_ref = Vector{CutScore}()
         n.con_cuts = Vector{ConstraintRef}()
         n.cutpool = CutPool()
+        n.assign = Dict{Int64, Int64}()
     
         f(t) = nothing # @async println("Finalizing node $(t.num).")
         finalizer(f, n)
@@ -121,6 +123,27 @@ function getPartialAssign(actual::Node)
         if !actual.EPB assignment[actual.var] = actual.var_bound end 
     end
     return assignment
+end
+
+function setPartialAssign(actual::Node)
+    actual.assign = Dict{Int64, Int64}() # var index => bound value
+    if isRoot(actual) # the actual node is the root 
+        return actual.assign
+    end
+    predecessor = actual.pred
+    if !actual.EPB actual.assign[actual.var] = actual.var_bound end 
+
+    while !isRoot(predecessor)     
+        actual = predecessor ; predecessor = actual.pred
+        if !actual.EPB actual.assign[actual.var] = actual.var_bound end 
+    end
+end
+
+function verifyAssign(x::Vector{Float64}, node::Node)
+    for (i, v) in node.assign
+        if abs(x[i] - v) > 0.0001 return false end
+    end
+    return true 
 end
 
 

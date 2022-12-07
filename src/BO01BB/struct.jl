@@ -60,7 +60,7 @@ mutable struct StatInfo
     test_dom_time::Float64
     update_incumb_time::Float64
     tree_size::Float64
-    cuts_activated::Bool
+    cp_activated::Bool
     cuts_infos::CutsInfo
     nb_nodes_EPB::Int64
     nb_nodes_VB::Int64
@@ -86,7 +86,7 @@ function Base.:show(io::IO, info::StatInfo)
         "nb_nodes_VB = $(info.nb_nodes_VB) \n",
         "root_relax = $(info.root_relax) "
     )
-    if info.cuts_activated println(io, info.cuts_infos) end
+    if info.cp_activated println(io, info.cuts_infos) end
 end
 
 
@@ -97,7 +97,7 @@ mutable struct BBparam
     time_limit::Float64     # time limit for B&B algo
     traverse::Symbol        # traverse strategy such as dfs, bfs...
     branching::Symbol       # branching strategy
-    cut_activated::Bool     # if apply cuts at each node
+    cp_activated::Bool     # if apply cuts at each node
     EPB::Bool               # if consider the EP branching 
     root_relax::Bool        # use the relaxation value at root in an IP solver 
 end

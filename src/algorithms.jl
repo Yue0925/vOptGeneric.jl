@@ -84,7 +84,7 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     
     #Set the first objective as an objective in the JuMP Model
     JuMP.set_objective(m, f1Sense, f1)
-    MOI.set(m, MOI.NumberOfThreads(), 1) # TODO
+    # MOI.set(m, MOI.NumberOfThreads(), 1) # TODO
     
     R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
@@ -304,7 +304,7 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
                     push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                     push!(vd.X_E, x_star)
                     # push!(vd.logObjs, f)
-                    if yt_1 >= ys_1 && yt_2 >= yr_2
+                    if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
                         dichoRecursion_callback(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                         dichoRecursion_callback(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
                     end
@@ -321,7 +321,7 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
                 push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                 push!(vd.X_E, JuMP.value.(varArray))
                 # push!(vd.logObjs, f)
-                if yt_1 >= ys_1 && yt_2 >= yr_2
+                if yt_1 > ys_1+1e-4 && yt_2 > yr_2+1e-4
                     dichoRecursion_callback(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                     dichoRecursion_callback(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
                 end
@@ -460,7 +460,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     varArray = JuMP.all_variables(m)
 
     #Set the first objective as an objective in the JuMP JuMP.Model
-    MOI.set(m, MOI.NumberOfThreads(), 1)
+    # MOI.set(m, MOI.NumberOfThreads(), 1)
     JuMP.set_objective(m, f1Sense, f1)
     verbose && println("solving for z1")
     

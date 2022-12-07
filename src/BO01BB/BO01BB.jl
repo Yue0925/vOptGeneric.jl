@@ -142,6 +142,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     # get the actual node
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
+    setPartialAssign(node)
 
     #--------------------
     # test dominance 
@@ -179,16 +180,13 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
         elseif length(node.pred.RBS.natural_order_vect) > 0
-                node.pred.RBS = RelaxedBoundSet()
-                if pb.param.cut_activated
+                node.pred.RBS = RelaxedBoundSet() ; node.pred.assign = Dict{Int64, Int64}()
+                if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
                 end
         end
     end
 
-    #-----------------------------------------
-    # TODO : check => branching variable/objective + generate new nodes
-    #-----------------------------------------
     if pb.param.EPB && length(node.localNadirPts) > 0
         for i = 1:length(node.localNadirPts)
             pt =  node.localNadirPts[i] ; duplicationBound_z1 = Inf
@@ -211,7 +209,8 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         end
     else
         # unchanged... variable branching 
-        assignment = getPartialAssign(node) ; var_split = pickUpAFreeVar(assignment, pb)
+        # assignment = getPartialAssign(node) ; 
+        var_split = pickUpAFreeVar(node.assign, pb)
         if var_split == 0 return end       # is a leaf
 
         node1 = Node(
@@ -270,7 +269,7 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     problem.info.test_dom_time = round(problem.info.test_dom_time, digits = 2)
     problem.info.update_incumb_time = round(problem.info.update_incumb_time, digits = 2)
 
-    if problem.info.cuts_activated
+    if problem.info.cp_activated
         problem.info.cuts_infos.times_calling_dicho = round(problem.info.cuts_infos.times_calling_dicho, digits = 2)
         problem.info.cuts_infos.times_calling_separators = round(problem.info.cuts_infos.times_calling_separators, digits = 2)
         problem.info.cuts_infos.times_oper_cutPool = round(problem.info.cuts_infos.times_oper_cutPool, digits = 2)
@@ -282,7 +281,8 @@ end
 """
 A bi-objective binary(0-1) branch and bound algorithm.
 """
-function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results, verbose; args...)
+#TODO : param
+function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results, verbose; args...)
     start = time()
 
     converted, f = formatting(m)
@@ -297,15 +297,18 @@ function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results
     standard_form(problem) ; problem.param.EPB = EPB
     # JuMP.unset_silent(problem.m)
 
-    if cut
-        # problem.param.cut_activated = cut ; problem.info.cuts_activated = cut 
-        problem.param.root_relax = cut ; problem.info.root_relax = cut 
+    if root_relax
+        problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
         JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
+    end
+
+    if cp
+        problem.param.cp_activated = cp ; problem.info.cp_activated = cp 
     end
     # # relaxation LP
     # undo_relax = JuMP.relax_integrality(problem.m)
     function undo_relax() end 
-    if !cut undo_relax = JuMP.relax_integrality(problem.m) end 
+    if !root_relax undo_relax = JuMP.relax_integrality(problem.m) end 
 
     # initialize the incumbent list by heuristics or with Inf
     incumbent = IncumbentSet() 
@@ -325,7 +328,7 @@ function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results
         post_processing(m, problem, incumbent, round_results, verbose; args...)
         problem.info.total_times = round(time() - start, digits = 2)
         # undo_relax()
-        if !cut undo_relax() end 
+        if !root_relax undo_relax() end 
         return problem.info
     end
 
@@ -359,7 +362,7 @@ function solve_branchboundcut(m::JuMP.Model, cut::Bool, EPB::Bool, round_results
     problem.info.tree_size = round(Base.summarysize(root)/MB, digits = 3)
     
     # undo_relax()
-    if !cut undo_relax() end 
+    if !root_relax undo_relax() end 
     show(tmr)
 
     problem.info.cuts_infos.cuts_total = problem.info.cuts_infos.cuts_applied

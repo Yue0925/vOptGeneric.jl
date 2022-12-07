@@ -45,7 +45,7 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
   fout = open(outputName, "w")
   println(fout, "vars = $vars ; constr = $constr ")
 
-  if method == :bb || method == :bc || method == :bb_EPB || method == :bc_EPB
+  if method != :dicho && method != :epsilon
     println(fout, infos)
   else
     println(fout, "total_times_used = $total_time")
@@ -114,14 +114,14 @@ function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
     elseif method == :bb
       infos = vSolve( Bi01IP, method=:bb, verbose=false )
       println(infos)
-    elseif method == :bc 
-      infos = vSolve( Bi01IP, method=:bc, verbose=false )
+    elseif method == :bc_rootRelax 
+      infos = vSolve( Bi01IP, method=:bc_rootRelax, verbose=false )
       println(infos)
     elseif method == :bb_EPB
       infos = vSolve( Bi01IP, method=:bb_EPB, verbose=false )
       println(infos)
-    elseif method == :bc_EPB
-      infos = vSolve( Bi01IP, method=:bc_EPB, verbose=false )
+    elseif method == :bc_rootRelaxEPB
+      infos = vSolve( Bi01IP, method=:bc_rootRelaxEPB, verbose=false )
       println(infos)
     end
 
@@ -134,7 +134,7 @@ function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
     println("length X_E = ", length(X_E))
 
     # ---- Writing the results
-    (method == :bb || method == :bc || method == :bb_EPB || method == :bc_EPB) ?
+    (method != :dicho && method != :epsilon) ?
       writeResults(n, m, fname, outputName, method, Y_N, X_E; infos) : 
       writeResults(n, m, fname, outputName, method, Y_N, X_E; total_time)
 
@@ -169,7 +169,7 @@ function main2(fname::String)
   end
 
   solverSelected = CPLEX.Optimizer
-  for method in [:dicho, :epsilon, :bb, :bc, :bb_EPB, :bc_EPB] # 
+  for method in [:dicho, :epsilon, :bb, :bc_rootRelax, :bb_EPB, :bc_rootRelaxEPB] # 
     vSolveBi01IP2(solverSelected, dat.C, dat.A, dat.b, fname, method) 
     vSolveBi01IP2(solverSelected, dat.C, dat.A, dat.b, fname, method) 
 

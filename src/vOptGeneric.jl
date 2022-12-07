@@ -56,13 +56,13 @@ function vSolve(m::JuMP.Model ; relax=false, method=nothing, step = 1., round_re
     elseif method == :lex || method == :lexico
         solve_lexico(m, verbose ; relaxation=relax, args...)
     elseif method == :bb || method == :branchbound
-        return solve_branchboundcut(m, false, false, round_results, verbose ; args...)
+        return solve_branchboundcut(m, false, false, false, round_results, verbose ; args...)
     elseif method == :bb_EPB || method == :branchboundEPB
-        return solve_branchboundcut(m, false, true, round_results, verbose ; args...)
-    elseif method == :bc || method == :branchcut
-        return solve_branchboundcut(m, true, false, round_results, verbose ; args...)
-    elseif method == :bc_EPB || method == :branchcutEPB
-        return solve_branchboundcut(m, true, true, round_results, verbose ; args...)
+        return solve_branchboundcut(m, false, false, true, round_results, verbose ; args...)
+    elseif method == :bc_rootRelax || method == :branchcutRootRelax
+        return solve_branchboundcut(m, false, true, false, round_results, verbose ; args...)
+    elseif method == :bc_rootRelaxEPB || method == :branchcutEPB
+        return solve_branchboundcut(m, false, true, true, round_results, verbose ; args...)
     else
         @warn("use solve(m, method = :(epsilon | dichotomy | chalmet | lexico | branchbound) )")
     end
