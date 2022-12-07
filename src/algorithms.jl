@@ -84,6 +84,7 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     
     #Set the first objective as an objective in the JuMP Model
     JuMP.set_objective(m, f1Sense, f1)
+    MOI.set(m, MOI.NumberOfThreads(), 1) # TODO
     
     R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
@@ -244,11 +245,11 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
             weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
 
             #Filter X_E and Y_N :
-            inds = Int[]
+            inds = Int[] ; last_ind = 0
             for i = 1:length(vd.Y_N)-1
                 if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
-                    push!(inds, i+1)
-                elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i])
+                    push!(inds, i+1) ; last_ind = i+1
+                elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i]) && last_ind != i
                     push!(inds, i)
                 end
             end
@@ -299,7 +300,7 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
                 yt_2 = x_star'* collect(values(f2.terms)) + f2.constant
                 val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
 
-                if (f1Sense == MOI.MIN_SENSE && val < lb - 1e-4) || val > lb + 1e-4
+                if ( val < lb - 1e-4)
                     push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                     push!(vd.X_E, x_star)
                     # push!(vd.logObjs, f)
@@ -316,7 +317,7 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
             yt_2 = JuMP.value(f2)
             val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
 
-            if (f1Sense == MOI.MIN_SENSE && val < lb - 1e-4) || val > lb + 1e-4
+            if (val < lb - 1e-4)
                 push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                 push!(vd.X_E, JuMP.value.(varArray))
                 # push!(vd.logObjs, f)
@@ -459,6 +460,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     varArray = JuMP.all_variables(m)
 
     #Set the first objective as an objective in the JuMP JuMP.Model
+    MOI.set(m, MOI.NumberOfThreads(), 1)
     JuMP.set_objective(m, f1Sense, f1)
     verbose && println("solving for z1")
     

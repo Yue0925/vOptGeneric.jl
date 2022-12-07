@@ -148,13 +148,15 @@ function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, v
         end
     end
 
-    # if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
-    #     prune!(node, OPTIMALITY)
-    #     if verbose
-    #         @info "node $(node.num) is fathomed by optimality ! and length = $(length(node.RBS.natural_order_vect))"
-    #     end
-    #     pb.info.update_incumb_time += (time() - start) ; return true
-    # end
+    if !pb.param.root_relax
+        if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
+            prune!(node, OPTIMALITY)
+            if verbose
+                @info "node $(node.num) is fathomed by optimality ! and length = $(length(node.RBS.natural_order_vect))"
+            end
+            pb.info.update_incumb_time += (time() - start) ; return true
+        end
+    end
     pb.info.update_incumb_time += (time() - start) ; return false
 end
 
