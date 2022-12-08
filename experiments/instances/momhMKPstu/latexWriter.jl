@@ -473,8 +473,188 @@ end
 
 
 
-detailedMOBB_perform("momhMKPstu/MOBKP/set3")
+# detailedMOBB_perform("momhMKPstu/MOBKP/set3")
 
-comparisonThreeMethods("momhMKPstu/MOBKP/set3")
+# comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 
-MOBC_perform("momhMKPstu/MOBKP/set3")
+# MOBC_perform("momhMKPstu/MOBKP/set3")
+
+
+
+
+
+function comparisons(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{lcccccccccccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(root relax)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(root relax)}} & \multicolumn{2}{c}{\textbf{B\&C(root relax + CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(root relax +CP)}} \\
+    
+    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17}
+    ~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["epsilon", "bb", "bc_rootRelax", "bb_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCP", "bc_rootRelaxCPEPB"] ; record_n = []
+    record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods[2:end])
+
+    for folder_n in readdir(work_dir * "/epsilon") # ∀ filder_n
+        count = 0
+        avg_n = 0
+        avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/") # ∀ file in dicho
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            times = []
+            pts = [] ; X = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars
+            avg_m += constr
+
+            # write ϵ-constraint result (ϵ = 0.5 by default)
+            if isfile(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+                include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N)
+
+                avgT["epsilon"] += total_times_used
+                avgY["epsilon"] += size_Y_N
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+
+            # write B&B result 
+            if isfile(work_dir * "/bb/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bb/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+                push!(X, size_X_E)
+                avgT["bb"] += total_times_used
+                avgY["bb"] += size_Y_N
+
+            else
+                # print(fout, "- & - & ")
+                push!(times, -1); push!(pts, -1)
+            end
+
+            # write B&C result 
+            if isfile(work_dir * "/bc_rootRelax/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bc_rootRelax/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+                avgT["bc_rootRelax"] += total_times_used
+                avgY["bc_rootRelax"] += size_Y_N
+
+            else
+                # print(fout, "- & - & ")
+                push!(times, -1); push!(pts, -1)
+            end
+
+            if isfile(work_dir * "/bb_EPB/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bb_EPB/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+                avgT["bb_EPB"] += total_times_used
+                avgY["bb_EPB"] += size_Y_N
+
+            else
+                # print(fout, "- & - & ")
+                push!(times, -1); push!(pts, -1)
+            end
+
+            if isfile(work_dir * "/bc_rootRelaxEPB/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bc_rootRelaxEPB/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+                avgT["bc_rootRelaxEPB"] += total_times_used
+                avgY["bc_rootRelaxEPB"] += size_Y_N
+
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+
+            if isfile(work_dir * "/bc_rootRelaxCP/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bc_rootRelaxCP/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+                avgT["bc_rootRelaxCP"] += total_times_used
+                avgY["bc_rootRelaxCP"] += size_Y_N
+
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+
+
+            if isfile(work_dir * "/bc_rootRelaxCPEPB/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bc_rootRelaxCPEPB/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N) 
+                avgT["bc_rootRelaxCPEPB"] += total_times_used
+                avgY["bc_rootRelaxCPEPB"] += size_Y_N
+
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+
+
+            # ------------------
+            for i=1:length(methods)-1
+                if times[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(times[i]) * " & ")
+                end
+    
+                if pts[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(pts[i]) * " & ")
+                end
+
+            end
+
+            print(fout, string(times[end]) * " & ") ; println(fout, string(pts[end]) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count)
+        avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        end
+
+        # append!(record_n, avg_n)
+        # append!(record_times["epsilon"], avg_ϵ_T) ; append!(record_times["B&B"], avg_bb_T) ; append!(record_times["B&C"], avg_bc_T) 
+        # append!(record_nodes["B&B"], avg_bb_node) ; append!(record_nodes["B&C"], avg_bc_node)
+
+        print(fout, "\\cline{1-17} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        end
+
+        println(fout, "} \\\\ \\cline{1-17}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the different algorithms performances for instances $instances .}")
+    println(fout, "\\label{tab:table_compare_$instances }")
+    println(fout, "\\end{table}")
+    close(fout)
+
+end
+
+
+comparisons("momhMKPstu/MOBKP/set3")
