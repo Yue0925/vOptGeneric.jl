@@ -70,7 +70,7 @@ end
 Compute and stock the relaxed bound set (i.e. the LP relaxation) of the (sub)problem defined by the given node.
 Return `true` if the node is pruned by infeasibility.
 """
-function LPRelaxByDicho(node::Node, pb::BO01Problem, round_results, verbose ; args...)
+function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
     objcons = setVarObjBounds(node, pb) ; num_var = length(pb.varArray)
 
     # ------------------------
@@ -81,7 +81,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, round_results, verbose ; ar
 
         # step 1 : calculate LBS of the actual sub-problem
         start = time()
-        pruned = compute_LBS(node, pb, round_results, verbose; args)
+        pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
         pb.info.relaxation_time += (time() - start)
 
         if pruned 
@@ -96,7 +96,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, round_results, verbose ; ar
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
         if length(node.RBS.natural_order_vect) > 1
-            pruned = MP_cutting_planes(node, pb, round_results, verbose ; args...)
+            pruned = MP_cutting_planes(node, pb, incumbent, round_results, verbose ; args...)
 
         elseif length(node.RBS.natural_order_vect) == 1
             pb.info.cuts_infos.ite_total += 1 
@@ -122,7 +122,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, round_results, verbose ; ar
         removeVarObjBounds(node, pb, objcons) ; return pruned
     else
         start = time()
-        pruned = compute_LBS(node, pb, round_results, verbose; args)
+        pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
         pb.info.relaxation_time += (time() - start)
 
         removeVarObjBounds(node, pb, objcons) ; return pruned
@@ -259,7 +259,12 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
     # Case 1 :  if only one feasible point in UBS 
     if length(incumbent.natural_order_vect) == 1 
-        return false 
+        u = incumbent.natural_order_vect.sols[1]
+        if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
+            return true
+        else
+            return false
+        end
     end
 
     # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
@@ -274,8 +279,8 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     if !sufficient return false end
 
     # test condition necessary 2 : LBS ≤/dominates UBS 
-    fathomed = true ; dist_naditPt = Vector{Float64}()
-    ideal_pt = [ptr.y[1], ptl.y[2]]
+    fathomed = true# ; dist_naditPt = Vector{Float64}()
+    # ideal_pt = [ptr.y[1], ptl.y[2]]
 
     # iterate of all local nadir points
     for u ∈ nadir_pts.sols
@@ -305,8 +310,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             compared = true
 
             if λ'*u.y < λ'*sol_r.y #&& λ'*u.y < λ'*sol_l.y
-                existence = true
-                break
+                existence = true ; break
             end
         end
         
@@ -315,9 +319,10 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             fathomed = false
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed # todo : EPB ignore duplicated part 
+                    # nothing 
                 else 
-                    push!(node.localNadirPts, u.y) ; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
+                    push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
                 end 
             else
                 return fathomed
@@ -377,7 +382,12 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
 
     # Case 1 :  if only one feasible point in UBS 
     if length(incumbent.natural_order_vect) == 1 
-        return false 
+        u = incumbent.natural_order_vect.sols[1]
+        if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
+            return true
+        else
+            return false
+        end
     end
 
     # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
@@ -416,7 +426,7 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
             
             compared = true
 
-            if u.y[1] <= sol_r.y[1]
+            if u.y[1] < sol_r.y[1]
                 existence = true ; break
             end
         end
@@ -434,7 +444,8 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
             fathomed = false
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed # todo : EPB ignore duplicated part 
+                    # nothing
                 else 
                     push!(node.localNadirPts, u.y)
                 end 
@@ -443,13 +454,14 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
             end
             
         end
-
+ 
         if !compared && u.y[2] ≥ ptr.y[2]
             if  ptr.y[1] <= u.y[1] <= ptl.y[1]
                 fathomed = false
                 if EPB
                     if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                        node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+                        node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed # todo : EPB ignore duplicated part 
+                        # nothing
                     else 
                         push!(node.localNadirPts, u.y)
                     end 

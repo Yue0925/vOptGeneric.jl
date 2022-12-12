@@ -197,7 +197,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             )
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
 
-            if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, round_results, verbose; args...) ) || 
+            if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
                 ( @timeit tmr "incumbent" updateIncumbent(nodeChild, pb, incumbent, verbose) )
                 nodeChild.activated = false ; pb.info.nb_nodes_pruned += 1
             else
@@ -218,7 +218,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         )
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, round_results, verbose; args...) ) || 
+        if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
             node1.activated = false ; pb.info.nb_nodes_pruned += 1
         else
@@ -232,7 +232,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         )
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, round_results, verbose; args...) ) || 
+        if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
             node2.activated = false ; pb.info.nb_nodes_pruned += 1
         else
@@ -280,7 +280,7 @@ end
 A bi-objective binary(0-1) branch and bound algorithm.
 """
 function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results, verbose; args...)
-    start = time()
+    
 
     converted, f = formatting(m)
 
@@ -297,11 +297,15 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     if root_relax
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
         JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
+        # JuMP.unset_silent(problem.m) # todo: comment 
     end
 
     if cp
         problem.param.cp_activated = cp ; problem.info.cp_activated = cp 
     end
+
+
+    start = time() # todo : presolving 
     # # relaxation LP
     # undo_relax = JuMP.relax_integrality(problem.m)
     function undo_relax() end 
@@ -318,12 +322,12 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
     problem.info.nb_nodes += 1
 
-    if LPRelaxByDicho(root, problem, round_results, verbose; args...) || updateIncumbent(root, problem, incumbent, verbose)
+    if LPRelaxByDicho(root, problem, incumbent, round_results, verbose; args...) || updateIncumbent(root, problem, incumbent, verbose)
         if converted
             reversion(m, f, incumbent)
         end
-        post_processing(m, problem, incumbent, round_results, verbose; args...)
         problem.info.total_times = round(time() - start, digits = 2)
+        post_processing(m, problem, incumbent, round_results, verbose; args...)
         # undo_relax()
         if !root_relax undo_relax() end 
         return problem.info
@@ -347,12 +351,12 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
             end
         end
     end
-
+    
+    problem.info.total_times = round(time() - start, digits = 2)
     if converted
         reversion(m, f, incumbent)
     end
     post_processing(m, problem, incumbent, round_results, verbose; args...)
-    problem.info.total_times = round(time() - start, digits = 2)
     
     MB = 10^6
 

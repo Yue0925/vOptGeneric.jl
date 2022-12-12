@@ -89,7 +89,7 @@ end
 
 function main()
     folder = "../../results/smallExamples"
-    for method in [:bc_rootRelaxCP, :bc_rootRelaxCPEPB] #  :dicho,  :bb, :bc_rootRelax, :bb_EPB, :bc_rootRelaxEPB
+    for method in [:bc_rootRelax, :bc_rootRelaxEPB, :bc_rootRelaxCP, :bc_rootRelaxCPEPB] #  :dicho,  :bb,    :bb_EPB,  , 
         result_dir = folder * "/" * string(method)
             if !isdir(result_dir)
                 mkdir(result_dir)

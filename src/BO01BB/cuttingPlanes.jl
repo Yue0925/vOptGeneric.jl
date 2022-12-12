@@ -16,12 +16,20 @@ Compute the lower bound set of the LP polyhedron by dichotomy method.
 
 Return `true` if this node is fathomed by infeasibility.
 """
-function compute_LBS(node::Node, pb::BO01Problem, round_results, verbose ; args...)
+function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
     #------------------------------------------------------------------------------
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.info.root_relax
-        solve_dicho_callback(pb.m, round_results, false ; args...)
+        Y_integer, X_integer = solve_dicho_callback(pb.m, round_results, false ; args...)
+        start = time()
+        for i = 1:length(Y_integer) 
+            s = Solution(X_integer[i], Y_integer[i])
+            if s.is_binary
+                push!(incumbent.natural_order_vect, s, filtered=true)  
+            end
+        end
+        pb.info.update_incumb_time += (time() - start) 
     else
         solve_dicho(pb.m, round_results, false ; args...)
     end
@@ -109,7 +117,7 @@ one corresponding vector `x` in decision space.
 
 Return ture if the node is infeasible after adding cuts.
 """
-function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ; args...)
+function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
     numVars = length(pb.varArray) ; numRows = size(pb.A, 1)
     LBS = node.RBS.natural_order_vect.sols ; loop_limit = 5
 
@@ -185,7 +193,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, round_results, verbose ;
         # ---------------------------------------------------
         start_dicho = time()
 
-        pruned = compute_LBS(node, pb, round_results, verbose; args)
+        pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
         pb.info.cuts_infos.times_calling_dicho += (time() - start_dicho)
         LBS = node.RBS.natural_order_vect.sols
         # in case of infeasibility

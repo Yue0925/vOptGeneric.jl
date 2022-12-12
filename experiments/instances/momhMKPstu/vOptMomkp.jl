@@ -175,7 +175,7 @@ function main(fname::String)
   end
 
   solverSelected = CPLEX.Optimizer
-  for method in [ :bb, :bc_rootRelax, :bc_rootRelaxCP , :bb_EPB, :bc_rootRelaxEPB, :bc_rootRelaxCPEPB] # :dicho, :epsilon, 
+  for method in [ :bc_rootRelax , :bc_rootRelaxEPB] # :dicho, :epsilon, :bb, :bb_EPB, :bc_rootRelax , :bc_rootRelaxCP  :bc_rootRelaxCPEPB  ,:bc_rootRelaxEPB
     vSolveBi01IP(solverSelected, dat.C, dat.A, dat.b, fname, method) 
   end
 
