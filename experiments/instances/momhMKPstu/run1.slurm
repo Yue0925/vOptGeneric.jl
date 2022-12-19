@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=testMomhMKPstu
+#SBATCH --job-name=testBC
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,8 +8,8 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=testMomhMKPstu_OUTPUT.txt
-#SBATCH --error=testMomhMKPstu_ERROR.txt
+#SBATCH --output=testBC_OUTPUT.txt
+#SBATCH --error=testBC_ERROR.txt
 
 
 for file in ./MOBKP/set3/*; do
@@ -17,4 +17,4 @@ for file in ./MOBKP/set3/*; do
     srun julia vOptMomkp.jl "$file"
 done
 
-srun julia latexWriter.jl
+# srun julia latexWriter.jl

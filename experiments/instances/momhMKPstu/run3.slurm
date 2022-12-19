@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=test_cuts
+#SBATCH --job-name=testRootRelax
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,8 +8,8 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=test_cuts_OUTPUT.txt
-#SBATCH --error=test_cuts_ERROR.txt
+#SBATCH --output=testRootRelax_OUTPUT.txt
+#SBATCH --error=testRootRelax_ERROR.txt
 
 
 for file in ./MOBKP/set3/*; do
