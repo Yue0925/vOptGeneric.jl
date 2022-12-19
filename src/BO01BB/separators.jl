@@ -190,15 +190,22 @@ function MP_CG_separator2(x_l::Vector{Float64}, x_r::Vector{Float64}, pb::BO01Pr
 end
 
 
+# todo : reduce A, b 
 
-
-function SP_KP_heurSeparator(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64})
+function SP_KP_heurSeparator(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
     n = size(A, 2)
     m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
+        for (j, v) in assign
+            if v==0 
+                A[i, j] = 0.0
+            elseif v==1
+                b[i] -= A[i, j] ; A[i, j] = 0.0
+            end
+        end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 
@@ -233,20 +240,30 @@ function SP_KP_heurSeparator(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{F
             cut[j+1] = 1.0
         end
         cut = round.(Int, cut)
-        push!(cuts, cut)
+        if (x .- 1)'* cut[2:end] +1 > 0.0
+            push!(cuts, cut)
+        end
+        # push!(cuts, cut)
     end
 
     return cuts
 end
 
 
-function SP_KP_heurSeparator2(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64})
+function SP_KP_heurSeparator2(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
     n = size(A, 2)
     m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
+        for (j, v) in assign
+            if v==0 
+                A[i, j] = 0.0
+            elseif v==1
+                b[i] -= A[i, j] ; A[i, j] = 0.0
+            end
+        end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 
@@ -282,19 +299,29 @@ function SP_KP_heurSeparator2(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{
             cut[j+1] = 1.0
         end
         cut = round.(Int, cut)
-        push!(cuts, cut)
+        if (x .- 1)'* cut[2:end] +1 > 0.0
+            push!(cuts, cut)
+        end
+        # push!(cuts, cut)
     end
 
     return cuts
 end
 
-function MP_KP_heurSeparator2(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64})
+function MP_KP_heurSeparator2(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
     n = size(A, 2)
     m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
+        for (j, v) in assign
+            if v==0 
+                A[i, j] = 0.0
+            elseif v==1
+                b[i] -= A[i, j] ; A[i, j] = 0.0
+            end
+        end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 
@@ -339,7 +366,10 @@ function MP_KP_heurSeparator2(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Mat
         
         cut[1] = sum(cut) - 1
         cut = round.(Int, cut)
-        push!(cuts, cut)
+        if (x_l .- 1)'* cut[2:end] +1 > 0.0 && (x_r .- 1)'* cut[2:end] +1 > 0.0
+            push!(cuts, cut)
+        end
+        # push!(cuts, cut)
     end
 
     return cuts
@@ -347,13 +377,20 @@ end
 
 
 
-function MP_KP_heurSeparator(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64})
+function MP_KP_heurSeparator(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
     n = size(A, 2)
     m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
+        for (j, v) in assign
+            if v==0 
+                A[i, j] = 0.0
+            elseif v==1
+                b[i] -= A[i, j] ; A[i, j] = 0.0
+            end
+        end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 
@@ -399,7 +436,10 @@ function MP_KP_heurSeparator(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Matr
         
         cut[1] = sum(cut) - 1
         cut = round.(Int, cut)
-        push!(cuts, cut)
+        if (x_l .- 1)'* cut[2:end] +1 > 0.0 && (x_r .- 1)'* cut[2:end] +1 > 0.0
+            push!(cuts, cut)
+        end
+        # push!(cuts, cut)
     end
 
     return cuts

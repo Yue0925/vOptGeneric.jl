@@ -20,18 +20,21 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     #------------------------------------------------------------------------------
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
-    if pb.info.root_relax
+    if pb.param.root_relax
+        start = time()
         Y_integer, X_integer = solve_dicho_callback(pb.m, round_results, false ; args...)
+        pb.info.relaxation_time += (time() - start)
+
         start = time()
         for i = 1:length(Y_integer) 
             s = Solution(X_integer[i], Y_integer[i])
-            if s.is_binary
-                push!(incumbent.natural_order_vect, s, filtered=true)  
-            end
+            if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
     else
+        start = time()
         solve_dicho(pb.m, round_results, false ; args...)
+        pb.info.relaxation_time += (time() - start)
     end
     vd_LP = getvOptData(pb.m)
 
@@ -73,7 +76,7 @@ function SP_cut_off(i::Int64, node::Node, pb::BO01Problem, round_results, verbos
     if node.RBS.natural_order_vect.sols[i].is_binary return (x_star, false) end 
 
     start_sep = time()
-    cuts = SP_KP_heurSeparator2(x_star, pb.A, pb.b)
+    cuts = SP_KP_heurSeparator2(x_star, pb.A, pb.b, node.assignment)
     pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
 
     if length(cuts) > 0
@@ -111,6 +114,18 @@ function SP_cut_off(i::Int64, node::Node, pb::BO01Problem, round_results, verbos
 end
 
 
+function isCutable(node::Node, i::Int64, j::Int64, incumbent::IncumbentSet)::Bool
+    # sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[j] 
+    # λ = [sol_r.y[2] - sol_l.y[2], sol_l.y[1] - sol_r.y[1]]
+    for t = i+1:j-1 
+        l = node.RBS.natural_order_vect.sols[t] 
+        if l.is_binary # || λ'*l.y > λ'*sol_r.y || λ'*l.y > λ'*sol_l.y
+            return false 
+        end
+    end
+    return true
+end
+
 """
 Cutting planes scheme for the multi-point cuts. For now we assume that every point `y` in criteria space has only
 one corresponding vector `x` in decision space. 
@@ -128,8 +143,6 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
     while ite < loop_limit 
         ite += 1 ; pb.info.cuts_infos.ite_total += 1 
 
-        # if isRoot(node) @info "ite = $ite " end
-
         l = 1 ; cut_counter = 0
 
         while l ≤ length(LBS)
@@ -139,7 +152,6 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
 
             for ∇ = max_step:-1:0 
                 if ∇ == 0
-                    # @info "MP_cutting_planes calling `SP_cut_off`"
                     (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
                     if new_cut cut_counter += 1 end 
                     l += 1
@@ -147,8 +159,10 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     r = l+∇
                     if r > length(LBS) || LBS[r].is_binary continue end
 
+                    if pb.param.root_relax && ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
+
                     start_sep = time()
-                    cuts = MP_KP_heurSeparator2(LBS[l].xEquiv[1], LBS[r].xEquiv[1], pb.A, pb.b)
+                    cuts = MP_KP_heurSeparator2(LBS[l].xEquiv[1], LBS[r].xEquiv[1], pb.A, pb.b, node.assignment)
                     pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
 
                     if length(cuts) > 0
@@ -191,13 +205,14 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         # ---------------------------------------------------
         # 3. otherwise, re-optimize by solving dicho -> LBS
         # ---------------------------------------------------
-        start_dicho = time()
 
-        pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-        pb.info.cuts_infos.times_calling_dicho += (time() - start_dicho)
-        LBS = node.RBS.natural_order_vect.sols
-        # in case of infeasibility
-        if pruned return true end
+        if cut_counter > 0
+            pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+            LBS = node.RBS.natural_order_vect.sols
+
+            # in case of infeasibility
+            if pruned return true end
+        end
 
         # --------------------------------------------------
         # 2. stop if no more valid cut can be found

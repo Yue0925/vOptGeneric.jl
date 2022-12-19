@@ -24,6 +24,7 @@ mutable struct Node
     deleted::Bool               # if the node is supposed to be deleted
     con_cuts::Vector{ConstraintRef}             
     cutpool::CutPool
+    assignment::Dict{Int64, Int64}
 
     Node() = new()
 
@@ -55,6 +56,7 @@ mutable struct Node
         # n.cuts_ref = Vector{CutScore}()
         n.con_cuts = Vector{ConstraintRef}()
         n.cutpool = CutPool()
+        n.assignment = Dict{Int64, Int64}()
     
         f(t) = nothing # @async println("Finalizing node $(t.num).")
         finalizer(f, n)
@@ -108,7 +110,7 @@ end
 """
 From the actual node, go up to the root to get the partial assignment of variables.
 """
-function getPartialAssign(actual::Node)
+function getPartialAssign(actual::Node)::Dict{Int64, Int64}
     assignment = Dict{Int64, Int64}() # var index => bound value
     if isRoot(actual) # the actual node is the root 
         return assignment

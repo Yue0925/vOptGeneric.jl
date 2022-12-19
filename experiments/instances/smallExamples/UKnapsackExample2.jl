@@ -52,16 +52,28 @@ function BOUKP(method, fname; step=0.5)
 
     if method == :bb
         infos = vSolve( m, method=:bb, verbose=false )
+        println(infos)
     elseif method == :bc_rootRelax 
         infos = vSolve( m, method=:bc_rootRelax, verbose=false )
+        println(infos)
     elseif method == :bb_EPB
         infos = vSolve( m, method=:bb_EPB, verbose=false )
+        println(infos)
     elseif method == :bc_rootRelaxEPB
         infos = vSolve( m, method=:bc_rootRelaxEPB, verbose=false ) #
+        println(infos)
     elseif method == :bc_rootRelaxCP
         infos = vSolve( m, method=:bc_rootRelaxCP, verbose=false )
+        println(infos)
     elseif method == :bc_rootRelaxCPEPB
         infos = vSolve( m, method=:bc_rootRelaxCPEPB, verbose=false )
+        println(infos)
+    elseif method == :bc
+        infos = vSolve( m, method=:bc, verbose=false )
+        println(infos)
+      elseif method == :bc_EPB
+        infos = vSolve( m, method=:bc_EPB, verbose=false )
+        println(infos)
     elseif method == :dicho 
         start = time()
         vSolve( m, method=:dicho, verbose=false )
@@ -89,13 +101,15 @@ end
 
 function main()
     folder = "../../results/smallExamples"
-    for method in [:bc_rootRelax, :bc_rootRelaxEPB, :bc_rootRelaxCP, :bc_rootRelaxCPEPB] #  :dicho,  :bb,    :bb_EPB,  , 
+    for method in [:bc, :bc_EPB, :bc_rootRelax, :bc_rootRelaxEPB, :bc_rootRelaxCP, :bc_rootRelaxCPEPB] #   
+        #  :dicho, :bc_rootRelaxCP, :bc_rootRelaxCPEPB
         result_dir = folder * "/" * string(method)
             if !isdir(result_dir)
                 mkdir(result_dir)
             end
             fname = result_dir * "/" * "UKnapsackExample2"
 
+            println(" --- method = $method ")
             BOUKP(method, fname) 
     end
 

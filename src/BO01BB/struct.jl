@@ -280,8 +280,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
-        push!(natural_sols.sols, sol)
-        return true
+        push!(natural_sols.sols, sol) ; return true
     end
 
     # a binary/dichotomy search finds the location to insert 
@@ -300,8 +299,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             r  = m-1
         # in case of equality
         else
-            addEquivX(natural_sols.sols[m], sol.xEquiv)
-            return true
+            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return true
         end
     end
 

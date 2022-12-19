@@ -167,9 +167,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         end
     end
 
-    pb.info.test_dom_time += (time() - start)
-
-
     #-----------------------------------------
     # liberate parent's useless data 
     #-----------------------------------------
@@ -179,13 +176,14 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
         elseif length(node.pred.RBS.natural_order_vect) > 0
-                node.pred.RBS = RelaxedBoundSet() 
+                node.pred.RBS = RelaxedBoundSet() ; node.pred.assignment = Dict{Int64, Int64}()
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
                 end
         end
     end
 
+    # objective branching 
     if pb.param.EPB && length(node.localNadirPts) > 0
         for i = 1:length(node.localNadirPts)
             pt =  node.localNadirPts[i] ; duplicationBound_z1 = Inf
@@ -195,6 +193,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
                 pred = node,
                 EPB = true, nadirPt = pt, duplicationBound = duplicationBound_z1
             )
+            nodeChild.assignment = getPartialAssign(nodeChild)
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
@@ -207,8 +206,8 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             push!(node.succs, nodeChild)
         end
     else
-        # unchanged... variable branching 
-        assignment = getPartialAssign(node) ; var_split = pickUpAFreeVar(assignment, pb)
+        # variable branching 
+        var_split = pickUpAFreeVar(node.assignment, pb)
         if var_split == 0 return end       # is a leaf
 
         node1 = Node(
@@ -216,6 +215,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             pred = node,
             var = var_split, var_bound = 1
         )
+        node1.assignment = getPartialAssign(node1)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
@@ -230,6 +230,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             pred = node, 
             var = var_split, var_bound = 0
         )
+        node2.assignment = getPartialAssign(node2)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
@@ -281,7 +282,6 @@ A bi-objective binary(0-1) branch and bound algorithm.
 """
 function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results, verbose; args...)
     
-
     converted, f = formatting(m)
 
     varArray = JuMP.all_variables(m)
@@ -294,22 +294,23 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     standard_form(problem) ; problem.param.EPB = EPB
     # JuMP.unset_silent(problem.m)
 
+    # # relaxation LP
+    # undo_relax = JuMP.relax_integrality(problem.m)
+    function undo_relax() end 
+
     if root_relax
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
         JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
         # JuMP.unset_silent(problem.m) # todo: comment 
+    else
+        undo_relax = JuMP.relax_integrality(problem.m)
     end
 
     if cp
         problem.param.cp_activated = cp ; problem.info.cp_activated = cp 
     end
 
-
     start = time() # todo : presolving 
-    # # relaxation LP
-    # undo_relax = JuMP.relax_integrality(problem.m)
-    function undo_relax() end 
-    if !root_relax undo_relax = JuMP.relax_integrality(problem.m) end 
 
     # initialize the incumbent list by heuristics or with Inf
     incumbent = IncumbentSet() 
@@ -318,7 +319,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     todo = initQueue(problem)
 
     # step 0 : create the root and add to the todo list
-    root = Node(problem.info.nb_nodes +1, 0)
+    root = Node(problem.info.nb_nodes +1, 0) ; root.assignment = getPartialAssign(root)
 
     problem.info.nb_nodes += 1
 
@@ -327,9 +328,10 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
             reversion(m, f, incumbent)
         end
         problem.info.total_times = round(time() - start, digits = 2)
+        problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time
         post_processing(m, problem, incumbent, round_results, verbose; args...)
-        # undo_relax()
-        if !root_relax undo_relax() end 
+        undo_relax()
+        # if !root_relax undo_relax() end 
         return problem.info
     end
 
@@ -356,14 +358,16 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     if converted
         reversion(m, f, incumbent)
     end
+    problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time
     post_processing(m, problem, incumbent, round_results, verbose; args...)
+
     
     MB = 10^6
 
     problem.info.tree_size = round(Base.summarysize(root)/MB, digits = 3)
     
-    # undo_relax()
-    if !root_relax undo_relax() end 
+    undo_relax()
+    # if !root_relax undo_relax() end 
     show(tmr)
 
     problem.info.cuts_infos.cuts_total = problem.info.cuts_infos.cuts_applied

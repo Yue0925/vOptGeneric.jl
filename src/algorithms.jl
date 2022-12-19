@@ -84,7 +84,6 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     
     #Set the first objective as an objective in the JuMP Model
     JuMP.set_objective(m, f1Sense, f1)
-    # MOI.set(m, MOI.NumberOfThreads(), 1) # TODO
     
     R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
@@ -200,9 +199,10 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
 
     #If a solution exists
     yr_1 = 0.0 ; yr_2 = 0.0 
+    # @info "                 status = $status "
     if status == MOI.INFEASIBLE return Y_integer, X_integer end
     if status == MOI.OPTIMAL
-        # todo : stock heur sol 
+        # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
@@ -214,7 +214,7 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
 
     elseif status == MOI.NODE_LIMIT && length(x_star) > 0
         if has_values(m)
-            # todo : stock heur sol 
+            # stock heur sol 
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
@@ -239,9 +239,11 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
     status = JuMP.termination_status(m)
 
     ys_1 = 0.0 ; ys_2 = 0.0 
+    # @info "                 status = $status "
+
     if status == MOI.INFEASIBLE return Y_integer, X_integer end
     if status == MOI.OPTIMAL
-        # todo : stock heur sol 
+        # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
@@ -258,7 +260,7 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
 
     elseif status == MOI.NODE_LIMIT && length(x_star) > 0
         if has_values(m)
-            # todo : stock heur sol 
+            # stock heur sol 
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
@@ -335,9 +337,11 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
 
     #If a solution exists
     yt_1 = 0.0 ; yt_2 = 0.0 
+    # @info "                 status = $status "
+
     if status == MOI.INFEASIBLE return Y_integer, X_integer end
     if status == MOI.OPTIMAL 
-        # todo : stock heur sol 
+        # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
@@ -359,7 +363,7 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
 
     elseif status == MOI.NODE_LIMIT && length(x_star) > 0
         if has_values(m)
-            # todo : stock heur sol 
+            # stock heur sol 
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end

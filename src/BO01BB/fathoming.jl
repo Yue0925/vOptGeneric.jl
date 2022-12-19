@@ -70,24 +70,17 @@ end
 Compute and stock the relaxed bound set (i.e. the LP relaxation) of the (sub)problem defined by the given node.
 Return `true` if the node is pruned by infeasibility.
 """
-function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
+function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)::Bool
     objcons = setVarObjBounds(node, pb) ; num_var = length(pb.varArray)
+    start = time()
 
+    # step 1 : calculate LBS of the actual sub-problem
+    pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+    
     # ------------------------
     # apply valid cuts 
     # ------------------------
-    if pb.param.cp_activated #&& node.depth < num_var/3
-        start_cuts = time() ; pruned = false 
-
-        # step 1 : calculate LBS of the actual sub-problem
-        start = time()
-        pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-        pb.info.relaxation_time += (time() - start)
-
-        if pruned 
-            removeVarObjBounds(node, pb, objcons) ; return true 
-        end
-
+    if pb.param.cp_activated && !pruned #&& node.depth < num_var/3
         @assert length(node.RBS.natural_order_vect) > 0 "valid LBS is empty !"
 
         # step 2 : add valid cuts constraints then re-optimize 
@@ -95,18 +88,20 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         loadingCutInPool( node, pb)         # complexity O(pt ⋅ cuts)
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
-        if length(node.RBS.natural_order_vect) > 1
-            pruned = MP_cutting_planes(node, pb, incumbent, round_results, verbose ; args...)
+        pruned = MP_cutting_planes(node, pb, incumbent, round_results, verbose ; args...)
 
-        elseif length(node.RBS.natural_order_vect) == 1
-            pb.info.cuts_infos.ite_total += 1 
-            (new_x, cut_found) = SP_cut_off(1, node, pb, round_results, verbose ; args...)
-            if cut_found && new_x != node.RBS.natural_order_vect.sols[1].xEquiv[1]
-                node.RBS.natural_order_vect.sols[1].xEquiv[1] = new_x[:]
-                node.RBS.natural_order_vect.sols[1].y = [pb.c[1, 1] + pb.c[1, 2:end]'*new_x , pb.c[2, 1] + pb.c[2, 2:end]'*new_x]
-                node.RBS.natural_order_vect.sols[1].is_binary = isBinary(new_x)
-            end
-        end
+        # if length(node.RBS.natural_order_vect) > 0
+            
+
+        # # elseif length(node.RBS.natural_order_vect) == 1 && !node.RBS.natural_order_vect.sols[1].is_binary
+        # #     pb.info.cuts_infos.ite_total += 1 
+        # #     (new_x, cut_found) = SP_cut_off(1, node, pb, round_results, verbose ; args...)
+        # #     if cut_found && new_x != node.RBS.natural_order_vect.sols[1].xEquiv[1]
+        # #         node.RBS.natural_order_vect.sols[1].xEquiv[1] = new_x[:]
+        # #         node.RBS.natural_order_vect.sols[1].y = [pb.c[1, 1] + pb.c[1, 2:end]'*new_x , pb.c[2, 1] + pb.c[2, 2:end]'*new_x]
+        # #         node.RBS.natural_order_vect.sols[1].is_binary = isBinary(new_x)
+        # #     end
+        # end
 
         # step 3 : retrieve applied valid cuts 
         start_processing = time()
@@ -117,17 +112,10 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         end
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
-        pb.info.cuts_infos.times_total_for_cuts += (time() - start_cuts)
-
-        removeVarObjBounds(node, pb, objcons) ; return pruned
-    else
-        start = time()
-        pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-        pb.info.relaxation_time += (time() - start)
-
-        removeVarObjBounds(node, pb, objcons) ; return pruned
+        pb.info.cuts_infos.times_total_for_cuts += (time() - start)        
     end
 
+    removeVarObjBounds(node, pb, objcons) ; return pruned
 end
 
 
@@ -135,7 +123,8 @@ end
 At the given node, update (filtered by dominance) the global incumbent set.
 Return `true` if the node is pruned by optimality.
 """
-function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, verbose)
+function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, verbose)::Bool
+    if pb.param.root_relax return false end 
     start = time()
     #-----------------------------------------------------------
     # check optimality && update the incumbent set
@@ -148,14 +137,12 @@ function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, v
         end
     end
 
-    if !pb.param.root_relax
-        if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
-            prune!(node, OPTIMALITY)
-            if verbose
-                @info "node $(node.num) is fathomed by optimality ! and length = $(length(node.RBS.natural_order_vect))"
-            end
-            pb.info.update_incumb_time += (time() - start) ; return true
+    if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
+        prune!(node, OPTIMALITY)
+        if verbose
+            @info "node $(node.num) is fathomed by optimality ! and length = $(length(node.RBS.natural_order_vect))"
         end
+        pb.info.update_incumb_time += (time() - start) ; return true
     end
     pb.info.update_incumb_time += (time() - start) ; return false
 end
@@ -319,7 +306,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             fathomed = false
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed # todo : EPB ignore duplicated part 
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
                     # nothing 
                 else 
                     push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
@@ -444,7 +431,7 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
             fathomed = false
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed # todo : EPB ignore duplicated part 
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
                     # nothing
                 else 
                     push!(node.localNadirPts, u.y)
@@ -460,7 +447,7 @@ function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet
                 fathomed = false
                 if EPB
                     if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                        node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed # todo : EPB ignore duplicated part 
+                        node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
                         # nothing
                     else 
                         push!(node.localNadirPts, u.y)
