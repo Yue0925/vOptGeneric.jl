@@ -149,12 +149,12 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     start = time()
     if pb.param.root_relax
         if ( @timeit tmr "dominance" fullyExplicitDominanceTestNonConvex(node, incumbent, worst_nadir_pt, pb.param.EPB) )
-            prune!(node, DOMINANCE)
-            if verbose
-                @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
-            end
-            pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            return
+            # prune!(node, DOMINANCE)
+            # if verbose
+            #     @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
+            # end
+            # pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
+            # return
         end
     else
         if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )

@@ -54,7 +54,11 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # construct/complete the relaxed bound set
     node.RBS = RelaxedBoundSet() #; node.objs = Vector{JuMP.GenericAffExpr}()
     for i = 1:length(vd_LP.Y_N)
-        push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]))
+        if pb.param.root_relax
+            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]) )
+        else
+            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]) )  
+        end
     end
     for i=1:length(node.RBS.natural_order_vect)-1
         node.RBS.segments[node.RBS.natural_order_vect.sols[i]] = true

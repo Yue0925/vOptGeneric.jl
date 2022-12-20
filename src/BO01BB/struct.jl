@@ -134,20 +134,21 @@ mutable struct Solution
     xEquiv::Vector{Vector{Float64}}            # a set of equivalent solutions x defining the same y
     y::Vector{Float64}
     is_binary::Bool
+    λ::Vector{Float64}
 end
 
 function Solution()
-    return Solution(Vector{Vector{Float64}}(), Vector{Float64}(), false)
+    return Solution(Vector{Vector{Float64}}(), Vector{Float64}(), false, Vector{Float64}())
 end
 
-function Solution(x::Vector{Float64}, y::Vector{Float64})
+function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}())
     is_binary = true
     for i = 1:length(x)
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             is_binary = false; break
         end
     end
-    return Solution([x], y, is_binary)
+    return Solution([x], y, is_binary, λ)
 end
 
 """

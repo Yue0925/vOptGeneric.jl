@@ -179,12 +179,50 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
     global model = m
 
     vd = getvOptData(m)
-    empty!(vd.Y_N) ; empty!(vd.X_E)# ; empty!(vd.logObjs)
+    empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) # ; empty!(vd.logObjs)
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(m)
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
+
+    function sorting()
+        #Sort X_E and Y_N
+        s = sortperm(vd.Y_N, by = first)
+        vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
+        # vd.logObjs = vd.logObjs[s]
+
+        R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
+        R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
+        weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
+
+        #Filter X_E and Y_N :
+        inds = Int[] ; last_ind = 0
+        for i = 1:length(vd.Y_N)-1
+            if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
+                push!(inds, i+1) ; last_ind = i+1
+            elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i]) && last_ind != i
+                push!(inds, i)
+            end
+        end
+        deleteat!(vd.Y_N, inds) ; deleteat!(vd.X_E, inds)
+        deleteat!(vd.lambda, inds)
+
+        #Sort X_integer and Y_integer
+        s = sortperm(Y_integer, by = first)
+        Y_integer = Y_integer[s] ; X_integer = X_integer[s]
+
+        #Filter X_integer and Y_integer :
+        inds = Int[] ; last_ind = 0
+        for i = 1:length(Y_integer)-1
+            if weak_dom(Y_integer[i], Y_integer[i+1])
+                push!(inds, i+1) ; last_ind = i+1
+            elseif weak_dom(Y_integer[i+1], Y_integer[i]) && last_ind != i
+                push!(inds, i)
+            end
+        end
+        deleteat!(Y_integer, inds) ; deleteat!(X_integer, inds)
+    end
 
     #Set the first objective as an objective in the JuMP JuMP.Model
     JuMP.set_objective(m, f1Sense, f1)
@@ -200,7 +238,10 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
     #If a solution exists
     yr_1 = 0.0 ; yr_2 = 0.0 
     # @info "                 status = $status "
-    if status == MOI.INFEASIBLE return Y_integer, X_integer end
+    if status == MOI.INFEASIBLE 
+        sorting()
+        return Y_integer, X_integer 
+    end
     if status == MOI.OPTIMAL
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
@@ -211,6 +252,7 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
         #Store results in vOptData
         push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
         push!(vd.X_E, JuMP.value.(varArray))
+        push!(vd.lambda, [1.0, 0.0])
 
     elseif status == MOI.NODE_LIMIT && length(x_star) > 0
         if has_values(m)
@@ -223,6 +265,7 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
         #Store results in vOptData
         push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
         push!(vd.X_E, x_star)
+        push!(vd.lambda, [1.0, 0.0])
 
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -241,7 +284,10 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
     ys_1 = 0.0 ; ys_2 = 0.0 
     # @info "                 status = $status "
 
-    if status == MOI.INFEASIBLE return Y_integer, X_integer end
+    if status == MOI.INFEASIBLE
+        sorting()
+        return Y_integer, X_integer
+    end
     if status == MOI.OPTIMAL
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
@@ -254,6 +300,8 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
             #Store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, JuMP.value.(varArray))
+            push!(vd.lambda, [0.0, 1.0])
+
             Y, X = dichoRecursion_callback(m, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
@@ -271,6 +319,8 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
             #Store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, x_star)
+            push!(vd.lambda, [0.0, 1.0])
+
             Y, X = dichoRecursion_callback(m, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
@@ -280,27 +330,7 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
         error("Condition  status $status ")
     end
 
-    #Sort X_E and Y_N
-    s = sortperm(vd.Y_N, by = first)
-    vd.Y_N = vd.Y_N[s]
-    vd.X_E = vd.X_E[s]
-    # vd.logObjs = vd.logObjs[s]
-
-    R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
-
-    #Filter X_E and Y_N :
-    inds = Int[] ; last_ind = 0
-    for i = 1:length(vd.Y_N)-1
-        if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
-            push!(inds, i+1) ; last_ind = i+1
-        elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i]) && last_ind != i
-            push!(inds, i)
-        end
-    end
-    deleteat!(vd.Y_N, inds)
-    deleteat!(vd.X_E, inds)
+    sorting()
     return Y_integer, X_integer
 end
 
@@ -352,6 +382,8 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
         if (val < lb - 1e-4)
             push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
             push!(vd.X_E, JuMP.value.(varArray))
+            push!(vd.lambda, [λ1, λ2])
+
             # push!(vd.logObjs, f)
             if yt_1 > ys_1+1e-4 && yt_2 > yr_2+1e-4
                 Y, X = dichoRecursion_callback(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
@@ -374,6 +406,8 @@ function dichoRecursion_callback(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray
         if ( val < lb - 1e-4)
             push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
             push!(vd.X_E, x_star)
+            push!(vd.lambda, [λ1, λ2])
+
             # push!(vd.logObjs, f)
             if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
                 Y, X = dichoRecursion_callback(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
@@ -516,7 +550,7 @@ end
 
 function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     vd = getvOptData(m)
-    empty!(vd.Y_N) ; empty!(vd.X_E)# ; empty!(vd.logObjs)
+    empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)# ; empty!(vd.logObjs)
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(m)

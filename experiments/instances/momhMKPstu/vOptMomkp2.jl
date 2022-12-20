@@ -89,7 +89,7 @@ function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
 
     outputName = folder * "/" * split(fname, "/")[end]
     # TODO : if a file already exists and differ from BB BC 
-    if isfile(outputName) && method != :bb && method != :bc && method != :bb_EPB && method != :bc_EPB
+    if isfile(outputName) || method == :dicho && method == :epsilon
       return
     end
 
@@ -117,11 +117,23 @@ function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
     elseif method == :bc_rootRelax 
       infos = vSolve( Bi01IP, method=:bc_rootRelax, verbose=false )
       println(infos)
+    elseif method == :bc_rootRelaxCP 
+      infos = vSolve( Bi01IP, method=:bc_rootRelaxCP, verbose=false )
+      println(infos)
     elseif method == :bb_EPB
       infos = vSolve( Bi01IP, method=:bb_EPB, verbose=false )
       println(infos)
     elseif method == :bc_rootRelaxEPB
       infos = vSolve( Bi01IP, method=:bc_rootRelaxEPB, verbose=false )
+      println(infos)
+    elseif method == :bc_rootRelaxCPEPB
+      infos = vSolve( Bi01IP, method=:bc_rootRelaxCPEPB, verbose=false )
+      println(infos)
+    elseif method == :bc
+      infos = vSolve( Bi01IP, method=:bc, verbose=false )
+      println(infos)
+    elseif method == :bc_EPB
+      infos = vSolve( Bi01IP, method=:bc_EPB, verbose=false )
       println(infos)
     end
 
@@ -169,10 +181,14 @@ function main2(fname::String)
   end
 
   solverSelected = CPLEX.Optimizer
-  for method in [:dicho, :epsilon, :bb, :bc_rootRelax, :bb_EPB, :bc_rootRelaxEPB] # 
+  for method in [
+    :bb, :bb_EPB,
+    :bc, :bc_EPB,
+    :bc_rootRelax , :bc_rootRelaxEPB,
+    :bc_rootRelaxCP, :bc_rootRelaxCPEPB
+    ]
     vSolveBi01IP2(solverSelected, dat.C, dat.A, dat.b, fname, method) 
     vSolveBi01IP2(solverSelected, dat.C, dat.A, dat.b, fname, method) 
-
   end
 
 end

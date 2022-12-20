@@ -170,7 +170,7 @@ function getNadirPoints(incumbent::IncumbentSet, ptl, ptr)
             [incumbent.natural_order_vect.sols[i].y[1],
             incumbent.natural_order_vect.sols[i+1].y[2]
             ],
-            true )# , filtered=true
+            true, Vector{Float64}() )# , filtered=true
         )
     end
 
@@ -330,6 +330,116 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
     return fathomed
 end
+
+
+# function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
+#     @assert length(node.RBS.natural_order_vect) > 0 "relaxed bound set is empty for node $(node.num)"
+
+#     # we can't compare the LBS and UBS if the incumbent set is empty
+#     if length(incumbent.natural_order_vect) == 0 return false end
+
+#     # if there exists an upper bound u s.t. u≦l
+#     function weak_dom(l)
+#         for u ∈ incumbent.natural_order_vect.sols
+#             if u ≤ l && u != l
+#                 return true
+#             end
+#         end
+#         return false
+#     end
+
+#     # ------------------------------------------
+#     # if the LBS consists of a single point
+#     # ------------------------------------------
+#     if length(node.RBS.natural_order_vect) == 1
+#         l = node.RBS.natural_order_vect.sols[1]
+#         return weak_dom(l)
+#     end
+
+#     # ----------------------------------------------
+#     # if the LBS consists of segments
+#     # ----------------------------------------------
+#     # two extreme points of LBS
+#     ptl = node.RBS.natural_order_vect.sols[1] ; ptr = node.RBS.natural_order_vect.sols[end]
+
+#     # Case 1 :  if only one feasible point in UBS 
+#     if length(incumbent.natural_order_vect) == 1 
+#         u = incumbent.natural_order_vect.sols[1]
+#         if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
+#             return true
+#         else
+#             return false
+#         end
+#     end
+
+#     # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
+#     (nadir_pts, fathomed) = getNadirPoints(incumbent, ptl, ptr)
+#     if fathomed return true end
+
+#     # test range condition necessary 1 : LBS ⊆ UBS 
+#     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
+
+#     sufficient = (u_l.y[2] < ptl.y[2] && u_r.y[1] < ptr.y[1])
+
+#     if !sufficient return false end
+
+#     fathomed = true 
+
+#     # iterate of all local nadir points
+#     for u ∈ nadir_pts.sols
+#         existence = false 
+
+#         # case 1 : if u is dominates the ideal point of LBS 
+#         if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
+#             return true
+#         end
+
+#         # case 3 : complete pairwise comparison
+#         for i=1:length(node.RBS.natural_order_vect)              # ∀ segment l ∈ LBS 
+
+#             sol = node.RBS.natural_order_vect.sols[i] ; λ = node.RBS.natural_order_vect.sols[i].λ
+
+#             if λ'*u.y >= λ'*sol.y
+#                 fathomed = false ; break
+#             end
+#         end
+        
+#         if !fathomed 
+#             if EPB
+#                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
+#                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
+#                     # nothing
+#                 else 
+#                     push!(node.localNadirPts, u.y)
+#                 end 
+#             else
+#                 return fathomed
+#             end
+            
+#         end
+ 
+#         if !compared && u.y[2] ≥ ptr.y[2]
+#             if  ptr.y[1] <= u.y[1] <= ptl.y[1]
+#                 fathomed = false
+#                 if EPB
+#                     if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
+#                         node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
+#                         # nothing
+#                     else 
+#                         push!(node.localNadirPts, u.y)
+#                     end 
+#                 else
+#                     return fathomed
+#                 end
+#             elseif u.y[1] > ptl.y[1]
+#                 if EPB node.localNadirPts = Vector{Vector{Float64}}() end               # no need to (extended) pareto branching
+#                 return false
+#             end
+#         end
+#     end
+
+#     return fathomed
+# end
 
 
 
