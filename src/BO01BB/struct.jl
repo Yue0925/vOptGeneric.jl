@@ -9,7 +9,7 @@
 
 @enum PrunedType NONE INFEASIBILITY OPTIMALITY DOMINANCE
 
-TOL = 10^(-4)
+TOL = 1e-4
 include("cutPool.jl")
 
 """
@@ -277,13 +277,17 @@ or `false`, if it is weakly dominated by one (or more) solution(s) in the vector
 In case of successfully added and `filtered=true` (by defaut false), delete the old solutions that are weakly dominated by the new one.
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)
-    sol.y = round.(sol.y, digits = 3)
-
+    sol.y = round.(sol.y, digits = 4)
+    # if sol.y == [-101062.0, -315795.0]
+    #     error( "find sol $(sol.y) ! ")        
+    # end
     # add s directly if sols is empty
     if length(natural_sols) == 0
         push!(natural_sols.sols, sol) ; return true
     end
 
+    # println("\n\n ------- \n", natural_sols)
+    # println("sol = ", sol)
     # a binary/dichotomy search finds the location to insert 
     l = 1; r = length(natural_sols); m = 0
     while l ≤ r
@@ -316,20 +320,47 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     end
 
     # find points weakly dominated by the new point and delete it/them
+    # push!(natural_sols.sols, sol)
+
+    # #Sort
+    # sort!(natural_sols.sols, by = s -> (-s.y[1], s.y[2]))
+    # # natural_sols.sols = natural_sols.sols[s]
     if filtered
-        inds = []
-        for i = 1:length(natural_sols)
-            if dominate(sol, natural_sols.sols[i])
-                push!(inds, i)
-            elseif dominate(natural_sols.sols[i], sol)
-                deleteat!(natural_sols.sols, m)
-                return false
+        i = 1
+        while i < length(natural_sols.sols)
+            j = i+1
+            while j<= length(natural_sols.sols)
+                if dominate(natural_sols.sols[i], natural_sols.sols[j])
+                    deleteat!(natural_sols.sols, j)
+                    
+                elseif dominate(natural_sols.sols[j], natural_sols.sols[i])
+                    deleteat!(natural_sols.sols, i)
+                    j -= 1 ; break
+                else
+                    j += 1
+                end
+            end
+            if j > length(natural_sols.sols) i += 1 end 
+        end
+    end
+
+    
+
+    #todo: verifying
+    for i = 1:length(natural_sols)-1
+        for j = i+1:length(natural_sols)
+            if dominate(natural_sols.sols[i], natural_sols.sols[j]) || dominate(natural_sols.sols[j], natural_sols.sols[i])
+                println("filtered = $filtered ")
+                println(" ---------------- after --------- \n", natural_sols)
+                error("error in push!")
+            end
+
+            if natural_sols.sols[i].y[1] < natural_sols.sols[j].y[1] || natural_sols.sols[i].y[2] > natural_sols.sols[j].y[2]
+                error("NATURAL ORDER error in push!")
             end
         end
-        deleteat!(natural_sols.sols, inds)
     end
-    
-    return true
+
 end
 
 
@@ -341,11 +372,10 @@ with a boolean if s and the next/adjacent point in right forms a segment.
 """
 mutable struct RelaxedBoundSet
     natural_order_vect::NaturalOrderVector
-    segments::Dict{Solution, Bool}        
 end
 
 function RelaxedBoundSet()
-    return RelaxedBoundSet(NaturalOrderVector(), Dict{Solution, Bool}())
+    return RelaxedBoundSet(NaturalOrderVector()) # , Dict{Solution, Bool}()
 end
 
 

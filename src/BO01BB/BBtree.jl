@@ -67,6 +67,33 @@ mutable struct Node
 end
 
 
+
+function Base.:show(io::IO, n::Node)
+    println(io, "\n\n # ----------- node $(n.num) : \n", 
+    "depth = $(n.depth) \n",
+    "pred = $(n.pred.num) \n",
+    # "succs = $(n.succs) \n",
+    "var[ $(n.var) ] = $(n.var_bound) \n",
+    "EPB = $(n.EPB) \n",
+    "localNadirPts = $(n.localNadirPts) \n",
+    "nadirPt = $(n.nadirPt) \n",
+    # "LBS = $(n.RBS.natural_order_vect) \n",
+    "activated = $(n.activated) \n",
+    "pruned = $(n.pruned) \n",
+    "prunedType = $(n.prunedType)"
+    )
+    print(io, "succs = [ ")
+    for s in n.succs print(io, "$(s.num), ") end
+    println(io, " ]")
+
+    print(io, "LBS = [ ")
+    for s in n.RBS.natural_order_vect.sols
+        print(io, "$(s.y) , ")
+    end
+    println(io, "] ")
+end
+
+
 """
 Return `true` if the given node is the root of a branch-and-bound tree.
 """

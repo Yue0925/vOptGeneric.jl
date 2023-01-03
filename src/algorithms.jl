@@ -186,42 +186,69 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
+    R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
+
     function sorting()
-        #Sort X_E and Y_N
-        s = sortperm(vd.Y_N, by = first)
+        # #Sort X_E and Y_N
+        s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
         vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
-        # vd.logObjs = vd.logObjs[s]
+        vd.lambda = vd.lambda[s]
 
-        R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-        R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-        weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
+        i = 1
+        while i < length(vd.Y_N)
+            j = i+1
+            while j<= length(vd.Y_N)
+                if weak_dom(vd.Y_N[i], vd.Y_N[j])
+                    # if vd.Y_N[j] == [-101062.0, -315795.0]
+                    #     error( "dicho deleting $(vd.Y_N[j]) !")
+                    # end
 
-        #Filter X_E and Y_N :
-        inds = Int[] ; last_ind = 0
-        for i = 1:length(vd.Y_N)-1
-            if weak_dom(vd.Y_N[i], vd.Y_N[i+1])
-                push!(inds, i+1) ; last_ind = i+1
-            elseif weak_dom(vd.Y_N[i+1], vd.Y_N[i]) && last_ind != i
-                push!(inds, i)
+                    deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j)
+                    deleteat!(vd.lambda, j)
+                elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
+                    # if vd.Y_N[i] == [-101062.0, -315795.0]
+                    #     error( "dicho deleting $(vd.Y_N[i]) !")
+                    # end
+
+                    deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i)
+                    deleteat!(vd.lambda, i)
+                    j -= 1 ; break
+                else
+                    j += 1
+                end
             end
+            if j > length(vd.Y_N) i += 1 end 
         end
-        deleteat!(vd.Y_N, inds) ; deleteat!(vd.X_E, inds)
-        deleteat!(vd.lambda, inds)
 
         #Sort X_integer and Y_integer
-        s = sortperm(Y_integer, by = first)
+        s = sortperm(Y_integer, by = x -> (-x[1], x[2]))
         Y_integer = Y_integer[s] ; X_integer = X_integer[s]
 
-        #Filter X_integer and Y_integer :
-        inds = Int[] ; last_ind = 0
-        for i = 1:length(Y_integer)-1
-            if weak_dom(Y_integer[i], Y_integer[i+1])
-                push!(inds, i+1) ; last_ind = i+1
-            elseif weak_dom(Y_integer[i+1], Y_integer[i]) && last_ind != i
-                push!(inds, i)
+        i = 1
+        while i < length(Y_integer)
+            j = i+1
+            while j<= length(Y_integer)
+                if weak_dom(Y_integer[i], Y_integer[j])
+                    # if Y_integer[j] == [-101062.0, -315795.0]
+                    #     error("dicho Y_integer deleting $(Y_integer[j]) !")
+                    # end
+
+                    deleteat!(Y_integer, j) ; deleteat!(X_integer, j)
+                elseif weak_dom(Y_integer[j], Y_integer[i])
+                    # if Y_integer[i]== [-101062.0, -315795.0]
+                    #     error( "dicho Y_integer deleting $(Y_integer[i]) !")
+                    # end
+
+                    deleteat!(Y_integer, i) ; deleteat!(X_integer, i)
+                    j -= 1 ; break
+                else
+                    j += 1
+                end
             end
+            if j > length(Y_integer) i += 1 end 
         end
-        deleteat!(Y_integer, inds) ; deleteat!(X_integer, inds)
     end
 
     #Set the first objective as an objective in the JuMP JuMP.Model
@@ -330,7 +357,36 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
         error("Condition  status $status ")
     end
 
+    # println("\n\n----------- \n before : ", vd.Y_N)
+    # println("\n\n----------- \n before : ", Y_integer)
     sorting()
+    # ----------------------
+    #todo: verifying
+    for i = 1:length(vd.Y_N)-1
+        for j = i+1:length(vd.Y_N)
+            if weak_dom(vd.Y_N[i], vd.Y_N[j]) || weak_dom(vd.Y_N[j], vd.Y_N[i])
+                println("----------- \n after : ", vd.Y_N)
+                error("vd.Y_N error in dicho ! ")
+            end
+
+            if vd.Y_N[i][1] < vd.Y_N[j][1] || vd.Y_N[i][2] > vd.Y_N[j][2]
+                error("NATURAL ORDER vd.Y_N error in dicho")
+            end
+        end
+    end
+
+    for i = 1:length(Y_integer)-1
+        for j = i+1:length(Y_integer)
+            if weak_dom(Y_integer[i], Y_integer[j]) || weak_dom(Y_integer[j], Y_integer[i])
+                println("----------- \n after : ", Y_integer)
+                error("Y_integer error in dicho ! ")
+            end
+
+            if Y_integer[i][1] < Y_integer[j][1] || Y_integer[i][2] > Y_integer[j][2]
+                error("NATURAL ORDER Y_integer error in dicho")
+            end
+        end
+    end
     return Y_integer, X_integer
 end
 

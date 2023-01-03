@@ -78,7 +78,7 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
 
   m, n_before = size(A)
   # scale test
-  for n in [10, 10, 20, 30, 40]
+  for n in [40]
     println("n=$n")
     ratio = n/n_before
 
@@ -183,9 +183,10 @@ function main(fname::String)
   solverSelected = CPLEX.Optimizer
   for method in [
     # :bb, :bb_EPB,
-    :bc, :bc_EPB
-    # :bc_rootRelax , :bc_rootRelaxEPB
-    # :bc_rootRelaxCP, :bc_rootRelaxCPEPB
+    # :bc, :bc_EPB
+    # :bc_rootRelax , :bc_rootRelaxEPB,
+    # :bc_rootRelaxCP, 
+    :bc_rootRelaxCPEPB
     ] # :dicho, :epsilon, 
 
     vSolveBi01IP(solverSelected, dat.C, dat.A, dat.b, fname, method) 
