@@ -199,19 +199,17 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
         i = 1
         while i < length(vd.Y_N)
             j = i+1
+            if vd.Y_N[i] == [-101062.0, -315795.0]
+                error( "dicho just found $(vd.Y_N[i]) !")
+            end
             while j<= length(vd.Y_N)
+                if vd.Y_N[j] == [-101062.0, -315795.0]
+                    error( "dicho just found $(vd.Y_N[j]) !")
+                end
                 if weak_dom(vd.Y_N[i], vd.Y_N[j])
-                    # if vd.Y_N[j] == [-101062.0, -315795.0]
-                    #     error( "dicho deleting $(vd.Y_N[j]) !")
-                    # end
-
                     deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j)
                     deleteat!(vd.lambda, j)
                 elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
-                    # if vd.Y_N[i] == [-101062.0, -315795.0]
-                    #     error( "dicho deleting $(vd.Y_N[i]) !")
-                    # end
-
                     deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i)
                     deleteat!(vd.lambda, i)
                     j -= 1 ; break
@@ -231,16 +229,8 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
             j = i+1
             while j<= length(Y_integer)
                 if weak_dom(Y_integer[i], Y_integer[j])
-                    # if Y_integer[j] == [-101062.0, -315795.0]
-                    #     error("dicho Y_integer deleting $(Y_integer[j]) !")
-                    # end
-
                     deleteat!(Y_integer, j) ; deleteat!(X_integer, j)
                 elseif weak_dom(Y_integer[j], Y_integer[i])
-                    # if Y_integer[i]== [-101062.0, -315795.0]
-                    #     error( "dicho Y_integer deleting $(Y_integer[i]) !")
-                    # end
-
                     deleteat!(Y_integer, i) ; deleteat!(X_integer, i)
                     j -= 1 ; break
                 else
@@ -261,6 +251,8 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
     MOI.set(model, CPLEX.CallbackFunction(), callback_noCuts)
     JuMP.optimize!(m, ignore_optimize_hook=true)
     status = JuMP.termination_status(m)
+
+    println(m)
 
     #If a solution exists
     yr_1 = 0.0 ; yr_2 = 0.0 

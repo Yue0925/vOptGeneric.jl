@@ -91,6 +91,12 @@ function Base.:show(io::IO, n::Node)
         print(io, "$(s.y) , ")
     end
     println(io, "] ")
+
+    print(io, "λ = [ ")
+    for s in n.RBS.natural_order_vect.sols
+        print(io, "$(s.λ) , ")
+    end
+    println(io, "] ")
 end
 
 

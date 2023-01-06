@@ -21,6 +21,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
+        println("\n --------------- display the model of node $(node.num) ")
         start = time()
         Y_integer, X_integer = solve_dicho_callback(pb.m, round_results, false ; args...)
         pb.info.relaxation_time += (time() - start)
@@ -28,6 +29,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         start = time()
         for i = 1:length(Y_integer) 
             s = Solution(X_integer[i], Y_integer[i])
+            # if s.y == [-101062.0, -315795.0] error("MAJ UBS ->x = $(s.xEquiv) , y = $(s.y) ") end
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
@@ -55,6 +57,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     node.RBS = RelaxedBoundSet() #; node.objs = Vector{JuMP.GenericAffExpr}()
     for i = 1:length(vd_LP.Y_N)
         if pb.param.root_relax
+            # if vd_LP.Y_N[i] == [-101062.0, -315795.0] error("MAJ LBS ->x = $(vd_LP.X_E[i]) , y = $(vd_LP.Y_N[i]) ") end
             push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
         else
             push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]), filtered=true)  
