@@ -24,16 +24,28 @@ using PyPlot
 
 # ------------------------------------------------------------------------------
 # compute the corner points of a set (S1,S2) and its lower envelop
+# function computeCornerPointsLowerEnvelop(S1, S2)
+#     # when all objectives have to be maximized
+#     Env1=[]; Env2=[]
+#     for i in 1:length(S1)-1
+#         push!(Env1, S1[i]); push!(Env2, S2[i])
+#         push!(Env1, S1[i]); push!(Env2, S2[i+1])
+#     end
+#     push!(Env1, S1[end]);push!(Env2, S2[end])
+#     return Env1,Env2
+# end
+
 function computeCornerPointsLowerEnvelop(S1, S2)
     # when all objectives have to be maximized
     Env1=[]; Env2=[]
     for i in 1:length(S1)-1
         push!(Env1, S1[i]); push!(Env2, S2[i])
-        push!(Env1, S1[i]); push!(Env2, S2[i+1])
+        push!(Env1, S1[i+1]); push!(Env2, S2[i])
     end
     push!(Env1, S1[end]);push!(Env2, S2[end])
     return Env1,Env2
 end
+
 
 # ------------------------------------------------------------------------------
 # display different results
@@ -141,3 +153,109 @@ end
 #[1219.0, 969.0], [1220.0, 818.0]]
 
 #displayGraphics(fname,YN)
+
+
+
+
+
+# ------------------------------------------------------------------------------
+# display different results
+function tmp_nodes(fname,YN, output::String, LBS, λ)
+    println("displayGraphics")
+    PlotOrthonormedAxis = true  # Axis orthonormed or not
+    DisplayYN   = true          # Non-dominated points corresponding to efficient solutions
+    DisplayUBS  = false         # Points belonging to the Upper Bound Set
+    DisplayLBS  = true         # Points belonging to the Lower Bound Set
+    DisplayInt  = false         # Points corresponding to integer solutions
+    DisplayProj = false         # Points corresponding to projected solutions
+    DisplayFea  = false         # Points corresponding to feasible solutions
+    DisplayPer  = false         # Points corresponding to perturbated solutions
+
+    YN_1=[];YN_2=[]
+    for i in 1:length(YN)
+        push!(YN_2, YN[i][2])
+        push!(YN_1, YN[i][1])
+    end
+
+    xL = []; yL = []
+    for i in 1:length(LBS)
+        push!(xL, LBS[i][1])
+        push!(yL, LBS[i][2])
+    end
+
+    ixL = []; iyL = []
+    if length(LBS) == 3
+        push!(ixL, LBS[1][1]) ; push!(iyL, LBS[1][2])
+        k = (λ[2][2]/λ[2][1]) ; b = LBS[2][1] + k * LBS[2][2]
+        push!(ixL, (b-k*LBS[1][2])) ; push!(iyL, LBS[1][2])
+        push!(ixL, LBS[3][1]) ; push!(iyL, (b-LBS[3][1])/k)
+        push!(ixL, LBS[3][1]) ; push!(iyL, LBS[3][2])
+
+    else
+        for i in 1:length(LBS)
+            push!(ixL, LBS[i][1])
+            push!(iyL, LBS[i][2])
+        end
+    end
+
+    # --------------------------------------------------------------------------
+    # Setup
+    figure("Project MOMH 2021") # ,figsize=(6.5,5) 
+    # if PlotOrthonormedAxis
+    #     vmin = 0.99 * min(minimum(YN_1),minimum(YN_2))
+    #     vmax = 1.01 * max(maximum(YN_1),maximum(YN_2))
+    #     xlim(vmin,vmax)
+    #     ylim(vmin,vmax)
+    # end
+    xlabel(L"z^2(x)")
+    ylabel(L"z^1(x)")
+    PyPlot.title("Bi-01BKP | $fname")
+
+    # --------------------------------------------------------------------------
+    # Display Non-Dominated points
+    if DisplayYN
+        # display only the points corresponding to non-dominated points
+        scatter(YN_2, YN_1, color="red", marker="x", label = L"y \in UBS")
+        # display segments joining adjacent non-dominated points
+        # plot(YN_2, YN_1, color="red", linewidth=0.75, marker="+", markersize=1.0, linestyle=":")
+        # display segments joining non-dominated points and their corners points
+        Env1,Env2 = computeCornerPointsLowerEnvelop(YN_2, YN_1)
+        plot(Env1,Env2, color="red", linewidth=0.75, marker="x", markersize=1.0, linestyle=":")
+    end
+
+    # --------------------------------------------------------------------------
+    # Display a Lower bound set (dual, by excess)
+    if DisplayLBS
+        plot(iyL, ixL, color="green", linewidth=0.75, linestyle=":")
+        scatter(yL, xL, color="green", marker="x", label = L"y \in LBS")
+    end
+
+    # --------------------------------------------------------------------------
+    # Display integer points (feasible and non-feasible in GravityMachine)
+    if DisplayInt
+        scatter(XInt,YInt, color="orange", marker="s", label = L"y"*" rounded")
+    end
+
+    # --------------------------------------------------------------------------
+    # Display projected points (points Δ(x,x̃) in GravityMachine)
+    if DisplayProj
+        scatter(XProj,YProj, color="red", marker="x", label = L"y"*" projected")
+    end
+
+    # --------------------------------------------------------------------------
+    # Display feasible points
+    if DisplayFea
+        scatter(XFeas,YFeas, color="green", marker="o", label = L"y \in F")
+    end
+
+    # --------------------------------------------------------------------------
+    # Display perturbed points (after a cycle in GravityMachine)
+    if DisplayPer
+        scatter(XPert,YPert, color="magenta", marker="s", label ="pertub")
+    end
+
+    # --------------------------------------------------------------------------
+    legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
+    savefig("./tmp/" * output * ".png")
+    PyPlot.close()
+end

@@ -125,7 +125,6 @@ At the given node, update (filtered by dominance) the global incumbent set.
 Return `true` if the node is pruned by optimality.
 """
 function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, verbose)::Bool
-    if pb.param.root_relax return false end 
     start = time()
     #-----------------------------------------------------------
     # check optimality && update the incumbent set
@@ -137,6 +136,10 @@ function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, v
             push!(incumbent.natural_order_vect, s, filtered=true) 
         end
     end
+
+    if pb.param.root_relax 
+        pb.info.update_incumb_time += (time() - start) ; return false 
+    end 
 
     if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
         prune!(node, OPTIMALITY)
@@ -386,7 +389,6 @@ function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet,
     # u_l = nadir_pts.sols[1] ; u_r = nadir_pts.sols[end]
 
     sufficient = (u_l.y[2] < ptl.y[2] && u_r.y[1] < ptr.y[1])
-
     if !sufficient return false end
 
     fathomed = true 

@@ -196,20 +196,23 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
         vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
         vd.lambda = vd.lambda[s]
 
+        deleted_Y = Vector{Vector{Float64}}() 
         i = 1
         while i < length(vd.Y_N)
             j = i+1
-            if vd.Y_N[i] == [-101062.0, -315795.0]
-                error( "dicho just found $(vd.Y_N[i]) !")
-            end
+            # if vd.Y_N[i] == [-101062.0, -315795.0]
+            #     error( "dicho just found $(vd.Y_N[i]) !")
+            # end
             while j<= length(vd.Y_N)
-                if vd.Y_N[j] == [-101062.0, -315795.0]
-                    error( "dicho just found $(vd.Y_N[j]) !")
-                end
+                # if vd.Y_N[j] == [-101062.0, -315795.0]
+                #     error( "dicho just found $(vd.Y_N[j]) !")
+                # end
                 if weak_dom(vd.Y_N[i], vd.Y_N[j])
+                    push!(deleted_Y, vd.Y_N[j])
                     deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j)
                     deleteat!(vd.lambda, j)
                 elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
+                    push!(deleted_Y, vd.Y_N[i])
                     deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i)
                     deleteat!(vd.lambda, i)
                     j -= 1 ; break
@@ -220,17 +223,33 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
             if j > length(vd.Y_N) i += 1 end 
         end
 
+        #todo : verifying 
+        for y in deleted_Y
+            dominated = false
+            for i=1:length(vd.Y_N)
+                if weak_dom(vd.Y_N[i], y)
+                    dominated = true ; break
+                end
+            end
+            if !dominated
+                error(" supprimed non dominated $(y) ! \n Y_N = $(vd.Y_N)")
+            end
+        end
+
         #Sort X_integer and Y_integer
         s = sortperm(Y_integer, by = x -> (-x[1], x[2]))
         Y_integer = Y_integer[s] ; X_integer = X_integer[s]
 
+        deleted_Y = Vector{Vector{Float64}}() 
         i = 1
         while i < length(Y_integer)
             j = i+1
             while j<= length(Y_integer)
                 if weak_dom(Y_integer[i], Y_integer[j])
+                    push!(deleted_Y, Y_integer[j])
                     deleteat!(Y_integer, j) ; deleteat!(X_integer, j)
                 elseif weak_dom(Y_integer[j], Y_integer[i])
+                    push!(deleted_Y, Y_integer[i])
                     deleteat!(Y_integer, i) ; deleteat!(X_integer, i)
                     j -= 1 ; break
                 else
@@ -238,6 +257,20 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
                 end
             end
             if j > length(Y_integer) i += 1 end 
+        end
+
+
+        #todo : verifying 
+        for y in deleted_Y
+            dominated = false
+            for i=1:length(Y_integer)
+                if weak_dom(Y_integer[i], y)
+                    dominated = true ; break
+                end
+            end
+            if !dominated
+                error(" supprimed non dominated $(y) ! \n Y_N = $(Y_integer)")
+            end
         end
     end
 
@@ -252,7 +285,7 @@ function solve_dicho_callback(m::JuMP.Model, round_results, verbose; args...)
     JuMP.optimize!(m, ignore_optimize_hook=true)
     status = JuMP.termination_status(m)
 
-    println(m)
+    # println(m)
 
     #If a solution exists
     yr_1 = 0.0 ; yr_2 = 0.0 

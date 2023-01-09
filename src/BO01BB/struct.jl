@@ -278,9 +278,6 @@ In case of successfully added and `filtered=true` (by defaut false), delete the 
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)
     sol.y = round.(sol.y, digits = 4)
-    # if sol.y == [-101062.0, -315795.0]
-    #     error( "find sol $(sol.y) ! ")        
-    # end
     # add s directly if sols is empty
     if length(natural_sols) == 0
         push!(natural_sols.sols, sol) ; return true
@@ -326,14 +323,17 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     # sort!(natural_sols.sols, by = s -> (-s.y[1], s.y[2]))
     # # natural_sols.sols = natural_sols.sols[s]
     if filtered
+        deleted_Y = Vector{Solution}()
         i = 1
         while i < length(natural_sols.sols)
             j = i+1
             while j<= length(natural_sols.sols)
                 if dominate(natural_sols.sols[i], natural_sols.sols[j])
+                    push!(deleted_Y, natural_sols.sols[j])
                     deleteat!(natural_sols.sols, j)
                     
                 elseif dominate(natural_sols.sols[j], natural_sols.sols[i])
+                    push!(deleted_Y, natural_sols.sols[i])
                     deleteat!(natural_sols.sols, i)
                     j -= 1 ; break
                 else
@@ -341,6 +341,20 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
                 end
             end
             if j > length(natural_sols.sols) i += 1 end 
+        end
+
+
+        #todo : verifying 
+        for y in deleted_Y
+            dominated = false
+            for i=1:length(natural_sols.sols)
+                if dominate(natural_sols.sols[i], y)
+                    dominated = true ; break
+                end
+            end
+            if !dominated
+                error(" supprimed non dominated $(y) ! \n Y_N = $(natural_sols.sols)")
+            end
         end
     end
 

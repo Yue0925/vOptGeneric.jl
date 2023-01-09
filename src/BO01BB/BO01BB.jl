@@ -151,6 +151,19 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         # fullyExplicitDominanceTestByNormal   ,   fullyExplicitDominanceTestNonConvex
         if ( @timeit tmr "dominance" fullyExplicitDominanceTestByNormal(node, incumbent, worst_nadir_pt, pb.param.EPB) )
             prune!(node, DOMINANCE)
+
+            #todo : affichage !
+            UBS = [] ; LBS = []; λ = []
+
+            for s in incumbent.natural_order_vect.sols
+                push!(UBS, s.y)
+            end
+            for s in node.RBS.natural_order_vect.sols
+                push!(LBS, s.y) ; push!(λ, s.λ)
+            end
+            tmp_nodes("node_$(node.num)" * "_$(node.prunedType)", UBS, "node_$(node.num)" * "_$(node.prunedType)", LBS, λ )
+
+
             if verbose
                 @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
             end
@@ -211,6 +224,20 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
                 ( @timeit tmr "incumbent" updateIncumbent(nodeChild, pb, incumbent, verbose) )
+
+                #todo : affichage !
+                UBS = [] ; LBS = [] ; λ = []
+
+                for s in incumbent.natural_order_vect.sols
+                    push!(UBS, s.y)
+                end
+                for s in nodeChild.RBS.natural_order_vect.sols
+                    push!(LBS, s.y); push!(λ, s.λ)
+                end
+                tmp_nodes("node_$(nodeChild.num)" * "_$(nodeChild.prunedType)", UBS, "node_$(nodeChild.num)" * "_$(nodeChild.prunedType)", LBS, λ )
+
+
+
                 nodeChild.activated = false ; pb.info.nb_nodes_pruned += 1
                 println(nodeChild)
                 print("UBS = [ ")
@@ -239,6 +266,21 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
+
+
+            #todo : affichage !
+            UBS = [] ; LBS = [] ; λ = []
+
+            for s in incumbent.natural_order_vect.sols
+                push!(UBS, s.y)
+            end
+            for s in node1.RBS.natural_order_vect.sols
+                push!(LBS, s.y); push!(λ, s.λ)
+            end
+            tmp_nodes("node_$(node1.num)" * "_$(node1.prunedType)", UBS, "node_$(node1.num)" * "_$(node1.prunedType)", LBS, λ)
+
+
+
             node1.activated = false ; pb.info.nb_nodes_pruned += 1
             println(node1)
             print("UBS = [ ")
@@ -260,6 +302,19 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
+
+            #todo : affichage !
+            UBS = [] ; LBS = [] ; λ = []
+
+            for s in incumbent.natural_order_vect.sols
+                push!(UBS, s.y)
+            end
+            for s in node2.RBS.natural_order_vect.sols
+                push!(LBS, s.y); push!(λ, s.λ)
+            end
+            tmp_nodes("node_$(node2.num)" * "_$(node2.prunedType)", UBS, "node_$(node2.num)" * "_$(node2.prunedType)", LBS , λ)
+
+
             node2.activated = false ; pb.info.nb_nodes_pruned += 1
             println(node2)
             print("UBS = [ ")
