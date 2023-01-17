@@ -1,6 +1,6 @@
 # This file contains functions related to cutting planes.
 
-using CPLEX, JuMP
+using JuMP
 
 ϵ = 0.00001
 NodeLimit = 1000

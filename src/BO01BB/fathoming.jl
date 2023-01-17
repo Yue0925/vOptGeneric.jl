@@ -31,6 +31,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                             # ineq = Cut(α)
                             if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), violationₗ, k))
                                 con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
+                                con = JuMP.@constraint(pb.lp_copied, α[2:end]'*pb.varArray_copied ≤ α[1]) ; push!(node.con_cuts_copied, con)
                             end
                         end
                     end
@@ -54,6 +55,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                             # ineq = Cut(α)
                             if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), viol, k))
                                 con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
+                                con = JuMP.@constraint(pb.lp_copied, α[2:end]'*pb.varArray_copied ≤ α[1]) ; push!(node.con_cuts_copied, con)
                             end
                         end
                     end
@@ -72,7 +74,8 @@ Compute and stock the relaxed bound set (i.e. the LP relaxation) of the (sub)pro
 Return `true` if the node is pruned by infeasibility.
 """
 function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)::Bool
-    objcons = setVarObjBounds(node, pb) ; num_var = length(pb.varArray)
+    objcons, objcons_copied = setVarObjBounds(node, pb)
+    num_var = length(pb.varArray)
     start = time()
 
     # step 1 : calculate LBS of the actual sub-problem
@@ -111,12 +114,17 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
                 JuMP.delete( pb.m, con) ; JuMP.unregister( pb.m, :con) # remove the symbolic reference
             end
         end
+        for con in node.con_cuts_copied
+            if JuMP.is_valid( pb.lp_copied, con)
+                JuMP.delete( pb.lp_copied, con) ; JuMP.unregister( pb.lp_copied, :con) # remove the symbolic reference
+            end
+        end
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
         pb.info.cuts_infos.times_total_for_cuts += (time() - start)        
     end
 
-    removeVarObjBounds(node, pb, objcons) ; return pruned
+    removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
 end
 
 

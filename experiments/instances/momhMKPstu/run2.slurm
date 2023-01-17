@@ -8,8 +8,8 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=set2.txt
-#SBATCH --error=set2.txt
+#SBATCH --output=set2_OUTPUT.txt
+#SBATCH --error=set2_ERROR.txt
 
 
 for file in ./MOBKP/set2/*; do
@@ -17,4 +17,4 @@ for file in ./MOBKP/set2/*; do
     srun julia vOptMomkp2.jl "$file"
 done
 
-srun julia latexWriter.jl
+# srun julia latexWriter.jl

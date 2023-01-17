@@ -112,7 +112,9 @@ Storage the components definning a bi-objective 0-1 linear program.
 """
 mutable struct BO01Problem
     varArray::Array{JuMP.VariableRef}
+    varArray_copied::Array{JuMP.VariableRef}
     m::JuMP.Model
+    lp_copied::JuMP.Model
     param::BBparam
     info::StatInfo
     A::Matrix{Float64}
@@ -344,36 +346,36 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         end
 
 
-        #todo : verifying 
-        for y in deleted_Y
-            dominated = false
-            for i=1:length(natural_sols.sols)
-                if dominate(natural_sols.sols[i], y)
-                    dominated = true ; break
-                end
-            end
-            if !dominated
-                error(" supprimed non dominated $(y) ! \n Y_N = $(natural_sols.sols)")
-            end
-        end
+        # #todo : verifying 
+        # for y in deleted_Y
+        #     dominated = false
+        #     for i=1:length(natural_sols.sols)
+        #         if dominate(natural_sols.sols[i], y)
+        #             dominated = true ; break
+        #         end
+        #     end
+        #     if !dominated
+        #         error(" supprimed non dominated $(y) ! \n Y_N = $(natural_sols.sols)")
+        #     end
+        # end
     end
 
     
 
-    #todo: verifying
-    for i = 1:length(natural_sols)-1
-        for j = i+1:length(natural_sols)
-            if dominate(natural_sols.sols[i], natural_sols.sols[j]) || dominate(natural_sols.sols[j], natural_sols.sols[i])
-                println("filtered = $filtered ")
-                println(" ---------------- after --------- \n", natural_sols)
-                error("error in push!")
-            end
+    # #todo: verifying
+    # for i = 1:length(natural_sols)-1
+    #     for j = i+1:length(natural_sols)
+    #         if dominate(natural_sols.sols[i], natural_sols.sols[j]) || dominate(natural_sols.sols[j], natural_sols.sols[i])
+    #             println("filtered = $filtered ")
+    #             println(" ---------------- after --------- \n", natural_sols)
+    #             error("error in push!")
+    #         end
 
-            if natural_sols.sols[i].y[1] < natural_sols.sols[j].y[1] || natural_sols.sols[i].y[2] > natural_sols.sols[j].y[2]
-                error("NATURAL ORDER error in push!")
-            end
-        end
-    end
+    #         if natural_sols.sols[i].y[1] < natural_sols.sols[j].y[1] || natural_sols.sols[i].y[2] > natural_sols.sols[j].y[2]
+    #             error("NATURAL ORDER error in push!")
+    #         end
+    #     end
+    # end
 
 end
 

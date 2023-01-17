@@ -5,7 +5,7 @@ include("struct.jl")
 include("separators.jl")
 include("cutPool.jl")
 
-using JuMP, CPLEX 
+using JuMP 
 
 const max_step = 2
 
@@ -21,15 +21,21 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
-        println("\n --------------- display the model of node $(node.num) ")
+
         start = time()
-        Y_integer, X_integer = solve_dicho_callback(pb.m, round_results, false ; args...)
+        # if node.num == 1144
+        #     # JuMP.unset_silent(pb.m) ; JuMP.unset_silent(pb.lp_copied)
+        #     Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, true ; args...)
+        #     # JuMP.set_silent(pb.m) ; JuMP.set_silent(pb.lp_copied)
+        # else
+            Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, round_results, false ; args...)
+        # end
+        
         pb.info.relaxation_time += (time() - start)
 
         start = time()
         for i = 1:length(Y_integer) 
             s = Solution(X_integer[i], Y_integer[i])
-            # if s.y == [-101062.0, -315795.0] error("MAJ UBS ->x = $(s.xEquiv) , y = $(s.y) ") end
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
@@ -48,8 +54,6 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         if verbose
             @info "node $(node.num) is unfeasible !"
         end
-        # pb.info.nb_nodes_pruned += 1
-        # pb.info.status = MOI.INFEASIBLE
         return true
     end
 
@@ -57,7 +61,6 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     node.RBS = RelaxedBoundSet() #; node.objs = Vector{JuMP.GenericAffExpr}()
     for i = 1:length(vd_LP.Y_N)
         if pb.param.root_relax
-            # if vd_LP.Y_N[i] == [-101062.0, -315795.0] error("MAJ LBS ->x = $(vd_LP.X_E[i]) , y = $(vd_LP.Y_N[i]) ") end
             push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
         else
             push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]), filtered=true)  
@@ -91,6 +94,7 @@ function SP_cut_off(i::Int64, node::Node, pb::BO01Problem, round_results, verbos
             if push!(node.cutpool, ineq)
                 pb.info.cuts_infos.cuts_applied += 1 ; pb.info.cuts_infos.sp_cuts += 1
                 con = JuMP.@constraint(pb.m, cut[2:end]'*pb.varArray ≤ cut[1]) ; push!(node.con_cuts, con)
+                con = JuMP.@constraint(pb.lp_copied, cut[2:end]'*pb.varArray_copied ≤ cut[1]) ; push!(node.con_cuts_copied, con)
             end
             pb.info.cuts_infos.times_oper_cutPool += (time() - start_pool)
 
@@ -120,11 +124,9 @@ end
 
 
 function isCutable(node::Node, i::Int64, j::Int64, incumbent::IncumbentSet)::Bool
-    # sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[j] 
-    # λ = [sol_r.y[2] - sol_l.y[2], sol_l.y[1] - sol_r.y[1]]
     for t = i+1:j-1 
         l = node.RBS.natural_order_vect.sols[t] 
-        if l.is_binary # || λ'*l.y > λ'*sol_r.y || λ'*l.y > λ'*sol_l.y
+        if l.is_binary
             return false 
         end
     end
@@ -155,6 +157,10 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                 l += 1 ; continue    
             end
 
+            if node == 1144 
+                println("LBS[ $(l) ]")
+            end 
+            
             for ∇ = max_step:-1:0 
                 if ∇ == 0
                     (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
@@ -178,6 +184,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                             if push!(node.cutpool, ineq)
                                 pb.info.cuts_infos.cuts_applied += 1 ; pb.info.cuts_infos.mp_cuts += 1
                                 con = JuMP.@constraint(pb.m, cut[2:end]'*pb.varArray ≤ cut[1]) ; push!(node.con_cuts, con)
+                                con = JuMP.@constraint(pb.lp_copied, cut[2:end]'*pb.varArray_copied ≤ cut[1]) ; push!(node.con_cuts_copied, con)
                             end
                             pb.info.cuts_infos.times_oper_cutPool += (time() - start_pool)
 

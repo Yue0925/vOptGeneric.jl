@@ -5,7 +5,7 @@ include("branching.jl")
 include("fathoming.jl")
 include("displayGraphic.jl")
 
-using TimerOutputs
+using TimerOutputs, JuMP, CPLEX
 tmr = TimerOutput()
 
 
@@ -151,29 +151,16 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         # fullyExplicitDominanceTestByNormal   ,   fullyExplicitDominanceTestNonConvex
         if ( @timeit tmr "dominance" fullyExplicitDominanceTestByNormal(node, incumbent, worst_nadir_pt, pb.param.EPB) )
             prune!(node, DOMINANCE)
-
-            #todo : affichage !
-            UBS = [] ; LBS = []; λ = []
-
-            for s in incumbent.natural_order_vect.sols
-                push!(UBS, s.y)
-            end
-            for s in node.RBS.natural_order_vect.sols
-                push!(LBS, s.y) ; push!(λ, s.λ)
-            end
-            tmp_nodes("node_$(node.num)" * "_$(node.prunedType)", UBS, "node_$(node.num)" * "_$(node.prunedType)", LBS, λ )
-
-
             if verbose
                 @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
             end
             pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            println(node)
-            print("UBS = [ ")
-            for s in incumbent.natural_order_vect.sols
-                print("$(s.y) , ")
-            end
-            println("]")
+            # println(node)
+            # print("UBS = [ ")
+            # for s in incumbent.natural_order_vect.sols
+            #     print("$(s.y) , ")
+            # end
+            # println("]")
             return
         end
     else
@@ -183,12 +170,12 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
                 @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
             end
             pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            println(node)
-            print("UBS = [ ")
-            for s in incumbent.natural_order_vect.sols
-                print("$(s.y) , ")
-            end
-            println("]")
+            # println(node)
+            # print("UBS = [ ")
+            # for s in incumbent.natural_order_vect.sols
+            #     print("$(s.y) , ")
+            # end
+            # println("]")
             return
         end
     end
@@ -224,27 +211,13 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
                 ( @timeit tmr "incumbent" updateIncumbent(nodeChild, pb, incumbent, verbose) )
-
-                #todo : affichage !
-                UBS = [] ; LBS = [] ; λ = []
-
-                for s in incumbent.natural_order_vect.sols
-                    push!(UBS, s.y)
-                end
-                for s in nodeChild.RBS.natural_order_vect.sols
-                    push!(LBS, s.y); push!(λ, s.λ)
-                end
-                tmp_nodes("node_$(nodeChild.num)" * "_$(nodeChild.prunedType)", UBS, "node_$(nodeChild.num)" * "_$(nodeChild.prunedType)", LBS, λ )
-
-
-
                 nodeChild.activated = false ; pb.info.nb_nodes_pruned += 1
-                println(nodeChild)
-                print("UBS = [ ")
-                for s in incumbent.natural_order_vect.sols
-                    print("$(s.y) , ")
-                end
-                println("]")
+                # println(nodeChild)
+                # print("UBS = [ ")
+                # for s in incumbent.natural_order_vect.sols
+                #     print("$(s.y) , ")
+                # end
+                # println("]")
             else
                 addTodo(todo, pb, nodeChild)
             end
@@ -266,28 +239,13 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
-
-
-            #todo : affichage !
-            UBS = [] ; LBS = [] ; λ = []
-
-            for s in incumbent.natural_order_vect.sols
-                push!(UBS, s.y)
-            end
-            for s in node1.RBS.natural_order_vect.sols
-                push!(LBS, s.y); push!(λ, s.λ)
-            end
-            tmp_nodes("node_$(node1.num)" * "_$(node1.prunedType)", UBS, "node_$(node1.num)" * "_$(node1.prunedType)", LBS, λ)
-
-
-
             node1.activated = false ; pb.info.nb_nodes_pruned += 1
-            println(node1)
-            print("UBS = [ ")
-            for s in incumbent.natural_order_vect.sols
-                print("$(s.y) , ")
-            end
-            println("]")
+            # println(node1)
+            # print("UBS = [ ")
+            # for s in incumbent.natural_order_vect.sols
+            #     print("$(s.y) , ")
+            # end
+            # println("]")
         else
             addTodo(todo, pb, node1)
         end
@@ -302,39 +260,25 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
-
-            #todo : affichage !
-            UBS = [] ; LBS = [] ; λ = []
-
-            for s in incumbent.natural_order_vect.sols
-                push!(UBS, s.y)
-            end
-            for s in node2.RBS.natural_order_vect.sols
-                push!(LBS, s.y); push!(λ, s.λ)
-            end
-            tmp_nodes("node_$(node2.num)" * "_$(node2.prunedType)", UBS, "node_$(node2.num)" * "_$(node2.prunedType)", LBS , λ)
-
-
             node2.activated = false ; pb.info.nb_nodes_pruned += 1
-            println(node2)
-            print("UBS = [ ")
-            for s in incumbent.natural_order_vect.sols
-                print("$(s.y) , ")
-            end
-            println("]")
+            # println(node2)
+            # print("UBS = [ ")
+            # for s in incumbent.natural_order_vect.sols
+            #     print("$(s.y) , ")
+            # end
+            # println("]")
         else
             addTodo(todo, pb, node2)
         end
 
         node.succs = [node1, node2]
     end
-
-    println(node)
-    print("UBS = [ ")
-    for s in incumbent.natural_order_vect.sols
-        print("$(s.y) , ")
-    end
-    println("]")
+    # println(node)
+    # print("UBS = [ ")
+    # for s in incumbent.natural_order_vect.sols
+    #     print("$(s.y) , ")
+    # end
+    # println("]")
 end
 
 function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::IncumbentSet, round_results, verbose; args...)
@@ -369,6 +313,29 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     end
 end
 
+
+function copy_model_LP(pb::BO01Problem)
+    n = size(pb.A, 2) ; numRows = size(pb.A, 1)
+
+    # build/copy constraints 
+    @variable(pb.lp_copied, var[1:n])
+    for i=1:numRows
+        @constraint(pb.lp_copied, pb.A[i, :]'*var <= pb.b[i])
+    end
+
+    # set upper/lower bounds 
+    for i=1:n         
+        if has_lower_bound(pb.varArray[i])
+            set_lower_bound(var[i], lower_bound(pb.varArray[i]))
+        elseif has_upper_bound(varArray[i])
+            set_upper_bound(var[i], upper_bound(pb.varArray[i]))
+        end
+    end
+
+    pb.varArray_copied = var
+end
+
+
 """
 A bi-objective binary(0-1) branch and bound algorithm.
 """
@@ -377,25 +344,24 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     converted, f = formatting(m)
 
     varArray = JuMP.all_variables(m)
+
     problem = BO01Problem(
-        varArray, m, BBparam(), StatInfo(), Matrix{Float64}(undef, 0,0), Vector{Float64}(), Matrix{Float64}(undef, 0,0),
+        varArray, Vector{JuMP.VariableRef}(), m, JuMP.Model(CPLEX.Optimizer), BBparam(), StatInfo(), Matrix{Float64}(undef, 0,0), Vector{Float64}(), Matrix{Float64}(undef, 0,0),
         false, JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}(), false,
         JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}()
     )
-    
-    standard_form(problem) ; problem.param.EPB = EPB
-    # JuMP.unset_silent(problem.m)
 
-    # # relaxation LP
-    # undo_relax = JuMP.relax_integrality(problem.m)
-    function undo_relax() end 
+    standard_form(problem) ; problem.param.EPB = EPB
+
+    # relaxation LP
+    undo_relax = JuMP.relax_integrality(problem.m)
 
     if root_relax
+        # copy alternative model 
+        copy_model_LP(problem) ; undo_relax()
+        set_silent(problem.lp_copied)
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
         JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
-        # JuMP.unset_silent(problem.m) # todo: comment 
-    else
-        undo_relax = JuMP.relax_integrality(problem.m)
     end
 
     if cp

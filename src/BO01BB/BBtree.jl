@@ -22,7 +22,8 @@ mutable struct Node
     pruned::Bool                # if the node is pruned
     prunedType::PrunedType      # if the node is fathomed, restore pruned type
     deleted::Bool               # if the node is supposed to be deleted
-    con_cuts::Vector{ConstraintRef}             
+    con_cuts::Vector{ConstraintRef} 
+    con_cuts_copied::Vector{ConstraintRef} 
     cutpool::CutPool
     assignment::Dict{Int64, Int64}
 
@@ -52,9 +53,8 @@ mutable struct Node
         n.pruned = false
         n.prunedType = NONE
         n.deleted = false
-        # n.objs = Vector{JuMP.GenericAffExpr}()
-        # n.cuts_ref = Vector{CutScore}()
         n.con_cuts = Vector{ConstraintRef}()
+        n.con_cuts_copied = Vector{ConstraintRef}()
         n.cutpool = CutPool()
         n.assignment = Dict{Int64, Int64}()
     
@@ -165,14 +165,16 @@ Going through all the predecessors until the root, add variables or objective bo
 Return a list of objective bounds (symbolic constraint).
 """
 function setVarObjBounds(actual::Node, pb::BO01Problem)
+    con_cuts = [] ; con_cuts_copied = []
     if isRoot(actual) # the actual node is the root 
-        return 
+        return con_cuts, con_cuts_copied
     end
-    predecessor = actual.pred ; con_cuts = []
+    predecessor = actual.pred
 
     # set actual objective/variable bound
     if actual.EPB
-        append!(con_cuts, setObjBound(pb, actual.nadirPt, actual.duplicationBound))
+        cons_obj, cons_obj_copied = setObjBound(pb, actual.nadirPt, actual.duplicationBound)
+        append!(con_cuts, cons_obj) ; append!(con_cuts_copied, cons_obj_copied)
     else
         setVarBound(pb, actual.var, actual.var_bound)
     end
@@ -181,19 +183,20 @@ function setVarObjBounds(actual::Node, pb::BO01Problem)
     while !isRoot(predecessor)     
         actual = predecessor ; predecessor = actual.pred
         if actual.EPB
-            append!(con_cuts, setObjBound(pb, actual.nadirPt, actual.duplicationBound))
+            cons_obj, cons_obj_copied = setObjBound(pb, actual.nadirPt, actual.duplicationBound)
+            append!(con_cuts, cons_obj) ; append!(con_cuts_copied, cons_obj_copied)
         else
             setVarBound(pb, actual.var, actual.var_bound)
         end
     end
-    return con_cuts
+    return con_cuts, con_cuts_copied
 end
 
 
 """
 Remove variables or objective bounds set in the predecessors.
 """
-function removeVarObjBounds(actual::Node, pb::BO01Problem, objcons)
+function removeVarObjBounds(actual::Node, pb::BO01Problem, objcons, objcons_copied)
     if isRoot(actual) # the actual node is the root 
         return 
     end
@@ -210,6 +213,12 @@ function removeVarObjBounds(actual::Node, pb::BO01Problem, objcons)
             JuMP.delete( pb.m, con) ; JuMP.unregister( pb.m, :con) # remove the symbolic reference
         end
     end
+
+    for con in objcons_copied
+        if JuMP.is_valid( pb.lp_copied, con)
+            JuMP.delete( pb.lp_copied, con) ; JuMP.unregister( pb.lp_copied, :con) # remove the symbolic reference
+        end
+    end
 end
 
 
@@ -218,9 +227,9 @@ Given a patrial assignment of variables, remove the fixed bounding.
 """
 function removeVarBound(pb::BO01Problem, var::Int64, bound::Int64)
     if bound == 0
-        JuMP.set_upper_bound(pb.varArray[var], 1)
+        JuMP.set_upper_bound(pb.varArray[var], 1) ; JuMP.set_upper_bound(pb.varArray_copied[var], 1)
     elseif bound == 1
-        JuMP.set_lower_bound(pb.varArray[var], 0)
+        JuMP.set_lower_bound(pb.varArray[var], 0) ; JuMP.set_lower_bound(pb.varArray_copied[var], 0)
     end
 end
 
@@ -230,9 +239,9 @@ Given a partial assignment on variables values, add the corresponding bounds.
 """
 function setVarBound(pb::BO01Problem, var::Int64, bound::Int64)
     if bound == 0
-        JuMP.set_upper_bound(pb.varArray[var], 0)
+        JuMP.set_upper_bound(pb.varArray[var], 0) ; JuMP.set_upper_bound(pb.varArray_copied[var], 0)
     elseif bound == 1
-        JuMP.set_lower_bound(pb.varArray[var], 1)
+        JuMP.set_lower_bound(pb.varArray[var], 1) ; JuMP.set_lower_bound(pb.varArray_copied[var], 1)
     end
 end
 
@@ -240,11 +249,18 @@ end
 Given a un-dominated nadir point, add the correspond EPB objective bound.
 """
 function setObjBound(pb::BO01Problem, nadirPt::Vector{Float64}, duplication_bound::Float64)
-    cons_obj = []
+    cons_obj = [] ; cons_obj_copied = []
     # for i=1:2 
         con = JuMP.@constraint(pb.m, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray ≤ nadirPt[1]) ; push!(cons_obj, con)
         con = JuMP.@constraint(pb.m, pb.c[2, 1] + pb.c[2, 2:end]'*pb.varArray ≤ nadirPt[2]) ; push!(cons_obj, con)
-        if duplication_bound != Inf con = JuMP.@constraint(pb.m, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray ≥ duplication_bound) ; push!(cons_obj, con) end 
+
+        con = JuMP.@constraint(pb.lp_copied, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray_copied ≤ nadirPt[1]) ; push!(cons_obj_copied, con)
+        con = JuMP.@constraint(pb.lp_copied, pb.c[2, 1] + pb.c[2, 2:end]'*pb.varArray_copied ≤ nadirPt[2]) ; push!(cons_obj_copied, con)
+        if duplication_bound != Inf 
+            con = JuMP.@constraint(pb.m, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray ≥ duplication_bound) ; push!(cons_obj, con) 
+
+            con = JuMP.@constraint(pb.lp_copied, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray_copied ≥ duplication_bound) ; push!(cons_obj_copied, con) 
+        end 
     # end
-    return cons_obj
+    return cons_obj, cons_obj_copied
 end
