@@ -679,7 +679,7 @@ function opt_scalar(m::JuMP.Model, λ1, λ2, round_results, verbose; args...)
         y_1 = JuMP.value(f1) ; y_2 = JuMP.value(f2)
 
         #Store results in vOptData
-        push!(vd.Y_N, round_results ? round.([y_1, yr_2]) : [y_1, yr_2])
+        push!(vd.Y_N, round_results ? round.([y_1, y_2]) : [y_1, y_2])
         push!(vd.X_E, JuMP.value.(varArray))
     end
 end

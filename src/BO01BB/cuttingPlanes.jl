@@ -65,12 +65,12 @@ end
 
 
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
-    n = length(node.node.RBS.natural_order_vect.sols) ; lambdas = []
+    n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
     for indx in cut_off
-        push!(lambdas, node.node.RBS.natural_order_vect.sols[indx].λ)
+        push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
     end
-    deleteat!(node.node.RBS.natural_order_vect.sols, cut_off)
+    deleteat!(node.RBS.natural_order_vect.sols, cut_off)
 
     # in each direction 
     for λ in lambdas
@@ -251,7 +251,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
 
         if cut_counter > 0
             # pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-            reoptimize_LBS(node, pb, incumbent, round_results, verbose; args)
+            reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
 
             LBS = node.RBS.natural_order_vect.sols
 
