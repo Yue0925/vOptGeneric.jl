@@ -190,22 +190,20 @@ function MP_CG_separator2(x_l::Vector{Float64}, x_r::Vector{Float64}, pb::BO01Pr
 end
 
 
-# todo : reduce A, b 
-
-function SP_KP_heurSeparator(x::Vector{Float64}, A_::Matrix{Float64}, b_::Vector{Float64}, assign::Dict{Int64, Int64})
-    A = deepcopy(A_) ; b = deepcopy(b_)
+function SP_KP_heurSeparator(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
+    # A = deepcopy(A_) ; b = deepcopy(b_)
     n = size(A, 2) ; m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
-        for (j, v) in assign
-            if v==0 
-                A[i, j] = 0.0
-            elseif v==1
-                b[i] -= A[i, j] ; A[i, j] = 0.0
-            end
-        end
+        # for (j, v) in assign
+        #     if v==0 
+        #         A[i, j] = 0.0
+        #     elseif v==1
+        #         b[i] -= A[i, j] ; A[i, j] = 0.0
+        #     end
+        # end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 
@@ -250,20 +248,20 @@ function SP_KP_heurSeparator(x::Vector{Float64}, A_::Matrix{Float64}, b_::Vector
 end
 
 
-function SP_KP_heurSeparator2(x::Vector{Float64}, A_::Matrix{Float64}, b_::Vector{Float64}, assign::Dict{Int64, Int64})
-    A = deepcopy(A_) ; b = deepcopy(b_)
+function SP_KP_heurSeparator2(x::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
+    # A = deepcopy(A_) ; b = deepcopy(b_)
     n = size(A, 2) ; m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
-        for (j, v) in assign
-            if v==0 
-                A[i, j] = 0.0
-            elseif v==1
-                b[i] -= A[i, j] ; A[i, j] = 0.0
-            end
-        end
+        # for (j, v) in assign
+        #     if v==0 
+        #         A[i, j] = 0.0
+        #     elseif v==1
+        #         b[i] -= A[i, j] ; A[i, j] = 0.0
+        #     end
+        # end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 
@@ -308,20 +306,20 @@ function SP_KP_heurSeparator2(x::Vector{Float64}, A_::Matrix{Float64}, b_::Vecto
     return cuts
 end
 
-function MP_KP_heurSeparator2(x_l::Vector{Float64}, x_r::Vector{Float64}, A_::Matrix{Float64}, b_::Vector{Float64}, assign::Dict{Int64, Int64})
-    A = deepcopy(A_) ; b = deepcopy(b_)
+function MP_KP_heurSeparator2(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
+    # A = deepcopy(A_) ; b = deepcopy(b_)
     n = size(A, 2) ; m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
-        for (j, v) in assign
-            if v==0 
-                A[i, j] = 0.0
-            elseif v==1
-                b[i] -= A[i, j] ; A[i, j] = 0.0
-            end
-        end
+        # for (j, v) in assign
+        #     if v==0 
+        #         A[i, j] = 0.0
+        #     elseif v==1
+        #         b[i] -= A[i, j] ; A[i, j] = 0.0
+        #     end
+        # end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 
@@ -377,20 +375,20 @@ end
 
 
 
-function MP_KP_heurSeparator(x_l::Vector{Float64}, x_r::Vector{Float64}, A_::Matrix{Float64}, b_::Vector{Float64}, assign::Dict{Int64, Int64})
-    A = deepcopy(A_) ; b = deepcopy(b_)
+function MP_KP_heurSeparator(x_l::Vector{Float64}, x_r::Vector{Float64}, A::Matrix{Float64}, b::Vector{Float64}, assign::Dict{Int64, Int64})
+    # A = deepcopy(A_) ; b = deepcopy(b_)
     n = size(A, 2) ; m = size(A, 1)
     cuts = []
 
     # for each knapsack constraint in Ax≤b 
     for i=1:m 
-        for (j, v) in assign
-            if v==0 
-                A[i, j] = 0.0
-            elseif v==1
-                b[i] -= A[i, j] ; A[i, j] = 0.0
-            end
-        end
+        # for (j, v) in assign
+        #     if v==0 
+        #         A[i, j] = 0.0
+        #     elseif v==1
+        #         b[i] -= A[i, j] ; A[i, j] = 0.0
+        #     end
+        # end
         # each coefficient must be positive 
         has_negative_coeff = false
         for j=1:n 

@@ -125,8 +125,6 @@ function standard_form(pb::BO01Problem)
         cstr_index += 1
     end
 
-    # loadT = round(time() - start, digits = 2)
-    # @info "loading matrix ... = $loadT"
 end
 
 """
@@ -155,12 +153,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
                 @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
             end
             pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            # println(node)
-            # print("UBS = [ ")
-            # for s in incumbent.natural_order_vect.sols
-            #     print("$(s.y) , ")
-            # end
-            # println("]")
             return
         end
     else
@@ -170,12 +162,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
                 @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
             end
             pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            # println(node)
-            # print("UBS = [ ")
-            # for s in incumbent.natural_order_vect.sols
-            #     print("$(s.y) , ")
-            # end
-            # println("]")
             return
         end
     end
@@ -198,6 +184,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
     # objective branching 
     if pb.param.EPB && length(node.localNadirPts) > 0
+        # todo : to be improved ... 
         for i = 1:length(node.localNadirPts)
             pt =  node.localNadirPts[i] ; duplicationBound_z1 = Inf
             if i < length(node.localNadirPts) duplicationBound_z1 = node.localNadirPts[i+1][1] end
@@ -212,12 +199,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
                 ( @timeit tmr "incumbent" updateIncumbent(nodeChild, pb, incumbent, verbose) )
                 nodeChild.activated = false ; pb.info.nb_nodes_pruned += 1
-                # println(nodeChild)
-                # print("UBS = [ ")
-                # for s in incumbent.natural_order_vect.sols
-                #     print("$(s.y) , ")
-                # end
-                # println("]")
             else
                 addTodo(todo, pb, nodeChild)
             end
@@ -240,12 +221,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
             node1.activated = false ; pb.info.nb_nodes_pruned += 1
-            # println(node1)
-            # print("UBS = [ ")
-            # for s in incumbent.natural_order_vect.sols
-            #     print("$(s.y) , ")
-            # end
-            # println("]")
         else
             addTodo(todo, pb, node1)
         end
@@ -261,24 +236,12 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
             node2.activated = false ; pb.info.nb_nodes_pruned += 1
-            # println(node2)
-            # print("UBS = [ ")
-            # for s in incumbent.natural_order_vect.sols
-            #     print("$(s.y) , ")
-            # end
-            # println("]")
         else
             addTodo(todo, pb, node2)
         end
 
         node.succs = [node1, node2]
     end
-    # println(node)
-    # print("UBS = [ ")
-    # for s in incumbent.natural_order_vect.sols
-    #     print("$(s.y) , ")
-    # end
-    # println("]")
 end
 
 function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::IncumbentSet, round_results, verbose; args...)
@@ -327,7 +290,7 @@ function copy_model_LP(pb::BO01Problem)
     for i=1:n         
         if has_lower_bound(pb.varArray[i])
             set_lower_bound(var[i], lower_bound(pb.varArray[i]))
-        elseif has_upper_bound(varArray[i])
+        elseif has_upper_bound(pb.varArray[i])
             set_upper_bound(var[i], upper_bound(pb.varArray[i]))
         end
     end
@@ -340,7 +303,6 @@ end
 A bi-objective binary(0-1) branch and bound algorithm.
 """
 function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results, verbose; args...)
-    
     converted, f = formatting(m)
 
     varArray = JuMP.all_variables(m)
@@ -353,13 +315,14 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
     standard_form(problem) ; problem.param.EPB = EPB
 
+    # copy alternative model
+    copy_model_LP(problem) ; set_silent(problem.lp_copied)
+
     # relaxation LP
     undo_relax = JuMP.relax_integrality(problem.m)
 
-    if root_relax
-        # copy alternative model 
-        copy_model_LP(problem) ; undo_relax()
-        set_silent(problem.lp_copied)
+    if root_relax 
+        undo_relax()
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
         JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
     end
@@ -368,13 +331,13 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         problem.param.cp_activated = cp ; problem.info.cp_activated = cp 
     end
 
-    start = time() # todo : presolving 
-
     # initialize the incumbent list by heuristics or with Inf
     incumbent = IncumbentSet() 
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)
+
+    start = time() # todo : presolving 
 
     # step 0 : create the root and add to the todo list
     root = Node(problem.info.nb_nodes +1, 0) ; root.assignment = getPartialAssign(root)
@@ -389,7 +352,6 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time
         post_processing(m, problem, incumbent, round_results, verbose; args...)
         undo_relax()
-        # if !root_relax undo_relax() end 
         return problem.info
     end
 
@@ -413,19 +375,18 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     end
     
     problem.info.total_times = round(time() - start, digits = 2)
+    problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time
+
     if converted
         reversion(m, f, incumbent)
     end
-    problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time
     post_processing(m, problem, incumbent, round_results, verbose; args...)
 
-    
     MB = 10^6
 
     problem.info.tree_size = round(Base.summarysize(root)/MB, digits = 3)
     
     undo_relax()
-    # if !root_relax undo_relax() end 
     show(tmr)
 
     problem.info.cuts_infos.cuts_total = problem.info.cuts_infos.cuts_applied

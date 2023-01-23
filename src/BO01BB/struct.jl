@@ -280,13 +280,12 @@ In case of successfully added and `filtered=true` (by defaut false), delete the 
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)
     sol.y = round.(sol.y, digits = 4)
+
     # add s directly if sols is empty
     if length(natural_sols) == 0
         push!(natural_sols.sols, sol) ; return true
     end
 
-    # println("\n\n ------- \n", natural_sols)
-    # println("sol = ", sol)
     # a binary/dichotomy search finds the location to insert 
     l = 1; r = length(natural_sols); m = 0
     while l ≤ r
@@ -319,23 +318,15 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     end
 
     # find points weakly dominated by the new point and delete it/them
-    # push!(natural_sols.sols, sol)
-
-    # #Sort
-    # sort!(natural_sols.sols, by = s -> (-s.y[1], s.y[2]))
-    # # natural_sols.sols = natural_sols.sols[s]
     if filtered
-        deleted_Y = Vector{Solution}()
         i = 1
         while i < length(natural_sols.sols)
             j = i+1
             while j<= length(natural_sols.sols)
                 if dominate(natural_sols.sols[i], natural_sols.sols[j])
-                    push!(deleted_Y, natural_sols.sols[j])
                     deleteat!(natural_sols.sols, j)
                     
                 elseif dominate(natural_sols.sols[j], natural_sols.sols[i])
-                    push!(deleted_Y, natural_sols.sols[i])
                     deleteat!(natural_sols.sols, i)
                     j -= 1 ; break
                 else
@@ -344,39 +335,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             end
             if j > length(natural_sols.sols) i += 1 end 
         end
-
-
-        # #todo : verifying 
-        # for y in deleted_Y
-        #     dominated = false
-        #     for i=1:length(natural_sols.sols)
-        #         if dominate(natural_sols.sols[i], y)
-        #             dominated = true ; break
-        #         end
-        #     end
-        #     if !dominated
-        #         error(" supprimed non dominated $(y) ! \n Y_N = $(natural_sols.sols)")
-        #     end
-        # end
     end
-
-    
-
-    # #todo: verifying
-    # for i = 1:length(natural_sols)-1
-    #     for j = i+1:length(natural_sols)
-    #         if dominate(natural_sols.sols[i], natural_sols.sols[j]) || dominate(natural_sols.sols[j], natural_sols.sols[i])
-    #             println("filtered = $filtered ")
-    #             println(" ---------------- after --------- \n", natural_sols)
-    #             error("error in push!")
-    #         end
-
-    #         if natural_sols.sols[i].y[1] < natural_sols.sols[j].y[1] || natural_sols.sols[i].y[2] > natural_sols.sols[j].y[2]
-    #             error("NATURAL ORDER error in push!")
-    #         end
-    #     end
-    # end
-
 end
 
 
@@ -391,7 +350,7 @@ mutable struct RelaxedBoundSet
 end
 
 function RelaxedBoundSet()
-    return RelaxedBoundSet(NaturalOrderVector()) # , Dict{Solution, Bool}()
+    return RelaxedBoundSet(NaturalOrderVector()) 
 end
 
 

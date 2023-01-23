@@ -23,14 +23,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     if pb.param.root_relax
 
         start = time()
-        # if node.num == 1144
-        #     # JuMP.unset_silent(pb.m) ; JuMP.unset_silent(pb.lp_copied)
-        #     Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, true ; args...)
-        #     # JuMP.set_silent(pb.m) ; JuMP.set_silent(pb.lp_copied)
-        # else
-            Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, round_results, false ; args...)
-        # end
-        
+        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, round_results, false ; args...)        
         pb.info.relaxation_time += (time() - start)
 
         start = time()
@@ -58,18 +51,56 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     end
 
     # construct/complete the relaxed bound set
-    node.RBS = RelaxedBoundSet() #; node.objs = Vector{JuMP.GenericAffExpr}()
+    node.RBS = RelaxedBoundSet()
     for i = 1:length(vd_LP.Y_N)
-        if pb.param.root_relax
+        # if pb.param.root_relax
             push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
-        else
-            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]), filtered=true)  
-        end
+        # else
+        #     push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]), filtered=true)  
+        # end
     end
-
 
     return false
 end
+
+
+function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
+    n = length(node.node.RBS.natural_order_vect.sols) ; lambdas = []
+
+    for indx in cut_off
+        push!(lambdas, node.node.RBS.natural_order_vect.sols[indx].λ)
+    end
+    deleteat!(node.node.RBS.natural_order_vect.sols, cut_off)
+
+    # in each direction 
+    for λ in lambdas
+        if pb.param.root_relax
+
+            start = time()
+            Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, λ[1], λ[2], round_results, false ; args...)        
+            pb.info.relaxation_time += (time() - start)
+    
+            start = time()
+            for i = 1:length(Y_integer) 
+                s = Solution(X_integer[i], Y_integer[i])
+                if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
+            end
+            pb.info.update_incumb_time += (time() - start) 
+        else
+            start = time()
+            opt_scalar(pb.m, λ[1], λ[2], round_results, false ; args...)
+            pb.info.relaxation_time += (time() - start)
+        end
+
+        vd_LP = getvOptData(pb.m)
+        if size(vd_LP.Y_N, 1) != 0
+            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[1], vd_LP.Y_N[1], λ), filtered=true )
+        end
+    end
+
+end
+
+
 
 
 """
@@ -151,33 +182,33 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         ite += 1 ; pb.info.cuts_infos.ite_total += 1 
 
         l = 1 ; cut_counter = 0
+        cut_off = []
 
         while l ≤ length(LBS)
             if LBS[l].is_binary 
                 l += 1 ; continue    
             end
-
-            if node == 1144 
-                println("LBS[ $(l) ]")
-            end 
             
             for ∇ = max_step:-1:0 
                 if ∇ == 0
                     (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
-                    if new_cut cut_counter += 1 end 
+                    if new_cut 
+                        cut_counter += 1 ; push!(cut_off, l) 
+                    end 
                     l += 1
                 else 
                     r = l+∇
                     if r > length(LBS) || LBS[r].is_binary continue end
 
-                    if pb.param.root_relax && ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
+                    if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
 
                     start_sep = time()
                     cuts = MP_KP_heurSeparator2(LBS[l].xEquiv[1], LBS[r].xEquiv[1], pb.A, pb.b, node.assignment)
                     pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
 
                     if length(cuts) > 0
-                        cut_counter += (∇+1)
+                        cut_counter += (∇+1) 
+                        for i=l:r push!(cut_off, i) end 
                         for cut in cuts
                             start_pool = time()
                             ineq = Cut(cut)
@@ -219,17 +250,19 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         # ---------------------------------------------------
 
         if cut_counter > 0
-            pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+            # pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+            reoptimize_LBS(node, pb, incumbent, round_results, verbose; args)
+
             LBS = node.RBS.natural_order_vect.sols
 
             # in case of infeasibility
-            if pruned return true end
+            if length(LBS)==0 return true end
         end
 
         # --------------------------------------------------
         # 2. stop if no more valid cut can be found
         # --------------------------------------------------
-        if cut_counter/length(LBS) < 0.4
+        if cut_counter/length(LBS) < 0.3
             return false 
         end
     end

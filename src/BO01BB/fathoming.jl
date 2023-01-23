@@ -94,19 +94,6 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
 
         pruned = MP_cutting_planes(node, pb, incumbent, round_results, verbose ; args...)
 
-        # if length(node.RBS.natural_order_vect) > 0
-            
-
-        # # elseif length(node.RBS.natural_order_vect) == 1 && !node.RBS.natural_order_vect.sols[1].is_binary
-        # #     pb.info.cuts_infos.ite_total += 1 
-        # #     (new_x, cut_found) = SP_cut_off(1, node, pb, round_results, verbose ; args...)
-        # #     if cut_found && new_x != node.RBS.natural_order_vect.sols[1].xEquiv[1]
-        # #         node.RBS.natural_order_vect.sols[1].xEquiv[1] = new_x[:]
-        # #         node.RBS.natural_order_vect.sols[1].y = [pb.c[1, 1] + pb.c[1, 2:end]'*new_x , pb.c[2, 1] + pb.c[2, 2:end]'*new_x]
-        # #         node.RBS.natural_order_vect.sols[1].is_binary = isBinary(new_x)
-        # #     end
-        # end
-
         # step 3 : retrieve applied valid cuts 
         start_processing = time()
         for con in node.con_cuts
@@ -166,18 +153,9 @@ function getNadirPoints(incumbent::IncumbentSet) # , ptl, ptr
     nadir_pts = NaturalOrderVector()
     @assert length(incumbent.natural_order_vect) > 1 "`getNadirPoints` requires at least two upper bounds in incumbent list."
 
-    # #todo : for local nadir point : condition ideal point
-    # if incumbent.natural_order_vect.sols[1].y[1] <= ptr.y[1] && incumbent.natural_order_vect.sols[1].y[2] <= ptl.y[2]
-    #     return (nadir_pts, true)
-    # end
-
     if length(incumbent.natural_order_vect) == 1 return incumbent.natural_order_vect end 
 
     for i = 1:length(incumbent.natural_order_vect)-1
-    #     # condition ideal point
-    #     if incumbent.natural_order_vect.sols[i+1].y[1] <= ptr.y[1] && incumbent.natural_order_vect.sols[i+1].y[2] <= ptl.y[2]
-    #         return (nadir_pts, true)
-    #     end
 
         push!(nadir_pts, Solution(
             Vector{Vector{Float64}}(),
@@ -190,37 +168,6 @@ function getNadirPoints(incumbent::IncumbentSet) # , ptl, ptr
 
     return nadir_pts
 end
-
-
-# """
-# Return local ideal points of the given lower bound set, or the single point it contains.
-# """
-# function getIdealPoints(LBS::RelaxedBoundSet, ptl, ptr)
-#     ideal_pts = NaturalOrderVector()
-#     @assert length(LBS.natural_order_vect) > 1 "`getIdealPoints` requires at least two lower bounds in LBS."
-
-#     # condition worst nadir point
-#     if LBS.natural_order_vect.sols[1].y[1] >= ptl.y[1] && LBS.natural_order_vect.sols[1].y[2] >= ptr.y[2]
-#         return (ideal_pts, true)
-#     end
-
-#     for i = 1:length(LBS.natural_order_vect)-1
-#         # condition worst nadir point
-#         if LBS.natural_order_vect.sols[i+1].y[1] >= ptl.y[1] && LBS.natural_order_vect.sols[i+1].y[2] >= ptr.y[2]
-#             return (ideal_pts, true)
-#         end
-
-#         push!(ideal_pts, Solution(
-#             Vector{Vector{Float64}}(),
-#             [LBS.natural_order_vect.sols[i+1].y[1],
-#             LBS.natural_order_vect.sols[i].y[2]
-#             ],
-#             true ) , filtered=true
-#         )
-#     end
-
-#     return (ideal_pts, false)
-# end
 
 
 """
@@ -280,7 +227,6 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
     # test condition necessary 2 : LBS ≤/dominates UBS 
     fathomed = true# ; dist_naditPt = Vector{Float64}()
-    # ideal_pt = [ptr.y[1], ptl.y[2]]
 
     # iterate of all local nadir points
     for u ∈ nadir_pts.sols
@@ -290,11 +236,6 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
             return true
         end
-
-        # # case 2 : if u is worse than the "worst nadir point" of LBS # todo: actually doesn't work  
-        # if u.y[1] > ptl.y[1] && u.y[2] > ptr.y[2]
-        #     return false
-        # end
 
         # case 3 : complete pairwise comparison
         for i=1:length(node.RBS.natural_order_vect)-1              # ∀ segment l ∈ LBS 
@@ -421,10 +362,6 @@ function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet,
             if λ[1] != 0.0 &&  λ[2] != 0.0 && λ'*u.y < λ'*sol.y # strictly inferior : case limit 
                 in_polygone = false ; break
             end
-
-            # if λ'*u.y < λ'*sol.y            
-            #     in_polygone = false ; break
-            # end
         end
 
         # the end of comparison 
