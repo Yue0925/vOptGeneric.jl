@@ -109,7 +109,7 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
       total_time = round(time() - start, digits = 2)
     elseif method == :epsilon
       start = time()
-      vSolve( Bi01IP, method=:epsilon, step=1.0, verbose=false )
+      vSolve( Bi01IP, method=:epsilon, step=0.5, verbose=false )
       total_time = round(time() - start, digits = 2)
     elseif method == :bb
       infos = vSolve( Bi01IP, method=:bb, verbose=false )
@@ -182,11 +182,12 @@ function main(fname::String)
 
   solverSelected = CPLEX.Optimizer
   for method in [
+    :dicho, :epsilon, 
     :bb, :bb_EPB,
     :bc, :bc_EPB,
     :bc_rootRelax , :bc_rootRelaxEPB,
     :bc_rootRelaxCP, :bc_rootRelaxCPEPB
-    ] # :dicho, :epsilon, 
+    ] # 
 
     vSolveBi01IP(solverSelected, dat.C, dat.A, dat.b, fname, method) 
   end

@@ -8,7 +8,7 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
     fout = open(outputName, "w")
     println(fout, "vars = $vars ; constr = $constr ")
   
-    if method == :bb || method == :bc
+    if method != :dicho && method != :epsilon
         println(fout, infos)
     else
       println(fout, "total_times_used = $total_time")
@@ -17,7 +17,8 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
     println(fout, "Y_N = ", Y_N)
     println(fout)
     println(fout, "size_X_E = ", length(X_E))
-  
+    println(fout, "X_E = ", X_E)
+
     close(fout)
   
     displayGraphics(fname,Y_N, outputName)

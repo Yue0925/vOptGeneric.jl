@@ -17,4 +17,4 @@ for file in ./BOSPA/*.txt; do
     srun julia vOptBOSPA.jl "$file"
 done
 
-srun julia latexWriter.jl
+# srun julia latexWriter.jl

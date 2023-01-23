@@ -17,4 +17,4 @@ for file in ./BOSCP/*.dat; do
     srun julia vOptBOSCP.jl "$file"
 done
 
-srun julia latexWriter.jl
+# srun julia latexWriter.jl

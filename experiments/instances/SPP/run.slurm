@@ -19,4 +19,4 @@ for subfolder in ./BOSPP/*; do
     done
 done
 
-srun julia latexWriter.jl
+# srun julia latexWriter.jl

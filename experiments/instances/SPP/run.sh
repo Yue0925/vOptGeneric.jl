@@ -7,4 +7,4 @@ for subfolder in ./BOSPP/*; do
     done
 done
 
-julia latexWriter.jl
+# julia latexWriter.jl

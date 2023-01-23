@@ -5,4 +5,4 @@ for file in ./BOSCP/*.dat; do
     julia vOptBOSCP.jl "$file"
 done
 
-julia latexWriter.jl
+# julia latexWriter.jl
