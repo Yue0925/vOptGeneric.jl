@@ -1,0 +1,33 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccccccccccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex+CP)}} \\
+
+\cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17} \cmidrule(r){18-19} \cmidrule(r){20-21}
+~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
+\midrule
+
+biodidactic.dat & 64 & 17 & 2.39 & 3 & 1.19 & 3 & 0.04 & 3 & 1.8 & 3 & 0.06 & 3 & 0.32 & 3 & 0.86 & 3 & 0.58 & 3 & 0.63 & 3 \\
+biosppnw08.dat & 434 & 24 & 6.19 & 20 & 39.53 & 20 & 60.42 & 20 & 164.55 & 20 & 2773.71 & 20 & 4166.86 & 20 & 336.67 & 20 & 212.02 & 20 & 308.75 & 20 \\
+biosppnw10.dat & 853 & 24 & 4.72 & 13 & 49.99 & 13 & 53.92 & 13 & 254.64 & 13 & 2080.17 & 13 & 2410.75 & 13 & 523.98 & 13 & 342.01 & 13 & 431.18 & 13 \\
+biosppnw12.dat & 626 & 27 & 9.96 & 43 & 437.47 & 43 & 554.71 & 43 & 1377.07 & 23 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw15.dat & 467 & 31 & 3.26 & 2 & 3.53 & 2 & 6.13 & 2 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw20.dat & 685 & 22 & 5.36 & 9 & 116.31 & 9 & 1095.46 & 9 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw21.dat & 577 & 25 & 5.34 & 10 & 55.04 & 10 & 324.45 & 10 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw22.dat & 619 & 23 & 7.14 & 19 & 225.07 & 19 & 1237.14 & 19 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw23.dat & 711 & 19 & 5.07 & 6 & 71.2 & 6 & 593.92 & 6 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw26.dat & 771 & 23 & 8.16 & 19 & 517.93 & 19 & 2428.19 & 19 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw32.dat & 294 & 19 & 4.45 & 8 & 16.92 & 8 & 79.88 & 8 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw34.dat & 899 & 20 & 7.03 & 14 & 204.76 & 14 & 1739.99 & 14 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw37.dat & 770 & 19 & 6.14 & 10 & 248.78 & 10 & 1257.37 & 10 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw39.dat & 677 & 25 & 6.57 & 12 & 133.53 & 12 & 979.76 & 12 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw40.dat & 404 & 19 & 5.23 & 10 & 27.21 & 10 & 104.76 & 10 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+biosppnw41.dat & 197 & 17 & 4.91 & 11 & 11.67 & 11 & 55.2 & 11 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+\bottomrule
+\end{tabular}
+}%
+\caption{Comparison of the different algorithms performances for instances SPA/BOSPA .}
+\label{tab:table_compare_SPA/BOSPA }
+\end{sidewaystable}

@@ -27,7 +27,7 @@ function solve(fname::String, method ; step=0.5)
     outputName = folder * "/" * split(fname, "/")[end]
     # if isfile(outputName) return end #TODO : ignore existed file  
     inst = readingBOSPP(fname)
-    if inst.n >= 3000 return end
+    if inst.n >= 1000 return end
     
 
     # ---- setting the model

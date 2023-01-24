@@ -173,7 +173,7 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
 end
 
 
-function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, λ1, λ2, round_results, verbose; args...)
+function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, round_results, verbose; args...)
     global varArray
     global x_star
     global model = m
@@ -185,8 +185,11 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, λ1, λ2, rou
     varArray = JuMP.all_variables(m)
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
+    # todo : incompatible
+    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
+    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
+    f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
+    f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
@@ -233,8 +236,10 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, λ1, λ2, rou
             end
         end
 
-        y_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        y_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        # y_1 = x_star'* collect(values(f1.terms)) + f1.constant
+        # y_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        y_1 = x_star'* c[1, 2:end] + c[1, 1]
+        y_2 = x_star'* c[2, 2:end] + c[2, 1]
         #Store results in vOptData
         push!(vd.Y_N, round_results ? round.([y_1, y_2]) : [y_1, y_2])
         push!(vd.X_E, x_star)
@@ -245,7 +250,7 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, λ1, λ2, rou
     return Y_integer, X_integer
 end
 
-function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, round_results, verbose; args...)
+function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_results, verbose; args...)
     global varArray
     global x_star
     global model = m
@@ -257,8 +262,11 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, round_result
     varArray = JuMP.all_variables(m)
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
+    #todo : incompatible
+    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
+    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
+    f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
+    f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
@@ -356,8 +364,10 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, round_result
             end
         end
 
-        yr_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        yr_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        # yr_1 = x_star'* collect(values(f1.terms)) + f1.constant
+        # yr_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        yr_1 = x_star'* c[1, 2:end] + c[1, 1]
+        yr_2 = x_star'* c[2, 2:end] + c[2, 1]
         #Store results in vOptData
         push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
         push!(vd.X_E, x_star) ; push!(vd.lambda, [1.0, 0.0])
@@ -391,7 +401,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, round_result
             push!(vd.X_E, JuMP.value.(varArray))
             push!(vd.lambda, [0.0, 1.0])
 
-            Y, X = dichoRecursion_callback(m, lp_copied, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
 
@@ -414,8 +424,10 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, round_result
             end
         end
 
-        ys_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        ys_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        # ys_1 = x_star'* collect(values(f1.terms)) + f1.constant
+        # ys_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        ys_1 = x_star'* c[1, 2:end] + c[1, 1]
+        ys_2 = x_star'* c[2, 2:end] + c[2, 1]
 
         if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
             #Store results in vOptData
@@ -423,7 +435,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, round_result
             push!(vd.X_E, x_star)
             push!(vd.lambda, [0.0, 1.0])
 
-            Y, X = dichoRecursion_callback(m, lp_copied, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
 
@@ -436,7 +448,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, round_result
     return Y_integer, X_integer
 end
 
-function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
     global varArray
     global x_star
 
@@ -447,8 +459,11 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, yr_1, yr_
     f1Sense, f2Sense = vd.objSenses
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
+    # todo : incompatible
+    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
+    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
+    f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
+    f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
     λ1 = abs(yr_2 - ys_2)
     λ2 = abs(ys_1 - yr_1)
@@ -488,9 +503,9 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, yr_1, yr_
             push!(vd.lambda, [λ1, λ2])
 
             if yt_1 > ys_1+1e-4 && yt_2 > yr_2+1e-4
-                Y, X = dichoRecursion_callback(m, lp_copied, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+                Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
-                Y, X = dichoRecursion_callback(m, lp_copied, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+                Y, X = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
             end
         end
@@ -514,8 +529,10 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, yr_1, yr_
             end
         end
 
-        yt_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        yt_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        # yt_1 = x_star'* collect(values(f1.terms)) + f1.constant
+        # yt_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        yt_1 = x_star'* c[1, 2:end] + c[1, 1]
+        yt_2 = x_star'* c[2, 2:end] + c[2, 1]
         val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
 
         if ( val < lb - 1e-4)
@@ -523,9 +540,9 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, yr_1, yr_
             push!(vd.X_E, x_star) ; push!(vd.lambda, [λ1, λ2])
 
             if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
-                Y, X = dichoRecursion_callback(m,lp_copied,yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+                Y, X = dichoRecursion_callback(m,lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
-                Y, X = dichoRecursion_callback(m, lp_copied, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+                Y, X = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
             end
         end

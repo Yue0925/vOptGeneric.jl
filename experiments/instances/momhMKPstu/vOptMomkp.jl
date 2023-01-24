@@ -54,7 +54,6 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
   println(fout, "Y_N = ", Y_N)
   println(fout)
   println(fout, "size_X_E = ", length(X_E))
-  println(fout, "X_E = ", X_E)
 
   close(fout)
 
@@ -183,7 +182,7 @@ function main(fname::String)
   solverSelected = CPLEX.Optimizer
   for method in [
     :dicho, :epsilon, 
-    :bb, :bb_EPB,
+    # :bb, :bb_EPB,
     :bc, :bc_EPB,
     :bc_rootRelax , :bc_rootRelaxEPB,
     :bc_rootRelaxCP, :bc_rootRelaxCPEPB

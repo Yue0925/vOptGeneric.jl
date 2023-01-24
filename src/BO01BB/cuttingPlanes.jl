@@ -23,7 +23,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     if pb.param.root_relax
 
         start = time()
-        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, round_results, false ; args...)        
+        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)        
         pb.info.relaxation_time += (time() - start)
 
         start = time()
@@ -77,7 +77,7 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
         if pb.param.root_relax
 
             start = time()
-            Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, λ[1], λ[2], round_results, false ; args...)        
+            Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)        
             pb.info.relaxation_time += (time() - start)
     
             start = time()
@@ -250,8 +250,13 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         # ---------------------------------------------------
 
         if cut_counter > 0
-            # pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-            reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
+
+            if pb.param.root_relax
+                reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
+            else
+                pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+                if pruned return true end
+            end
 
             LBS = node.RBS.natural_order_vect.sols
 

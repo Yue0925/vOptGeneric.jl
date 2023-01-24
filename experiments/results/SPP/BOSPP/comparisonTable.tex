@@ -1,0 +1,37 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccccccccccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex+CP)}} \\
+
+\cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17} \cmidrule(r){18-19} \cmidrule(r){20-21}
+~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
+\midrule
+
+2mis100_300A.dat & 100 & 300 & 11.16 & 41 & 27.93 & 41 & 199.9 & 41 & 41.72 & 41 & 90.02 & 41 & 263.2 & 41 & 212.74 & 41 & 38.97 & 41 & 94.58 & 41 \\
+2mis100_300B.dat & 100 & 300 & 10.76 & 31 & 67.9 & 31 & 689.81 & 31 & 54.1 & 31 & 289.23 & 31 & 778.49 & 31 & 335.15 & 31 & 75.74 & 31 & 429.23 & 31 \\
+2mis100_300C.dat & 100 & 300 & 8.74 & 22 & 73.1 & 22 & 984.07 & 22 & 54.85 & 22 & 401.08 & 22 & 1215.3 & 22 & 205.3 & 22 & 58.97 & 22 & 293.96 & 22 \\
+2mis100_300D.dat & 100 & 300 & 6.42 & 16 & 19.11 & 16 & 130.37 & 16 & 25.19 & 16 & 33.44 & 16 & 110.39 & 16 & 66.94 & 16 & 21.51 & 16 & 61.76 & 16 \\
+2mis100_300E.dat & 100 & 300 & 4.43 & 5 & 92.99 & 5 & 567.41 & 5 & 84.29 & 5 & 79.68 & 5 & 675.87 & 5 & 102.52 & 5 & 98.31 & 5 & 110.79 & 5 \\
+2mis100_300F.dat & 100 & 300 & 4.06 & 5 & 124.24 & 5 & 783.2 & 5 & 822.86 & 5 & 98.12 & 5 & 363.53 & 5 & 805.84 & 5 & 813.54 & 5 & 826.96 & 5 \\
+2mis100_500A.dat & 100 & 500 & 7.52 & 17 & 46.33 & 17 & 470.53 & 17 & 52.65 & 17 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis100_500B.dat & 100 & 500 & 6.83 & 17 & 91.01 & 17 & 854.96 & 17 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis100_500C.dat & 100 & 500 & 6.17 & 13 & 145.87 & 13 & 4126.73 & 13 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis100_500D.dat & 100 & 500 & 8.26 & 19 & 205.86 & 19 & 2761.41 & 19 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis100_500E.dat & 100 & 500 & 3.6 & 2 & 137.8 & 2 & 3994.36 & 2 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis100_500F.dat & 100 & 500 & 3.99 & 4 & 113.44 & 4 & 2825.39 & 4 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_300A.dat & 100 & 300 & 7.66 & 22 & 13.41 & 22 & 165.71 & 22 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_300B.dat & 100 & 300 & 8.55 & 30 & 15.25 & 30 & 176.0 & 30 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_300C.dat & 100 & 300 & 9.04 & 26 & 104.86 & 26 & 1297.7 & 26 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_300D.dat & 100 & 300 & 11.66 & 41 & 51.29 & 41 & 392.05 & 41 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_300E.dat & 100 & 300 & 3.53 & 3 & 29.03 & 3 & 940.72 & 3 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_300F.dat & 100 & 300 & 3.95 & 4 & 30.45 & 4 & 415.18 & 4 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_500A.dat & 100 & 500 & 8.35 & 21 & 317.26 & 21 & 7901.81 & 21 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+2mis101_500B.dat & 100 & 500 & 7.98 & 20 & 140.03 & 20 &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+\bottomrule
+\end{tabular}
+}%
+\caption{Comparison of the different algorithms performances for instances SPP/BOSPP .}
+\label{tab:table_compare_SPP/BOSPP }
+\end{sidewaystable}
