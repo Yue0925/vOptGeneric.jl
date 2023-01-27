@@ -73,6 +73,7 @@ function solve(fname::String)
     instances = readHKP(fname) 
 
     for inst in instances
+        if inst.n >= 1000 continue end 
         println("\n -----------------------------")
         println(" building $(inst.name) ... ")
         println(" -----------------------------")
