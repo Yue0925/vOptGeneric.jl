@@ -58,7 +58,7 @@ function readInstances(fname::String)::Vector{MDMDKP}
             instName = prefixName * "_$q" 
             c = split(readline(f)[1:end-1], " ") 
             inst.c[:] = parse.(Int64, c)[:] ; inst.name = instName
-            println("reading $(inst.name ) ...")
+            # println("reading $(inst.name ) ...")
             push!(instances, inst)
         end
         # push!(instances, inst)
