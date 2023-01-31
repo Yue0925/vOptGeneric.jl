@@ -41,9 +41,11 @@ function vopt_solve(inst::MDKP, method; step=0.5) # fname, outputName
     @variable(model, x[1:inst.n], Bin)
     @constraint(model, [i in 1:inst.m], x'* inst.A[i, :] ≤ inst.b[i])
     @addobjective(model, Max, x'* inst.c)
-    #todo : construct C2 
-    c2 = generateC2(inst.c)
+    
+    include("./objective/" * inst.name)
     @addobjective(model, Max, x'* c2)
+    println("c2 = $c2")
+    return 
 
     if method == :bb
         infos = vSolve( model, method=:bb, verbose=false )
@@ -120,7 +122,18 @@ function solve(fname::String)
         println(" n = $(inst.n) , m = $(inst.m)")
         println("solved time $(solved_time)" )
 
-        if solved_time <= 500.0
+        if solved_time <= 300.0
+            c2 = generateC2(inst.c)
+            folder = "./objective"
+            if !isdir(folder)
+                mkdir(folder)
+            end
+
+            outputName = folder * "/" * inst.name
+            fout = open(outputName, "w")
+            println(fout, "c2 = $c2 ")
+            close(fout)
+            
             vopt_solve(inst, :epsilon)
         end 
     end

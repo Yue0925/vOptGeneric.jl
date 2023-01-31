@@ -36,8 +36,30 @@ function generateC2(c1::Vector{Int64})::Vector{Int64}
 end
 
 
+function writeResults(vars::Int64, constr::Int64, fname::String, outputName::String, method, Y_N, X_E; total_time=nothing, infos=nothing)
 
-function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
+    fout = open(outputName, "w")
+    println(fout, "vars = $vars ; constr = $constr ")
+  
+    if method != :dicho && method != :epsilon
+        println(fout, infos)
+    else
+      println(fout, "total_times_used = $total_time")
+    end
+
+    println(fout, "size_Y_N = ", length(Y_N))
+    println(fout, "Y_N = ", Y_N)
+    println(fout)
+    println(fout, "size_X_E = ", length(X_E))
+  
+    close(fout)
+  
+    # displayGraphics(fname,Y_N, outputName)
+end
+
+
+
+function vopt_solve(inst::MDMDKP, method, outputName; step=0.5) # fname, outputName
     # ---- setting the model
     model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 
@@ -48,8 +70,6 @@ function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
 
     include("./objective/" * inst.name)
     @addobjective(model, Max, x'* c2)
-    println("c2 = $c2")
-    return 
 
     if method == :bb
         infos = vSolve( model, method=:bb, verbose=false )
@@ -61,11 +81,13 @@ function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
         start = time()
         vSolve( model, method=:dicho, verbose=false )
         total_time = round(time() - start, digits = 2)
+        println(" total_time = $total_time ")
+
     elseif method==:epsilon 
         start = time()
         vSolve( model, method=:epsilon, step=step, verbose=false )
         total_time = round(time() - start, digits = 2)
-        println("epsilon_ctr total_time = $total_time ")
+        println(" total_time = $total_time ")
 
     elseif method == :bc_rootRelax 
         infos = vSolve( model, method=:bc_rootRelax, verbose=false )
@@ -97,17 +119,29 @@ function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
     # println("length X_E = ", length(X_E))
 
 
-    # (method != :dicho && method != :epsilon) ? writeResults(inst.n, inst.m, fname, outputName, method, Y_N, X_E; infos) :
-    #     writeResults(inst.n, inst.m, fname, outputName, method, Y_N, X_E; total_time)
+    (method != :dicho && method != :epsilon) ? writeResults(inst.n, inst.m*2, inst.name, outputName, method, Y_N, X_E; infos) :
+        writeResults(inst.n, inst.m*2, inst.name, outputName, method, Y_N, X_E; total_time)
 
 end
 
 
-function solve(fname::String)
+function solve(fname::String, method::String)
     instances = readInstances(fname)
 
+
+    folder = "../../results/MDMDKP"
+    if !isdir(folder)
+        mkdir(folder)
+    end
+    result_folder = folder * "/" * string(method)
+    if !isdir(result_folder)
+        mkdir(result_folder)
+    end
+
+
     for inst in instances
-        if inst.n >= 1000 continue end 
+        fileName = "./objective/" * inst.name
+        if !isfile(fileName) continue end
 
         println("\n -----------------------------")
         println(" solving mono $(inst.name) ... ")
@@ -126,22 +160,16 @@ function solve(fname::String)
         println(" n = $(inst.n) , m = $(inst.m * 2)")
         println("solved time $(solved_time)" )
 
-        if solved_time <= 300.0
-            c2 = generateC2(inst.c)
-            folder = "./objective"
-            if !isdir(folder)
-                mkdir(folder)
-            end
 
-            outputName = folder * "/" * inst.name
-            fout = open(outputName, "w")
-            println(fout, "c2 = $c2 ")
-            close(fout)
-            
-            vopt_solve(inst, :epsilon)
-        end 
+        println("\n -----------------------------")
+        println(" solving $(inst.name) by $method  ... ")
+        println(" -----------------------------")
+        # solve bo-pb 
+        outputName = result_folder * "/" * inst.name
+        vopt_solve(inst, Symbol(method), outputName)
 
     end
 end
 
-solve(ARGS[1])
+
+solve(ARGS[1], ARGS[2])

@@ -1,20 +1,9 @@
-# ----------------------------------------------------------------------------
-# Multi-demande multi-dimensional Knapsack Problem 
-#
-# (MDMKP) max  sum{j=1,...,n} c(j) x(j) 
-#         s.t. sum{j=1,...,n} a(i,j) x(j) <= b(i) i=1,...,m
-#              sum{j=1,...,n} a(i,j) x(j) >= b(i) i=m+1,...,m+q
-#              x(j) = 0 or 1                      j=1,...,n
-#  ---------------------------------------------------------------------------
-
-include("parserMDMDKP.jl")
+include("parserHardKP.jl")
 
 using JuMP, CPLEX
 
-
 include("../../../src/vOptGeneric.jl")
 using .vOptGeneric 
-
 
 """
 Coefficients generator proposed by Pedersen et al, 2008.
@@ -36,16 +25,36 @@ function generateC2(c1::Vector{Int64})::Vector{Int64}
 end
 
 
+function writeResults(vars::Int64, constr::Int64, fname::String, outputName::String, method, Y_N, X_E; total_time=nothing, infos=nothing)
 
-function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
+    fout = open(outputName, "w")
+    println(fout, "vars = $vars ; constr = $constr ")
+  
+    if method != :dicho && method != :epsilon
+        println(fout, infos)
+    else
+      println(fout, "total_times_used = $total_time")
+    end
+
+    println(fout, "size_Y_N = ", length(Y_N))
+    println(fout, "Y_N = ", Y_N)
+    println(fout)
+    println(fout, "size_X_E = ", length(X_E))
+  
+    close(fout)
+  
+    # displayGraphics(fname,Y_N, outputName)
+end
+
+
+function vopt_solve(inst::HKP, method; step=0.5) # fname, outputName
     # ---- setting the model
     model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 
     @variable(model, x[1:inst.n], Bin)
-    @constraint(model, [i in 1:inst.m], x'* inst.A_inf[i, :] ≤ inst.b_inf[i])
-    @constraint(model, [i in 1:inst.m], x'* inst.A_sup[i, :] ≥ inst.b_sup[i])    
+    @constraint(model, x'* inst.A ≤ inst.b)
     @addobjective(model, Max, x'* inst.c)
-
+    
     include("./objective/" * inst.name)
     @addobjective(model, Max, x'* c2)
     println("c2 = $c2")
@@ -61,11 +70,13 @@ function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
         start = time()
         vSolve( model, method=:dicho, verbose=false )
         total_time = round(time() - start, digits = 2)
+        println(" total_time = $total_time ")
+
     elseif method==:epsilon 
         start = time()
         vSolve( model, method=:epsilon, step=step, verbose=false )
         total_time = round(time() - start, digits = 2)
-        println("epsilon_ctr total_time = $total_time ")
+        println(" total_time = $total_time ")
 
     elseif method == :bc_rootRelax 
         infos = vSolve( model, method=:bc_rootRelax, verbose=false )
@@ -97,35 +108,32 @@ function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
     # println("length X_E = ", length(X_E))
 
 
-    # (method != :dicho && method != :epsilon) ? writeResults(inst.n, inst.m, fname, outputName, method, Y_N, X_E; infos) :
-    #     writeResults(inst.n, inst.m, fname, outputName, method, Y_N, X_E; total_time)
+    # (method != :dicho && method != :epsilon) ? writeResults(inst.n, inst.m, inst.name, outputName, method, Y_N, X_E; infos) :
+    #     writeResults(inst.n, inst.m, inst.name, outputName, method, Y_N, X_E; total_time)
 
 end
 
-
 function solve(fname::String)
-    instances = readInstances(fname)
+    instances = readHKP(fname) 
 
     for inst in instances
         if inst.n >= 1000 continue end 
-
         println("\n -----------------------------")
         println(" solving mono $(inst.name) ... ")
         println(" -----------------------------")
-
+ 
         model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
         @variable(model, x[1:inst.n], Bin )
         @objective(model, Max, x'* inst.c)
 
-        @constraint(model, [i in 1:inst.m], x'* inst.A_inf[i, :] ≤ inst.b_inf[i])
-
-        @constraint(model, [i in 1:inst.m], x'* inst.A_sup[i, :] ≥ inst.b_sup[i])
+        @constraint(model, x'* inst.A ≤ inst.b)
 
         # optimize
         optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
-        println(" n = $(inst.n) , m = $(inst.m * 2)")
+        println(" n = $(inst.n) , m = 1")
         println("solved time $(solved_time)" )
 
+        # write second objective coefficients 
         if solved_time <= 300.0
             c2 = generateC2(inst.c)
             folder = "./objective"
@@ -137,11 +145,13 @@ function solve(fname::String)
             fout = open(outputName, "w")
             println(fout, "c2 = $c2 ")
             close(fout)
-            
+
             vopt_solve(inst, :epsilon)
         end 
-
     end
 end
+
+
+
 
 solve(ARGS[1])

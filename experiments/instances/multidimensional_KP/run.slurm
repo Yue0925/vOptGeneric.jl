@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=test_MDKP
+#SBATCH --job-name=alt_BOMDKP
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,12 +8,14 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=test_MDKP_OUTPUT.txt
-#SBATCH --error=test_MDKP_ERROR.txt
+#SBATCH --output=alt_BOMDKP_OUTPUT.txt
+#SBATCH --error=alt_BOMDKP_ERROR.txt
 
-
+methodes=("epsilon" "bb" "bc" "bc_rootRelax" "bb_EPB" "bc_EPB" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB")
 
 for file in ./ORLib/*.txt; do
-    echo "$file"
-    srun julia vOptMDKP.jl "$file"
+    for mthd in ${methodes[@]}; do
+        echo "$file ... " $mthd
+        srun julia vOptMDKP_alt.jl "$file" $mthd
+    done
 done
