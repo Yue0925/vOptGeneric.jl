@@ -12,10 +12,6 @@ include("parserMDMDKP.jl")
 using JuMP, CPLEX
 
 
-include("../../../src/vOptGeneric.jl")
-using .vOptGeneric 
-
-
 """
 Coefficients generator proposed by Pedersen et al, 2008.
 """
@@ -37,72 +33,6 @@ end
 
 
 
-function vopt_solve(inst::MDMDKP, method; step=0.5) # fname, outputName
-    # ---- setting the model
-    model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
-
-    @variable(model, x[1:inst.n], Bin)
-    @constraint(model, [i in 1:inst.m], x'* inst.A_inf[i, :] ≤ inst.b_inf[i])
-    @constraint(model, [i in 1:inst.m], x'* inst.A_sup[i, :] ≥ inst.b_sup[i])    
-    @addobjective(model, Max, x'* inst.c)
-
-    include("./objective/" * inst.name)
-    @addobjective(model, Max, x'* c2)
-    println("c2 = $c2")
-    return 
-
-    if method == :bb
-        infos = vSolve( model, method=:bb, verbose=false )
-        println(infos)
-    elseif method == :bc 
-        infos = vSolve( model, method=:bc, verbose=false )
-        println(infos)
-    elseif method == :dicho 
-        start = time()
-        vSolve( model, method=:dicho, verbose=false )
-        total_time = round(time() - start, digits = 2)
-    elseif method==:epsilon 
-        start = time()
-        vSolve( model, method=:epsilon, step=step, verbose=false )
-        total_time = round(time() - start, digits = 2)
-        println("epsilon_ctr total_time = $total_time ")
-
-    elseif method == :bc_rootRelax 
-        infos = vSolve( model, method=:bc_rootRelax, verbose=false )
-        println(infos)
-    elseif method == :bc_rootRelaxCP  
-        infos = vSolve( model, method=:bc_rootRelaxCP , verbose=false )
-        println(infos)    
-    elseif method == :bb_EPB 
-        infos = vSolve( model, method=:bb_EPB, verbose=false )
-        println(infos)
-    elseif method == :bc_rootRelaxEPB
-        infos = vSolve( model, method=:bc_rootRelaxEPB, verbose=false )
-        println(infos)
-    elseif method == :bc_rootRelaxCPEPB
-        infos = vSolve( model, method=:bc_rootRelaxCPEPB, verbose=false )
-        println(infos)
-    elseif method == :bc_EPB
-        infos = vSolve( model, method=:bc_EPB, verbose=false )
-        println(infos)
-    else
-        @error "Unknown method parameter $(method) !"
-    end
-
-    # ---- Querying the results
-    Y_N = getY_N( model )
-    println("length Y_N = ", length(Y_N))
-
-    X_E = getX_E( model )
-    # println("length X_E = ", length(X_E))
-
-
-    # (method != :dicho && method != :epsilon) ? writeResults(inst.n, inst.m, fname, outputName, method, Y_N, X_E; infos) :
-    #     writeResults(inst.n, inst.m, fname, outputName, method, Y_N, X_E; total_time)
-
-end
-
-
 function solve(fname::String)
     instances = readInstances(fname)
 
@@ -113,33 +43,29 @@ function solve(fname::String)
         println(" solving mono $(inst.name) ... ")
         println(" -----------------------------")
 
-        model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
-        @variable(model, x[1:inst.n], Bin )
-        @objective(model, Max, x'* inst.c)
+        # model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
+        # @variable(model, x[1:inst.n], Bin )
+        # @objective(model, Max, x'* inst.c)
 
-        @constraint(model, [i in 1:inst.m], x'* inst.A_inf[i, :] ≤ inst.b_inf[i])
+        # @constraint(model, [i in 1:inst.m], x'* inst.A_inf[i, :] ≤ inst.b_inf[i])
 
-        @constraint(model, [i in 1:inst.m], x'* inst.A_sup[i, :] ≥ inst.b_sup[i])
+        # @constraint(model, [i in 1:inst.m], x'* inst.A_sup[i, :] ≥ inst.b_sup[i])
 
-        # optimize
-        optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
-        println(" n = $(inst.n) , m = $(inst.m * 2)")
-        println("solved time $(solved_time)" )
+        # # optimize
+        # optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
+        # println(" n = $(inst.n) , m = $(inst.m * 2)")
+        # println("solved time $(solved_time)" )
 
-        if solved_time <= 300.0
-            c2 = generateC2(inst.c)
-            folder = "./objective"
-            if !isdir(folder)
-                mkdir(folder)
-            end
+        c2 = generateC2(inst.c)
+        folder = "./objective"
+        if !isdir(folder)
+            mkdir(folder)
+        end
 
-            outputName = folder * "/" * inst.name
-            fout = open(outputName, "w")
-            println(fout, "c2 = $c2 ")
-            close(fout)
-            
-            vopt_solve(inst, :epsilon)
-        end 
+        outputName = folder * "/" * inst.name
+        fout = open(outputName, "w")
+        println(fout, "c2 = $c2 ")
+        close(fout)
 
     end
 end

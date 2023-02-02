@@ -142,6 +142,7 @@ function solve(fname::String, method::String)
     @objective(model, Min, x'* inst.c)
     @constraint(model, [i in 1:inst.m], sum(x[j] for j in inst.cover[i]) >= 1)
 
+    relax_integrality(model)
     # optimize
     optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
     println(" n = $(inst.n) , m = $(inst.m)")

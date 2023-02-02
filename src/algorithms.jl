@@ -97,6 +97,7 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     JuMP.optimize!(m, ignore_optimize_hook=true)
     status = JuMP.termination_status(m)
 
+    time_acc = time()
     if status == MOI.OPTIMAL
         #While a solution exists
         while status == MOI.OPTIMAL
@@ -130,6 +131,13 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
             #And solve again
             JuMP.optimize!(m, ignore_optimize_hook=true)
             status = JuMP.termination_status(m)
+
+
+            # time limit 
+            if time() - time_acc >= 3600.0
+                break
+            end
+
         end
 
         #Sort X_E and Y_N

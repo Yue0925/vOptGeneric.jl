@@ -56,7 +56,7 @@ function comparisons(instances::String)
             if times[i] == -1
                 print(fout, " - & ")
             else
-                print(fout, string(times[i]) * " & ")
+                times[i] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[i]) * " & ")
             end
 
             if pts[i] == -1
@@ -67,7 +67,8 @@ function comparisons(instances::String)
 
         end
 
-        print(fout, string(times[end]) * " & ") ; println(fout, string(pts[end]) * " \\\\")
+        times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[end]) * " & ")
+        println(fout, string(pts[end]) * " \\\\")
 
     end
 

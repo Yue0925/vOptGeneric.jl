@@ -2,8 +2,6 @@ include("parserHardKP.jl")
 
 using JuMP, CPLEX
 
-include("../../../src/vOptGeneric.jl")
-using .vOptGeneric 
 
 """
 Coefficients generator proposed by Pedersen et al, 2008.
@@ -25,93 +23,6 @@ function generateC2(c1::Vector{Int64})::Vector{Int64}
 end
 
 
-function writeResults(vars::Int64, constr::Int64, fname::String, outputName::String, method, Y_N, X_E; total_time=nothing, infos=nothing)
-
-    fout = open(outputName, "w")
-    println(fout, "vars = $vars ; constr = $constr ")
-  
-    if method != :dicho && method != :epsilon
-        println(fout, infos)
-    else
-      println(fout, "total_times_used = $total_time")
-    end
-
-    println(fout, "size_Y_N = ", length(Y_N))
-    println(fout, "Y_N = ", Y_N)
-    println(fout)
-    println(fout, "size_X_E = ", length(X_E))
-  
-    close(fout)
-  
-    # displayGraphics(fname,Y_N, outputName)
-end
-
-
-function vopt_solve(inst::HKP, method; step=0.5) # fname, outputName
-    # ---- setting the model
-    model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
-
-    @variable(model, x[1:inst.n], Bin)
-    @constraint(model, x'* inst.A ≤ inst.b)
-    @addobjective(model, Max, x'* inst.c)
-    
-    include("./objective/" * inst.name)
-    @addobjective(model, Max, x'* c2)
-    println("c2 = $c2")
-    return 
-
-    if method == :bb
-        infos = vSolve( model, method=:bb, verbose=false )
-        println(infos)
-    elseif method == :bc 
-        infos = vSolve( model, method=:bc, verbose=false )
-        println(infos)
-    elseif method == :dicho 
-        start = time()
-        vSolve( model, method=:dicho, verbose=false )
-        total_time = round(time() - start, digits = 2)
-        println(" total_time = $total_time ")
-
-    elseif method==:epsilon 
-        start = time()
-        vSolve( model, method=:epsilon, step=step, verbose=false )
-        total_time = round(time() - start, digits = 2)
-        println(" total_time = $total_time ")
-
-    elseif method == :bc_rootRelax 
-        infos = vSolve( model, method=:bc_rootRelax, verbose=false )
-        println(infos)
-    elseif method == :bc_rootRelaxCP  
-        infos = vSolve( model, method=:bc_rootRelaxCP , verbose=false )
-        println(infos)    
-    elseif method == :bb_EPB 
-        infos = vSolve( model, method=:bb_EPB, verbose=false )
-        println(infos)
-    elseif method == :bc_rootRelaxEPB
-        infos = vSolve( model, method=:bc_rootRelaxEPB, verbose=false )
-        println(infos)
-    elseif method == :bc_rootRelaxCPEPB
-        infos = vSolve( model, method=:bc_rootRelaxCPEPB, verbose=false )
-        println(infos)
-    elseif method == :bc_EPB
-        infos = vSolve( model, method=:bc_EPB, verbose=false )
-        println(infos)
-    else
-        @error "Unknown method parameter $(method) !"
-    end
-
-    # ---- Querying the results
-    Y_N = getY_N( model )
-    println("length Y_N = ", length(Y_N))
-
-    X_E = getX_E( model )
-    # println("length X_E = ", length(X_E))
-
-
-    # (method != :dicho && method != :epsilon) ? writeResults(inst.n, inst.m, inst.name, outputName, method, Y_N, X_E; infos) :
-    #     writeResults(inst.n, inst.m, inst.name, outputName, method, Y_N, X_E; total_time)
-
-end
 
 function solve(fname::String)
     instances = readHKP(fname) 
@@ -122,32 +33,29 @@ function solve(fname::String)
         println(" solving mono $(inst.name) ... ")
         println(" -----------------------------")
  
-        model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
-        @variable(model, x[1:inst.n], Bin )
-        @objective(model, Max, x'* inst.c)
+        # model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
+        # @variable(model, x[1:inst.n], Bin )
+        # @objective(model, Max, x'* inst.c)
 
-        @constraint(model, x'* inst.A ≤ inst.b)
+        # @constraint(model, x'* inst.A ≤ inst.b)
 
         # optimize
-        optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
-        println(" n = $(inst.n) , m = 1")
-        println("solved time $(solved_time)" )
+        # optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
+        # println(" n = $(inst.n) , m = 1")
+        # println("solved time $(solved_time)" )
 
         # write second objective coefficients 
-        if solved_time <= 300.0
-            c2 = generateC2(inst.c)
-            folder = "./objective"
-            if !isdir(folder)
-                mkdir(folder)
-            end
+        c2 = generateC2(inst.c)
+        folder = "./objective"
+        if !isdir(folder)
+            mkdir(folder)
+        end
 
-            outputName = folder * "/" * inst.name
-            fout = open(outputName, "w")
-            println(fout, "c2 = $c2 ")
-            close(fout)
+        outputName = folder * "/" * inst.name
+        fout = open(outputName, "w")
+        println(fout, "c2 = $c2 ")
+        close(fout)
 
-            vopt_solve(inst, :epsilon)
-        end 
     end
 end
 

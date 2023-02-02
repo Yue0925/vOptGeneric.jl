@@ -362,6 +362,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
 
     # continue to fathom the node until todo list is empty
+    time_acc = time()
     @timeit tmr "BB loop" begin
         while length(todo) > 0
             @timeit tmr "next node" node_ref = nextTodo(todo, problem)
@@ -370,6 +371,11 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
                 finalize(node_ref[])
             else
                 @timeit tmr "iteration" iterative_procedure(todo, node_ref[], problem, incumbent, worst_nadir_pt, round_results, verbose; args...)
+            end
+
+            # time limit 
+            if time() - time_acc >= 3600.0
+                problem.info.TO = true ; break
             end
         end
     end

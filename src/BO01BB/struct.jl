@@ -65,11 +65,12 @@ mutable struct StatInfo
     nb_nodes_EPB::Int64
     nb_nodes_VB::Int64
     root_relax::Bool
+    TO::Bool
     # status::MOI.TerminationStatusCode 
 end
 
 function StatInfo()
-    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false)
+    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false)
 end
 
 function Base.:show(io::IO, info::StatInfo)
@@ -84,7 +85,8 @@ function Base.:show(io::IO, info::StatInfo)
         "tree_size = $(info.tree_size) \n",
         "nb_nodes_EPB = $(info.nb_nodes_EPB) \n",
         "nb_nodes_VB = $(info.nb_nodes_VB) \n",
-        "root_relax = $(info.root_relax) "
+        "root_relax = $(info.root_relax) \n",
+        "TO = $(info.TO) "
     )
     if info.cp_activated println(io, info.cuts_infos) end
 end

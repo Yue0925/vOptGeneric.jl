@@ -179,6 +179,7 @@ function solve(fname::String, method::String)
         @constraint(model, x'* inst.A ≤ inst.b)
 
         # optimize
+        relax_integrality(model)
         optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
         println(" n = $(inst.n) , m = 1")
         println("solved time $(solved_time)" )

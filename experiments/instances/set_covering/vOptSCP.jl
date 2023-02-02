@@ -38,17 +38,17 @@ function solve(fname::String)
     println(" solving mono $(inst.name) ... ")
     println(" -----------------------------")
 
-    model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
-    @variable(model, x[1:inst.n], Bin )
-    @objective(model, Min, x'* inst.c)
-    @constraint(model, [i in 1:inst.m], sum(x[j] for j in inst.cover[i]) >= 1)
+    # model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
+    # @variable(model, x[1:inst.n], Bin )
+    # @objective(model, Min, x'* inst.c)
+    # @constraint(model, [i in 1:inst.m], sum(x[j] for j in inst.cover[i]) >= 1)
 
-    # optimize
-    optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
-    println(" n = $(inst.n) , m = $(inst.m)")
-    println("solved time $(solved_time)" )
+    # # optimize
+    # optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
+    # println(" n = $(inst.n) , m = $(inst.m)")
+    # println("solved time $(solved_time)" )
 
-    if solved_time <= 300.0
+    # if solved_time <= 300.0
         c2 = generateC2(inst.c)
         folder = "./objective"
         if !isdir(folder)
@@ -59,7 +59,7 @@ function solve(fname::String)
         fout = open(outputName, "w")
         println(fout, "c2 = $c2 ")
         close(fout)
-    end 
+    # end 
 
 end
 

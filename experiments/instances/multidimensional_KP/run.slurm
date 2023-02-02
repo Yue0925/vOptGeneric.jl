@@ -11,7 +11,7 @@
 #SBATCH --output=alt_BOMDKP_OUTPUT.txt
 #SBATCH --error=alt_BOMDKP_ERROR.txt
 
-methodes=("epsilon" "bb" "bc" "bc_rootRelax" "bb_EPB" "bc_EPB" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB")
+methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelax")
 
 for file in ./ORLib/*.txt; do
     for mthd in ${methodes[@]}; do
@@ -19,3 +19,4 @@ for file in ./ORLib/*.txt; do
         srun julia vOptMDKP_alt.jl "$file" $mthd
     done
 done
+

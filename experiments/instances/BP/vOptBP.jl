@@ -38,9 +38,9 @@ function vopt_solve(inst::BP, method, outputName; step=0.5) # fname, outputName
 
     @variable(model, x[1:inst.n], Bin)
     @constraint(model, [i in 1:inst.m], x'* inst.A[i, :] ≤ inst.b[i])
-    inst.objSense == MIN_SENSE ? @addobjective(model, Min, x'* inst.c) : @addobjective(model, Max, x'* inst.c)
 
     include("./objective/" * inst.name)
+    inst.objSense == MIN_SENSE ? @addobjective(model, Min, x'* c1) : @addobjective(model, Max, x'* c1)
     inst.objSense == MIN_SENSE ? @addobjective(model, Min, x'* c2) : @addobjective(model, Max, x'* c2)
 
     if method == :bb
@@ -114,10 +114,11 @@ function solve(fname::String, method::String)
     println("\n -----------------------------")
     println(" solving $(inst.name) by $method  ... ")
     println(" -----------------------------")
-    println(" n = $(inst.n) , m = $(inst.m )")
 
     # solve bo-pb 
     outputName = result_folder * "/" * inst.name
+    # todo avoid double computation 
+    # if isfile(outputName) return end
     vopt_solve(inst, Symbol(method), outputName)
 end
 
