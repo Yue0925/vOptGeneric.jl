@@ -1,0 +1,23 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccccccccccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex+CP)}} \\
+
+\cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17} \cmidrule(r){18-19} \cmidrule(r){20-21}
+~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
+\midrule
+
+mknap1\_1 & 6 & 10 & 3.43 & 7 & 1.95 & 7 & 2.55 & 7 & 3.79 & 7 & 2.02 & 7 &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+mknap1\_2 & 15 & 10 & 2.23 & 18 & 1.24 & 18 & 2.24 & 18 & 2.38 & 18 & 4.59 & 18 &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+mknap1\_3 & 20 & 10 & 4.65 & 23 & 17.8 & 23 & 27.5 & 23 & 9.48 & 23 & 21.6 & 23 &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+mknap1\_4 & 28 & 10 & 6.81 & 35 & 143.39 & 35 & 287.93 & 35 & 42.84 & 35 & 546.84 & 35 &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+mknap1\_5 & 39 & 5 & 4.3 & 23 & 264.4 & 23 & 937.65 & 23 & 59.27 & 23 & 715.31 & 23 &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+mknap1\_6 & 50 & 5 & 14.53 & 61 &  - &  - &  - &  - & 1677.56 & 61 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+\bottomrule
+\end{tabular}
+}%
+\caption{Comparison of the different algorithms performances for instances MDKP .}
+\label{tab:table_compare_MDKP }
+\end{sidewaystable}
