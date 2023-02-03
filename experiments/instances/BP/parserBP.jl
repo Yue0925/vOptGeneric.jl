@@ -58,12 +58,12 @@ function readModel(fname::String)::BP
 
     varIndex = Dict(varArray[i] => i for i=1:length(varArray))
 
-    # todo write first objective
-    inst.objSense = objective_sense(model) 
-    obj = objective_function(model)
-    for i = 1:numVars
-        inst.c[i] = rand(10:numVars)# round(Int64, coeff)
-    end
+    # # todo write first objective
+    # inst.objSense = objective_sense(model) 
+    # obj = objective_function(model)
+    # for i = 1:numVars
+    #     inst.c[i] = rand(10:numVars)# round(Int64, coeff)
+    # end
 
     cstr_index = 0
     
@@ -131,18 +131,18 @@ function readModel(fname::String)::BP
     println(" n = $(numVars) , m = $(numRows)")
     println("mono solved time $(solved_time) \n\n" )
 
-    # todo write second objective
-    c2 = generateC2(inst.c)
-    folder = "./objective"
-    if !isdir(folder)
-        mkdir(folder)
-    end
+    # # todo write second objective
+    # c2 = generateC2(inst.c)
+    # folder = "./objective"
+    # if !isdir(folder)
+    #     mkdir(folder)
+    # end
 
-    outputName = folder * "/" * inst.name
-    fout = open(outputName, "w")
-    println(fout, "c1 = $(inst.c) ")
-    println(fout, "c2 = $c2 ")
-    close(fout)
+    # outputName = folder * "/" * inst.name
+    # fout = open(outputName, "w")
+    # println(fout, "c1 = $(inst.c) ")
+    # println(fout, "c2 = $c2 ")
+    # close(fout)
     return inst 
 end
 

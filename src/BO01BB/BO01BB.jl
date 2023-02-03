@@ -351,7 +351,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         problem.info.total_times = round(time() - start, digits = 2)
         problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time
         post_processing(m, problem, incumbent, round_results, verbose; args...)
-        undo_relax()
+        if !root_relax undo_relax() end 
         return problem.info
     end
 
@@ -374,7 +374,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
             end
 
             # time limit 
-            if time() - time_acc >= 3600.0
+            if time() - time_acc >= 300.0#3600.0
                 problem.info.TO = true ; break
             end
         end
@@ -391,8 +391,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     MB = 10^6
 
     problem.info.tree_size = round(Base.summarysize(root)/MB, digits = 3)
-    
-    undo_relax()
+    if !root_relax undo_relax() end 
     show(tmr)
 
     problem.info.cuts_infos.cuts_total = problem.info.cuts_infos.cuts_applied

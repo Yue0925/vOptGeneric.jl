@@ -57,9 +57,9 @@ function vopt_solve(inst::MDMDKP, method, outputName; step=0.5) # fname, outputN
 
     @variable(model, x[1:inst.n], Bin)
     @constraint(model, [i in 1:inst.m], sum(x[j] for j in inst.cover[i]) >= 1)
-    @addobjective(model, Min, x'* inst.c)
-
+    
     include("./objective/" * inst.name)
+    @addobjective(model, Min, x'* c1)
     @addobjective(model, Min, x'* c2)
 
     if method == :bb
@@ -131,7 +131,7 @@ function solve(fname::String, method::String)
     end
 
     fileName = "./objective/" * inst.name
-    if !isfile(fileName) continue end
+    if !isfile(fileName) return end
 
     println("\n -----------------------------")
     println(" solving mono $(inst.name) ... ")
@@ -139,7 +139,8 @@ function solve(fname::String, method::String)
 
     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[1:inst.n], Bin )
-    @objective(model, Min, x'* inst.c)
+    include("./objective/" * inst.name)
+    @objective(model, Min, x'* c1)
     @constraint(model, [i in 1:inst.m], sum(x[j] for j in inst.cover[i]) >= 1)
 
     relax_integrality(model)
