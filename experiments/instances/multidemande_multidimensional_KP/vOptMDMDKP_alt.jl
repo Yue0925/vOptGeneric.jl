@@ -167,6 +167,7 @@ function solve(fname::String, method::String)
         println(" -----------------------------")
         # solve bo-pb 
         outputName = result_folder * "/" * inst.name
+        if isfile(outputName) return end
         vopt_solve(inst, Symbol(method), outputName)
 
     end

@@ -151,7 +151,7 @@ Return local nadir points (so-called corner points) of the given incumbent set, 
 """
 function getNadirPoints(incumbent::IncumbentSet) # , ptl, ptr
     nadir_pts = NaturalOrderVector()
-    @assert length(incumbent.natural_order_vect) > 1 "`getNadirPoints` requires at least two upper bounds in incumbent list."
+    # @assert length(incumbent.natural_order_vect) > 1 "`getNadirPoints` requires at least two upper bounds in incumbent list."
 
     if length(incumbent.natural_order_vect) == 1 return incumbent.natural_order_vect end 
 

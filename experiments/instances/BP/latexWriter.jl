@@ -24,7 +24,7 @@ function comparisons(instances::String)
     methods = ["epsilon", "bb", "bc", "bc_rootRelax", "bb_EPB", "bc_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCP", "bc_rootRelaxCPEPB"]
 
     # ∀ file in dicho
-    for file in readdir(work_dir * "/epsilon/")
+    for file in readdir(work_dir * "/bc_rootRelaxCPEPB/")
         if split(file, ".")[end] == "png"
             continue
         end
@@ -33,7 +33,7 @@ function comparisons(instances::String)
         times = [] ; pts = []
 
         # write dichotomy result 
-        include(work_dir * "/epsilon/" * file)
+        include(work_dir * "/bc_rootRelaxCPEPB/" * file)
         print(fout, string(vars) * " & " * string(constr) * " & ")
 
         # ∀ method 
@@ -52,7 +52,7 @@ function comparisons(instances::String)
             if times[i] == -1
                 print(fout, " - & ")                
             else
-                times[i] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[i]) * " & ")
+                times[i] >= 300.0 ? print(fout, "TO & ") : print(fout, string(times[i]) * " & ")
             end
 
             if pts[i] == -1
@@ -63,7 +63,7 @@ function comparisons(instances::String)
 
         end
 
-        times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[end]) * " & ")
+        times[end] >= 300.0 ? print(fout, "TO & ") : print(fout, string(times[end]) * " & ")
         println(fout, string(pts[end]) * " \\\\")
 
     end

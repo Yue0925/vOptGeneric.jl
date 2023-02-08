@@ -51,7 +51,7 @@ end
 
 
 
-function vopt_solve(inst::MDMDKP, method, outputName; step=0.5) # fname, outputName
+function vopt_solve(inst::SCP, method, outputName; step=0.5) # fname, outputName
     # ---- setting the model
     model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 
@@ -154,6 +154,7 @@ function solve(fname::String, method::String)
     println(" -----------------------------")
     # solve bo-pb 
     outputName = result_folder * "/" * inst.name
+    if isfile(outputName) return end
     vopt_solve(inst, Symbol(method), outputName)
 
 end

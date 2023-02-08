@@ -11,14 +11,14 @@
 #SBATCH --output=alt_BOMDKP2_OUTPUT.txt
 #SBATCH --error=alt_BOMDKP2_ERROR.txt
 
-methodes=("bb" "bc" "bb_EPB" "bc_EPB")
+# methodes=("bb" "bc" "bb_EPB" "bc_EPB")
 
-for file in ./ORLib/*.txt; do
-    for mthd in ${methodes[@]}; do
-        echo "$file ... " $mthd
-        srun julia vOptMDKP_alt.jl "$file" $mthd
-    done
-done
+# for file in ./ORLib/*.txt; do
+#     for mthd in ${methodes[@]}; do
+#         echo "$file ... " $mthd
+#         srun julia vOptMDKP_alt.jl "$file" $mthd
+#     done
+# done
 
 
 for file in ./ORLib/*.txt; do

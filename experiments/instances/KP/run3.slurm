@@ -11,15 +11,15 @@
 #SBATCH --output=BOHKP3_OUTPUT.txt
 #SBATCH --error=BOHKP3_ERROR.txt
 
-methodes=("bb" "bc" "bb_EPB" "bc_EPB")
+# methodes=("bb" "bc" "bb_EPB" "bc_EPB")
 
 
-for file in ./hardinstances_pisinger/*.csv; do
-    for mthd in ${methodes[@]}; do
-        echo "$file ... " $mthd
-        srun julia vOptHKP.jl "$file" $mthd
-    done
-done
+# for file in ./hardinstances_pisinger/*.csv; do
+#     for mthd in ${methodes[@]}; do
+#         echo "$file ... " $mthd
+#         srun julia vOptHKP.jl "$file" $mthd
+#     done
+# done
 
 
 for file in ./hardinstances_pisinger/*.csv; do
