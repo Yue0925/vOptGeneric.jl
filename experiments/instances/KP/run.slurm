@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=BOHKP1
+#SBATCH --job-name=BOHKP_new_exp2
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,10 +8,10 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=BOHKP1_OUTPUT.txt
-#SBATCH --error=BOHKP1_ERROR.txt
+#SBATCH --output=BOHKP_new_exp2_OUTPUT.txt
+#SBATCH --error=BOHKP_new_exp2_ERROR.txt
 
-methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelax")
+methodes=("bb" "bc" "bb_EPB" "bc_EPB")
 
 for file in ./hardinstances_pisinger/*.csv; do
     for mthd in ${methodes[@]}; do

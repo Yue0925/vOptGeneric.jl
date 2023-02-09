@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=mipLib
+#SBATCH --job-name=BOBP_new_exp
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,11 +8,14 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=mipLib_OUTPUT.txt
-#SBATCH --error=mipLib_ERROR.txt
+#SBATCH --output=BOBP_new_exp_OUTPUT.txt
+#SBATCH --error=BOBP_new_exp_ERROR.txt
 
+methodes=("bb" "bc" "bb_EPB" "bc_EPB")
 
 for file in ./mipLib/*.mps; do
-    echo "$file"
-    srun julia parserBP.jl "$file"
+    for mthd in ${methodes[@]}; do
+        echo "$file ... " $mthd
+        srun julia vOptBP.jl "$file" $mthd
+    done
 done

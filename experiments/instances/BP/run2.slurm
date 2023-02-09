@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=BOBP
+#SBATCH --job-name=BOBP_new_exp2
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,11 +8,12 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=BOBP_OUTPUT.txt
-#SBATCH --error=BOBP_ERROR.txt
+#SBATCH --output=BOBP_new_exp2_OUTPUT.txt
+#SBATCH --error=BOBP_new_exp2_ERROR.txt
 
 
-methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelax")
+methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxCP")
+
 
 for file in ./mipLib/*.mps; do
     for mthd in ${methodes[@]}; do

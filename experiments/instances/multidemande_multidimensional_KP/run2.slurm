@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=BOMDMDKP
+#SBATCH --job-name=BOMDMDKP_new_exp2
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,12 +8,14 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=test_BOMDMDKP_OUTPUT.txt
-#SBATCH --error=test_BOMDMDKP_ERROR.txt
+#SBATCH --output=BOMDMDKP_new_exp2_OUTPUT.txt
+#SBATCH --error=BOMDMDKP_new_exp2_ERROR.txt
 
-
+methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxCP")
 
 for file in ./ORLib/*.txt; do
-    echo "$file"
-    srun julia vOptMDMDKP.jl "$file"
+    for mthd in ${methodes[@]}; do
+        echo "$file ... " $mthd
+        srun julia vOptMDMDKP_alt.jl "$file" $mthd
+    done
 done
