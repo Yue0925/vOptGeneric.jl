@@ -221,30 +221,16 @@ function comparisonThreeMethods(instances::String)
     plt.close()
 end
 
-
+# todo : pic ... BB and EPB  
 function detailedMOBB_perform(instances::String)
     dir = "../../results/" * instances
     @assert isdir(dir) "This directory doesn't exist $dir !"
 
-    fout = open(dir * "/detailedMOBB.tex", "w")
-
-    latex = raw"""\begin{table}[!h]
-    \centering
-    \resizebox{\columnwidth}{!}{%
-    \hspace*{-1cm}\begin{tabular}{lccccccccccc}
-    \toprule
-    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{4}{c}{\textbf{Time(s)}} & \multicolumn{2}{c}{\textbf{Nodes}}  & \textbf{Tree(MB)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$|\mathcal{X}_E|$}
-    \\
-    \cmidrule(r){4-7} \cmidrule(r){8-9} 
-    ~ & ~ & ~ & \textbf{total} &\textbf{relax} & \textbf{dominance} & \textbf{incumbent} & \textbf{total} & \textbf{pruned} & ~ & ~ & ~ \\
-    \midrule
-    """
-    println(fout, latex)
     labelT = ["BOLP", "dominance", "incumbent"] ; record_n = []
     labelNode = ["total", "pruned"]
     record_times = Dict(k => [] for k in labelT) ; record_nodes = Dict(k => [] for k in labelNode)
 
-    for folder_n in readdir(dir * "/bb/")
+    for folder_n in readdir(dir * "/bb_EPB/")
         count = 0
         avg_n = 0
         avg_m = 0
@@ -258,25 +244,14 @@ function detailedMOBB_perform(instances::String)
         avg_YN = 0
         avg_XE = 0
 
-        for file in readdir(dir * "/bb/" * string(folder_n) * "/")
+        for file in readdir(dir * "/bb_EPB/" * string(folder_n) * "/")
             if split(file, ".")[end] == "png"
                 continue
             end
     
-            print(fout, file * " & ")
             times = []
             pts = []
-    
-    
-            include(dir * "/bb/" * string(folder_n) * "/" * file)
-            print(fout, string(vars) * " & " * string(constr) * " & ")
-            print(fout, string(total_times_used)* " & " * string(relaxation_time) * " & " *
-                string(test_dominance_time) * " & " * string(update_incumbent_time) * " & " *
-                string(total_nodes) * " & " * string( pruned_nodes) * " & " * string(tree_size) * " & " *
-                string(size_Y_N) * " & " * string(size_X_E)
-            )
-    
-            println(fout, "\\\\")
+            include(dir * "/bb_EPB/" * string(folder_n) * "/" * file)
 
             count += 1
             avg_n += vars
@@ -307,22 +282,7 @@ function detailedMOBB_perform(instances::String)
         append!(record_n, avg_n)
         append!(record_times["BOLP"], avg_relaxT) ; append!(record_times["dominance"], avg_dominanceT) ; append!(record_times["incumbent"], avg_incumbentT)
         append!(record_nodes["total"], avg_totalN) ; append!(record_nodes["pruned"], avg_prunedN)
-
-        println(fout, "\\cline{1-12} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) * "} & \\textbf{" *
-            string(avg_totalT) * "} & \\textbf{" * string(avg_relaxT) * "} & \\textbf{" * string(avg_dominanceT) * "} & \\textbf{" *
-            string(avg_incumbentT) * "} & \\textbf{" * string(avg_totalN) * "} & \\textbf{" * string(avg_prunedN) * "} & \\textbf{" *
-            string(avg_treeSize) * "} & \\textbf{" * string(avg_YN) * "} & \\textbf{" * string(avg_XE) *"} \\\\ \\cline{1-12}")
     end
-
-    latex = raw"""\bottomrule
-    \end{tabular}%
-    }%
-    \caption{The detailed experimental information about BO01B\&B algorithm.}
-    \label{tab:table_bb}
-    \end{table}
-    """
-    println(fout, latex)
-    close(fout)
 
     labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
 
@@ -348,8 +308,8 @@ function detailedMOBB_perform(instances::String)
     for i =1:4
         plt.text(x = pos[i]-0.6 , y = record_times["incumbent"][i]+0.5, s = record_times["incumbent"][i], size = 7)
     end
-    title("The influence of instance size on BO01B&B algorithm", fontsize=14)
-    savefig(dir * "/BBperformTimes.png")
+    title("The influence of instance size on EPB BO01B&B", fontsize=12)
+    savefig(dir * "/EPBBBperformTimes.png")
     plt.close()
 
 
@@ -370,8 +330,8 @@ function detailedMOBB_perform(instances::String)
     for i =1:4
         plt.text(x = pos[i]-0.6 , y = record_nodes["pruned"][i]+0.5, s = record_nodes["pruned"][i], size = 7)
     end
-    title("The influence of instance size on B&B tree", fontsize=14)
-    savefig(dir * "/BBperformNodes.png")
+    title("The influence of instance size on EPB B&B tree", fontsize=12)
+    savefig(dir * "/EPBBBperformNodes.png")
     plt.close()
 end
 
@@ -470,18 +430,6 @@ function MOBC_perform(instances::String)
     close(fout)
 
 end
-
-
-
-# detailedMOBB_perform("momhMKPstu/MOBKP/set3")
-
-# comparisonThreeMethods("momhMKPstu/MOBKP/set3")
-
-# MOBC_perform("momhMKPstu/MOBKP/set3")
-
-
-
-
 
 function comparisons(instances::String)
     work_dir = "../../results/" * instances
@@ -584,4 +532,16 @@ function comparisons(instances::String)
 end
 
 
-comparisons("momhMKPstu/MOBKP/set3")
+# comparisons("momhMKPstu/MOBKP/set3")
+
+
+
+
+detailedMOBB_perform("momhMKPstu/MOBKP/set3")
+
+# comparisonThreeMethods("momhMKPstu/MOBKP/set3")
+
+# MOBC_perform("momhMKPstu/MOBKP/set3")
+
+
+

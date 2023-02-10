@@ -53,9 +53,11 @@ function comparisons(instances::String)
         # ------------------
         for i=1:length(methods)-1
             if times[i] == -1
-                print(fout, " - & ")
-            else
-                times[i] >= 300.0 ? print(fout, "TO & ") : print(fout, string(times[i]) * " & ")
+                print(fout, " - & ")                
+            elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                times[i] >= 3600.0 ? print(fout, "TO & ") : print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+            else 
+                times[i] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[i]) * " & ")
             end
 
             if pts[i] == -1
@@ -66,8 +68,13 @@ function comparisons(instances::String)
 
         end
 
-        times[end] >= 300.0 ? print(fout, "TO & ") : print(fout, string(times[end]) * " & ")
+        if times[end] == minimum(filter(x -> x > 0 ,times))
+            times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, " \\textcolor{blue2}{" * string(times[end]) * " & ")
+        else
+            times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[end]) * " & ")
+        end
         println(fout, string(pts[end]) * " \\\\")
+
 
     end
 

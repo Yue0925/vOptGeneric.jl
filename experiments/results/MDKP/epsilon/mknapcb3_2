@@ -1,6 +1,0 @@
-vars = 500 ; constr = 5 
-total_times_used = 539.35
-size_Y_N = 2
-Y_N = [[117857.0, 78315.0], [117879.0, 78307.0]]
-
-size_X_E = 2

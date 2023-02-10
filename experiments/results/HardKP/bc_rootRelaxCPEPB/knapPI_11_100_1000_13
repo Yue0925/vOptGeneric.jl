@@ -1,34 +1,34 @@
 vars = 100 ; constr = 1 
  # informations of B&B algorithm : 
-total_times_used = 300.03 
-total_nodes = 26245 
-pruned_nodes = 10021 
+total_times_used = 3600.05 
+total_nodes = 220886 
+pruned_nodes = 60035 
 GAP = 0.0 
-relaxation_time = 285.73 
-test_dominance_time = 0.09 
-update_incumbent_time = 0.91 
-tree_size = 81.942 
-nb_nodes_EPB = 3912 
-nb_nodes_VB = 22332 
+relaxation_time = 3482.57 
+test_dominance_time = 1.48 
+update_incumbent_time = 10.81 
+tree_size = 900.37 
+nb_nodes_EPB = 10823 
+nb_nodes_VB = 210062 
 root_relax = true 
 TO = true 
 
 
  # ----------- info about cuts : 
-ite_total = 18075 
-cuts_applied = 11713 
-sp_cuts = 11702 
-mp_cuts = 11 
-cuts_total = 11713 
-times_calling_dicho = 285.73 
-times_calling_separators = 1.06 
-times_oper_cutPool = 0.71 
-times_total_for_cuts = 262.2 
-times_add_retrieve_cuts = 0.73 
+ite_total = 196467 
+cuts_applied = 198350 
+sp_cuts = 198310 
+mp_cuts = 40 
+cuts_total = 198350 
+times_calling_dicho = 3482.57 
+times_calling_separators = 21.37 
+times_oper_cutPool = 12.53 
+times_total_for_cuts = 3451.96 
+times_add_retrieve_cuts = 11.13 
 
 
 
-size_Y_N = 28
-Y_N = [[5860.0, 46528.0], [6764.0, 46427.0], [7304.0, 45951.0], [7484.0, 45734.0], [8028.0, 45535.0], [8208.0, 45318.0], [8568.0, 45029.0], [8748.0, 43964.0], [9112.0, 42784.0], [9292.0, 42577.0], [9472.0, 42364.0], [9652.0, 42274.0], [9832.0, 42066.0], [10012.0, 41854.0], [10196.0, 41622.0], [10736.0, 41091.0], [11460.0, 39766.0], [11820.0, 38305.0], [12000.0, 36522.0], [12180.0, 36312.0], [12724.0, 35410.0], [12904.0, 33761.0], [13084.0, 33688.0], [13264.0, 31766.0], [13444.0, 30647.0], [13624.0, 29178.0], [13988.0, 27490.0], [14168.0, 24275.0]]
+size_Y_N = 25
+Y_N = [[5860.0, 46527.0], [6764.0, 46428.0], [7484.0, 46005.0], [8028.0, 45536.0], [8208.0, 45318.0], [8568.0, 45030.0], [8748.0, 44206.0], [9472.0, 43788.0], [9652.0, 42275.0], [9832.0, 42068.0], [10012.0, 41854.0], [10196.0, 41725.0], [10736.0, 41141.0], [11460.0, 39766.0], [11820.0, 38305.0], [12000.0, 36526.0], [12180.0, 36254.0], [12724.0, 35410.0], [13084.0, 33688.0], [13264.0, 31761.0], [13444.0, 30647.0], [13624.0, 29178.0], [13804.0, 27529.0], [13988.0, 27455.0], [14168.0, 25144.0]]
 
-size_X_E = 28
+size_X_E = 25
