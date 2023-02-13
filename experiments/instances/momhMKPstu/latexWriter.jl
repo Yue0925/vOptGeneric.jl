@@ -423,11 +423,66 @@ function MOBC_perform(instances::String)
     \end{tabular}%
     }%
     \caption{.}
-    \label{tab:table_bc}
+    \label{tab:table_bc_EPB}
     \end{sidewaystable}
     """
     println(fout, latex)
     close(fout)
+
+    # ----------------------------------------------------------------
+    # ------------------ pics of times -------------------------------
+    # ----------------------------------------------------------------
+    labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
+
+    plt.bar(loc .- width, record_times["BOLP"], width, label="BOLP")
+    plt.bar(loc, record_times["cutpool"], width, label="cutpool")
+    plt.bar(loc .+ width, record_times["separator"], width, label="separator")
+    plt.xticks(loc, labels)
+    plt.xlabel("Number of variables")
+    plt.ylabel("Computation time(s)", fontsize=14)
+    plt.legend(methods)
+
+
+    pos = loc .+ (width/2)
+    for i =1:4
+        plt.text(x = pos[i]-0.6 , y = record_times["BOLP"][i]+0.5, s = record_times["BOLP"][i], size = 7)
+    end
+
+    pos = loc .+ (width) .+ (width/2)
+    for i =1:4
+        plt.text(x = pos[i]-0.6 , y = record_times["cutpool"][i]+0.5, s = record_times["cutpool"][i], size = 7)
+    end
+
+    pos = loc .+ (2 * width) .+ (width/2)
+    for i =1:4
+        plt.text(x = pos[i]-0.6 , y = record_times["separator"][i]+0.5, s = record_times["separator"][i], size = 7)
+    end
+    title("Influence of instance size on BOB\&C", fontsize=12)
+    savefig(work_dir * "/BCperformTime.png")
+    plt.close()
+
+    # ---------------
+    width = 0.4
+    plt.bar(loc .- width/2, record_nodes["total"], width, label="total", color="darkorange")
+    plt.bar(loc .+ width/2, record_nodes["pruned"], width, label="pruned", color="forestgreen")
+    plt.xticks(loc, labels)
+    plt.xlabel("Number of variables")
+    plt.ylabel("Number of explored nodes", fontsize=14)
+    plt.legend(methods[2:end])
+
+    pos = loc .+ (width)/2# .+ (width/2)
+    for i =1:4
+        plt.text(x = pos[i]-0.6 , y = record_nodes["total"][i]+0.5, s = record_nodes["total"][i], size = 7)
+    end
+
+    pos = loc .+ (3 *width)/2# .+ (width/2)
+    for i =1:4
+        plt.text(x = pos[i]-0.6 , y = record_nodes["pruned"][i]+0.5, s = record_nodes["pruned"][i], size = 7)
+    end
+    title("Influence of instance size on BOB\&C tree", fontsize=12)
+    savefig(work_dir * "/BCperformNodes.png")
+    plt.close()
+
 
 end
 
@@ -537,11 +592,11 @@ end
 
 
 
-detailedMOBB_perform("momhMKPstu/MOBKP/set3")
+# detailedMOBB_perform("momhMKPstu/MOBKP/set3")
 
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 
-# MOBC_perform("momhMKPstu/MOBKP/set3")
+MOBC_perform("momhMKPstu/MOBKP/set3")
 
 
 
