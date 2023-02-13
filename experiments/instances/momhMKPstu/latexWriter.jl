@@ -335,12 +335,14 @@ function detailedMOBB_perform(instances::String)
     plt.close()
 end
 
+
+# todo : bc, bc_EPB 
 function MOBC_perform(instances::String)
-    bc = "/bc"
+    bc = "/bc_EPB"
     dir = "../../results/" * instances * bc
     @assert isdir(dir) "This directory doesn't exist $dir !"
 
-    fout = open(dir * "/MOBC_bc.tex", "w")
+    fout = open(dir * "/MOBC_bc_EPB.tex", "w")
 
     latex = raw"""\begin{sidewaystable}[h]
     \centering
@@ -354,6 +356,11 @@ function MOBC_perform(instances::String)
     \midrule
     """
     println(fout, latex)
+
+    labelT = ["BOLP", "cutpool", "separator"] ;# record_n = []
+    labelNode = ["total", "pruned"]
+    record_times = Dict(k => [] for k in labelT) ; record_nodes = Dict(k => [] for k in labelNode)
+
 
     for folder_n in readdir(dir)
         if !isdir(dir * "/" * string(folder_n) ) continue end 
@@ -409,6 +416,12 @@ function MOBC_perform(instances::String)
         avg_BCtime = round(avg_BCtime/count, digits = 2)
         avg_YN = round(avg_YN/count, digits = 2)
 
+        append!(record_times["BOLP"], avg_dichoT)
+        append!(record_times["cutpool"], avg_poolT)
+        append!(record_times["separator"], avg_sepaT)
+        append!(record_nodes["total"], avg_totalNodes)
+        append!(record_nodes["pruned"], avg_prunedNodes)
+
 
         println(fout, "\\cline{1-18} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) * "} & \\textbf{" *
             string(avg_totalNodes) * "} & \\textbf{" * string(avg_prunedNodes) * "} & \\textbf{" * string(avg_totalIte) * "} & \\textbf{" *
@@ -440,7 +453,7 @@ function MOBC_perform(instances::String)
     plt.xticks(loc, labels)
     plt.xlabel("Number of variables")
     plt.ylabel("Computation time(s)", fontsize=14)
-    plt.legend(methods)
+    plt.legend(labelT)
 
 
     pos = loc .+ (width/2)
@@ -457,8 +470,8 @@ function MOBC_perform(instances::String)
     for i =1:4
         plt.text(x = pos[i]-0.6 , y = record_times["separator"][i]+0.5, s = record_times["separator"][i], size = 7)
     end
-    title("Influence of instance size on BOB\&C", fontsize=12)
-    savefig(work_dir * "/BCperformTime.png")
+    title("Influence of instance size on EPB BOB\\&C", fontsize=12)
+    savefig(dir * "/EPBBCperformTime.png")
     plt.close()
 
     # ---------------
@@ -468,7 +481,7 @@ function MOBC_perform(instances::String)
     plt.xticks(loc, labels)
     plt.xlabel("Number of variables")
     plt.ylabel("Number of explored nodes", fontsize=14)
-    plt.legend(methods[2:end])
+    plt.legend(labelNode)
 
     pos = loc .+ (width)/2# .+ (width/2)
     for i =1:4
@@ -479,8 +492,8 @@ function MOBC_perform(instances::String)
     for i =1:4
         plt.text(x = pos[i]-0.6 , y = record_nodes["pruned"][i]+0.5, s = record_nodes["pruned"][i], size = 7)
     end
-    title("Influence of instance size on BOB\&C tree", fontsize=12)
-    savefig(work_dir * "/BCperformNodes.png")
+    title("Influence of instance size on EPB BOB\\&C tree", fontsize=12)
+    savefig(dir * "/EPBBCperformNodes.png")
     plt.close()
 
 
