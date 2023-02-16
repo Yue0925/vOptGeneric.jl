@@ -226,7 +226,7 @@ function detailedMOBB_perform(instances::String)
     dir = "../../results/" * instances
     @assert isdir(dir) "This directory doesn't exist $dir !"
 
-    labelT = ["BOLP", "dominance", "incumbent"] ; record_n = []
+    labelT = ["BOLP relaxation", "Dominance test", "UBS update"] ; record_n = []
     labelNode = ["total", "pruned"]
     record_times = Dict(k => [] for k in labelT) ; record_nodes = Dict(k => [] for k in labelNode)
 
@@ -280,35 +280,35 @@ function detailedMOBB_perform(instances::String)
         avg_XE = round(avg_XE/count, digits = 2)
 
         append!(record_n, avg_n)
-        append!(record_times["BOLP"], avg_relaxT) ; append!(record_times["dominance"], avg_dominanceT) ; append!(record_times["incumbent"], avg_incumbentT)
+        append!(record_times["BOLP relaxation"], avg_relaxT) ; append!(record_times["Dominance test"], avg_dominanceT) ; append!(record_times["UBS update"], avg_incumbentT)
         append!(record_nodes["total"], avg_totalN) ; append!(record_nodes["pruned"], avg_prunedN)
     end
 
     labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
 
-    plt.bar(loc .- width, record_times["BOLP"], width, label="BOLP")
-    plt.bar(loc, record_times["dominance"], width, label="dominance")
-    plt.bar(loc .+ width, record_times["incumbent"], width, label="incumbent")
+    plt.bar(loc .- width, record_times["BOLP relaxation"], width, label="BOLP relaxation")
+    plt.bar(loc, record_times["Dominance test"], width, label="Dominance test")
+    plt.bar(loc .+ width, record_times["UBS update"], width, label="UBS update")
     plt.xticks(loc, labels)
-    plt.xlabel("Number of variables", fontsize=14)
-    plt.ylabel("Computation time(s)", fontsize=14)
+    plt.xlabel("Number of variables", fontsize=12)
+    plt.ylabel("Computation time(s)", fontsize=12)
     plt.legend(labelT)
 
     pos = loc .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["BOLP"][i]+0.5, s = record_times["BOLP"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_times["BOLP relaxation"][i]+0.5, s = record_times["BOLP relaxation"][i], size = 7)
     end
 
     pos = loc .+ (width) .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["dominance"][i]+0.5, s = record_times["dominance"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_times["Dominance test"][i]+0.5, s = record_times["Dominance test"][i], size = 7)
     end
 
     pos = loc .+ (2 * width) .+ (width/2)
     for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["incumbent"][i]+0.5, s = record_times["incumbent"][i], size = 7)
+        plt.text(x = pos[i]-0.6 , y = record_times["UBS update"][i]+0.5, s = record_times["UBS update"][i], size = 7)
     end
-    title("The influence of instance size on EPB BO01B&B", fontsize=12)
+    title("The influence of instance size on EPB BO01B&B", fontsize=10)
     savefig(dir * "/EPBBBperformTimes.png")
     plt.close()
 
@@ -317,8 +317,9 @@ function detailedMOBB_perform(instances::String)
     plt.bar(loc .- width/2, record_nodes["total"], width, label="total")
     plt.bar(loc .+ width/2, record_nodes["pruned"], width, label="pruned")
     plt.xticks(loc, labels)
-    plt.xlabel("Number of variables", fontsize=14)
-    plt.ylabel("Number of nodes", fontsize=14)
+    plt.xlabel("Number of variables", fontsize=12)
+    plt.ylabel("Number of nodes", fontsize=12)
+    # plt.yscale("log")
     plt.legend(labelNode)
 
     pos = loc .+ (width)/2# .+ (width/2)
@@ -330,7 +331,7 @@ function detailedMOBB_perform(instances::String)
     for i =1:4
         plt.text(x = pos[i]-0.6 , y = record_nodes["pruned"][i]+0.5, s = record_nodes["pruned"][i], size = 7)
     end
-    title("The influence of instance size on EPB B&B tree", fontsize=12)
+    title("The influence of instance size on EPB B&B tree", fontsize=10)
     savefig(dir * "/EPBBBperformNodes.png")
     plt.close()
 end
@@ -445,56 +446,56 @@ function MOBC_perform(instances::String)
     # ----------------------------------------------------------------
     # ------------------ pics of times -------------------------------
     # ----------------------------------------------------------------
-    labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
+    # labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
 
-    plt.bar(loc .- width, record_times["BOLP"], width, label="BOLP")
-    plt.bar(loc, record_times["cutpool"], width, label="cutpool")
-    plt.bar(loc .+ width, record_times["separator"], width, label="separator")
-    plt.xticks(loc, labels)
-    plt.xlabel("Number of variables")
-    plt.ylabel("Computation time(s)", fontsize=14)
-    plt.legend(labelT)
+    # plt.bar(loc .- width, record_times["BOLP"], width, label="BOLP")
+    # plt.bar(loc, record_times["cutpool"], width, label="cutpool")
+    # plt.bar(loc .+ width, record_times["separator"], width, label="separator")
+    # plt.xticks(loc, labels)
+    # plt.xlabel("Number of variables")
+    # plt.ylabel("Computation time(s)", fontsize=14)
+    # plt.legend(labelT)
 
 
-    pos = loc .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["BOLP"][i]+0.5, s = record_times["BOLP"][i], size = 7)
-    end
+    # pos = loc .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_times["BOLP"][i]+0.5, s = record_times["BOLP"][i], size = 7)
+    # end
 
-    pos = loc .+ (width) .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["cutpool"][i]+0.5, s = record_times["cutpool"][i], size = 7)
-    end
+    # pos = loc .+ (width) .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_times["cutpool"][i]+0.5, s = record_times["cutpool"][i], size = 7)
+    # end
 
-    pos = loc .+ (2 * width) .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["separator"][i]+0.5, s = record_times["separator"][i], size = 7)
-    end
-    title("Influence of instance size on EPB BOB\\&C", fontsize=12)
-    savefig(dir * "/EPBBCperformTime.png")
-    plt.close()
+    # pos = loc .+ (2 * width) .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_times["separator"][i]+0.5, s = record_times["separator"][i], size = 7)
+    # end
+    # title("Influence of instance size on EPB BOB\\&C", fontsize=12)
+    # savefig(dir * "/EPBBCperformTime.png")
+    # plt.close()
 
-    # ---------------
-    width = 0.4
-    plt.bar(loc .- width/2, record_nodes["total"], width, label="total", color="darkorange")
-    plt.bar(loc .+ width/2, record_nodes["pruned"], width, label="pruned", color="forestgreen")
-    plt.xticks(loc, labels)
-    plt.xlabel("Number of variables")
-    plt.ylabel("Number of explored nodes", fontsize=14)
-    plt.legend(labelNode)
+    # # ---------------
+    # width = 0.4
+    # plt.bar(loc .- width/2, record_nodes["total"], width, label="total", color="darkorange")
+    # plt.bar(loc .+ width/2, record_nodes["pruned"], width, label="pruned", color="forestgreen")
+    # plt.xticks(loc, labels)
+    # plt.xlabel("Number of variables")
+    # plt.ylabel("Number of explored nodes", fontsize=14)
+    # plt.legend(labelNode)
 
-    pos = loc .+ (width)/2# .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_nodes["total"][i]+0.5, s = record_nodes["total"][i], size = 7)
-    end
+    # pos = loc .+ (width)/2# .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_nodes["total"][i]+0.5, s = record_nodes["total"][i], size = 7)
+    # end
 
-    pos = loc .+ (3 *width)/2# .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_nodes["pruned"][i]+0.5, s = record_nodes["pruned"][i], size = 7)
-    end
-    title("Influence of instance size on EPB BOB\\&C tree", fontsize=12)
-    savefig(dir * "/EPBBCperformNodes.png")
-    plt.close()
+    # pos = loc .+ (3 *width)/2# .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_nodes["pruned"][i]+0.5, s = record_nodes["pruned"][i], size = 7)
+    # end
+    # title("Influence of instance size on EPB BOB\\&C tree", fontsize=12)
+    # savefig(dir * "/EPBBCperformNodes.png")
+    # plt.close()
 
 
 end
@@ -558,6 +559,8 @@ function comparisons(instances::String)
             for i=1:length(methods)-1
                 if times[i] == -1
                     print(fout, " - & ")
+                elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
                 else
                     print(fout, string(times[i]) * " & ")
                 end
@@ -570,7 +573,13 @@ function comparisons(instances::String)
 
             end
 
-            print(fout, string(times[end]) * " & ") ; println(fout, string(pts[end]) * " \\\\")
+            if times[end] == minimum(filter(x -> x > 0 ,times))
+                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+            else
+                print(fout, string(times[end]) * " & ") 
+            end
+            
+            println(fout, string(pts[end]) * " \\\\")
     
         end
 
@@ -600,7 +609,448 @@ function comparisons(instances::String)
 end
 
 
-# comparisons("momhMKPstu/MOBKP/set3")
+
+function comparisons_bis(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonBBTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \hspace*{-1cm}\begin{tabular}{lccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{B\&B}}  & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \textbf{$|\mathcal{Y}_N|$}
+    \\
+    \cmidrule(r){4-5} \cmidrule(r){6-7} 
+    ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & ~ \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["bb", "bb_EPB"] ; record_n = []
+    record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods[2:end])
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+        countY_N = 0
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            times = [] ; pts = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+            countY_N += size_Y_N
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(times, total_times_used); push!(pts, total_nodes)
+    
+                    avgT[m] += total_times_used ; avgY[m] += total_nodes
+                else
+                    push!(times, -1); push!(pts, -1)
+                end
+            end
+
+            # ------------------
+            for i=1:length(methods)-1
+                if times[i] == -1
+                    print(fout, " - & ")
+                elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                else
+                    print(fout, string(times[i]) * " & ")
+                end
+    
+                if pts[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(pts[i]) * " & ")
+                end
+
+            end
+
+            if times[end] == minimum(filter(x -> x > 0 ,times))
+                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+            else
+                print(fout, string(times[end]) * " & ") 
+            end
+            
+            println(fout, string(pts[end]) * " & " * string(countY_N) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        end
+
+        print(fout, "\\cline{1-8} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        end
+
+        println(fout, "} & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-8}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the B\\&B algorithms performances for instances $instances .}")
+    println(fout, "\\label{tab:table_compareBB_$instances }")
+    println(fout, "\\end{table}")
+    close(fout)
+
+end
+
+
+
+
+
+
+
+function comparisonsCP(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonBCTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    % \resizebox{\columnwidth}{!}{%
+    \hspace*{-1cm}\begin{tabular}{lcccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{B\&C}}  & \multicolumn{2}{c}{\textbf{EPB B\&C}}
+    \\
+    \cmidrule(r){4-5} \cmidrule(r){6-7} 
+    ~ & ~ & ~ & \textbf{SP cuts} &\textbf{MP cuts} & \textbf{SP cuts} &\textbf{MP cuts} \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["bc", "bc_EPB"] ; record_n = []
+    record_sp = Dict(k => [] for k in methods) ; record_mp = Dict(k => [] for k in methods)
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgSP = Dict(k => 0.0 for k in methods) ; avgMP = Dict(k => 0.0 for k in methods)
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            sp = [] ; mp = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(sp, mp_cuts); push!(mp, sp_cuts)
+    
+                    avgSP[m] += mp_cuts ; avgMP[m] += sp_cuts
+                else
+                    push!(sp, -1); push!(mp, -1)
+                end
+            end
+
+            # ------------------
+            for i=1:length(methods)-1
+                if sp[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(sp[i]) * " & ")
+                end
+    
+                if mp[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(mp[i]) * " & ")
+                end
+
+            end
+
+
+            print(fout, string(sp[end]) * " & ") 
+            
+            println(fout, string(mp[end]) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgSP[m] = round(avgSP[m]/count, digits = 2); avgMP[m] = round(avgMP[m]/count, digits = 2) 
+        end
+
+        print(fout, "\\cline{1-7} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgSP[m]) * "} & \\textbf{" * string(avgMP[m]))
+        end
+
+        println(fout, "} " * "\\\\ \\cline{1-7}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the B\\&B algorithms performances for instances $instances .}")
+    println(fout, "%\\label{tab:table_compareBB_$instances }")
+    println(fout, "\\end{table}")
+    close(fout)
+
+end
+
+
+
+function comparisons4(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonBBBCTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    % \resizebox{\columnwidth}{!}{%
+    \hspace*{-1cm}\begin{tabular}{lcccccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C}}  & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C}} \\
+    
+    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} 
+    ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes}  \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["bb", "bc", "bb_EPB", "bc_EPB"] ; record_n = []
+    record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods)
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            times = [] ; pts = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(times, total_times_used); push!(pts, total_nodes)
+    
+                    avgT[m] += total_times_used ; avgY[m] += total_nodes
+                else
+                    push!(times, -1); push!(pts, -1)
+                end
+            end
+
+            # ------------------
+            for i=1:length(methods)-1
+                if times[i] == -1
+                    print(fout, " - & ")
+                elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                else
+                    print(fout, string(times[i]) * " & ")
+                end
+    
+                if pts[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(pts[i]) * " & ")
+                end
+
+            end
+
+            if times[end] == minimum(filter(x -> x > 0 ,times))
+                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+            else
+                print(fout, string(times[end]) * " & ") 
+            end
+            
+            println(fout, string(pts[end]) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        end
+
+        print(fout, "\\cline{1-11} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        end
+
+        println(fout, "} \\\\ \\cline{1-11}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the different algorithms performances for instances $instances .}")
+    println(fout, "%\\label{tab:table_compare_$instances }")
+    println(fout, "\\end{sidewaystable}")
+    close(fout)
+
+end
+
+
+
+
+function comparisons5(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonBCcplexTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \hspace*{-1cm}\begin{tabular}{lcccccccccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{B\&C}} & \multicolumn{2}{c}{\textbf{B\&C (cplex)}} & \multicolumn{2}{c}{\textbf{B\&C (cplex + CP)}}  & \multicolumn{2}{c}{\textbf{EPB B\&C}} & \multicolumn{2}{c}{\textbf{EPB B\&C (cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&C (cplex + CP)}} \\
+    
+    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15}  
+    ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes}  \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["bc", "bc_rootRelax", "bc_rootRelaxCP", "bc_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCPEPB"] ; record_n = []
+    record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods)
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            times = [] ; pts = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(times, total_times_used); push!(pts, total_nodes)
+    
+                    avgT[m] += total_times_used ; avgY[m] += total_nodes
+                else
+                    push!(times, -1); push!(pts, -1)
+                end
+            end
+
+            # ------------------
+            for i=1:length(methods)-1
+                if times[i] == -1
+                    print(fout, " - & ")
+                elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                else
+                    print(fout, string(times[i]) * " & ")
+                end
+    
+                if pts[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(pts[i]) * " & ")
+                end
+
+            end
+
+            if times[end] == minimum(filter(x -> x > 0 ,times))
+                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+            else
+                print(fout, string(times[end]) * " & ") 
+            end
+            
+            println(fout, string(pts[end]) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        end
+
+        print(fout, "\\cline{1-15} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        end
+
+        println(fout, "} \\\\ \\cline{1-15}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the different algorithms performances for instances $instances .}")
+    println(fout, "%\\label{tab:table_compare_$instances }")
+    println(fout, "\\end{sidewaystable}")
+    close(fout)
+
+end
+
+comparisons5("momhMKPstu/MOBKP/set3")
 
 
 
@@ -609,7 +1059,7 @@ end
 
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 
-MOBC_perform("momhMKPstu/MOBKP/set3")
+# MOBC_perform("momhMKPstu/MOBKP/set3")
 
 
 
