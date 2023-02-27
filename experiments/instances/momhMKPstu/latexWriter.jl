@@ -1050,7 +1050,121 @@ function comparisons5(instances::String)
 
 end
 
-comparisons5("momhMKPstu/MOBKP/set3")
+
+
+
+function comparisons6(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonFinalTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{lcccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\epsilon$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}}
+    \\
+    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} 
+    ~ & ~ & ~ & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["epsilon", "bb", "bc_rootRelaxEPB"] ; record_n = []
+    record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods[2:end])
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            times = [] ; pts = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(times, total_times_used); push!(pts, size_Y_N)
+    
+                    avgT[m] += total_times_used ; avgY[m] += size_Y_N
+                else
+                    push!(times, -1); push!(pts, -1)
+                end
+            end
+
+            # ------------------
+            for i=1:length(methods)-1
+                if times[i] == -1
+                    print(fout, " - & ")
+                elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                else
+                    print(fout, string(times[i]) * " & ")
+                end
+    
+                if pts[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(pts[i]) * " & ")
+                end
+
+            end
+
+            if times[end] == minimum(filter(x -> x > 0 ,times))
+                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+            else
+                print(fout, string(times[end]) * " & ") 
+            end
+            
+            println(fout, string(pts[end]) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        end
+
+        print(fout, "\\cline{1-9} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        end
+
+        println(fout, "} \\\\ \\cline{1-9}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the different algorithms performances for instances $instances .}")
+    println(fout, "\\label{tab:table_compare_$instances }")
+    println(fout, "\\end{sidewaystable}")
+    close(fout)
+
+end
+
+
+
+
+comparisons6("momhMKPstu/MOBKP/set3")
 
 
 
