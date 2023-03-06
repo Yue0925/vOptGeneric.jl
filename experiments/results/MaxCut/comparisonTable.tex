@@ -1,0 +1,19 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccccccccccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex+CP)}} \\
+
+\cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17} \cmidrule(r){18-19} \cmidrule(r){20-21}
+~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
+\midrule
+
+MaxCut\_10 & 55 & 90 &  \textcolor{blue2}{4.8} & 6 & 122.12 & 6 & TO & 6 & 129.74 & 6 & 167.06 & 6 & TO & 6 & 138.89 & 6 & 256.16 & 6 & 135.31 & 6 \\
+MaxCut\_11 & 66 & 110 &  \textcolor{blue2}{5.66} & 12 &  - &  - &  - &  - & 1991.89 & 12 &  - &  - &  - &  - & 3027.93 & 12 & 1767.45 & 12 & 2458.21 & 12 \\
+\bottomrule
+\end{tabular}
+}%
+\caption{Comparison of the different algorithms performances for instances MaxCut .}
+\label{tab:table_compare_MaxCut }
+\end{sidewaystable}
