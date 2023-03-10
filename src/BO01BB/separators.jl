@@ -18,7 +18,7 @@ function SP_CG_separator(x::Vector{Float64}, pb::BO01Problem)
         set_objective(pb.SP_CG_model, MOI.MAX_SENSE, sum(pb.SP_CG_α[j] * x[j-1] for j = 2:n+1) - pb.SP_CG_α[1])
     else
         pb.SP_CG_model_defined = true      # create model
-        JuMP.set_silent( pb.SP_CG_model ) ; set_optimizer_attribute(pb.SP_CG_model, "CPXPARAM_MIP_Limits_Nodes", NodeLimit)
+        JuMP.set_silent( pb.SP_CG_model ) ; set_optimizer_attribute(pb.SP_CG_model, "NodeLimit", NodeLimit) # "CPXPARAM_MIP_Limits_Nodes"
         @variable(pb.SP_CG_model, α[1:n+1], Int) ; pb.SP_CG_α = α
         @variable(pb.SP_CG_model, μ[1:m] ≥ 0)
 
@@ -51,7 +51,7 @@ function SP_CG_separator2(x::Vector{Float64}, pb::BO01Problem)
         set_objective(pb.SP_CG_model, MOI.MAX_SENSE, sum(pb.SP_CG_α[j] * x[j-1] for j = 2:n+1) - pb.SP_CG_α[1])
     else
         pb.SP_CG_model_defined = true      # create model
-        JuMP.set_silent( pb.SP_CG_model ) ; set_optimizer_attribute(pb.SP_CG_model, "CPXPARAM_MIP_Limits_Nodes", NodeLimit)
+        JuMP.set_silent( pb.SP_CG_model ) ; set_optimizer_attribute(pb.SP_CG_model, "NodeLimit", NodeLimit) # "CPXPARAM_MIP_Limits_Nodes"
         @variable(pb.SP_CG_model, α[1:n+1], Int) ; pb.SP_CG_α = α
         @variable(pb.SP_CG_model, μ[1:m] ≥ 0) ; @variable(pb.SP_CG_model, f[1:n+1] ≥ 0)
 
@@ -97,7 +97,7 @@ function MP_CG_separator(x_l::Vector{Float64}, x_r::Vector{Float64}, pb::BO01Pro
         end
     else
         pb.MP_CG_model_defined = true      # create model
-        JuMP.set_silent( pb.MP_CG_model ) ; set_optimizer_attribute(pb.MP_CG_model, "CPXPARAM_MIP_Limits_Nodes", NodeLimit)
+        JuMP.set_silent( pb.MP_CG_model ) ; set_optimizer_attribute(pb.MP_CG_model, "NodeLimit", NodeLimit) # "CPXPARAM_MIP_Limits_Nodes"
         @variable(pb.MP_CG_model, α[1:n+1], Int) ; pb.MP_CG_α = α
         @variable(pb.MP_CG_model, μ[1:m] ≥ 0) ; @variable(pb.MP_CG_model, l)
         push!(pb.MP_CG_α, l)
@@ -154,7 +154,7 @@ function MP_CG_separator2(x_l::Vector{Float64}, x_r::Vector{Float64}, pb::BO01Pr
 
     else
         pb.MP_CG_model_defined = true      # create model
-        JuMP.set_silent( pb.MP_CG_model ) ; set_optimizer_attribute(pb.MP_CG_model, "CPXPARAM_MIP_Limits_Nodes", NodeLimit)
+        JuMP.set_silent( pb.MP_CG_model ) ; set_optimizer_attribute(pb.MP_CG_model, "NodeLimit", NodeLimit) # "CPXPARAM_MIP_Limits_Nodes"
         @variable(pb.MP_CG_model, α[1:n+1], Int) ; pb.MP_CG_α = α
         @variable(pb.MP_CG_model, μ[1:m] ≥ 0) ; @variable(pb.MP_CG_model, l)
         push!(pb.MP_CG_α, l) ; @variable(pb.MP_CG_model, f[1:n+1] ≥ 0)

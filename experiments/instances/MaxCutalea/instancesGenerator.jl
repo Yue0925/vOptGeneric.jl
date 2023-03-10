@@ -3,7 +3,7 @@ Max cut instances generation for complete graphs Kₙ with random edge weights (
 """
 
 
-using JuMP, CPLEX 
+using JuMP, Gurobi #CPLEX 
 
 
 function completeG(n::Int64)
@@ -39,7 +39,7 @@ function completeG(n::Int64)
     println(" solving mono $(name) ... ")
     println(" -----------------------------")
 
-    model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
+    model = Model(Gurobi.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[i=1:n-1, j=i+1:n], Bin )
     @variable(model, y[1:n], Bin)
     @objective(model, Max, sum([W[i, j]*x[i, j] for i=1:n-1 for j=i+1:n]))

@@ -155,17 +155,32 @@ end
 global varArray = Array{JuMP.VariableRef}
 global x_star = []
 global model 
+global curr_λ
+global last_bnd = -Inf
+global C
 
-function callback_noCuts(cb_data)
+function callback_noCuts(cb_data, cb_where::Cint)
+    println("entering callback")
     global varArray
     global x_star
     global model 
+    global curr_λ
+    global last_bnd, C
 
     node_statut = callback_node_status(cb_data, model)
      
-    # if node_statut == MOI.CALLBACK_NODE_STATUS_FRACTIONAL
-        x_star = callback_value.(cb_data, varArray)
-    # end
+    if node_statut == MOI.CALLBACK_NODE_STATUS_FRACTIONAL
+        x_new = callback_value.(cb_data, varArray)
+        new_bnd = curr_λ[1] * (x_new'* C[1, 2:end] + C[1, 1]) + curr_λ[2] * (x_new'* C[2, 2:end] + C[2, 1])
+        if new_bnd > last_bnd
+            x_star = x_new ; last_bnd = new_bnd
+        end
+        println("-------------------------")
+        @info "x_new = $x_new"
+        @info "x_star = $x_star"
+        println("-------------------------")
+
+    end
 end
 
 function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
@@ -185,6 +200,9 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
     global varArray
     global x_star
     global model = m
+    global curr_λ
+    global C = c
+
 
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) 
@@ -206,9 +224,12 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
     verbose && println("solving for $λ1*f1 + $λ2*f2")
     
     #Solve with that objective
-    x_star = []
-    MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
+    x_star = [] ; curr_λ = [λ1, λ2]
+    # MOI.set(m, MOI.NumberOfThreads(), 1) ; #
+    MOI.set(m, Gurobi.CallbackFunction(), callback_noCuts)
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+
+    @info " status $status  with curr_λ = $curr_λ "  #todo : 
 
     # whether a solution exists
     y_1 = 0.0 ; y_2 = 0.0 
@@ -262,6 +283,8 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     global varArray
     global x_star
     global model = m
+    global curr_λ
+    global C = c
 
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) 
@@ -332,9 +355,12 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     verbose && println("solving for z1")
     
     #Solve with that objective
-    x_star = []
-    MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
+    x_star = [] ; curr_λ = [1.0, 0.0]
+    # MOI.set(m, MOI.NumberOfThreads(), 1) ;
+    MOI.set(m, Gurobi.CallbackFunction(), callback_noCuts)
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+
+    @info " status $status  with curr_λ = $curr_λ "  #todo : 
 
     # whether a solution exists
     yr_1 = 0.0 ; yr_2 = 0.0 
@@ -389,8 +415,10 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     verbose && println("solving for z2")
 
     #Solve with that objective
-    x_star = []
+    x_star = [] ; curr_λ = [0.0, 1.0]
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+
+    @info " status $status  with curr_λ = $curr_λ "  #todo : 
 
     ys_1 = 0.0 ; ys_2 = 0.0 
     if status == MOI.INFEASIBLE
@@ -459,6 +487,7 @@ end
 function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
     global varArray
     global x_star
+    global curr_λ
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
@@ -490,11 +519,13 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
         f = λ1*f1 - λ2*f2
     end
 
-    x_star = []
+    x_star = [] ; curr_λ = [λ1, λ2]
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
     #If a solution exists
     yt_1 = 0.0 ; yt_2 = 0.0 
+
+    @info " status $status with curr_λ=$curr_λ "  #todo : 
 
     if status == MOI.INFEASIBLE return Y_integer, X_integer end
     if status == MOI.OPTIMAL 

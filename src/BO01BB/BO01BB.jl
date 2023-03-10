@@ -5,7 +5,7 @@ include("branching.jl")
 include("fathoming.jl")
 include("displayGraphic.jl")
 
-using TimerOutputs, JuMP, CPLEX
+using TimerOutputs, JuMP, Gurobi #CPLEX
 tmr = TimerOutput()
 
 
@@ -308,9 +308,9 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     varArray = JuMP.all_variables(m)
 
     problem = BO01Problem(
-        varArray, Vector{JuMP.VariableRef}(), m, JuMP.Model(CPLEX.Optimizer), BBparam(), StatInfo(), Matrix{Float64}(undef, 0,0), Vector{Float64}(), Matrix{Float64}(undef, 0,0),
-        false, JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}(), false,
-        JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}()
+        varArray, Vector{JuMP.VariableRef}(), m, JuMP.Model(Gurobi.Optimizer), BBparam(), StatInfo(), Matrix{Float64}(undef, 0,0), Vector{Float64}(), Matrix{Float64}(undef, 0,0),
+        false, JuMP.Model(Gurobi.Optimizer), Vector{JuMP.VariableRef}(), false,
+        JuMP.Model(Gurobi.Optimizer), Vector{JuMP.VariableRef}()
     )
 
     standard_form(problem) ; problem.param.EPB = EPB
@@ -324,7 +324,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     if root_relax 
         undo_relax()
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
+        JuMP.set_optimizer_attribute(problem.m, "NodeLimit", 0)
     end
 
     if cp

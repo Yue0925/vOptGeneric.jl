@@ -1,6 +1,6 @@
 
 
-using JuMP, CPLEX
+using JuMP, Gurobi# CPLEX
 
 include("../../../src/vOptGeneric.jl")
 using .vOptGeneric 
@@ -32,7 +32,7 @@ end
 
 function vopt_solve(method, outputName; step=0.5) 
     # ---- setting the model
-    model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
+    model = vModel( Gurobi.Optimizer ) ; JuMP.set_silent(model)
 
     @variable(model, x[i=1:n-1, j=i+1:n], Bin )
     @variable(model, y[1:n], Bin)
@@ -116,7 +116,7 @@ function solve(fname::String, method::String)
     println(" solving mono $(inst_name) ... ")
     println(" -----------------------------")
 
-    model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
+    model = Model(Gurobi.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[i=1:n-1, j=i+1:n], Bin )
     @variable(model, y[1:n], Bin)
     @objective(model, Max, sum([W[i, j]*x[i, j] for i=1:n-1 for j=i+1:n]))
