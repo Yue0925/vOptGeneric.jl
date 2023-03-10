@@ -57,17 +57,22 @@ end
 Pich up a free variable to be split according to the prefiexd strategy.
 """
 function pickUpAFreeVar(assignment::Dict{Int64, Int64}, pb::BO01Problem)
-    if pb.param.branching == :arbitrary
-        free_vars = [ind for ind in 1:length(pb.varArray)]
-        fixed_var = collect(keys(assignment))
-        filter!(v -> v ∉ fixed_var, free_vars)
-        return (length(free_vars) > 0) ? free_vars[rand(1:length(free_vars))] : 0
-    else
+    # if pb.param.branching == :arbitrary
+    #     free_vars = [ind for ind in 1:length(pb.varArray)]
+    #     fixed_var = collect(keys(assignment))
+    #     filter!(v -> v ∉ fixed_var, free_vars)
+    #     return (length(free_vars) > 0) ? free_vars[rand(1:length(free_vars))] : 0
+    # else
         # default order 
-        for ind in 1:length(pb.varArray)
-            if !haskey(assignment, ind) return ind end 
+        # the last n vars 
+        n = round(Int64, (sqrt(8*length(pb.varArray) + 1)-1)/2 )
+
+        for ind in length(pb.varArray):-1:length(pb.varArray)-n+1
+            if !haskey(assignment, ind) 
+                return ind 
+            end 
         end
         return 0
-        @error "Unknown branching parameter !"
-    end
+    #     @error "Unknown branching parameter !"
+    # end
 end

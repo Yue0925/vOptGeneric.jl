@@ -313,6 +313,15 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}()
     )
 
+    # println("-----------------------------")
+    # println("varArray => ", varArray)
+    # println("-----------------------------")
+    # println(m)
+    # println("-----------------------------")
+
+
+    # exit()
+
     standard_form(problem) ; problem.param.EPB = EPB
 
     # copy alternative model
