@@ -1,34 +1,34 @@
 vars = 190 ; constr = 342 
  # informations of B&B algorithm : 
-total_times_used = 3607.74 
-total_nodes = 2263 
-pruned_nodes = 10 
+total_times_used = 3606.14 
+total_nodes = 18143 
+pruned_nodes = 5255 
 GAP = 0.0 
-relaxation_time = 3568.6 
-test_dominance_time = 0.0 
-update_incumbent_time = 0.16 
-tree_size = 21.783 
-nb_nodes_EPB = 0 
-nb_nodes_VB = 2262 
+relaxation_time = 3551.02 
+test_dominance_time = 0.04 
+update_incumbent_time = 0.8 
+tree_size = 91.626 
+nb_nodes_EPB = 6518 
+nb_nodes_VB = 11624 
 root_relax = true 
 TO = true 
 
 
  # ----------- info about cuts : 
-ite_total = 2257 
-cuts_applied = 8943 
-sp_cuts = 8808 
-mp_cuts = 135 
-cuts_total = 8943 
-times_calling_dicho = 3568.6 
-times_calling_separators = 36.82 
-times_oper_cutPool = 0.49 
-times_total_for_cuts = 3606.7 
-times_add_retrieve_cuts = 0.58 
+ite_total = 13839 
+cuts_applied = 18720 
+sp_cuts = 18448 
+mp_cuts = 272 
+cuts_total = 18720 
+times_calling_dicho = 3551.02 
+times_calling_separators = 45.59 
+times_oper_cutPool = 0.95 
+times_total_for_cuts = 3529.12 
+times_add_retrieve_cuts = 0.99 
 
 
 
-size_Y_N = 21
-Y_N = [[64101.0, 44180.0], [67319.0, 44139.0], [68653.0, 42815.0], [69517.0, 39024.0], [69527.0, 38624.0], [69604.0, 38107.0], [69667.0, 37788.0], [69676.0, 36229.0], [69801.0, 35690.0], [69912.0, 35628.0], [69918.0, 35618.0], [70473.0, 34632.0], [70680.0, 33663.0], [70700.0, 33607.0], [71082.0, 33337.0], [71169.0, 32778.0], [71186.0, 31387.0], [71412.0, 30881.0], [71493.0, 30171.0], [72116.0, 28505.0], [72381.0, 26739.0]]
+size_Y_N = 28
+Y_N = [[64101.0, 44180.0], [67319.0, 44139.0], [68653.0, 42815.0], [69425.0, 40941.0], [69517.0, 39024.0], [69527.0, 38624.0], [69604.0, 38107.0], [69650.0, 38077.0], [69667.0, 37788.0], [69699.0, 37430.0], [69772.0, 36592.0], [70023.0, 36557.0], [70071.0, 36004.0], [70697.0, 35604.0], [70900.0, 34209.0], [71046.0, 34154.0], [71134.0, 33581.0], [71196.0, 33297.0], [71208.0, 32538.0], [71286.0, 32231.0], [71484.0, 31576.0], [71493.0, 30171.0], [71506.0, 29709.0], [71636.0, 29516.0], [71929.0, 29414.0], [72116.0, 28505.0], [72240.0, 27412.0], [72381.0, 26739.0]]
 
-size_X_E = 21
+size_X_E = 28
