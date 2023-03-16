@@ -137,6 +137,12 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     if verbose
         @info "at node $(node.num) |Y_N| = $(length(incumbent.natural_order_vect)), EPB ? $(node.EPB)"
     end
+
+    # println("----------------------------------------------------")
+    # println("node $(node.num) , LBS => $(node.RBS.natural_order_vect) ")
+    # println("----------------------------------------------------")
+
+
     # get the actual node
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
@@ -324,7 +330,9 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     if root_relax 
         undo_relax()
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo reduce heur 
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.05) # todo : time limit in sec 
     end
 
     if cp

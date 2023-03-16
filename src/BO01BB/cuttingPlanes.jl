@@ -20,10 +20,14 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     #------------------------------------------------------------------------------
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
+    # println("-------------------------")
+    # @info "node $(node.num)"
     if pb.param.root_relax
 
         start = time()
-        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)        
+        # unset_silent(pb.m) # todo : 
+        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)      
+        # @info "cplex root = $((time() - start))"  
         pb.info.relaxation_time += (time() - start)
 
         start = time()
@@ -34,10 +38,16 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         pb.info.update_incumb_time += (time() - start) 
     else
         start = time()
+        # unset_silent(pb.m) # todo : 
         solve_dicho(pb.m, round_results, false ; args...)
+        # @info "lp = $((time() - start))"
         pb.info.relaxation_time += (time() - start)
+
+
     end
     vd_LP = getvOptData(pb.m)
+    # @info "Y => $(vd_LP.Y_N)"
+    # @info "X => $(vd_LP.X_E)"
 
     #-------------------------------------------------------------------------------
     # in case of the LP relaxed (sub) problem is infeasible, prune the actual node

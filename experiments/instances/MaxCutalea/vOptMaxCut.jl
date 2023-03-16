@@ -34,7 +34,8 @@ function vopt_solve(method, outputName; step=0.5)
     # ---- setting the model
     model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 
-    @variable(model, x[i=1:n-1, j=i+1:n], Bin )
+    # todo : binary for epsilon 
+    @variable(model, 0<= x[i=1:n-1, j=i+1:n] <= 1 )
     @variable(model, y[1:n], Bin)
 
     @addobjective(model, Max, sum([W[i, j]*x[i, j] for i=1:n-1 for j=i+1:n]))

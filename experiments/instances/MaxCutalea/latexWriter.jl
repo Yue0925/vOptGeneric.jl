@@ -90,4 +90,61 @@ function comparisons(instances::String)
 end
 
 
-comparisons("MaxCut")
+
+function MOBB_perform(instances::String)
+
+    dir = "../../results/" * instances * "/bc_rootRelax"
+    @assert isdir(dir) "This directory doesn't exist $dir !"
+
+    fout = open(dir * "/MOBC_bc_rootRelax.tex", "w")
+
+    latex = raw"""\begin{table}[!h]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \hspace*{-1cm}\begin{tabular}{lccccccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{4}{c}{\textbf{Time(s)}} & \multicolumn{2}{c}{\textbf{Nodes}}  & \textbf{Tree(MB)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$|\mathcal{X}_E|$}
+    \\
+    \cmidrule(r){4-7} \cmidrule(r){8-9} 
+    ~ & ~ & ~ & \textbf{total} &\textbf{relax} & \textbf{dominance} & \textbf{incumbent} & \textbf{total} & \textbf{pruned} & ~ & ~ & ~ \\
+    \midrule
+    """
+    println(fout, latex)
+
+
+    for file in readdir(dir * "/")
+        if split(file, ".")[end] == "png" || split(file, ".")[end] == "tex"
+            continue
+        end
+
+        name_seg = split(file, "_")
+        for s in name_seg[1:end-1]
+            print(fout, s * "\\_")
+        end
+        print(fout, name_seg[end] * " & ")
+
+        include(dir * "/" * file)
+        print(fout, string(vars) * " & " * string(constr) * " & ")
+
+        print(fout, string(total_times_used) * " & " * string(relaxation_time) * " & " * string(test_dominance_time) * " & "*
+            string( update_incumbent_time ) * " & " * string(total_nodes) * " & " * string(pruned_nodes)*
+            " & " * string(tree_size) * " & " * string(size_Y_N) * " & " * string(size_X_E)
+        )
+
+        println(fout, "\\\\")
+
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}%
+    }%
+    \caption{The detailed experimental information about BB algorithm.}
+    \label{tab:table_bc_rootRelax}
+    \end{table}
+    """
+    println(fout, latex)
+    close(fout)
+end
+
+MOBB_perform("MaxCut")
+# comparisons("MaxCut")
