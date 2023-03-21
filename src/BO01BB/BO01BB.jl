@@ -272,6 +272,7 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     problem.info.relaxation_time = round(problem.info.relaxation_time, digits = 2)
     problem.info.test_dom_time = round(problem.info.test_dom_time, digits = 2)
     problem.info.update_incumb_time = round(problem.info.update_incumb_time, digits = 2)
+    problem.info.Gap = round(problem.info.Gap/problem.info.nb_nodes, digits = 2)
 
     if problem.info.cp_activated
         problem.info.cuts_infos.times_calling_dicho = round(problem.info.cuts_infos.times_calling_dicho, digits = 2)
@@ -330,9 +331,10 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     if root_relax 
         undo_relax()
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
-        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo reduce heur 
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.05) # todo : time limit in sec 
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo reduce heur 
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo preprocessing 
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.05) # todo : time limit in sec 
     end
 
     if cp

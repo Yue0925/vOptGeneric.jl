@@ -26,6 +26,7 @@ mutable struct Node
     con_cuts_copied::Vector{ConstraintRef} 
     cutpool::CutPool
     assignment::Dict{Int64, Int64}
+    Gap::Float64
 
     Node() = new()
 
@@ -57,6 +58,7 @@ mutable struct Node
         n.con_cuts_copied = Vector{ConstraintRef}()
         n.cutpool = CutPool()
         n.assignment = Dict{Int64, Int64}()
+        n.Gap = 0.0
     
         f(t) = nothing # @async println("Finalizing node $(t.num).")
         finalizer(f, n)

@@ -221,12 +221,16 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
     curr_λ = [λ1, λ2]
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
- 
+    Gap = 0.0
+
     # whether a solution exists
     y_1 = 0.0 ; y_2 = 0.0 
     if status == MOI.INFEASIBLE 
-        return Y_integer, X_integer 
+        return Y_integer, X_integer, Gap
     end
+    Gap = MOI.get(m, MOI.RelativeGap())*100
+    @info "Gap = $Gap"
+
     if status == MOI.OPTIMAL
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
@@ -245,6 +249,7 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
 
         if length(x_star) > 0
             nothing
+
         else
             best_bound = objective_bound(m)
             ctr_bound = JuMP.@constraint(lp_copied, λ1*f1_copied + λ2*f2_copied >= best_bound)
@@ -268,7 +273,7 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
-    return Y_integer, X_integer
+    return Y_integer, X_integer, Gap
 end
 
 function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_results, verbose; args...)
@@ -278,12 +283,12 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     global C = c
     global curr_λ
 
-
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) 
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(m)
+    Gap = 0.0
 
     varArray_copied = JuMP.all_variables(lp_copied)
     #todo : incompatible
@@ -357,8 +362,12 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     yr_1 = 0.0 ; yr_2 = 0.0 
     if status == MOI.INFEASIBLE 
         sorting()
-        return Y_integer, X_integer 
+        return Y_integer, X_integer, Gap
     end
+
+    Gap += MOI.get(m, MOI.RelativeGap())*100
+    @info "Gap = $Gap"
+
     if status == MOI.OPTIMAL
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
@@ -378,6 +387,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
 
         if length(x_star) > 0
             nothing
+
         else
             best_bound = objective_bound(m)
             ctr_bound = JuMP.@constraint(lp_copied, f1_copied >= best_bound)
@@ -413,8 +423,11 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     ys_1 = 0.0 ; ys_2 = 0.0 
     if status == MOI.INFEASIBLE
         sorting()
-        return Y_integer, X_integer
+        return Y_integer, X_integer, Gap
     end
+    Gap += MOI.get(m, MOI.RelativeGap())*100
+    @info "Gap = $Gap"
+
     if status == MOI.OPTIMAL
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
@@ -427,8 +440,9 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             push!(vd.X_E, JuMP.value.(varArray))
             push!(vd.lambda, [0.0, 1.0])
 
-            Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
+            Gap += G
         end
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
@@ -439,6 +453,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
 
         if length(x_star) > 0
             nothing
+
         else
             best_bound = objective_bound(m)
             ctr_bound = JuMP.@constraint(lp_copied, f2_copied >= best_bound)
@@ -462,8 +477,9 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             push!(vd.X_E, x_star)
             push!(vd.lambda, [0.0, 1.0])
 
-            Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
+            Gap += G
         end
 
     else
@@ -472,7 +488,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     end
 
     sorting()
-    return Y_integer, X_integer
+    return Y_integer, X_integer, Gap
 end
 
 function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
@@ -498,6 +514,7 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
     λ2 = abs(ys_1 - yr_1)
 
     f = AffExpr(0.0)
+    Gap = 0.0
 
     if f1Sense==f2Sense
         lb = λ1*yr_1 + λ2*yr_2
@@ -517,7 +534,9 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
     #If a solution exists
     yt_1 = 0.0 ; yt_2 = 0.0 
 
-    if status == MOI.INFEASIBLE return Y_integer, X_integer end
+    if status == MOI.INFEASIBLE return Y_integer, X_integer, Gap end
+    Gap += MOI.get(m, MOI.RelativeGap())*100
+    @info "Gap = $Gap"
     if status == MOI.OPTIMAL 
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
@@ -532,14 +551,17 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
             push!(vd.lambda, [λ1, λ2])
 
             if yt_1 > ys_1+1e-4 && yt_2 > yr_2+1e-4
-                Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+                Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
-                Y, X = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+                Gap += G
+                Y, X, G = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
+                Gap += G
             end
         end
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
+        
         if has_values(m)
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
@@ -570,10 +592,12 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
             push!(vd.X_E, x_star) ; push!(vd.lambda, [λ1, λ2])
 
             if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
-                Y, X = dichoRecursion_callback(m,lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+                Y, X, G = dichoRecursion_callback(m,lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
-                Y, X = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+                Gap += G
+                Y, X, G = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
+                Gap += G
             end
         end
 
@@ -581,7 +605,7 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
-    return Y_integer, X_integer
+    return Y_integer, X_integer, Gap
 
 end
 

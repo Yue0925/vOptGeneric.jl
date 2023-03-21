@@ -26,9 +26,10 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
 
         start = time()
         # unset_silent(pb.m) # todo : 
-        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)      
+        Y_integer, X_integer, Gap = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)      
         # @info "cplex root = $((time() - start))"  
         pb.info.relaxation_time += (time() - start)
+        node.Gap += Gap 
 
         start = time()
         for i = 1:length(Y_integer) 
@@ -63,12 +64,10 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # construct/complete the relaxed bound set
     node.RBS = RelaxedBoundSet()
     for i = 1:length(vd_LP.Y_N)
-        # if pb.param.root_relax
-            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
-        # else
-        #     push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]), filtered=true)  
-        # end
+        push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
     end
+
+    pb.info.Gap += (node.Gap/length(node.RBS.natural_order_vect.sols) )
 
     return false
 end
@@ -87,8 +86,9 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
         if pb.param.root_relax
 
             start = time()
-            Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)        
+            Y_integer, X_integer, Gap = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)        
             pb.info.relaxation_time += (time() - start)
+            node.Gap += Gap
     
             start = time()
             for i = 1:length(Y_integer) 
