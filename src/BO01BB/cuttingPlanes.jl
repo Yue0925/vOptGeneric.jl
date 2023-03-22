@@ -1,11 +1,5 @@
 # This file contains functions of cutting planes algorithm.
-include("BBtree.jl")
-include("../algorithms.jl")
-include("struct.jl")
-include("separators.jl")
-include("cutPool.jl")
-
-using JuMP 
+include("metaHeuristic.jl")
 
 const max_step = 2
 
@@ -60,6 +54,9 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         # end
     end
 
+    # todo : local heuristic search 
+    U_newfea = feasPumingJumping(node, pb, incumbent)
+    @info "$(length(U_newfea.sols)) new feasible points found !"
     return false
 end
 
