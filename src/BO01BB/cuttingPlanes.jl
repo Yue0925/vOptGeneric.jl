@@ -54,9 +54,15 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         # end
     end
 
-    # todo : local heuristic search 
-    U_newfea = feasPumingJumping(node, pb, incumbent)
-    @info "$(length(U_newfea.sols)) new feasible points found !"
+    # todo : local heuristic search
+    start = time() 
+    U_newfea = feasPumingJumping(node, pb, incumbent ; verbose=false)
+    false && @info "$(length(U_newfea.sols))/$(length(node.RBS.natural_order_vect.sols)) new feasible points found !"
+    for s in U_newfea.sols
+        push!(incumbent.natural_order_vect, s, filtered=true)
+    end
+    pb.info.update_incumb_time += (time() - start) 
+
     return false
 end
 
