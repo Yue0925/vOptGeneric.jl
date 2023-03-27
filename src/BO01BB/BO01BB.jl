@@ -322,11 +322,11 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
     standard_form(problem) ; problem.param.EPB = EPB
 
-    # copy alternative model
-    copy_model_LP(problem) ; set_silent(problem.lp_copied)
-
     # relaxation LP
     undo_relax = JuMP.relax_integrality(problem.m)
+
+    # copy alternative model
+    copy_model_LP(problem) ; set_silent(problem.lp_copied)
 
     if root_relax 
         undo_relax()
