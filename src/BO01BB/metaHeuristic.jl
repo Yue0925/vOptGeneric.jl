@@ -212,14 +212,14 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
     for l in LBS
         if l.is_binary 
             verbose && println("--- l binary") ; 
-            push!(U_newfea, l, filtered=true) ; #todo , 
+            push!(U_newfea, l, filtered=true) ; 
             continue 
         end 
 
         H = Vector{Solution}()
         s̄ = rounding_jumping(l, pb, node.assignment)
         verbose && println("sbar is feasible ? $(isFeasible(s̄, pb))")
-        if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end #todo  , 
+        if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end
 
         # do not pumping if node is in deep 
         if node.depth>=1 continue end
@@ -235,7 +235,7 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
 
             if s̃.is_binary 
                 verbose && println("Δ_opt feasible sol ^^")
-                push!(U_newfea, s̃, filtered=true) ; break #todo : 
+                push!(U_newfea, s̃, filtered=true) ; break  
             end 
 
             s̄ = rounding_jumping(s̃, pb, node.assignment)
@@ -246,7 +246,7 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
             end
             push!(H, s̄)
             verbose && println("sbar is feasible ? $(isFeasible(s̄, pb))")
-            if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end # todo : 
+            if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end 
         end
     end
 

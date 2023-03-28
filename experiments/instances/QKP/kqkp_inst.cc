@@ -56,29 +56,46 @@ int generate_instance(int n, int r, int pct, int v, int *p,int *w,int *c,int *nb
 
   srand(v+n+r+pct);
   char buffer[100];
-  sprintf(buffer, "QKP_%d_%d_%d", n, r, pct);
+  sprintf(buffer, "./instances/QKP_%d_%d_%d", n, r, pct);
   inst = fopen(buffer, "w");
-  fprintf(inst,"#E-kQKP Instance:%d\n\n%d #n: number of items\n", v, n);
+  fprintf(inst,"n=%d\n", n);
+  fprintf(inst,"density=%d\n", pct);
 
   /* generate profits and weights */
-  fprintf(inst,"\n#Profits:\n");
   for (i = 0; i < n; i++) {
     for (j = 0; j <= i; j++) {
       p[i*n+j] = p[j*n+i] = (randm(100) >= pct ? 0 : randm(r)+1);
-      fprintf(inst,"%d\t", p[i*n+j]);
+      // fprintf(inst,"%d\t", p[i*n+j]);
     }
-    fprintf(inst,"\n");
-//     printf("i=%d pii=%d  ", i, p[i][i]);
+    // fprintf(inst,"\n");
+
     w[i] = randm(r/2)+1;
   }
-  fprintf(inst,"\n#Weights:\n");
-//   printf("Before sort\n");
+
+
+  fprintf(inst,"Q1=[");
+  for (i = 0; i < n-1; i++) {
+    for (j = 0; j < n; j++) {
+      (j<=i) ? fprintf(inst,"%d ", p[i*n+j]) : fprintf(inst,"%d ", 0);
+    }
+    fprintf(inst,";\n");
+  }
+  i=n-1;
+  for (j = 0; j < n; j++) {
+      fprintf(inst,"%d ", p[i*n+j]);
+  }
+  fprintf(inst,"]\n");
+
+
+
+  fprintf(inst,"w=[");
   for (i = 0; i < n; i++) {
     tabInt[i].valeur=w[i];
     tabInt[i].indice=i;
   }
-  fprintf(inst,"\n");
-  for (i = 0; i < n; i++) fprintf(inst,"%d\t", w[i]);
+  for (i = 0; i < n-1; i++) fprintf(inst,"%d, ", w[i]);
+  fprintf(inst,"%d]\n", w[n-1]);
+
   wsum = 0;
   for (i = 0; i < n; i++) 
     wsum += w[i];
@@ -101,8 +118,8 @@ int generate_instance(int n, int r, int pct, int v, int *p,int *w,int *c,int *nb
     wsum-=tabInt[*nbobj-1].valeur;
     *nbobj=*nbobj-1;
   }
-  fprintf(inst,"\n%d #capacity\n", *c);
-  fprintf(inst,"\n%d #k: cardinality\n\n", *nbobj);
+  fprintf(inst,"W=%d \n", *c);
+  // fprintf(inst,"\n%d #k: cardinality\n\n", *nbobj);
 
   fclose(inst);
   return 0;
@@ -140,21 +157,6 @@ int main(int argc, char* argv[])
   for(int i = 0; i < m_n; i++) m_a[i] = 0;
 
   generate_instance(m_n,m_r,m_pct,m_v,m_C,m_a,&m_b,&m_k);
-
-
-/*  cout<<"n = "<< m_n <<", r = "<< m_r << ", pct = "<< m_pct << ", v = "<< m_v << ", b = " << m_b << ", k = "<< m_k <<endl;
-  cout<<"weights: "<<endl;
-  for(int i = 0; i< m_n; i++)
-    cout<<" "<<m_a[i];
-  cout<<endl;
-  cout<<"cost matrix: "<<endl;
-  for(int i = 0; i < m_n; i++) {
-    for(int j = 0; j < m_n; j++)
-      cout<<" "<<m_C[i*m_n+j];
-    cout<<endl;
-  }    
-  cout<<endl;*/
-
 
 
   delete[] m_C;
