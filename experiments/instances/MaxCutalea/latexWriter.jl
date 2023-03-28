@@ -24,7 +24,7 @@ function comparisons(instances::String)
     methods = ["epsilon", "bb", "bc", "bc_rootRelax", "bb_EPB", "bc_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCP", "bc_rootRelaxCPEPB"]
 
     # ∀ file in dicho
-    for file in readdir(work_dir * "/bc_rootRelaxCPEPB/")
+    for file in readdir(work_dir * "/bb/")
         if split(file, ".")[end] == "png"
             continue
         end
@@ -37,7 +37,7 @@ function comparisons(instances::String)
         times = [] ; pts = []
 
         # write dichotomy result 
-        include(work_dir * "/bc_rootRelaxCPEPB/" * file)
+        include(work_dir * "/bb/" * file)
         print(fout, string(vars) * " & " * string(constr) * " & ")
 
         # ∀ method 
@@ -146,5 +146,5 @@ function MOBB_perform(instances::String)
     close(fout)
 end
 
-MOBB_perform("MaxCut")
-# comparisons("MaxCut")
+# MOBB_perform("MaxCut")
+comparisons("MaxCut")

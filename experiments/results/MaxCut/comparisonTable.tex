@@ -1,0 +1,28 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccccccccccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex+CP)}} \\
+
+\cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17} \cmidrule(r){18-19} \cmidrule(r){20-21}
+~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
+\midrule
+
+MaxCut\_10 & 55 & 90 & 3.37 & 6 &  \textcolor{blue2}{2.17} & 6 & 2.2 & 6 & 6.51 & 6 & 3.2 & 6 & 3.48 & 6 & 6.7 & 6 & 7.16 & 6 & 8.32 & 6 \\
+MaxCut\_11 & 66 & 110 & 4.14 & 12 & 3.13 & 12 &  \textcolor{blue2}{2.91} & 12 & 8.59 & 12 & 4.09 & 12 & 4.48 & 12 & 11.12 & 12 & 9.15 & 12 & 13.34 & 12 \\
+MaxCut\_12 & 78 & 132 &  \textcolor{blue2}{4.24} & 10 & 4.35 & 10 & 4.77 & 10 & 11.53 & 10 & 5.87 & 10 & 6.61 & 10 & 12.2 & 10 & 11.7 & 10 & 13.41 & 10 \\
+MaxCut\_13 & 91 & 156 &  \textcolor{blue2}{5.39} & 18 & 8.54 & 18 & 9.84 & 18 & 20.81 & 18 & 10.2 & 18 & 12.15 & 18 & 25.89 & 18 & 21.24 & 18 & 28.33 & 18 \\
+MaxCut\_14 & 105 & 182 &  \textcolor{blue2}{4.51} & 9 & 16.74 & 9 & 20.09 & 9 & 34.97 & 9 & 21.57 & 9 & 23.01 & 9 & 35.84 & 9 & 36.23 & 9 & 40.7 & 9 \\
+MaxCut\_15 & 120 & 210 &  \textcolor{blue2}{4.42} & 7 & 25.77 & 7 & 33.06 & 7 & 53.45 & 7 & 29.85 & 7 & 35.09 & 7 & 52.4 & 7 & 57.76 & 7 & 58.62 & 7 \\
+MaxCut\_16 & 136 & 240 &  \textcolor{blue2}{8.61} & 17 & 42.27 & 17 & 146.77 & 17 & 100.28 & 17 & 51.85 & 17 & 61.49 & 17 & 117.64 & 17 & 96.71 & 17 & 124.46 & 17 \\
+MaxCut\_17 & 153 & 272 &  \textcolor{blue2}{10.61} & 17 & 54.75 & 17 & 98.35 & 17 & 441.84 & 17 & 149.29 & 17 & 144.75 & 17 & 519.62 & 17 & 405.94 & 17 & 521.79 & 17 \\
+MaxCut\_18 & 171 & 306 &  \textcolor{blue2}{13.59} & 8 & 94.41 & 8 & 225.0 & 8 & 272.12 & 8 & 94.69 & 8 & 212.7 & 8 & 293.66 & 8 & 278.07 & 8 & 291.97 & 8 \\
+MaxCut\_19 & 190 & 342 &  \textcolor{blue2}{54.73} & 28 & 128.74 & 28 & 359.59 & 28 & 477.06 & 28 & 150.58 & 28 & 424.84 & 28 & 866.59 & 28 & 435.28 & 28 & 858.72 & 28 \\
+MaxCut\_20 & 210 & 380 &  \textcolor{blue2}{156.02} & 41 & 230.69 & 41 &  - &  - & 992.23 & 41 & 313.86 & 41 & 1173.02 & 41 & 2078.38 & 41 & 988.04 & 40 & 2123.45 & 41 \\
+\bottomrule
+\end{tabular}
+}%
+\caption{Comparison of the different algorithms performances for instances MaxCut .}
+\label{tab:table_compare_MaxCut }
+\end{sidewaystable}
