@@ -228,8 +228,7 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
     if status == MOI.INFEASIBLE 
         return Y_integer, X_integer, Gap
     end
-    Gap = MOI.get(m, MOI.RelativeGap())*100
-    @info "Gap = $Gap"
+    # Gap = MOI.get(m, MOI.RelativeGap())*100
 
     if status == MOI.OPTIMAL
         # stock heur sol 
@@ -365,8 +364,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         return Y_integer, X_integer, Gap
     end
 
-    Gap += MOI.get(m, MOI.RelativeGap())*100
-    @info "Gap = $Gap"
+    # Gap += MOI.get(m, MOI.RelativeGap())*100
 
     if status == MOI.OPTIMAL
         # stock heur sol 
@@ -425,8 +423,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         sorting()
         return Y_integer, X_integer, Gap
     end
-    Gap += MOI.get(m, MOI.RelativeGap())*100
-    @info "Gap = $Gap"
+    # Gap += MOI.get(m, MOI.RelativeGap())*100
 
     if status == MOI.OPTIMAL
         # stock heur sol 
@@ -535,8 +532,8 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
     yt_1 = 0.0 ; yt_2 = 0.0 
 
     if status == MOI.INFEASIBLE return Y_integer, X_integer, Gap end
-    Gap += MOI.get(m, MOI.RelativeGap())*100
-    @info "Gap = $Gap"
+    # Gap += MOI.get(m, MOI.RelativeGap())*100
+
     if status == MOI.OPTIMAL 
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)

@@ -125,9 +125,10 @@ Flip some vars with high difference between fractional sol and integer sol, and 
 """
 function flip(s̃::Solution, s̄::Solution, assign::Dict{Int64, Int64}, pb::BO01Problem)::Solution
     n = length(s̄.xEquiv[1])
-    T = n/4 ; nb_flipped = rand(round(Int64, T/2):round(Int64, T*3/4))
-    x = deepcopy(s̄.xEquiv[1][:])
     forbid = keys(assign) ; idx = [j for j in 1:n if !(j in forbid)]
+
+    T = length(idx)/4 ; nb_flipped = rand(round(Int64, T/2):round(Int64, T*3/4))
+    x = deepcopy(s̄.xEquiv[1][:])
 
     score = Dict{Int64, Vector{Float64}}(
             j => [-abs(s̃.xEquiv[1][j] - s̄.xEquiv[1][j]), abs(s̃.xEquiv[1][j] - 0.5) ] for j in idx
@@ -219,6 +220,9 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
         s̄ = rounding_jumping(l, pb, node.assignment)
         verbose && println("sbar is feasible ? $(isFeasible(s̄, pb))")
         if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end #todo  , 
+
+        # do not pumping if node is in deep 
+        if node.depth>=1 continue end
 
         push!(H, s̄) ; zone = nadirPtsZone(incumbent, l)
 
