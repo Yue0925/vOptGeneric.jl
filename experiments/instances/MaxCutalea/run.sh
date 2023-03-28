@@ -8,11 +8,11 @@ done
 
 # methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxCP" "bc_rootRelaxEPB" "bc_rootRelax" "bb_EPB" "bc_EPB" "bc")
 
-methodes=("bb" "bc_rootRelax")
+# methodes=("bb" "bc_rootRelax")
 
-for file in ./instances/*; do
-    for mthd in ${methodes[@]}; do
-        echo "$file ... " $mthd
-        julia vOptMaxCut.jl "$file" $mthd
-    done
-done
+# for file in ./instances/*; do
+#     for mthd in ${methodes[@]}; do
+#         echo "$file ... " $mthd
+#         julia vOptMaxCut.jl "$file" $mthd
+#     done
+# done

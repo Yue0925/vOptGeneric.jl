@@ -1,0 +1,29 @@
+\begin{table}[!h]
+\centering
+\resizebox{\columnwidth}{!}{%
+\hspace*{-1cm}\begin{tabular}{lccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{4}{c}{\textbf{Time(s)}} & \multicolumn{2}{c}{\textbf{Nodes}}  & \textbf{Tree(MB)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$|\mathcal{X}_E|$}
+\\
+\cmidrule(r){4-7} \cmidrule(r){8-9} 
+~ & ~ & ~ & \textbf{total} &\textbf{relax} & \textbf{dominance} & \textbf{incumbent} & \textbf{total} & \textbf{pruned} & ~ & ~ & ~ \\
+\midrule
+
+MaxCut\_10 & 55 & 90 & 8.32 & 6.51 & 0.0 & 0.58 & 328 & 141 & 0.774 & 6 & 6\\
+MaxCut\_11 & 66 & 110 & 13.34 & 10.12 & 0.0 & 1.38 & 1133 & 555 & 2.241 & 12 & 12\\
+MaxCut\_12 & 78 & 132 & 13.41 & 10.75 & 0.0 & 0.93 & 835 & 390 & 1.934 & 10 & 10\\
+MaxCut\_13 & 91 & 156 & 28.33 & 22.08 & 0.0 & 3.74 & 1998 & 1012 & 4.458 & 18 & 18\\
+MaxCut\_14 & 105 & 182 & 40.7 & 31.06 & 0.0 & 6.04 & 1729 & 822 & 4.428 & 9 & 9\\
+MaxCut\_15 & 120 & 210 & 58.62 & 45.99 & 0.0 & 9.71 & 1516 & 719 & 5.341 & 7 & 7\\
+MaxCut\_16 & 136 & 240 & 124.46 & 95.02 & 0.01 & 21.01 & 5118 & 2603 & 13.643 & 17 & 17\\
+MaxCut\_17 & 153 & 272 & 521.79 & 450.43 & 0.04 & 38.67 & 7906 & 4017 & 24.801 & 17 & 17\\
+MaxCut\_18 & 171 & 306 & 291.97 & 248.81 & 0.01 & 25.08 & 7953 & 3917 & 30.509 & 8 & 8\\
+MaxCut\_19 & 190 & 342 & 858.72 & 734.84 & 0.12 & 29.73 & 35030 & 19366 & 117.637 & 28 & 28\\
+MaxCut\_20 & 210 & 380 & 2123.45 & 1788.35 & 0.43 & 47.28 & 95777 & 53934 & 303.444 & 41 & 41\\
+\bottomrule
+\end{tabular}%
+}%
+\caption{The detailed experimental information about BB algorithm.}
+\label{tab:table_$m}
+\end{table}
+
