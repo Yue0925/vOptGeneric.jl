@@ -331,10 +331,10 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     if root_relax 
         undo_relax()
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo reduce heur 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo preprocessing 
-        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.05) # todo : time limit in sec 
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.01) # todo : time limit in sec 
     end
 
     if cp

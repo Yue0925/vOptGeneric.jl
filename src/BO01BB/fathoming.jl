@@ -112,7 +112,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     end
 
     # todo : local heuristic search
-    if node.depth < 10 
+    if false #node.depth < 10 
         start = time() 
         U_newfea = feasPumingJumping(node, pb, incumbent ; verbose=false)
         false && @info "$(length(U_newfea.sols))/$(length(node.RBS.natural_order_vect.sols)) new feasible points found !"

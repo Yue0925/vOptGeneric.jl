@@ -10,8 +10,6 @@ using Random
 const IterLimit = 5
 const EPS = 0.001
 
-# todo : check all bounds cuts for m/m_copied 
-
 """
 Given a fractional solution `l`, return a rounded jumped interger solution `s`.
 """
@@ -177,7 +175,6 @@ function Δ_opt(pb::BO01Problem, s::Solution, nadir_pts::NaturalOrderVector)::So
         ctr = JuMP.@constraint(pb.lp_copied, pb.varArray_copied'* pb.c[2, 2:end] + pb.c[2, 1] ≤ u.y[2]) ; push!(ctr_symbol, ctr)
     end
 
-    # todo : (check) LBS bounds which normally no influence 
     JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.lp_copied)
 
     x = JuMP.value.(pb.varArray_copied)
@@ -204,21 +201,21 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
     LBS = node.RBS.natural_order_vect.sols
     U_newfea = NaturalOrderVector()
 
-    verbose && println("---------------------------")
-    verbose && @info " feasPumingJumping ... "
-    verbose && println("---------------------------")
+    # verbose && println("---------------------------")
+    # verbose && @info " feasPumingJumping ... "
+    # verbose && println("---------------------------")
 
     # ∀ l lower bound
     for l in LBS
         if l.is_binary 
-            verbose && println("--- l binary") ; 
-            push!(U_newfea, l, filtered=true) ; 
+            # verbose && println("--- l binary") ; 
+            # push!(U_newfea, l, filtered=true) ; 
             continue 
         end 
 
         H = Vector{Solution}()
         s̄ = rounding_jumping(l, pb, node.assignment)
-        verbose && println("sbar is feasible ? $(isFeasible(s̄, pb))")
+        # verbose && println("sbar is feasible ? $(isFeasible(s̄, pb))")
         if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end
 
         # do not pumping if node is in deep 
