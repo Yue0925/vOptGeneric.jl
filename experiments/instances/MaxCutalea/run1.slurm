@@ -7,7 +7,6 @@
 #SBATCH --ntasks=1 
 
 #SBATCH --gres=gpu:1   
-#SBATCH --qos=qos_gpu_t4        
 
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
