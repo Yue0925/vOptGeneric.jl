@@ -201,50 +201,38 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
     LBS = node.RBS.natural_order_vect.sols
     U_newfea = NaturalOrderVector()
 
-    # verbose && println("---------------------------")
-    # verbose && @info " feasPumingJumping ... "
-    # verbose && println("---------------------------")
-
     # ∀ l lower bound
     for l in LBS
-        if l.is_binary 
-            # verbose && println("--- l binary") ; 
-            # push!(U_newfea, l, filtered=true) ; 
-            continue 
-        end 
+        if l.is_binary continue end 
 
-        H = Vector{Solution}()
         s̄ = rounding_jumping(l, pb, node.assignment)
-        # verbose && println("sbar is feasible ? $(isFeasible(s̄, pb))")
         if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end
 
-        # do not pumping if node is in deep 
-        # if node.depth>-1 continue end
+        # pumping only at root  
+        if node.depth >0 continue end
 
-        # push!(H, s̄) ; zone = nadirPtsZone(incumbent, l)
+        H = Vector{Solution}()
+        push!(H, s̄) ; zone = nadirPtsZone(incumbent, l)
 
-        # iter = 0
-        # while iter < IterLimit
-        #     iter += 1
-        #     verbose && println("iter = $iter ... ")
+        iter = 0
+        while iter < IterLimit
+            iter += 1
 
-        #     s̃ = Δ_opt(pb, s̄, zone) ; s̃.λ = l.λ
+            s̃ = Δ_opt(pb, s̄, zone) ; s̃.λ = l.λ
 
-        #     if s̃.is_binary 
-        #         verbose && println("Δ_opt feasible sol ^^")
-        #         push!(U_newfea, s̃, filtered=true) ; break  
-        #     end 
+            if s̃.is_binary 
+                push!(U_newfea, s̃, filtered=true) ; break  
+            end 
 
-        #     s̄ = rounding_jumping(s̃, pb, node.assignment)
+            s̄ = rounding_jumping(s̃, pb, node.assignment)
 
-        #     if contains(H, s̄)
-        #         s̄ = flip(s̃, s̄, node.assignment, pb)
-        #         verbose && println("flip ...")
-        #     end
-        #     push!(H, s̄)
-        #     verbose && println("sbar is feasible ? $(isFeasible(s̄, pb))")
-        #     if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end 
-        # end
+            if contains(H, s̄)
+                s̄ = flip(s̃, s̄, node.assignment, pb)
+                verbose && println("flip ...")
+            end
+            push!(H, s̄)
+            if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end 
+        end
     end
 
     return U_newfea
