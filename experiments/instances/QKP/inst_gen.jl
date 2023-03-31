@@ -26,6 +26,7 @@ function colpmeleQ2()
         @constraint(model, [i=1:n, j=1:i], x[i, j] ≥ y[i] + y[j] -1 )
         @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[i])
         @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[j])
+        @constraint(model, sum(y) == k)
     
     
         # relax_integrality(model)

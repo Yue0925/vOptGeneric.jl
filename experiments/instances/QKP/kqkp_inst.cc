@@ -119,7 +119,7 @@ int generate_instance(int n, int r, int pct, int v, int *p,int *w,int *c,int *nb
     *nbobj=*nbobj-1;
   }
   fprintf(inst,"W=%d \n", *c);
-  // fprintf(inst,"\n%d #k: cardinality\n\n", *nbobj);
+  fprintf(inst,"k=%d \n", *nbobj);
 
   fclose(inst);
   return 0;

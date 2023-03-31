@@ -34,7 +34,7 @@ function vopt_solve(method, outputName; step=0.5)
     model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 
     # todo : binary for epsilon 
-    @variable(model, 0 ≤ x[i=1:n, j=1:i] ≤ 1 )
+    @variable(model, x[i=1:n, j=1:i], Bin )
     @variable(model, y[1:n], Bin)
 
     @addobjective(model, Max, sum([Q1[i, j]*x[i, j] for i=1:n for j=1:i]))
@@ -44,6 +44,7 @@ function vopt_solve(method, outputName; step=0.5)
     @constraint(model, [i=1:n, j=1:i], x[i, j] ≥ y[i] + y[j] -1 )
     @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[i])
     @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[j])
+    @constraint(model, sum(y) == k)
 
 
     if method == :bb
@@ -127,6 +128,7 @@ function solve(fname::String, method::String)
     @constraint(model, [i=1:n, j=1:i], x[i, j] ≥ y[i] + y[j] -1 )
     @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[i])
     @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[j])
+    @constraint(model, sum(y) == k)
 
     # optimize
     optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
