@@ -112,15 +112,15 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     end
 
     # todo : local heuristic search
-    if rand() > 0.5# true #node.depth < 10 
-        start = time() 
-        U_newfea = feasPumingJumping(node, pb, incumbent ; verbose=false)
-        false && @info "$(length(U_newfea.sols))/$(length(node.RBS.natural_order_vect.sols)) new feasible points found !"
-        for s in U_newfea.sols
-            push!(incumbent.natural_order_vect, s, filtered=true)
-        end
-        pb.info.update_incumb_time += (time() - start) 
-    end
+    # if rand() > 0.5# true #node.depth < 10 
+    #     start = time() 
+    #     U_newfea = feasPumingJumping(node, pb, incumbent ; verbose=false)
+    #     false && @info "$(length(U_newfea.sols))/$(length(node.RBS.natural_order_vect.sols)) new feasible points found !"
+    #     for s in U_newfea.sols
+    #         push!(incumbent.natural_order_vect, s, filtered=true)
+    #     end
+    #     pb.info.update_incumb_time += (time() - start) 
+    # end
     
     removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
 end

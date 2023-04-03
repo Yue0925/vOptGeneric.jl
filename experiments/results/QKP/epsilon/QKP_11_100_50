@@ -1,6 +1,0 @@
-vars = 72 ; constr = 182 
-total_times_used = 2.64
-size_Y_N = 3
-Y_N = [[289.0, 700.0], [316.0, 649.0], [388.0, 614.0]]
-
-size_X_E = 3
