@@ -25,7 +25,7 @@ function comparisons(instances::String)
 
     # ∀ file in dicho
     for file in readdir(work_dir * "/bb/")
-        if split(file, ".")[end] == "png"
+        if split(file, ".")[end] == "png" || split(file, ".")[end] == "tex"
             continue
         end
 

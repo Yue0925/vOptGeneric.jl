@@ -10,6 +10,11 @@ using Random
 const IterLimit = 5
 const EPS = 0.001
 
+
+
+
+
+
 """
 Given a fractional solution `l`, return a rounded jumped interger solution `s`.
 """
@@ -208,31 +213,31 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
         s̄ = rounding_jumping(l, pb, node.assignment)
         if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end
 
-        # pumping only at root  
-        if node.depth >0 continue end
+        # # pumping only at root  
+        # if node.depth >0 continue end
 
-        H = Vector{Solution}()
-        push!(H, s̄) ; zone = nadirPtsZone(incumbent, l)
+        # H = Vector{Solution}()
+        # push!(H, s̄) ; zone = nadirPtsZone(incumbent, l)
 
-        iter = 0
-        while iter < IterLimit
-            iter += 1
+        # iter = 0
+        # while iter < IterLimit
+        #     iter += 1
 
-            s̃ = Δ_opt(pb, s̄, zone) ; s̃.λ = l.λ
+        #     s̃ = Δ_opt(pb, s̄, zone) ; s̃.λ = l.λ
 
-            if s̃.is_binary 
-                push!(U_newfea, s̃, filtered=true) ; break  
-            end 
+        #     if s̃.is_binary 
+        #         push!(U_newfea, s̃, filtered=true) ; break  
+        #     end 
 
-            s̄ = rounding_jumping(s̃, pb, node.assignment)
+        #     s̄ = rounding_jumping(s̃, pb, node.assignment)
 
-            if contains(H, s̄)
-                s̄ = flip(s̃, s̄, node.assignment, pb)
-                verbose && println("flip ...")
-            end
-            push!(H, s̄)
-            if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end 
-        end
+        #     if contains(H, s̄)
+        #         s̄ = flip(s̃, s̄, node.assignment, pb)
+        #         verbose && println("flip ...")
+        #     end
+        #     push!(H, s̄)
+        #     if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end 
+        # end
     end
 
     return U_newfea
