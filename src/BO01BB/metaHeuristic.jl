@@ -11,7 +11,84 @@ const IterLimit = 5
 const EPS = 0.001
 
 
+function simple_rounding(l::Solution, pb::BO01Problem, assign::Dict{Int64, Int64}; proba::Float64=0.5)::Solution
+    n = length(l.xEquiv[1]) ; x̄ = [-1 for _ in 1:n]
+    lhs =[0.0 for _ in 1:length(pb.b)]
 
+    # ----------------------------------
+    # rounding to 1 with a probability, O(n*m)
+    # ----------------------------------
+    for j in 1:n
+        if abs(l.xEquiv[1][j] - 0) ≤ EPS
+            for i in 1:size(pb.A, 1)
+                if lhs[i] > pb.b[i] && pb.A[i, j] < 0
+                    x̄[j] = 1 ; break
+                end
+            end
+
+            if x̄[j] ==-1 
+                x̄[j] = 0 
+            else
+                for i in 1:size(pb.A, 1)
+                    lhs[i] += pb.A[i, j]
+                end
+            end
+
+        elseif abs(l.xEquiv[1][j] - 1) ≤ EPS
+            for i in 1:size(pb.A, 1)
+                if lhs[i] + pb.A[i, j] > pb.b[i]
+                    x̄[j] = 0 ; break 
+                end
+            end
+
+            if x̄[j] == -1
+                x̄[j] = 1
+                for i in 1:size(pb.A, 1)
+                    lhs[i] += pb.A[i, j]
+                end
+            end
+        end
+    end
+
+    # ----------------------------------
+    # rounding by value, O(n*m)
+    # ----------------------------------
+    idx = sort!([j for j=1:n if x̄[j] == -1], by=v -> abs(l.xEquiv[1][v] - 0.5), rev=true)
+    for j in idx
+        if l.xEquiv[1][j] ≤ 0.5
+            for i in 1:size(pb.A, 1)
+                if lhs[i] > pb.b[i] && pb.A[i, j] < 0
+                    x̄[j] = 1 ; break
+                end
+            end
+
+            if x̄[j] ==-1 
+                x̄[j] = 0 
+            else
+                for i in 1:size(pb.A, 1)
+                    lhs[i] += pb.A[i, j]
+                end
+            end
+        else
+            for i in 1:size(pb.A, 1)
+                if lhs[i] + pb.A[i, j] > pb.b[i]
+                    x̄[j] = 0 ; break 
+                end
+            end
+
+            if x̄[j] == -1
+                x̄[j] = 1
+                for i in 1:size(pb.A, 1)
+                    lhs[i] += pb.A[i, j]
+                end
+            end
+        end
+            
+    end
+
+    y = [x̄'* pb.c[1, 2:end] + pb.c[1, 1], x̄'* pb.c[2, 2:end] + pb.c[2, 1]]
+    return Solution([x̄], y, true, Vector{Float64}())
+end
 
 
 
@@ -210,8 +287,13 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
     for l in LBS
         if l.is_binary continue end 
 
-        s̄ = rounding_jumping(l, pb, node.assignment)
-        if isFeasible(s̄, pb) push!(U_newfea, s̄, filtered=true) end
+        # s̄ = rounding_jumping(l, pb, node.assignment)
+        s̄ = simple_rounding(l, pb, node.assignment)
+        if isFeasible(s̄, pb) 
+            push!(U_newfea, s̄, filtered=true) 
+        else
+            @info "rounded sol not feasible ! "
+        end
 
         # # pumping only at root  
         # if node.depth >0 continue end
