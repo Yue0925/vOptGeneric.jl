@@ -8,7 +8,8 @@
 
 # methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxCP" "bc_rootRelaxEPB" "bb_EPB" "bc_EPB")
 
-methodes=("bb" "bc_rootRelax" "bc")
+methodes=("bb")
+# "bc_rootRelax" "bc"
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do

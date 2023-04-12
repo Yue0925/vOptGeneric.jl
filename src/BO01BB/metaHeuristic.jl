@@ -16,7 +16,7 @@ function simple_rounding(l::Solution, pb::BO01Problem, assign::Dict{Int64, Int64
     lhs =[0.0 for _ in 1:length(pb.b)]
 
     # ----------------------------------
-    # rounding to 1 with a probability, O(n*m)
+    # rounding vars close to 0/1, O(n*m)
     # ----------------------------------
     for j in 1:n
         if abs(l.xEquiv[1][j] - 0) ≤ EPS
@@ -52,7 +52,41 @@ function simple_rounding(l::Solution, pb::BO01Problem, assign::Dict{Int64, Int64
 
     # ----------------------------------
     # rounding by value, O(n*m)
-    # ----------------------------------
+    # ----------------------------------   
+    idx = sort!([j for j=1:n if x̄[j] == -1 && l.λ'*pb.c[:, j+1]!= 0.0], by=v -> l.λ'*pb.c[:, v+1])
+
+    for j in idx
+        # if l.xEquiv[1][j] ≤ 0.5
+        #     for i in 1:size(pb.A, 1)
+        #         if lhs[i] > pb.b[i] && pb.A[i, j] < 0
+        #             x̄[j] = 1 ; break
+        #         end
+        #     end
+
+        #     if x̄[j] ==-1 
+        #         x̄[j] = 0 
+        #     else
+        #         for i in 1:size(pb.A, 1)
+        #             lhs[i] += pb.A[i, j]
+        #         end
+        #     end
+        # else
+            for i in 1:size(pb.A, 1)
+                if lhs[i] + pb.A[i, j] > pb.b[i]
+                    x̄[j] = 0 ; break 
+                end
+            end
+
+            if x̄[j] == -1
+                x̄[j] = 1
+                for i in 1:size(pb.A, 1)
+                    lhs[i] += pb.A[i, j]
+                end
+            end
+        # end
+            
+    end
+
     idx = sort!([j for j=1:n if x̄[j] == -1], by=v -> abs(l.xEquiv[1][v] - 0.5), rev=true)
     for j in idx
         if l.xEquiv[1][j] ≤ 0.5
@@ -85,6 +119,7 @@ function simple_rounding(l::Solution, pb::BO01Problem, assign::Dict{Int64, Int64
         end
             
     end
+
 
     y = [x̄'* pb.c[1, 2:end] + pb.c[1, 1], x̄'* pb.c[2, 2:end] + pb.c[2, 1]]
     return Solution([x̄], y, true, Vector{Float64}())
@@ -285,14 +320,13 @@ function feasPumingJumping(node::Node, pb::BO01Problem, incumbent::IncumbentSet;
 
     # ∀ l lower bound
     for l in LBS
-        if l.is_binary continue end 
+        if l.is_binary @info "binary sol ..." ; continue end 
 
         # s̄ = rounding_jumping(l, pb, node.assignment)
         s̄ = simple_rounding(l, pb, node.assignment)
         if isFeasible(s̄, pb) 
+            @info "new feasible sol ..."
             push!(U_newfea, s̄, filtered=true) 
-        else
-            @info "rounded sol not feasible ! "
         end
 
         # # pumping only at root  
