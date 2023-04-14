@@ -1,28 +1,29 @@
 vars = 20 ; constr = 2 
  # informations of B&B algorithm : 
-total_times_used = 0.46 
-total_nodes = 383 
-pruned_nodes = 192 
+total_times_used = 0.59 
+total_nodes = 449 
+pruned_nodes = 225 
 GAP = 0.0 
-relaxation_time = 0.4 
+relaxation_time = 0.47 
 test_dominance_time = 0.0 
 update_incumbent_time = 0.0 
-tree_size = 1.025 
+tree_size = 1.308 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 382 
+nb_nodes_VB = 448 
 root_relax = false 
+TO = false 
 
 
  # ----------- info about cuts : 
-ite_total = 354 
-cuts_applied = 187 
-sp_cuts = 140 
-mp_cuts = 47 
-cuts_total = 187 
-times_calling_dicho = 0.4 
-times_calling_separators = 0.01 
+ite_total = 418 
+cuts_applied = 289 
+sp_cuts = 215 
+mp_cuts = 74 
+cuts_total = 289 
+times_calling_dicho = 0.47 
+times_calling_separators = 0.08 
 times_oper_cutPool = 0.0 
-times_total_for_cuts = 0.44 
+times_total_for_cuts = 0.57 
 times_add_retrieve_cuts = 0.02 
 
 
@@ -31,4 +32,3 @@ size_Y_N = 7
 Y_N = [[307280.0, 256039.0], [308487.0, 250156.0], [309752.0, 246987.0], [334001.0, 242828.0], [335266.0, 239659.0], [335488.0, 236458.0], [349822.0, 167522.0]]
 
 size_X_E = 7
-X_E = [[0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [-5.551115123125783e-17, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0], [0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0], [1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0], [1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0], [1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0]]

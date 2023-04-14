@@ -1,8 +1,8 @@
 # This file contains functions of cutting planes algorithm.
 include("metaHeuristic.jl")
+include("LBSwithIPsolver.jl")
 
 const max_step = 2
-
 
 
 """
@@ -14,9 +14,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     #------------------------------------------------------------------------------
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
-    # println("-------------------------")
-    # @info "node $(node.num)"
-    if pb.param.root_relax
+    if pb.param.root_relax # todo : call new algo 
 
         start = time()
         Y_integer, X_integer, Gap = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)      
@@ -33,7 +31,6 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         start = time()
         solve_dicho(pb.m, round_results, false ; args...)
         pb.info.relaxation_time += (time() - start)
-
 
     end
     vd_LP = getvOptData(pb.m)
