@@ -87,7 +87,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     # in case of infeasibility 
     yr_1 = 0.0 ; yr_2 = 0.0 
     if status == MOI.INFEASIBLE 
-        return Y_integer, X_integer, Gap 
+        return Y_integer, X_integer, Gap #todo : vd.Y_N empty 
     end
 
     # in case of optimality 
@@ -129,7 +129,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         # push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
         # push!(vd.X_E, x_star) ; push!(vd.lambda, curr_λ)
 
-        push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ), filerted=true)
+        push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ ), filerted=true)
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
@@ -147,7 +147,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
 
     ys_1 = 0.0 ; ys_2 = 0.0 
     if status == MOI.INFEASIBLE
-        return Y_integer, X_integer, Gap
+        return Y_integer, X_integer, Gap #todo : vd.Y_N empty
     end
 
     if status == MOI.OPTIMAL
@@ -155,17 +155,17 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
-            #Store results in vOptData
-            push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
-            push!(vd.X_E, JuMP.value.(varArray))
-            push!(vd.lambda, curr_λ)
+        #Store results in vOptData # todo : use natural order list 
+        push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
+        push!(vd.X_E, JuMP.value.(varArray))
+        push!(vd.lambda, curr_λ)
 
-            # # todo : 
-            # Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
-            # append!(Y_integer, Y) ; append!(X_integer, X)
-            # Gap += G
+        ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
+        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+
+
+            # # todo : stop 
+            return Y_integer, X_integer, Gap #todo : vd.Y_N empty
         end
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
@@ -191,18 +191,16 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         ys_1 = x_star'* c[1, 2:end] + c[1, 1]
         ys_2 = x_star'* c[2, 2:end] + c[2, 1]
 
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
-            # store results in vOptData
-            push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
-            push!(vd.X_E, x_star)
-            push!(vd.lambda, curr_λ)
+        # store results in vOptData # todo : use natural order list 
+        # push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
+        # push!(vd.X_E, x_star)
+        # push!(vd.lambda, curr_λ)
+        push!(L.natural_order_vect, Solution(x_star, [ys_1, ys_2], curr_λ ), filtered=true)
 
-            # # todo : 
-            # Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
-            # append!(Y_integer, Y) ; append!(X_integer, X)
-            # Gap += G
+        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+            # # todo : stop 
+            return Y_integer, X_integer, Gap #todo : vd.Y_N empty
         end
-
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
@@ -213,7 +211,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     # -----------------------------------------
     #todo : using natural order list 
 
-    return Y_integer, X_integer, Gap
+    return Y_integer, X_integer, Gap #todo : vd.Y_N empty
 end
 
 
