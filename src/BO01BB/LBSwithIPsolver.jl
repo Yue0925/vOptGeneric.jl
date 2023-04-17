@@ -1,4 +1,5 @@
 using JuMP
+include("struct.jl")
 
 
 global varArray = Array{JuMP.VariableRef}
@@ -41,7 +42,9 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     return Y_integer, X_integer
 end  
 
-
+"""
+New correction iterative algorithm for LBS 
+"""
 function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_results, verbose; args...)
     global varArray
     global x_star
@@ -49,6 +52,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     global C = c
     global curr_λ
 
+    L = RelaxedBoundSet()
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) 
     f1, f2 = vd.objs
@@ -66,16 +70,18 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
     weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
 
+    # set up callback 
+    MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
+
     # -------------------------------------------
     # step 1 : calculate the left extreme point
     # ------------------------------------------- 
     JuMP.set_objective(m, f1Sense, f1) ; JuMP.set_objective(lp_copied, f1Sense, f1_copied)
     verbose && println("solving for z1")
     
-    # set up callback 
+    
     x_star = [] ; bst_val = -Inf 
     curr_λ = [1.0, 0.0]
-    MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
     # in case of infeasibility 
@@ -91,10 +97,11 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
-        # store results in vOptData
-        push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
-        push!(vd.X_E, JuMP.value.(varArray))
-        push!(vd.lambda, [1.0, 0.0])
+        # store results in vOptData # todo : use natural order list 
+        # push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
+        # push!(vd.X_E, JuMP.value.(varArray))
+        # push!(vd.lambda, curr_λ)
+        push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ), filtered=true)
 
     # otherwise, take the best primal sol so far 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
@@ -118,9 +125,11 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
 
         yr_1 = x_star'* c[1, 2:end] + c[1, 1]
         yr_2 = x_star'* c[2, 2:end] + c[2, 1]
-        # store results in vOptData
-        push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
-        push!(vd.X_E, x_star) ; push!(vd.lambda, [1.0, 0.0])
+        # store results in vOptData # todo : use natural order list 
+        # push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
+        # push!(vd.X_E, x_star) ; push!(vd.lambda, curr_λ)
+
+        push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ), filerted=true)
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
@@ -151,7 +160,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             #Store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, JuMP.value.(varArray))
-            push!(vd.lambda, [0.0, 1.0])
+            push!(vd.lambda, curr_λ)
 
             # # todo : 
             # Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
@@ -186,7 +195,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             # store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, x_star)
-            push!(vd.lambda, [0.0, 1.0])
+            push!(vd.lambda, curr_λ)
 
             # # todo : 
             # Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
@@ -232,17 +241,11 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
     f = AffExpr(0.0)
     Gap = 0.0
 
-    if f1Sense==f2Sense
-        lb = λ1*yr_1 + λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ1*f1_copied + λ2*f2_copied)
-        verbose && println("solving for $λ1*f1 + $λ2*f2")    
-        f = λ1*f1 + λ2*f2
-    else
-        lb = λ1*yr_1 - λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 - λ2*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ1*f1_copied - λ2*f2_copied)
-        verbose && println("solving for $λ1*f1 - $λ2*f2") 
-        f = λ1*f1 - λ2*f2
-    end
+    lb = λ1*yr_1 + λ2*yr_2
+    JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ1*f1_copied + λ2*f2_copied)
+    verbose && println("solving for $λ1*f1 + $λ2*f2")    
+    f = λ1*f1 + λ2*f2
+
 
     x_star = [] ; bst_val = -Inf 
     curr_λ = [λ1, λ2]
@@ -264,7 +267,7 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
         if (val < lb - 1e-4)
             push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
             push!(vd.X_E, JuMP.value.(varArray))
-            push!(vd.lambda, [λ1, λ2])
+            push!(vd.lambda, curr_λv)
 
             if yt_1 > ys_1+1e-4 && yt_2 > yr_2+1e-4
                 Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
@@ -303,7 +306,7 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
 
         if ( val < lb - 1e-4)
             push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
-            push!(vd.X_E, x_star) ; push!(vd.lambda, [λ1, λ2])
+            push!(vd.X_E, x_star) ; push!(vd.lambda, curr_λ)
 
             if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
                 Y, X, G = dichoRecursion_callback(m,lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
