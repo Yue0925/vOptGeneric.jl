@@ -147,7 +147,7 @@ function Solution()
 end
 
 function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}(), ct::Float64=0.0)
-    is_binary = true
+    is_binary = length(x) >0 ? true : false 
     for i = 1:length(x)
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             is_binary = false; break
@@ -160,6 +160,7 @@ end
 Given a vector `x`, return true if `x` is approximately binary.
 """
 function isBinary(x::Vector{Float64})
+    if length(x) == 0 return false end 
     for i in 1:length(x)
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             return false
