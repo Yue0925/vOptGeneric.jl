@@ -44,8 +44,6 @@ function vopt_solve(method, outputName; step=0.5)
     @constraint(model, [i=1:n-1, j=i+1:n], x[i, j] ≤ y[i] + y[j])
     @constraint(model, [i=1:n-1, j=i+1:n], x[i, j] ≤ 2-(y[i] + y[j]))
 
-
-
     if method == :bb
         infos = vSolve( model, method=:bb, verbose=false )
         println(infos)

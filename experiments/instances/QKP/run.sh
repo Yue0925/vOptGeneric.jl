@@ -6,10 +6,9 @@
 #     julia vOptQKP.jl "$file" epsilon
 # done
 
-# methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxCP" "bc_rootRelaxEPB" "bb_EPB" "bc_EPB")
+methodes=("bc_rootRelax" "bc_rootRelaxCPEPB" "bc_rootRelaxCP" "bc_rootRelaxEPB")
 
-methodes=("bb")
-# "bc_rootRelax" "bc"
+# methodes=("bb" "bb_EPB" "bc_EPB" "bc")
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do

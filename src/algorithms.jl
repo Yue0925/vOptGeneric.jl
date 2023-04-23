@@ -169,11 +169,12 @@ function callback_noCuts(cb_data)
     node_statut = callback_node_status(cb_data, model)
      
     # if node_statut == MOI.CALLBACK_NODE_STATUS_FRACTIONAL
-        tmp = callback_value.(cb_data, varArray)
-        val = tmp'* C[1, 2:end] + C[1, 1] + tmp'* C[2, 2:end] + C[2, 1]
-        if val > bst_val
-            bst_val = val ; x_star = callback_value.(cb_data, varArray)
-        end
+        # tmp = callback_value.(cb_data, varArray)
+        # val = (tmp'* C[1, 2:end] + C[1, 1]) * curr_λ[1] + (tmp'* C[2, 2:end] + C[2, 1]) * curr_λ[2] 
+        # if val > bst_val
+        #     bst_val = val ; x_star = callback_value.(cb_data, varArray)
+        # end
+        x_star = callback_value.(cb_data, varArray)
     # end
 end
 
