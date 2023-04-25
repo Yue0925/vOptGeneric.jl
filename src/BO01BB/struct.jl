@@ -195,10 +195,10 @@ end
 Overload operators for the dominance order between two solutions.
 """
 function Base.:show(io::IO, s::Solution)
-    println(io, "Solution( \n |xEquiv| = ", length(s.xEquiv),
+    println(io, "Solution( \n |xEquiv| = ", length(s.xEquiv), 
+    "\t is_binary ? ", s.is_binary,
     "\n y = ", s.y,
-    "\n is_binary ? ", s.is_binary,
-    "\n λ = ", s.λ,
+    "\n λ = ", s.λ, "\t ct = ", s.ct, 
     " )")
 end
 

@@ -8,7 +8,7 @@
 
 # methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxCP" "bc_rootRelaxEPB" "bb_EPB" "bc_EPB")
 
-methodes=("bc_rootRelax")
+methodes=("bc_rootRelax" "bc_rootRelaxEPB")
 # "bc_rootRelax" "bc"
 
 for file in ./instances/*; do
