@@ -127,7 +127,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     #     println("|incumbent| after = $(length(incumbent.natural_order_vect.sols))")
     # end
     # todo 
-    @info "node $(node.num) |LBS| = $(length(node.RBS.natural_order_vect)) "
+    # @info "node $(node.num) |LBS| = $(length(node.RBS.natural_order_vect)) "
     
     removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
 end
@@ -180,7 +180,7 @@ function getNadirPoints(incumbent::IncumbentSet) # , ptl, ptr
             [incumbent.natural_order_vect.sols[i].y[1],
             incumbent.natural_order_vect.sols[i+1].y[2]
             ],
-            true, Vector{Float64}() ), filtered=true
+            true, Vector{Float64}(), 0.0), filtered=true
         )
     end
 
