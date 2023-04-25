@@ -1164,7 +1164,7 @@ end
 
 
 
-# comparisons6("momhMKPstu/MOBKP/set3")
+comparisons("momhMKPstu/MOBKP/set3")
 
 
 
@@ -1173,7 +1173,7 @@ end
 
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 
-MOBC_perform("momhMKPstu/MOBKP/set3")
+# MOBC_perform("momhMKPstu/MOBKP/set3")
 
 
 

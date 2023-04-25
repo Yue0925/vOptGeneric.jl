@@ -149,5 +149,5 @@ function MOBB_perform(instances::String)
     end
 end
 
-MOBB_perform("MaxCut")
+# MOBB_perform("MaxCut")
 comparisons("MaxCut")
