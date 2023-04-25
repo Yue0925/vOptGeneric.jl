@@ -65,7 +65,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     return false
 end
 
-
+# todo : rewrite 
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
     n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
@@ -78,7 +78,7 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
     for λ in lambdas
         if pb.param.root_relax
 
-            start = time()
+            start = time() # todo : verify 
             Y_integer, X_integer, Gap = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)        
             pb.info.relaxation_time += (time() - start)
             node.Gap += Gap
