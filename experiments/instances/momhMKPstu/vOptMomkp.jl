@@ -182,10 +182,10 @@ function main(fname::String)
   solverSelected = CPLEX.Optimizer
   for method in [
     # :dicho, :epsilon, 
-    :bb, :bb_EPB,
-    :bc, :bc_EPB,
-    :bc_rootRelax , :bc_rootRelaxEPB,
-    :bc_rootRelaxCP, :bc_rootRelaxCPEPB
+    # :bb, :bb_EPB,
+    # :bc, :bc_EPB,
+    :bc_rootRelax #, :bc_rootRelaxEPB,
+    # :bc_rootRelaxCP, :bc_rootRelaxCPEPB
     ] # 
 
     vSolveBi01IP(solverSelected, dat.C, dat.A, dat.b, fname, method) 
