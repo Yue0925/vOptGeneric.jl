@@ -126,6 +126,8 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     #     pb.info.update_incumb_time += (time() - start) 
     #     println("|incumbent| after = $(length(incumbent.natural_order_vect.sols))")
     # end
+    # todo 
+    @info "node $(node.num) |LBS| = $(length(node.RBS.natural_order_vect)) "
     
     removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
 end

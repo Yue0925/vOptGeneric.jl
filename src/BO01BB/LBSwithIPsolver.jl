@@ -52,25 +52,87 @@ function updateCT(s::Solution)
     s.ct = s.λ[1] * s.y[1] - s.λ[2] * s.y[2]
 end
 
+# todo : improve complexity 
+function filtering(lb::Float64, L::RelaxedBoundSet, λ)
+    # remove all points under current line 
+    to_delete = Int64[] ; i = 1
+    for s in L.natural_order_vect.sols
+        if s.y[1]*λ[1] + s.y[2]*λ[2] < lb - 1e-4 push!(to_delete, i) end
+        i += 1
+    end
+
+    deleteat!(L.natural_order_vect.sols, to_delete)
+end
+
+
+function next_direc(idx::Int64, L::RelaxedBoundSet, todo)
+    i = idx ; j = idx ; l = 0 ; r = length(L.natural_order_vect.sols) + 1
+    while i > 1
+        i -= 1
+        if length(L.natural_order_vect.sols[i].xEquiv) > 0 l = i ; break end 
+    end
+
+    while j < length(L.natural_order_vect.sols)
+        j += 1
+        if length(L.natural_order_vect.sols[j].xEquiv) > 0 r = j ; break end 
+    end
+
+    # prepare next directions 
+    l ≥ 1 ? push!(todo, [L.natural_order_vect.sols[l].y, L.natural_order_vect.sols[idx].y]) : nothing 
+    r ≤ length(L.natural_order_vect.sols) ? push!(todo, [L.natural_order_vect.sols[idx].y, L.natural_order_vect.sols[r].y]) : nothing 
+end
+
+#todo : improve complexity 
+function intersectionPts(L::RelaxedBoundSet, idx::Int)::Set{Solution}
+    s2 = L.natural_order_vect.sols[idx] ; res = Set{Solution}()
+
+    for i = 1:length(L.natural_order_vect.sols)
+        if i== idx continue end 
+
+        s1 = L.natural_order_vect.sols[i]
+
+        det = s1.λ[1] * -s2.λ[2] - s2.λ[1] * -s1.λ[2]
+        if abs(det) < 1e-3 continue end 
+        
+        y = [ (s1.ct * -s2.λ[2] - s2.ct * -s1.λ[2])/det ,
+            (s1.λ[1] * s2.ct - s2.λ[1] * s1.ct )/det
+        ]
+
+        # check 
+        valid = true
+        for j = 1:length(L.natural_order_vect.sols)
+            t = L.natural_order_vect.sols[j]
+            if y[1] * t.λ[1] + y[2] * t.λ[2] < t.y[1] * t.λ[1] + t.y[2] * t.λ[2] - 1e-4
+                valid = false ; break
+            end
+        end
+
+        if valid 
+            new = Solution(Vector{Vector{Float64}}(), y, false, s1.λ, 0.0) ; updateCT(new)
+            push!(res, new )
+        end
+    end
+    
+    return res
+end
+
 """
 New correction iterative algorithm for LBS 
     
-    #todo : should return the new lbs directly !!!
 """
-function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; args...)
+function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; args...)
     global varArray
     global x_star
     global model = m
     global C = c
     global curr_λ
 
-    L = RelaxedBoundSet()
+    # L = RelaxedBoundSet()
     vd = getvOptData(m)
     # empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) 
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(m)
-    # Gap = 0.0 # todo : useless 
 
     varArray_copied = JuMP.all_variables(lp_copied)
     f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
@@ -80,7 +142,6 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
 
     R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    # weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && (a[1]!= b[1] || a[2]!= b[2]) # todo : useless
     
     # set up callback 
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
@@ -98,7 +159,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
     # in case of infeasibility 
     yr_1 = 0.0 ; yr_2 = 0.0 
     if status == MOI.INFEASIBLE 
-        return Y_integer, X_integer #todo : vd.Y_N empty update , Gap
+        return Y_integer, X_integer
     end
 
     # in case of optimality 
@@ -154,7 +215,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
 
     ys_1 = 0.0 ; ys_2 = 0.0 
     if status == MOI.INFEASIBLE
-        return Y_integer, X_integer #todo : vd.Y_N empty update, Gap 
+        return Y_integer, X_integer
     end
 
     if status == MOI.OPTIMAL
@@ -166,9 +227,8 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
         idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [ys_1, ys_2], curr_λ ), filtered=true)
         idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
-        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
-            # # todo : stop 
-            return Y_integer, X_integer #todo : vd.Y_N empty, Gap
+        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+            return Y_integer, X_integer
         end
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
@@ -197,9 +257,8 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
         idx = push!(L.natural_order_vect, Solution(x_star, [ys_1, ys_2], curr_λ ), filtered=true)
         idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
-        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
-            # # todo : stop 
-            return Y_integer, X_integer #todo : vd.Y_N empty, Gap
+        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+            return Y_integer, X_integer
         end
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -209,20 +268,8 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
     # -----------------------------------------
     # step 3 : fix the next search direction 
     # -----------------------------------------
-    function filtering(lb::Float64)
-        # remove all points under current line 
-        to_delete = Int64[] ; i = 1
-        for s in L.natural_order_vect.sols
-            if s.y[1]*λ[1] + s.y[2]*λ[2] < lb - 1e-4 push!(to_delete, i) end
-            i += 1
-        end
-
-        deleteat!(L.natural_order_vect.sols, to_delete)
-    end
-
-
     if length(L.natural_order_vect.sols) < 2 
-        return Y_integer, X_integer #todo : vd.Y_N empty, Gap
+        return Y_integer, X_integer
     end
 
     todo = []; 
@@ -233,7 +280,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
     # repeat the same procedure until no more direction in todo list 
     # ----------------------------------------------------------------
     while length(todo) > 0
-        [yl, yr] = popfirst!(todo)
+        p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
         λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
 
         # solve the mono scalarization problem 
@@ -251,7 +298,7 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
         val = -Inf ; idx = -1
 
         if status == MOI.INFEASIBLE 
-            continue # Y_integer, X_integer, Gap # todo : stop, but ...
+            continue 
         end
 
         if status == MOI.OPTIMAL 
@@ -261,6 +308,11 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
     
             yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
             val = λ[1]*yt_1 + λ[2]*yt_2 
+
+            if (isapprox(yt_1, yl[1], atol=1e-3) && isapprox(yt_2, yl[2], atol=1e-3) ) || 
+                (isapprox(yt_1, yr[1], atol=1e-3) && isapprox(yt_2, yr[2], atol=1e-3) )
+                continue
+            end
 
             # add new sol in LBS without filtering 
             idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) )
@@ -290,6 +342,11 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
             yt_2 = x_star'* c[2, 2:end] + c[2, 1]
             val = λ[1]*yt_1 + λ[2]*yt_2
 
+            if (isapprox(yt_1, yl[1], atol=1e-3) && isapprox(yt_2, yl[2], atol=1e-3) ) || 
+                (isapprox(yt_1, yr[1], atol=1e-3) && isapprox(yt_2, yr[2], atol=1e-3) )
+                continue
+            end
+
             # add new sol in LBS without filtering 
             idx = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], curr_λ ) )
             updateCT(L.natural_order_vect.sols[idx])
@@ -299,61 +356,52 @@ function LBSinvokingIPsolveer(m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; 
         end
 
         # todo : make sure idx > 0
-        # -----------------------------
-        # find point intersection 
-        # -----------------------------
-
 
         # -----------------------------
         # case 1 :  convexe
         # -----------------------------
         if (val < lb - 1e-4)  
+            # find point intersection 
+            intersection = intersectionPts(L, idx)
 
-            if yt_1 > ys_1+1e-4 && yt_2 > yr_2+1e-4
-                # Y, X, G = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
-                # append!(Y_integer, Y) ; append!(X_integer, X)
-                # Gap += G
-                # Y, X, G = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
-                # append!(Y_integer, Y) ; append!(X_integer, X)
-                # Gap += G
+            # define new search direction 
+            next_direc(idx, L, todo)
+
+            # filter lower bounds under current line 
+            filtering(val, L, λ)
+            
+            # add new intersection points 
+            for s in intersection
+                push!(L.natural_order_vect, s)
             end
-
         # -----------------------------
         # case 2 : concave 
         # -----------------------------
         elseif (val > lb + 1e-4)  
-            filtering(lb)
+            # find point intersection 
+            intersection = intersectionPts(L, idx)
+
+            # filter lower bounds under current line 
+            filtering(val, L, λ)
 
             # add new intersection points 
+            for s in intersection
+                push!(L.natural_order_vect, s)
+            end
 
             # define new search direction 
-            i = idx ; j = idx 
-            while i > 0
-                i -= 1
-                if length(L.natural_order_vect.sols[i].xEquiv) > 0 break end 
-            end
-
-            while j < length(L.natural_order_vect.sols)
-                j += 1
-                if length(L.natural_order_vect.sols[j].xEquiv) > 0 break end 
-            end
-
-            # prepare next directions 
-            i ≥ 1 ? push!(todo, [L.natural_order_vect.sols[i].y, L.natural_order_vect.sols[idx].y]) : nothing 
-            j ≤ length(L.natural_order_vect.sols) ? push!(todo, [L.natural_order_vect.sols[idx].y, L.natural_order_vect.sols[j].y]) : nothing 
-
+            next_direc(idx, L, todo)
             
         # -----------------------------
         # case equality    
         # -----------------------------
         else 
-
+            nothing
         end        
         
-
     end
 
-    return Y_integer, X_integer #todo : vd.Y_N empty, Gap 
+    return Y_integer, X_integer
 end
 
 
