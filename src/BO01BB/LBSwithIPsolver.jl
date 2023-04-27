@@ -439,12 +439,12 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             # println("update LBS : ", L.natural_order_vect)
 
             # define new search direction 
-            idx = 0
+            idx = 0 ; located = false
             for s in L.natural_order_vect.sols
                 idx +=1
-                if s.y[1] == bckp[1] && s.y[2] == bckp[2] break end
+                if s.y[1] == bckp[1] && s.y[2] == bckp[2] located = true ; break end
             end
-            idx > 0 ? next_direc(idx, L, todo) : nothing 
+            located ? next_direc(idx, L, todo) : nothing 
         # # -----------------------------
         # # case 2 : concave 
         # # -----------------------------
