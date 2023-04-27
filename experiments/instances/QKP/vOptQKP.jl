@@ -114,7 +114,7 @@ function solve(fname::String, method::String)
         mkdir(result_folder)
     end
 
-    if n%3 == 0 return end 
+    if n%3 == 0 return end # todo : 
     println("\n -----------------------------")
     println(" solving mono $(inst_name) ... ")
     println(" -----------------------------")

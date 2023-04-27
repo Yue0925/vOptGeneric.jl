@@ -14,7 +14,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
     l = 1 ; LBS = node.RBS.natural_order_vect.sols
 
     while l ≤ length(LBS)
-        if LBS[l].is_binary 
+        if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
             l += 1 ; continue
         end
 
@@ -40,7 +40,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
             else 
                 applied = false
                 r = l+∇
-                if r > length(LBS) || LBS[r].is_binary continue end
+                if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
 
                 xᵣ_star = LBS[r].xEquiv[1]
                 # multi-point cut 
