@@ -6,9 +6,9 @@
 #     julia vOptMaxCut.jl "$file" epsilon
 # done
 
-methodes=("bb" "bc_rootRelax" "bc_rootRelaxCPEPB" "bc_rootRelaxCP" "bc_rootRelaxEPB" "bb_EPB" "bc_EPB" "bc")
+methodes=("bc_rootRelax" "bc_rootRelaxCPEPB" "bc_rootRelaxCP" "bc_rootRelaxEPB")
 
-# methodes=("bb" "bc_rootRelax")
+# methodes=("bb" "bc_rootRelax") "bb_EPB" "bc_EPB" "bc"
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do
