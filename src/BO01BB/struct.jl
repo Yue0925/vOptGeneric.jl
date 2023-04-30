@@ -308,9 +308,10 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             l = m+1
         elseif sol.y[2] < natural_sols.sols[m].y[2]
             r  = m-1
-        # in case of equality
+        # todo : in case of equality, do nothing
         else
-            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return m
+            # addEquivX(natural_sols.sols[m], sol.xEquiv) ; return m
+            return idx
         end
     end
 

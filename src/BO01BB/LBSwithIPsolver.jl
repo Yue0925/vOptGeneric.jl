@@ -134,7 +134,7 @@ end
 
 """
 New correction iterative algorithm for LBS 
-    
+    taking account into intersection with odd LBS
 """
 function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, verbose; args...)
     global varArray
@@ -160,123 +160,127 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     # set up callback 
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
 
-    # -------------------------------------------
-    # step 1 : calculate the left extreme point
-    # ------------------------------------------- 
-    JuMP.set_objective(m, f1Sense, f1) ; JuMP.set_objective(lp_copied, f1Sense, f1_copied)
-    verbose && println("solving for z1")
-    
-    x_star = [] ; bst_val = -Inf 
-    curr_λ = [1.0, 0.0]
-    JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+    # start from the extreme point 
+    if length(L.natural_order_vect.sols) < 2
+        
+        # -------------------------------------------
+        # step 1 : calculate the left extreme point
+        # ------------------------------------------- 
+        JuMP.set_objective(m, f1Sense, f1) ; JuMP.set_objective(lp_copied, f1Sense, f1_copied)
+        verbose && println("solving for z1")
+        
+        x_star = [] ; bst_val = -Inf 
+        curr_λ = [1.0, 0.0]
+        JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
-    # in case of infeasibility 
-    yr_1 = 0.0 ; yr_2 = 0.0 
-    if status == MOI.INFEASIBLE 
-        return Y_integer, X_integer
-    end
-
-    # in case of optimality 
-    if status == MOI.OPTIMAL
-        # stock heur sol 
-        Y, X = stock_all_primal_sols(m, f1, f2, varArray)
-        append!(Y_integer, Y) ; append!(X_integer, X)
-
-        yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
-
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ))
-        updateCT(L.natural_order_vect.sols[idx])
-
-    # otherwise, take the best primal sol so far 
-    elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
-        # stock heuristic sol 
-        if has_values(m)
-            Y, X = stock_all_primal_sols(m, f1, f2, varArray) ; append!(Y_integer, Y) ; append!(X_integer, X)
-        end
-
-        if length(x_star) > 0
-            nothing
-        else
-            best_bound = objective_bound(m)
-            ctr_bound = JuMP.@constraint(lp_copied, f1_copied >= best_bound)
-            JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
-            x_star = JuMP.value.(varArray_copied)
-
-            if JuMP.is_valid(lp_copied, ctr_bound)
-                JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
-            end
-        end
-
-        yr_1 = x_star'* c[1, 2:end] + c[1, 1]
-        yr_2 = x_star'* c[2, 2:end] + c[2, 1]
-
-        idx = push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ ))
-        updateCT(L.natural_order_vect.sols[idx])
-    else
-        println("has primal ? $(JuMP.has_values(m))")
-        error("Condition  status $status ")
-    end
-
-    # -------------------------------------------
-    # step 2 : calculate the right extreme point
-    # ------------------------------------------- 
-    JuMP.set_objective(m, f2Sense, f2) ; JuMP.set_objective(lp_copied, f2Sense, f2_copied)
-    verbose && println("solving for z2")
-
-    x_star = [] ; bst_val = -Inf 
-    curr_λ = [0.0, 1.0]
-    JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
-
-    ys_1 = 0.0 ; ys_2 = 0.0 
-    if status == MOI.INFEASIBLE
-        return Y_integer, X_integer
-    end
-
-    if status == MOI.OPTIMAL
-        # stock heur sol 
-        Y, X = stock_all_primal_sols(m, f1, f2, varArray)
-        append!(Y_integer, Y) ; append!(X_integer, X)
-        ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
-
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [ys_1, ys_2], curr_λ ), filtered=true)
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
-
-        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+        # in case of infeasibility 
+        yr_1 = 0.0 ; yr_2 = 0.0 
+        if status == MOI.INFEASIBLE 
             return Y_integer, X_integer
         end
 
-    elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
-        if has_values(m)
+        # in case of optimality 
+        if status == MOI.OPTIMAL
+            # stock heur sol 
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
-        end
 
-        if length(x_star) > 0
-            nothing
-        else
-            best_bound = objective_bound(m)
-            ctr_bound = JuMP.@constraint(lp_copied, f2_copied >= best_bound)
-            JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
+            yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
 
-            x_star = JuMP.value.(varArray_copied)
+            idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ))
+            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
-            if JuMP.is_valid(lp_copied, ctr_bound)
-                JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
+        # otherwise, take the best primal sol so far 
+        elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
+            # stock heuristic sol 
+            if has_values(m)
+                Y, X = stock_all_primal_sols(m, f1, f2, varArray) ; append!(Y_integer, Y) ; append!(X_integer, X)
             end
+
+            if length(x_star) > 0
+                nothing
+            else
+                best_bound = objective_bound(m)
+                ctr_bound = JuMP.@constraint(lp_copied, f1_copied >= best_bound)
+                JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
+                x_star = JuMP.value.(varArray_copied)
+
+                if JuMP.is_valid(lp_copied, ctr_bound)
+                    JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
+                end
+            end
+
+            yr_1 = x_star'* c[1, 2:end] + c[1, 1]
+            yr_2 = x_star'* c[2, 2:end] + c[2, 1]
+
+            idx = push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ ))
+            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        else
+            println("has primal ? $(JuMP.has_values(m))")
+            error("Condition  status $status ")
         end
 
-        ys_1 = x_star'* c[1, 2:end] + c[1, 1]
-        ys_2 = x_star'* c[2, 2:end] + c[2, 1]
+        # -------------------------------------------
+        # step 2 : calculate the right extreme point
+        # ------------------------------------------- 
+        JuMP.set_objective(m, f2Sense, f2) ; JuMP.set_objective(lp_copied, f2Sense, f2_copied)
+        verbose && println("solving for z2")
 
-        idx = push!(L.natural_order_vect, Solution(x_star, [ys_1, ys_2], curr_λ ), filtered=true)
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        x_star = [] ; bst_val = -Inf 
+        curr_λ = [0.0, 1.0]
+        JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
-        if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+        ys_1 = 0.0 ; ys_2 = 0.0 
+        if status == MOI.INFEASIBLE
             return Y_integer, X_integer
         end
-    else
-        println("has primal ? $(JuMP.has_values(m))")
-        error("Condition  status $status ")
+
+        if status == MOI.OPTIMAL
+            # stock heur sol 
+            Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+            append!(Y_integer, Y) ; append!(X_integer, X)
+            ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
+
+            idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [ys_1, ys_2], curr_λ ), filtered=true)
+            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+
+            if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+                return Y_integer, X_integer
+            end
+
+        elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
+            if has_values(m)
+                Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+                append!(Y_integer, Y) ; append!(X_integer, X)
+            end
+
+            if length(x_star) > 0
+                nothing
+            else
+                best_bound = objective_bound(m)
+                ctr_bound = JuMP.@constraint(lp_copied, f2_copied >= best_bound)
+                JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
+
+                x_star = JuMP.value.(varArray_copied)
+
+                if JuMP.is_valid(lp_copied, ctr_bound)
+                    JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
+                end
+            end
+
+            ys_1 = x_star'* c[1, 2:end] + c[1, 1]
+            ys_2 = x_star'* c[2, 2:end] + c[2, 1]
+
+            idx = push!(L.natural_order_vect, Solution(x_star, [ys_1, ys_2], curr_λ ), filtered=true)
+            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+
+            if isapprox(yr_1, ys_1, atol=1e-3) || isapprox(yr_2, ys_2, atol=1e-3)
+                return Y_integer, X_integer
+            end
+        else
+            println("has primal ? $(JuMP.has_values(m))")
+            error("Condition  status $status ")
+        end
     end
 
     # -----------------------------------------
@@ -343,7 +347,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             # add new sol in LBS without filtering 
             idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) )
-            updateCT(L.natural_order_vect.sols[idx])
+            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
             # println("idx = $idx , LBS : ", L.natural_order_vect)
     
@@ -381,7 +385,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             # add new sol in LBS without filtering 
             idx = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], curr_λ ) )
-            updateCT(L.natural_order_vect.sols[idx])
+            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
             # println("idx = $idx , LBS : ", L.natural_order_vect)
 
@@ -394,7 +398,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # -----------------------------
         # case : equality    
         # -----------------------------
-        if (abs(val - lb) ≤ 1e-4) 
+        if (abs(val - lb) ≤ 1e-4) || idx < 1
             continue
         end
 
@@ -422,50 +426,24 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             continue 
         end 
 
-        # -----------------------------
-        # case :  convexe OR concave
-        # -----------------------------
-        # if (val < lb - 1e-4)  
-        #     @info "case convex ! "
-            bckp = L.natural_order_vect.sols[idx].y 
-            # filter lower bounds under current line 
-            filtering(val, L, λ)
+        bckp = L.natural_order_vect.sols[idx].y 
+        # filter lower bounds under current line 
+        filtering(val, L, λ)
 
-            # add new intersection points 
-            for s in intersection
-                push!(L.natural_order_vect, s)
-            end
+        # add new intersection points 
+        for s in intersection
+            push!(L.natural_order_vect, s)
+        end
 
-            # println("update LBS : ", L.natural_order_vect)
+        # println("update LBS : ", L.natural_order_vect)
 
-            # define new search direction 
-            idx = 0 ; located = false
-            for s in L.natural_order_vect.sols
-                idx +=1
-                if s.y[1] == bckp[1] && s.y[2] == bckp[2] located = true ; break end
-            end
-            located ? next_direc(idx, L, todo) : nothing 
-        # # -----------------------------
-        # # case 2 : concave 
-        # # -----------------------------
-        # elseif (val > lb + 1e-4)  
-        #     @info "case concave ! "
-
-        #     # filter lower bounds under current line 
-        #     filtering(val, L, λ)
-
-        #     # add new intersection points 
-        #     for s in intersection
-        #         push!(L.natural_order_vect, s)
-        #     end
-
-        #     println("update LBS : ", L.natural_order_vect)
-
-        #     # define new search direction 
-        #     next_direc(idx, L, todo)
-            
-
-        # end        
+        # define new search direction 
+        idx = 0 ; located = false
+        for s in L.natural_order_vect.sols
+            idx +=1
+            if s.y[1] == bckp[1] && s.y[2] == bckp[2] located = true ; break end
+        end
+        located ? next_direc(idx, L, todo) : nothing    
         
     end
 
