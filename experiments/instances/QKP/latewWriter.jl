@@ -24,7 +24,7 @@ function comparisons(instances::String)
     methods = ["epsilon", "bb", "bc", "bc_rootRelax", "bb_EPB", "bc_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCP", "bc_rootRelaxCPEPB"]
 
     # ∀ file in dicho
-    for file in readdir(work_dir * "/bb/")
+    for file in readdir(work_dir * "/bc_rootRelax/")
         if split(file, ".")[end] == "png" || split(file, ".")[end] == "tex"
             continue
         end
@@ -37,7 +37,7 @@ function comparisons(instances::String)
         times = [] ; pts = []
 
         # write dichotomy result 
-        include(work_dir * "/bb/" * file)
+        include(work_dir * "/bc_rootRelax/" * file)
         print(fout, string(vars) * " & " * string(constr) * " & ")
 
         # ∀ method 

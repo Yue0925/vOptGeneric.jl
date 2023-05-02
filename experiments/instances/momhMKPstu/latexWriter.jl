@@ -522,13 +522,13 @@ function comparisons(instances::String)
     record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods[2:end])
 
     # ∀ filder_n
-    for folder_n in readdir(work_dir * "/epsilon") 
+    for folder_n in readdir(work_dir * "/bc_rootRelax") 
         count = 0
         avg_n = 0 ; avg_m = 0
         avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
 
         # ∀ file in dicho
-        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+        for file in readdir(work_dir * "/bc_rootRelax/" * string(folder_n) * "/")
             if split(file, ".")[end] == "png"
                 continue
             end
@@ -537,7 +537,7 @@ function comparisons(instances::String)
             times = [] ; pts = []
 
             # write dichotomy result 
-            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            include(work_dir * "/bc_rootRelax/" * string(folder_n) * "/" * file)
             print(fout, string(vars) * " & " * string(constr) * " & ")
 
             count += 1
