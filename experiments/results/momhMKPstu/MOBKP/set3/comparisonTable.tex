@@ -1,0 +1,45 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccccccccccccccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\mathbf{\epsilon}$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex+CP)}} \\
+
+\cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17} \cmidrule(r){18-19} \cmidrule(r){20-21}
+~ & ~ & ~ & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} & \textbf{$|\mathcal{Y}_N|$} \\
+\midrule
+
+W7BI-rnd1-1800.DAT & 10 & 2 &  \textcolor{blue2}{0.02} & 8 & 0.1 & 8 & 0.1 & 8 & 0.12 & 8 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-rnd1-3000.DAT & 10 & 2 &  \textcolor{blue2}{0.01} & 7 & 0.06 & 7 & 0.05 & 7 & 0.12 & 7 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-1800.DAT & 10 & 2 &  \textcolor{blue2}{0.03} & 8 & 0.06 & 8 & 0.04 & 8 & 0.11 & 8 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-3000.DAT & 10 & 2 &  \textcolor{blue2}{0.02} & 5 & 0.03 & 5 &  \textcolor{blue2}{0.02} & 5 & 0.08 & 5 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-asyn.DAT & 10 & 2 &  \textcolor{blue2}{0.02} & 5 & 0.03 & 5 & 2.97 & 5 & 2.96 & 5 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube2-1800.DAT & 10 & 2 &  \textcolor{blue2}{0.02} & 7 & 0.05 & 7 & 0.06 & 7 & 0.11 & 7 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+\cline{1-21} \textbf{avg} & \textbf{10} & \textbf{2} & \textbf{0.02} & \textbf{6.67} & \textbf{0.06} & \textbf{6.67} & \textbf{0.54} & \textbf{6.67} & \textbf{0.58} & \textbf{6.67} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} \\ \cline{1-21}
+W7BI-rnd1-1800.DAT & 20 & 2 &  \textcolor{blue2}{0.02} & 7 & 0.36 & 7 & 0.38 & 7 & 1.42 & 7 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-rnd1-3000.DAT & 20 & 2 &  \textcolor{blue2}{0.01} & 4 & 0.21 & 4 & 0.11 & 4 & 0.34 & 4 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-1800.DAT & 20 & 2 &  \textcolor{blue2}{0.02} & 5 & 0.81 & 5 & 0.58 & 5 & 0.55 & 5 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-3000.DAT & 20 & 2 &  \textcolor{blue2}{0.04} & 14 & 0.2 & 14 & 0.18 & 14 & 0.67 & 14 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-asyn.DAT & 20 & 2 &  \textcolor{blue2}{0.05} & 14 & 0.19 & 14 & 229.84 & 14 & 21.86 & 14 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube2-1800.DAT & 20 & 2 &  \textcolor{blue2}{0.02} & 5 & 0.74 & 5 & 0.57 & 5 & 0.55 & 5 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+\cline{1-21} \textbf{avg} & \textbf{20} & \textbf{2} & \textbf{0.03} & \textbf{8.17} & \textbf{0.42} & \textbf{8.17} & \textbf{38.61} & \textbf{8.17} & \textbf{4.23} & \textbf{8.17} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} \\ \cline{1-21}
+W7BI-rnd1-1800.DAT & 30 & 2 &  \textcolor{blue2}{0.03} & 8 & 65.14 & 8 & 64.93 & 8 & 3.03 & 8 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-rnd1-3000.DAT & 30 & 2 &  \textcolor{blue2}{0.01} & 2 & 0.73 & 2 & 0.39 & 2 & 0.64 & 2 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-1800.DAT & 30 & 2 &  \textcolor{blue2}{0.12} & 31 & 10.19 & 31 & 4.75 & 31 & 5.64 & 31 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-3000.DAT & 30 & 2 &  \textcolor{blue2}{0.04} & 12 & 1.27 & 12 & 0.82 & 12 & 1.41 & 12 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-asyn.DAT & 30 & 2 &  \textcolor{blue2}{0.05} & 12 & 102.76 & 12 & 283.83 & 12 & 18.46 & 12 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube2-1800.DAT & 30 & 2 &  \textcolor{blue2}{0.1} & 28 & 9.05 & 28 & 4.23 & 28 & 5.53 & 28 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+\cline{1-21} \textbf{avg} & \textbf{30} & \textbf{2} & \textbf{0.06} & \textbf{15.5} & \textbf{31.52} & \textbf{15.5} & \textbf{59.82} & \textbf{15.5} & \textbf{5.78} & \textbf{15.5} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} \\ \cline{1-21}
+W7BI-rnd1-1800.DAT & 40 & 2 &  \textcolor{blue2}{0.05} & 11 & 88.67 & 11 & 66.71 & 11 & 7.72 & 11 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-rnd1-3000.DAT & 40 & 2 &  \textcolor{blue2}{0.02} & 7 & 13.02 & 7 & 5.84 & 7 & 3.71 & 7 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-1800.DAT & 40 & 2 &  \textcolor{blue2}{0.31} & 51 & 41.05 & 51 & 67.52 & 51 & 15.7 & 51 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-3000.DAT & 40 & 2 &  \textcolor{blue2}{0.03} & 8 & 7.77 & 8 & 9.93 & 8 & 11.75 & 8 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube1-asyn.DAT & 40 & 2 &  \textcolor{blue2}{0.48} & 49 & 1413.49 & 49 & 20361.01 & 13 & 328.68 & 49 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+W7BI-tube2-1800.DAT & 40 & 2 &  \textcolor{blue2}{0.24} & 43 & 43.55 & 43 & 68.77 & 43 & 19.58 & 43 &  - &  - &  - &  - &  - &  - &  - &  - & -1 & -1 \\
+\cline{1-21} \textbf{avg} & \textbf{40} & \textbf{2} & \textbf{0.19} & \textbf{28.17} & \textbf{267.92} & \textbf{28.17} & \textbf{3429.96} & \textbf{22.17} & \textbf{64.52} & \textbf{28.17} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} & \textbf{0.0} \\ \cline{1-21}
+\bottomrule
+\end{tabular}
+}%
+\caption{Comparison of the different algorithms performances for instances momhMKPstu/MOBKP/set3 .}
+\label{tab:table_compare_momhMKPstu/MOBKP/set3 }
+\end{sidewaystable}
