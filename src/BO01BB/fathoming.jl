@@ -14,7 +14,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
     l = 1 ; LBS = node.RBS.natural_order_vect.sols
 
     while l ≤ length(LBS)
-        if LBS[l].is_binary 
+        if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
             l += 1 ; continue
         end
 
@@ -40,7 +40,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
             else 
                 applied = false
                 r = l+∇
-                if r > length(LBS) || LBS[r].is_binary continue end
+                if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
 
                 xᵣ_star = LBS[r].xEquiv[1]
                 # multi-point cut 
@@ -126,6 +126,8 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     #     pb.info.update_incumb_time += (time() - start) 
     #     println("|incumbent| after = $(length(incumbent.natural_order_vect.sols))")
     # end
+    # todo 
+    # @info "node $(node.num)  depth $(node.depth) \t |LBS| = $(length(node.RBS.natural_order_vect)) "
     
     removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
 end
@@ -178,7 +180,7 @@ function getNadirPoints(incumbent::IncumbentSet) # , ptl, ptr
             [incumbent.natural_order_vect.sols[i].y[1],
             incumbent.natural_order_vect.sols[i+1].y[2]
             ],
-            true, Vector{Float64}() ), filtered=true
+            true, Vector{Float64}(), 0.0), filtered=true
         )
     end
 
@@ -197,9 +199,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     # we can't compare the LBS and UBS if the incumbent set is empty
     if length(incumbent.natural_order_vect) == 0 return false end
 
+    nadir_pts = getNadirPoints(incumbent)
+
     # if there exists an upper bound u s.t. u≦l
     function weak_dom(l)
-        for u ∈ incumbent.natural_order_vect.sols
+        for u ∈ nadir_pts.sols
             if u ≤ l && u != l
                 return true
             end
@@ -230,9 +234,6 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             return false
         end
     end
-
-    # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
-    nadir_pts = getNadirPoints(incumbent) # , ptl, ptr
 
     # test range condition necessary 1 : LBS ⊆ UBS 
     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
@@ -277,9 +278,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
-                    # nothing 
+
+                elseif (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2])
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
                 else 
-                    push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
+                    push!(node.localNadirPts, u.y)
                 end 
             else
                 return fathomed
@@ -304,7 +307,6 @@ end
 
 """
 Dominance test designed for the LBS that is the convex intersection of the set of lines passing lower bound and perpendicular to it's normal.
-
     Return `True` if this node is pruned by dominance.
 """
 function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
@@ -372,6 +374,8 @@ function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet,
 
         # case 3 : complete pairwise comparison
         for sol in node.RBS.natural_order_vect.sols # i=1:length(node.RBS.natural_order_vect)              # ∀ segment l ∈ LBS 
+            # #todo : ignore intersection pt 
+            # if length(sol.xEquiv) == 0 continue end
 
             λ = sol.λ
 
@@ -409,7 +413,6 @@ end
 # -------------------------------------------
 """
 Dominance test designed for the LBS connected by consecutive local ideal points.
-
     Return `True` if this node is pruned by dominance.
 """
 function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)::Bool

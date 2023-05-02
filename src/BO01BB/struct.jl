@@ -1,7 +1,6 @@
 """
     This file contains objects types used for BO01BB algorithm.
     Consider the following multi-objective program :
-
     min     f1(⋅), f2(⋅)
     s.t.      Ax ≤ b
               x∈{0,1}
@@ -139,26 +138,28 @@ mutable struct Solution
     y::Vector{Float64}
     is_binary::Bool
     λ::Vector{Float64}
+    ct::Float64
 end
 
 function Solution()
-    return Solution(Vector{Vector{Float64}}(), Vector{Float64}(), false, Vector{Float64}())
+    return Solution(Vector{Vector{Float64}}(), Vector{Float64}(), false, Vector{Float64}(), 0.0)
 end
 
-function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}())
-    is_binary = true
+function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}(), ct::Float64=0.0)
+    is_binary = length(x) >0 ? true : false 
     for i = 1:length(x)
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             is_binary = false; break
         end
     end
-    return Solution([x], y, is_binary, λ)
+    return Solution([x], y, is_binary, λ, ct)
 end
 
 """
 Given a vector `x`, return true if `x` is approximately binary.
 """
 function isBinary(x::Vector{Float64})
+    if length(x) == 0 return false end 
     for i in 1:length(x)
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             return false
@@ -193,9 +194,11 @@ end
 Overload operators for the dominance order between two solutions.
 """
 function Base.:show(io::IO, s::Solution)
-    println(io, "Solution( \n |xEquiv| = ", length(s.xEquiv),
+    println(io, "Solution( \n |xEquiv| = ", length(s.xEquiv), 
+    "\t is_binary ? ", s.is_binary,
     "\n y = ", s.y,
-    "\n is_binary ? ", s.is_binary, " )")
+    "\n λ = ", s.λ, "\t ct = ", s.ct, 
+    " )")
 end
 
 
@@ -277,15 +280,15 @@ end
 """
 Push a solution into a vector of natrual ordered solutions, return `true` if it is successfully added;
 or `false`, if it is weakly dominated by one (or more) solution(s) in the vector. 
-
 In case of successfully added and `filtered=true` (by defaut false), delete the old solutions that are weakly dominated by the new one.
+REturn the position successfully inserted, -1 in case dominated.
 """
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)
-    sol.y = round.(sol.y, digits = 4)
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Int
+    sol.y = round.(sol.y, digits = 4) ; idx = -1
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
-        push!(natural_sols.sols, sol) ; return true
+        push!(natural_sols.sols, sol) ; return 1
     end
 
     # a binary/dichotomy search finds the location to insert 
@@ -304,7 +307,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             r  = m-1
         # in case of equality
         else
-            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return true
+            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return m
         end
     end
 
@@ -318,6 +321,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         m = m > Int(floor((l+r)/2)) ? m : m+1
         natural_sols.sols = vcat(vcat(natural_sols.sols[1:m-1], sol), natural_sols.sols[m:end])
     end
+    idx = m 
 
     # find points weakly dominated by the new point and delete it/them
     if filtered
@@ -327,9 +331,11 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             while j<= length(natural_sols.sols)
                 if dominate(natural_sols.sols[i], natural_sols.sols[j])
                     deleteat!(natural_sols.sols, j)
+                    if j == m idx= -1 elseif m > j idx -= 1 end 
                     
                 elseif dominate(natural_sols.sols[j], natural_sols.sols[i])
                     deleteat!(natural_sols.sols, i)
+                    if i == m idx= -1 elseif m > i idx -= 1 end 
                     j -= 1 ; break
                 else
                     j += 1
@@ -338,12 +344,12 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             if j > length(natural_sols.sols) i += 1 end 
         end
     end
+    return idx 
 end
 
 
 """
 The relaxed bound set consists of segments and natural ordered solutions. 
-
 Since all solutions are natural ordered, segments is defined by a dictionary where each point solution s is associated
 with a boolean if s and the next/adjacent point in right forms a segment.
 """

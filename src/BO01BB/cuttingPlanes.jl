@@ -1,27 +1,24 @@
 # This file contains functions of cutting planes algorithm.
 include("metaHeuristic.jl")
+include("../algorithms.jl")
 
 const max_step = 2
 
 
-
 """
 Compute the lower bound set of the LP polyhedron by dichotomy method.
-
 Return `true` if this node is fathomed by infeasibility.
 """
 function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
     #------------------------------------------------------------------------------
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
-    # println("-------------------------")
-    # @info "node $(node.num)"
-    if pb.param.root_relax
+    if pb.param.root_relax # todo : call new algo 
+        # node.RBS = RelaxedBoundSet()
 
         start = time()
-        Y_integer, X_integer, Gap = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)      
+        Y_integer, X_integer, Gap = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)  
         pb.info.relaxation_time += (time() - start)
-        node.Gap += Gap 
 
         start = time()
         for i = 1:length(Y_integer) 
@@ -29,52 +26,61 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
+
+        if length(node.RBS.natural_order_vect.sols) == 0
+            prune!(node, INFEASIBILITY)
+            if verbose
+                @info "node $(node.num) is unfeasible !"
+            end
+            return true
+        end
     else
         start = time()
         solve_dicho(pb.m, round_results, false ; args...)
         pb.info.relaxation_time += (time() - start)
 
-
-    end
-    vd_LP = getvOptData(pb.m)
+        vd_LP = getvOptData(pb.m)
     
-    #-------------------------------------------------------------------------------
-    # in case of the LP relaxed (sub) problem is infeasible, prune the actual node
-    #-------------------------------------------------------------------------------
-    if size(vd_LP.Y_N, 1) == 0
-        prune!(node, INFEASIBILITY)
-        if verbose
-            @info "node $(node.num) is unfeasible !"
+        #-------------------------------------------------------------------------------
+        # in case of the LP relaxed (sub) problem is infeasible, prune the actual node
+        #-------------------------------------------------------------------------------
+        if size(vd_LP.Y_N, 1) == 0
+            prune!(node, INFEASIBILITY)
+            if verbose
+                @info "node $(node.num) is unfeasible !"
+            end
+            return true
         end
-        return true
-    end
+    
+        # construct/complete the relaxed bound set
+        node.RBS = RelaxedBoundSet()
+        for i = 1:length(vd_LP.Y_N)
+            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
+        end
 
-    # construct/complete the relaxed bound set
-    node.RBS = RelaxedBoundSet()
-    for i = 1:length(vd_LP.Y_N)
-        push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
     end
 
     return false
 end
 
-
+# todo : rewrite 
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
     n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
+    # delete all points cut off 
     for indx in cut_off
         push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
     end
     deleteat!(node.RBS.natural_order_vect.sols, cut_off)
 
-    # in each direction 
+    # in each direction, re-optimize 
     for λ in lambdas
         if pb.param.root_relax
 
-            start = time()
-            Y_integer, X_integer, Gap = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)        
+            start = time() 
+            Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)  
+            # Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ, false ; args...)      
             pb.info.relaxation_time += (time() - start)
-            node.Gap += Gap
     
             start = time()
             for i = 1:length(Y_integer) 
@@ -86,11 +92,11 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
             start = time()
             opt_scalar(pb.m, λ[1], λ[2], round_results, false ; args...)
             pb.info.relaxation_time += (time() - start)
-        end
 
-        vd_LP = getvOptData(pb.m)
-        if size(vd_LP.Y_N, 1) != 0
-            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[1], vd_LP.Y_N[1], λ), filtered=true )
+            vd_LP = getvOptData(pb.m)
+            if size(vd_LP.Y_N, 1) != 0
+                push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[1], vd_LP.Y_N[1], λ) ) # , filtered=true
+            end
         end
     end
 
@@ -101,7 +107,6 @@ end
 
 """
 A single point cut off algorithm. 
-
 Returns :
     - the fractional/integer point
     - true, if new cut(s) has benn found 
@@ -163,7 +168,6 @@ end
 """
 Cutting planes scheme for the multi-point cuts. For now we assume that every point `y` in criteria space has only
 one corresponding vector `x` in decision space. 
-
 Return ture if the node is infeasible after adding cuts.
 """
 function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
@@ -181,7 +185,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         cut_off = []
 
         while l ≤ length(LBS)
-            if LBS[l].is_binary 
+            if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
                 l += 1 ; continue    
             end
             
@@ -194,7 +198,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     l += 1
                 else 
                     r = l+∇
-                    if r > length(LBS) || LBS[r].is_binary continue end
+                    if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
 
                     if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
 
@@ -247,12 +251,12 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
 
         if cut_counter > 0
 
-            if pb.param.root_relax
+            # if pb.param.root_relax
                 reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
-            else
-                pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-                if pruned return true end
-            end
+            # else
+            #     pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+            #     if pruned return true end
+            # end
 
             LBS = node.RBS.natural_order_vect.sols
 
