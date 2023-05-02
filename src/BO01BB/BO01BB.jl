@@ -169,8 +169,8 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             end
             pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
             return
-        # end
-    end
+        end
+    # end
 
     #-----------------------------------------
     # liberate parent's useless data 
