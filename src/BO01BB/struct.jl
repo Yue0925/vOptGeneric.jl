@@ -286,12 +286,12 @@ In case of successfully added and `filtered=true` (by defaut false), delete the 
 
 REturn the position successfully inserted, -1 in case dominated.
 """
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Int
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
     sol.y = round.(sol.y, digits = 4) ; idx = -1
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
-        push!(natural_sols.sols, sol) ; return 1
+        push!(natural_sols.sols, sol) ; return 1, true
     end
 
     # a binary/dichotomy search finds the location to insert 
@@ -311,7 +311,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         # todo : in case of equality, do nothing
         else
             # addEquivX(natural_sols.sols[m], sol.xEquiv) ; return m
-            return idx
+            return m, false
         end
     end
 
@@ -348,7 +348,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             if j > length(natural_sols.sols) i += 1 end 
         end
     end
-    return idx 
+    return idx < 1 ? (idx, false) : (idx, true)
 end
 
 
