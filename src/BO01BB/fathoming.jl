@@ -199,9 +199,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     # we can't compare the LBS and UBS if the incumbent set is empty
     if length(incumbent.natural_order_vect) == 0 return false end
 
+    nadir_pts = getNadirPoints(incumbent)
+
     # if there exists an upper bound u s.t. u≦l
     function weak_dom(l)
-        for u ∈ incumbent.natural_order_vect.sols
+        for u ∈ nadir_pts.sols
             if u ≤ l && u != l
                 return true
             end
@@ -232,9 +234,6 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             return false
         end
     end
-
-    # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
-    nadir_pts = getNadirPoints(incumbent) # , ptl, ptr
 
     # test range condition necessary 1 : LBS ⊆ UBS 
     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
@@ -279,9 +278,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
-                    # nothing 
+
+                elseif (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2])
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
                 else 
-                    push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
+                    push!(node.localNadirPts, u.y)
                 end 
             else
                 return fathomed
@@ -306,13 +307,10 @@ end
 
 """
 Dominance test designed for the LBS that is the convex intersection of the set of lines passing lower bound and perpendicular to it's normal.
-
     Return `True` if this node is pruned by dominance.
 """
 function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
     @assert length(node.RBS.natural_order_vect) > 0 "relaxed bound set is empty for node $(node.num)"
-
-    # @info "node $(node.num) \t |LBS| = $(length(node.RBS.natural_order_vect.sols))" # todo 
 
     # we can't compare the LBS and UBS if the incumbent set is empty
     if length(incumbent.natural_order_vect) == 0 return false end
@@ -363,44 +361,31 @@ function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet,
     fathomed = true 
     # iterate of all local nadir points
     for u ∈ nadir_pts.sols
-        existence = false ; compared = false
-        # in_polygone = true
+        in_polygone = true
 
         # case 1 : if u is dominates the ideal point of LBS 
         if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
             return true
         end
 
-        # if u.y[2] < ptl.y[2] || u.y[1] < ptr.y[1] # todo :
-        #     continue
-        # end
+        if u.y[2] < ptl.y[2] || u.y[1] < ptr.y[1]
+            continue
+        end
 
         # case 3 : complete pairwise comparison
-        # for sol in node.RBS.natural_order_vect.sols              # ∀ segment l ∈ LBS 
-        for i=1:length(node.RBS.natural_order_vect)-1
-            sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[i+1]
+        for sol in node.RBS.natural_order_vect.sols # i=1:length(node.RBS.natural_order_vect)              # ∀ segment l ∈ LBS 
+            # #todo : ignore intersection pt 
+            # if length(sol.xEquiv) == 0 continue end
 
-            if (u.y[1] > sol_l.y[1] || u.y[1] < sol_r.y[1]) && (u.y[2] > sol_r.y[2] || u.y[2] < sol_l.y[2])
-                continue
+            λ = sol.λ
+
+            if λ[1] != 0.0 &&  λ[2] != 0.0 && λ'*u.y < λ'*sol.y # strictly inferior : case limit 
+                in_polygone = false ; break
             end
-
-            λ = [sol_r.y[2] - sol_l.y[2], sol_l.y[1] - sol_r.y[1]]      # normal to the segment
-            compared = true
-
-            if λ'*u.y < λ'*sol_r.y#&& λ'*u.y < λ'*sol_l.y
-                existence = true ; break
-            end
-
-            # λ = sol.λ
-
-            # if λ[1] != 0.0 &&  λ[2] != 0.0 && λ'*u.y < λ'*sol.y # strictly inferior : case limit 
-            #     in_polygone = false ; break
-            # end
         end
 
         # the end of comparison 
-        # if in_polygone
-        if compared && !existence 
+        if in_polygone
             fathomed = false
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
@@ -415,11 +400,6 @@ function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet,
                 return fathomed
             end
         end
-
-        if !compared && (u.y[1] ≥ ptr.y[1] && u.y[2] ≥ ptl.y[2] )
-            if EPB node.localNadirPts = Vector{Vector{Float64}}() end               # no need to (extended) pareto branching
-            return false
-        end
     end
 
     return fathomed
@@ -433,7 +413,6 @@ end
 # -------------------------------------------
 """
 Dominance test designed for the LBS connected by consecutive local ideal points.
-
     Return `True` if this node is pruned by dominance.
 """
 function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)::Bool

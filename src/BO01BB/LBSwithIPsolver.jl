@@ -162,7 +162,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
     # start from the extreme point 
     # if length(L.natural_order_vect.sols) < 2
-        println("\n\t calculate extreme pts ")
+        # println("\n\t calculate extreme pts ")
         # -------------------------------------------
         # step 1 : calculate the left extreme point
         # ------------------------------------------- 
@@ -178,6 +178,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         val = -Inf ; idx = -1 ; validNewPoint = false
 
         if status == MOI.INFEASIBLE 
+            L = RelaxedBoundSet()
             return Y_integer, X_integer
         end
 
@@ -223,6 +224,37 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         end
 
         # todo : intersect and filter 
+        # find point intersection 
+        intersection = intersectionPts(L, idx)
+        # println("number intersection pts: ", length(intersection) )
+
+        valid = true
+        for s in L.natural_order_vect.sols
+            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
+                valid = false ; break
+            end
+        end
+
+        # under the current LBS 
+        if !valid 
+            # @info "under the current LBS  !"
+            deleteat!(L.natural_order_vect.sols, idx) ; 
+            # add new intersection points 
+            for s in intersection
+                push!(L.natural_order_vect, s)
+            end
+
+            # println("update LBS : ", L.natural_order_vect)
+        else
+
+            # filter lower bounds under current line 
+            filtering(val, L, λ)
+
+            # add new intersection points 
+            for s in intersection
+                push!(L.natural_order_vect, s)
+            end
+        end 
 
 
         # -------------------------------------------
@@ -288,6 +320,40 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             println("has primal ? $(JuMP.has_values(m))")
             error("Condition  status $status ")
         end
+
+        # todo : intersect and filter 
+        # find point intersection 
+        intersection = intersectionPts(L, idx)
+        # println("number intersection pts: ", length(intersection) )
+
+        valid = true
+        for s in L.natural_order_vect.sols
+            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
+                valid = false ; break
+            end
+        end
+
+        # under the current LBS 
+        if !valid 
+            # @info "under the current LBS  !"
+            deleteat!(L.natural_order_vect.sols, idx) ; 
+            # add new intersection points 
+            for s in intersection
+                push!(L.natural_order_vect, s)
+            end
+
+            # println("update LBS : ", L.natural_order_vect)
+        else
+
+            # filter lower bounds under current line 
+            filtering(val, L, λ)
+
+            # add new intersection points 
+            for s in intersection
+                push!(L.natural_order_vect, s)
+            end
+        end 
+
     # end
 
     # -----------------------------------------

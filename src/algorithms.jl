@@ -279,7 +279,7 @@ function solve_Chalmet(m::JuMP.Model, step, verbose ; args...)
             ys_1 = JuMP.value(f1)
             ys_2 = JuMP.value(f2)
 
-            if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+            if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
                 push!(vd.Y_N, [ys_1, ys_2])
                 push!(vd.X_E, JuMP.value.(varArray))
                 #Declare the constraints on z1 and z2 (RHS will be set later)

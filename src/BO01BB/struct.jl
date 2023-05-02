@@ -308,10 +308,18 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             l = m+1
         elseif sol.y[2] < natural_sols.sols[m].y[2]
             r  = m-1
-        # todo : in case of equality, do nothing
+        # todo : in case of equality yl == yr, do nothing if λ, x are equal 
         else
             # addEquivX(natural_sols.sols[m], sol.xEquiv) ; return m
-            return m, false
+            if length(sol.λ) == length(natural_sols.sols[m].λ) && length(sol.λ) > 0 && 
+                ( sol.λ[1] != natural_sols.sols[m].λ[1] || sol.λ[2] != natural_sols.sols[m].λ[2] )
+                natural_sols.sols[m].λ = sol.λ
+                natural_sols.sols[m].ct = sol.ct
+                addEquivX(natural_sols.sols[m], sol.xEquiv)
+                natural_sols.sols[m].is_binary = sol.is_binary
+                return m, true
+            end
+            return m,false 
         end
     end
 
