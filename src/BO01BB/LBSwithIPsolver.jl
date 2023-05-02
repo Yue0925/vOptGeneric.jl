@@ -162,7 +162,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
     # start from the extreme point 
     if length(L.natural_order_vect.sols) < 2
-        
+        println("\n\t calculate extreme pts ")
         # -------------------------------------------
         # step 1 : calculate the left extreme point
         # ------------------------------------------- 
@@ -175,6 +175,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         # in case of infeasibility 
         yr_1 = 0.0 ; yr_2 = 0.0 
+        val = -Inf ; idx = -1
+
         if status == MOI.INFEASIBLE 
             return Y_integer, X_integer
         end
@@ -187,7 +189,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
 
-            idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ))
+            idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ), filtered=true )
             idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
         # otherwise, take the best primal sol so far 
@@ -213,7 +215,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             yr_1 = x_star'* c[1, 2:end] + c[1, 1]
             yr_2 = x_star'* c[2, 2:end] + c[2, 1]
 
-            idx = push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ ))
+            idx = push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ ), filtered = true)
             idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
         else
             println("has primal ? $(JuMP.has_values(m))")
@@ -231,6 +233,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
         ys_1 = 0.0 ; ys_2 = 0.0 
+        val = -Inf ; idx = -1
+
         if status == MOI.INFEASIBLE
             return Y_integer, X_integer
         end
@@ -299,10 +303,11 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     # ----------------------------------------------------------------
     # println("start with LBS : ", L.natural_order_vect)
     iter = 1
-    while length(todo) > 0
+    while length(todo) > 0 # && iter ≤ 5
         # println("----------------------")
-        # @info "iter = $iter "
-        # iter += 1
+        println( "\t iter = $iter ..." )
+        iter += 1
+        # iter ≥ 15 ? @info "iter $ter " : nothing
         # println("----------------------")
 
         p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]

@@ -16,6 +16,10 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     #------------------------------------------------------------------------------
     if pb.param.root_relax
 
+        println("----------------------------------------")
+        @info "node $(node.num) \t |LBS| = $(length(node.RBS.natural_order_vect.sols)) \t computing LBS ... "
+        println("----------------------------------------")
+
         start = time()
         Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
         pb.info.relaxation_time += (time() - start)
