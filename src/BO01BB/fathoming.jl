@@ -199,9 +199,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     # we can't compare the LBS and UBS if the incumbent set is empty
     if length(incumbent.natural_order_vect) == 0 return false end
 
+    nadir_pts = getNadirPoints(incumbent)
+
     # if there exists an upper bound u s.t. u≦l
     function weak_dom(l)
-        for u ∈ incumbent.natural_order_vect.sols
+        for u ∈ nadir_pts.sols
             if u ≤ l && u != l
                 return true
             end
@@ -232,9 +234,6 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             return false
         end
     end
-
-    # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
-    nadir_pts = getNadirPoints(incumbent) # , ptl, ptr
 
     # test range condition necessary 1 : LBS ⊆ UBS 
     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
@@ -279,9 +278,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
-                    # nothing 
+
+                elseif (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2])
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
                 else 
-                    push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
+                    push!(node.localNadirPts, u.y)
                 end 
             else
                 return fathomed
