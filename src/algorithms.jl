@@ -727,6 +727,7 @@ function ChalmetRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, rhs_z
     end
 end
 
+
 function opt_scalar(m::JuMP.Model, λ1, λ2, round_results, verbose; args...)
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)
@@ -846,31 +847,31 @@ function dichoRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, round_r
 
     f = AffExpr(0.0)
 
-    if f1Sense==f2Sense
-        lb = λ1*yr_1 + λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
-        verbose && println("solving for $λ1*f1 + $λ2*f2")    
-        f = λ1*f1 + λ2*f2
-    else
-        lb = λ1*yr_1 - λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 - λ2*f2)
-        verbose && println("solving for $λ1*f1 - $λ2*f2") 
-        f = λ1*f1 - λ2*f2
-    end
+    lb = λ1*yr_1 + λ2*yr_2
+    JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
+    verbose && println("solving for $λ1*f1 + $λ2*f2")    
+    f = λ1*f1 + λ2*f2
 
     JuMP.optimize!(m, ignore_optimize_hook=true)
+    status = JuMP.termination_status(m)
 
-    yt_1 = JuMP.value(f1)
-    yt_2 = JuMP.value(f2)
+    #If a solution exists
+    if status == MOI.OPTIMAL
 
-    val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
+        yt_1 = JuMP.value(f1)
+        yt_2 = JuMP.value(f2)
 
-    if (val < lb - 1e-4)
-        push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
-        push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, [λ1, λ2])
+        val = λ1*yt_1 + λ2*yt_2
 
-        dichoRecursion(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
-        dichoRecursion(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+        if (val < lb - 1e-4)
+            if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
+                push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
+                push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, [λ1, λ2])
+
+                dichoRecursion(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+                dichoRecursion(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            end
+        end
     end
 
 end
