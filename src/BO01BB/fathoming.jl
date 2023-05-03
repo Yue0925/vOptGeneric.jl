@@ -374,9 +374,6 @@ function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet,
 
         # case 3 : complete pairwise comparison
         for sol in node.RBS.natural_order_vect.sols # i=1:length(node.RBS.natural_order_vect)              # ∀ segment l ∈ LBS 
-            # #todo : ignore intersection pt 
-            # if length(sol.xEquiv) == 0 continue end
-
             λ = sol.λ
 
             if λ[1] != 0.0 &&  λ[2] != 0.0 && λ'*u.y < λ'*sol.y # strictly inferior : case limit 

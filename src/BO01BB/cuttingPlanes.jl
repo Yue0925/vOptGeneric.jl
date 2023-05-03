@@ -16,7 +16,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     if pb.param.root_relax
 
         start = time()
-        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)        
+        Y_integer, X_integer, Gap = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)        
         pb.info.relaxation_time += (time() - start)
 
         start = time()
@@ -67,8 +67,7 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
         if pb.param.root_relax
 
             start = time() 
-            Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)  
-            # Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ, false ; args...)      
+            Y_integer, X_integer, Gap = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)  
             pb.info.relaxation_time += (time() - start)
     
             start = time()
@@ -86,7 +85,7 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
 
         vd_LP = getvOptData(pb.m)
         if size(vd_LP.Y_N, 1) != 0
-            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[1], vd_LP.Y_N[1], λ) ) # , filtered=true
+            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[1], vd_LP.Y_N[1], λ) , filtered=true) # 
         end
     end
 
@@ -175,7 +174,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         cut_off = []
 
         while l ≤ length(LBS)
-            if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
+            if LBS[l].is_binary
                 l += 1 ; continue    
             end
             
@@ -188,7 +187,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     l += 1
                 else 
                     r = l+∇
-                    if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
+                    if r > length(LBS) || LBS[r].is_binary continue end
 
                     if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
 

@@ -137,12 +137,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     if verbose
         @info "at node $(node.num) |Y_N| = $(length(incumbent.natural_order_vect)), EPB ? $(node.EPB)"
     end
-
-    # println("----------------------------------------------------")
-    # println("node $(node.num) , LBS => $(node.RBS.natural_order_vect) ")
-    # println("----------------------------------------------------")
-
-
     # get the actual node
     @assert node.activated == true "the actual node is not activated "
     node.activated = false

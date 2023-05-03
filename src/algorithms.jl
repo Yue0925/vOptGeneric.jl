@@ -205,9 +205,6 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
     varArray = JuMP.all_variables(m)
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    # todo : incompatible
-    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
     f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
     f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
@@ -291,9 +288,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     Gap = 0.0
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    #todo : incompatible
-    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
+
     f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
     f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
@@ -432,7 +427,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+        if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
             #Store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, JuMP.value.(varArray))
@@ -469,7 +464,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         ys_1 = x_star'* c[1, 2:end] + c[1, 1]
         ys_2 = x_star'* c[2, 2:end] + c[2, 1]
 
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+        if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
             #Store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, x_star)
@@ -846,31 +841,31 @@ function dichoRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, round_r
 
     f = AffExpr(0.0)
 
-    if f1Sense==f2Sense
-        lb = λ1*yr_1 + λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
-        verbose && println("solving for $λ1*f1 + $λ2*f2")    
-        f = λ1*f1 + λ2*f2
-    else
-        lb = λ1*yr_1 - λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 - λ2*f2)
-        verbose && println("solving for $λ1*f1 - $λ2*f2") 
-        f = λ1*f1 - λ2*f2
-    end
+    lb = λ1*yr_1 + λ2*yr_2
+    JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
+    verbose && println("solving for $λ1*f1 + $λ2*f2")    
+    f = λ1*f1 + λ2*f2
 
     JuMP.optimize!(m, ignore_optimize_hook=true)
+    status = JuMP.termination_status(m)
 
-    yt_1 = JuMP.value(f1)
-    yt_2 = JuMP.value(f2)
+    #If a solution exists
+    if status == MOI.OPTIMAL
 
-    val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
+        yt_1 = JuMP.value(f1)
+        yt_2 = JuMP.value(f2)
 
-    if (val < lb - 1e-4)
-        push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
-        push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, [λ1, λ2])
+        val = λ1*yt_1 + λ2*yt_2
 
-        dichoRecursion(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
-        dichoRecursion(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+        if (val < lb - 1e-4)
+            if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
+                push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
+                push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, [λ1, λ2])
+
+                dichoRecursion(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+                dichoRecursion(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            end
+        end
     end
 
 end
