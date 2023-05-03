@@ -15,7 +15,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax # todo : call new algo 
-        node.RBS = RelaxedBoundSet()
+        # node.RBS = RelaxedBoundSet()
 
         start = time()
         Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
@@ -254,12 +254,12 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
 
         if cut_counter > 0
 
-            # if pb.param.root_relax
+            if pb.param.root_relax
                 reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
-            # else
-            #     pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-            #     if pruned return true end
-            # end
+            else
+                pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+                if pruned return true end
+            end
 
             LBS = node.RBS.natural_order_vect.sols
 

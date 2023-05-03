@@ -184,7 +184,7 @@ function main(fname::String)
     #:dicho, 
     # :epsilon, 
     # :bb, :bb_EPB,
-    # :bc, :bc_EPB,
+    :bc, :bc_EPB,
     :bc_rootRelax, :bc_rootRelaxEPB,
     :bc_rootRelaxCP, :bc_rootRelaxCPEPB
     ] # 
