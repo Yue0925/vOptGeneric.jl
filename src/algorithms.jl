@@ -761,6 +761,37 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(m)
 
+
+    R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
+
+    function sorting()
+        # sort in a natural order 
+        s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
+        vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s]
+        vd.lambda = vd.lambda[s]
+
+        i = 1
+        while i < length(vd.Y_N)
+            j = i+1
+            while j<= length(vd.Y_N)
+                if weak_dom(vd.Y_N[i], vd.Y_N[j])
+                    deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j)
+                    deleteat!(vd.lambda, j)
+                elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
+                    deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i)
+                    deleteat!(vd.lambda, i)
+                    j -= 1 ; break
+                else
+                    j += 1
+                end
+            end
+            if j > length(vd.Y_N) i += 1 end 
+        end
+    end
+
+
     #Set the first objective as an objective in the JuMP JuMP.Model
     JuMP.set_objective(m, f1Sense, f1)
     verbose && println("solving for z1")
@@ -799,35 +830,9 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
                 push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [0.0, 1.0])
                 dichoRecursion(m, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             end
-        
-            #Sort X_E and Y_N
-            s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
-            vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
-
-            R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-            R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-            weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
-
-            i = 1
-            while i < length(vd.Y_N)
-                j = i+1
-                while j<= length(vd.Y_N)
-                    if weak_dom(vd.Y_N[i], vd.Y_N[j])
-                        deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j) ; deleteat!(vd.lambda, j)
-                    elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
-                        deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i) ; deleteat!(vd.lambda, i)
-                        j -= 1 ; break
-                    else
-                        j += 1
-                    end
-                end
-                if j > length(vd.Y_N) i += 1 end 
-            end
-    
+            sorting()
         end
     end
-
-    status
 end
 
 function dichoRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
@@ -860,7 +865,7 @@ function dichoRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, round_r
 
     val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
 
-    if (f1Sense == MOI.MIN_SENSE && val < lb - 1e-4) || (f1Sense == MOI.MAX_SENSE && val > lb + 1e-4)
+    if (val < lb - 1e-4)
         push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
         push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, [λ1, λ2])
 

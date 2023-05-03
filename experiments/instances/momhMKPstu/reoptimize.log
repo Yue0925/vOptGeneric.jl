@@ -7551,3 +7551,2411 @@ length Y_N = 8
 length X_E = 8
 displayGraphics
 ./MOBKP/set3/W7BI-tube1-asyn.DAT
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+ERROR: LoadError: StackOverflowError:
+Stacktrace:
+  [1] CPXlpopt
+    @ ~/.julia/packages/CPLEX/X6Mno/src/gen2210/libcpx_api.jl:834 [inlined]
+  [2] _optimize!(model::CPLEX.Optimizer)
+    @ CPLEX ~/.julia/packages/CPLEX/X6Mno/src/MOI/MOI_wrapper.jl:2616
+  [3] optimize!(model::CPLEX.Optimizer)
+    @ CPLEX ~/.julia/packages/CPLEX/X6Mno/src/MOI/MOI_wrapper.jl:2679
+  [4] optimize!
+    @ ~/.julia/packages/MathOptInterface/a4tKm/src/Bridges/bridge_optimizer.jl:376 [inlined]
+  [5] optimize!(m::MathOptInterface.Utilities.CachingOptimizer{MathOptInterface.Bridges.LazyBridgeOptimizer{CPLEX.Optimizer}, MathOptInterface.Utilities.UniversalFallback{MathOptInterface.Utilities.Model{Float64}}})
+    @ MathOptInterface.Utilities ~/.julia/packages/MathOptInterface/a4tKm/src/Utilities/cachingoptimizer.jl:325
+  [6] optimize!(model::Model; ignore_optimize_hook::Bool, kwargs::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ JuMP ~/.julia/packages/JuMP/0STkJ/src/optimizer_interface.jl:161
+  [7] dichoRecursion(m::Model, yr_1::Float64, yr_2::Float64, ys_1::Float64, ys_2::Float64, varArray::Vector{VariableRef}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/algorithms.jl:856
+  [8] dichoRecursion(m::Model, yr_1::Float64, yr_2::Float64, ys_1::Float64, ys_2::Float64, varArray::Vector{VariableRef}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}}) (repeats 10877 times)
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/algorithms.jl:867
+  [9] solve_dicho(m::Model, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/algorithms.jl:800
+ [10] compute_LBS(node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/BO01BB/cuttingPlanes.jl:30
+ [11] LPRelaxByDicho(node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/BO01BB/fathoming.jl:82
+ [12] LPRelaxByDicho
+    @ ~/coding/vOptGeneric.jl/src/BO01BB/fathoming.jl:76 [inlined]
+ [13] macro expansion
+    @ ~/.julia/packages/TimerOutputs/4yHI4/src/TimerOutput.jl:237 [inlined]
+ [14] iterative_procedure(todo::DataStructures.Queue{Base.RefValue{Main.vOptGeneric.Node}}, node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/BO01BB/BO01BB.jl:205
+ [15] iterative_procedure(todo::DataStructures.Queue{Base.RefValue{Main.vOptGeneric.Node}}, node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results::Bool, verbose::Bool)
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/BO01BB/BO01BB.jl:136
+ [16] macro expansion
+    @ ~/.julia/packages/TimerOutputs/4yHI4/src/TimerOutput.jl:237 [inlined]
+ [17] macro expansion
+    @ ~/coding/vOptGeneric.jl/src/BO01BB/BO01BB.jl:383 [inlined]
+ [18] macro expansion
+    @ ~/.julia/packages/TimerOutputs/4yHI4/src/TimerOutput.jl:237 [inlined]
+ [19] solve_branchboundcut(m::Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/BO01BB/BO01BB.jl:376
+ [20] solve_branchboundcut
+    @ ~/coding/vOptGeneric.jl/src/BO01BB/BO01BB.jl:312 [inlined]
+ [21] vSolve(m::Model; relax::Bool, method::Symbol, step::Float64, round_results::Bool, verbose::Bool, args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/coding/vOptGeneric.jl/src/vOptGeneric.jl:62
+ [22] vSolveBi01IP(solverSelected::Type, C::Matrix{Int64}, A::Matrix{Int64}, B::Vector{Int64}, fname::String, method::Symbol)
+    @ Main ~/coding/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:123
+ [23] main(fname::String)
+    @ Main ~/coding/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:192
+ [24] top-level scope
+    @ ~/coding/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:200
+in expression starting at /home/yue/coding/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:200
+
+Project MOMH 2021" --------------------------------
+
+method : bb
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         20.5s /   2.5%           2.21GiB /   0.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    516ms  100.0%   516ms   21.2MiB  100.0%  21.2MiB
+   iteration         90    455ms   88.0%  5.05ms   16.7MiB   78.7%   190KiB
+     incumbent       99   45.8ms    8.9%   463μs   82.1KiB    0.4%     849B
+     relax          114   43.5ms    8.4%   381μs   3.94MiB   18.6%  35.4KiB
+     dominance       90   87.4μs    0.0%   971ns   23.9KiB    0.1%     272B
+   next node         90   50.0ms    9.7%   556μs   4.28MiB   20.2%  48.7KiB
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 3.62 
+total_nodes = 115 
+pruned_nodes = 58 
+GAP = 0.0 
+relaxation_time = 3.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.05 
+tree_size = 0.187 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 114 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         22.1s /   2.4%           2.32GiB /   1.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    540ms  100.0%   270ms   24.7MiB  100.0%  12.4MiB
+   iteration        180    478ms   88.5%  2.65ms   20.2MiB   81.8%   115KiB
+     relax          228   65.8ms   12.2%   288μs   7.19MiB   29.1%  32.3KiB
+     incumbent      198   45.9ms    8.5%   232μs   89.4KiB    0.4%     462B
+     dominance      180    162μs    0.0%   898ns   47.8KiB    0.2%     272B
+   next node        180   50.1ms    9.3%   278μs   4.28MiB   17.3%  24.4KiB
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.02 
+total_nodes = 115 
+pruned_nodes = 58 
+GAP = 0.0 
+relaxation_time = 0.02 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.187 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 114 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         22.4s /   2.9%           2.34GiB /   2.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              3    645ms  100.0%   215ms   50.3MiB  100.0%  16.8MiB
+   iteration        390    582ms   90.4%  1.49ms   45.8MiB   91.0%   120KiB
+     relax          482    168ms   26.1%   349μs   31.5MiB   62.7%  67.0KiB
+     incumbent      439   46.2ms    7.2%   105μs    120KiB    0.2%     280B
+     dominance      390    921μs    0.1%  2.36μs    521KiB    1.0%  1.34KiB
+   next node        390   50.2ms    7.8%   129μs   4.29MiB    8.5%  11.3KiB
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.11 
+total_nodes = 255 
+pruned_nodes = 128 
+GAP = 0.0 
+relaxation_time = 0.1 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.591 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 254 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 14
+length X_E = 14
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          109s /  63.8%           20.6GiB /  86.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              4    69.7s  100.0%   17.4s   17.8GiB  100.0%  4.46GiB
+   iteration      72.9k    69.5s   99.7%   953μs   17.8GiB   99.9%   256KiB
+     relax        78.5k    66.9s   96.0%   853μs   17.1GiB   96.0%   229KiB
+     dominance    72.9k    1.53s    2.2%  21.0μs    427MiB    2.3%  5.99KiB
+     incumbent    76.6k    107ms    0.2%  1.40μs   5.76MiB    0.0%    78.8B
+   next node      72.9k   78.8ms    0.1%  1.08μs   6.50MiB    0.0%    93.5B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 69.07 
+total_nodes = 77969 
+pruned_nodes = 38985 
+GAP = 0.0 
+relaxation_time = 64.01 
+test_dominance_time = 0.81 
+update_incumbent_time = 0.03 
+tree_size = 283.394 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 77968 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 12
+length X_E = 12
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1335s /  76.7%            261GiB /  98.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              5    1024s  100.0%    205s    255GiB  100.0%  51.1GiB
+   iteration       374k    1023s   99.9%  2.73ms    255GiB  100.0%   715KiB
+     relax         400k    1004s   98.0%  2.51ms    251GiB   98.4%   660KiB
+     dominance     374k    14.5s    1.4%  38.7μs   2.53GiB    1.0%  7.08KiB
+     incumbent     379k    424ms    0.0%  1.12μs   23.4MiB    0.0%    64.9B
+   next node       374k    310ms    0.0%   829ns   15.7MiB    0.0%    44.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 954.34 
+total_nodes = 321073 
+pruned_nodes = 160537 
+GAP = 0.0 
+relaxation_time = 914.83 
+test_dominance_time = 6.61 
+update_incumbent_time = 0.17 
+tree_size = 2118.351 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 321072 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 49
+length X_E = 49
+displayGraphics
+method : bb_EPB
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1335s /  76.7%            261GiB /  98.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              6    1024s  100.0%    171s    255GiB  100.0%  42.6GiB
+   iteration       375k    1023s   99.9%  2.73ms    255GiB  100.0%   715KiB
+     relax         400k    1004s   98.0%  2.51ms    251GiB   98.4%   660KiB
+     dominance     375k    14.5s    1.4%  38.7μs   2.53GiB    1.0%  7.08KiB
+     incumbent     379k    424ms    0.0%  1.12μs   23.4MiB    0.0%    64.9B
+   next node       375k    310ms    0.0%   829ns   15.7MiB    0.0%    44.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.02 
+total_nodes = 115 
+pruned_nodes = 58 
+GAP = 0.0 
+relaxation_time = 0.02 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.187 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 114 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1335s /  76.7%            261GiB /  98.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              7    1024s  100.0%    146s    255GiB  100.0%  36.5GiB
+   iteration       375k    1023s   99.9%  2.73ms    255GiB  100.0%   715KiB
+     relax         400k    1004s   98.0%  2.51ms    251GiB   98.4%   659KiB
+     dominance     375k    14.5s    1.4%  38.7μs   2.53GiB    1.0%  7.08KiB
+     incumbent     379k    424ms    0.0%  1.12μs   23.5MiB    0.0%    64.9B
+   next node       375k    310ms    0.0%   829ns   15.7MiB    0.0%    44.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.02 
+total_nodes = 115 
+pruned_nodes = 58 
+GAP = 0.0 
+relaxation_time = 0.02 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.187 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 114 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1336s /  76.7%            261GiB /  98.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              8    1025s  100.0%    128s    255GiB  100.0%  31.9GiB
+   iteration       375k    1024s   99.9%  2.73ms    255GiB  100.0%   714KiB
+     relax         400k    1004s   98.0%  2.51ms    251GiB   98.4%   659KiB
+     dominance     375k    14.5s    1.4%  38.7μs   2.53GiB    1.0%  7.08KiB
+     incumbent     379k    425ms    0.0%  1.12μs   23.5MiB    0.0%    64.9B
+   next node       375k    311ms    0.0%   828ns   15.7MiB    0.0%    44.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.61 
+total_nodes = 267 
+pruned_nodes = 134 
+GAP = 0.0 
+relaxation_time = 0.1 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.604 
+nb_nodes_EPB = 6 
+nb_nodes_VB = 260 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 14
+length X_E = 14
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1442s /  76.9%            283GiB /  98.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              9    1109s  100.0%    123s    277GiB  100.0%  30.8GiB
+   iteration       463k    1108s   99.9%  2.39ms    277GiB  100.0%   627KiB
+     relax         510k    1086s   97.9%  2.13ms    272GiB   98.3%   560KiB
+     dominance     463k    16.1s    1.4%  34.7μs   3.00GiB    1.1%  6.78KiB
+     incumbent     468k    470ms    0.0%  1.00μs   26.8MiB    0.0%    60.0B
+   next node       463k    348ms    0.0%   751ns   18.4MiB    0.0%    41.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 84.66 
+total_nodes = 109861 
+pruned_nodes = 58096 
+GAP = 0.0 
+relaxation_time = 71.15 
+test_dominance_time = 0.59 
+update_incumbent_time = 0.01 
+tree_size = 325.414 
+nb_nodes_EPB = 24358 
+nb_nodes_VB = 85502 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 12
+length X_E = 12
+displayGraphics
+n=40
+Building...
+Solving...
+./MOBKP/set3/W7BI-tube2-1800.DAT
+
+Project MOMH 2021" --------------------------------
+
+method : bb
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         19.1s /   2.5%           2.21GiB /   1.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    476ms  100.0%   476ms   23.0MiB  100.0%  23.0MiB
+   iteration        148    440ms   92.4%  2.97ms   18.5MiB   80.4%   128KiB
+     relax          220   48.4ms   10.2%   220μs   5.42MiB   23.5%  25.2KiB
+     incumbent      168   42.1ms    8.8%   250μs   94.5KiB    0.4%     576B
+     dominance      148    198μs    0.0%  1.34μs    129KiB    0.5%     895B
+   next node        148   24.6ms    5.2%   166μs   4.28MiB   18.6%  29.6KiB
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 3.61 
+total_nodes = 221 
+pruned_nodes = 111 
+GAP = 0.0 
+relaxation_time = 3.07 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.04 
+tree_size = 0.33 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 220 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         20.6s /   2.5%           2.32GiB /   1.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    505ms  100.0%   253ms   28.4MiB  100.0%  14.2MiB
+   iteration        296    469ms   92.8%  1.59ms   23.9MiB   84.1%  82.7KiB
+     relax          440   76.8ms   15.2%   175μs   10.2MiB   35.7%  23.6KiB
+     incumbent      336   42.2ms    8.4%   126μs    114KiB    0.4%     348B
+     dominance      296    373μs    0.1%  1.26μs    259KiB    0.9%     895B
+   next node        296   24.6ms    4.9%  83.1μs   4.29MiB   15.1%  14.8KiB
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.03 
+total_nodes = 221 
+pruned_nodes = 111 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.33 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 220 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         21.2s /   4.5%           2.43GiB /   5.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              3    964ms  100.0%   321ms    132MiB  100.0%  44.0MiB
+   iteration      1.20k    927ms   96.1%   774μs    127MiB   96.5%   109KiB
+     relax        1.47k    527ms   54.6%   357μs    110MiB   83.0%  76.1KiB
+     incumbent    1.30k   43.0ms    4.5%  33.2μs    197KiB    0.1%     155B
+     dominance    1.20k   2.25ms    0.2%  1.88μs   1.41MiB    1.1%  1.21KiB
+   next node      1.20k   24.9ms    2.6%  20.8μs   4.31MiB    3.3%  3.69KiB
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.46 
+total_nodes = 1035 
+pruned_nodes = 518 
+GAP = 0.0 
+relaxation_time = 0.43 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 2.369 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 1034 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         27.6s /  23.6%           3.95GiB /  40.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              4    6.50s  100.0%   1.63s   1.60GiB  100.0%   408MiB
+   iteration      13.4k    6.45s   99.2%   480μs   1.59GiB   99.7%   124KiB
+     relax        14.6k    5.89s   90.6%   404μs   1.49GiB   93.7%   108KiB
+     dominance    13.4k   79.7ms    1.2%  5.94μs   35.8MiB    2.2%  2.73KiB
+     incumbent    13.9k   50.3ms    0.8%  3.63μs    942KiB    0.1%    69.6B
+   next node      13.4k   28.5ms    0.4%  2.12μs   4.69MiB    0.3%     366B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 5.54 
+total_nodes = 13095 
+pruned_nodes = 6548 
+GAP = 0.0 
+relaxation_time = 4.93 
+test_dominance_time = 0.05 
+update_incumbent_time = 0.0 
+tree_size = 39.396 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 13094 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         58.6s /  60.3%           12.5GiB /  80.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              5    35.3s  100.0%   7.06s   10.0GiB  100.0%  2.01GiB
+   iteration      37.0k    35.2s   99.7%   950μs   10.0GiB   99.9%   284KiB
+     relax        39.3k    34.2s   96.9%   870μs   9.76GiB   97.1%   260KiB
+     dominance    37.0k    315ms    0.9%  8.51μs    141MiB    1.4%  3.89KiB
+     incumbent    37.9k   70.9ms    0.2%  1.87μs   2.67MiB    0.0%    74.0B
+   next node      37.0k   35.8ms    0.1%   966ns   5.41MiB    0.1%     153B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 28.8 
+total_nodes = 24767 
+pruned_nodes = 12384 
+GAP = 0.0 
+relaxation_time = 27.28 
+test_dominance_time = 0.14 
+update_incumbent_time = 0.01 
+tree_size = 110.879 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 24766 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+method : bb_EPB
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         58.7s /  60.2%           12.5GiB /  80.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              6    35.3s  100.0%   5.89s   10.1GiB  100.0%  1.68GiB
+   iteration      37.2k    35.2s   99.7%   947μs   10.0GiB   99.9%   283KiB
+     relax        39.6k    34.2s   96.9%   866μs   9.76GiB   97.1%   259KiB
+     dominance    37.2k    315ms    0.9%  8.48μs    141MiB    1.4%  3.88KiB
+     incumbent    38.0k   71.0ms    0.2%  1.87μs   2.69MiB    0.0%    74.2B
+   next node      37.2k   35.8ms    0.1%   963ns   5.41MiB    0.1%     153B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.03 
+total_nodes = 221 
+pruned_nodes = 111 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.33 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 220 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         58.9s /  60.0%           12.6GiB /  80.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              7    35.4s  100.0%   5.05s   10.1GiB  100.0%  1.44GiB
+   iteration      37.3k    35.3s   99.7%   944μs   10.1GiB   99.9%   282KiB
+     relax        39.8k    34.3s   96.9%   862μs   9.77GiB   97.1%   258KiB
+     dominance    37.3k    316ms    0.9%  8.45μs    141MiB    1.4%  3.87KiB
+     incumbent    38.2k   71.2ms    0.2%  1.86μs   2.71MiB    0.0%    74.4B
+   next node      37.3k   35.9ms    0.1%   960ns   5.42MiB    0.1%     152B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.03 
+total_nodes = 221 
+pruned_nodes = 111 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.33 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 220 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         60.0s /  60.5%           12.7GiB /  80.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              8    36.3s  100.0%   4.54s   10.2GiB  100.0%  1.28GiB
+   iteration      38.2k    36.2s   99.8%   949μs   10.2GiB   99.9%   280KiB
+     relax        40.8k    35.2s   96.9%   863μs   9.91GiB   97.1%   255KiB
+     dominance    38.2k    349ms    1.0%  9.15μs    142MiB    1.4%  3.81KiB
+     incumbent    39.1k   71.9ms    0.2%  1.84μs   2.78MiB    0.0%    74.6B
+   next node      38.2k   36.1ms    0.1%   946ns   5.44MiB    0.1%     149B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.96 
+total_nodes = 1030 
+pruned_nodes = 498 
+GAP = 0.0 
+relaxation_time = 0.39 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 2.255 
+nb_nodes_EPB = 69 
+nb_nodes_VB = 960 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         69.4s /  64.5%           15.2GiB /  83.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              9    44.8s  100.0%   4.98s   12.6GiB  100.0%  1.41GiB
+   iteration      51.3k    44.7s   99.7%   871μs   12.6GiB   99.9%   258KiB
+     relax        60.8k    43.4s   96.9%   714μs   12.2GiB   96.8%   211KiB
+     dominance    51.3k    437ms    1.0%  8.52μs    180MiB    1.4%  3.59KiB
+     incumbent    52.4k   80.1ms    0.2%  1.53μs   3.36MiB    0.0%    67.2B
+   next node      51.3k   41.6ms    0.1%   811ns   5.84MiB    0.0%     119B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 8.47 
+total_nodes = 19976 
+pruned_nodes = 10015 
+GAP = 0.0 
+relaxation_time = 6.01 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.0 
+tree_size = 45.138 
+nb_nodes_EPB = 1319 
+nb_nodes_VB = 18656 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          121s /  74.7%           30.6GiB /  90.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             10    90.1s  100.0%   9.01s   27.8GiB  100.0%  2.78GiB
+   iteration      90.3k    89.9s   99.8%   996μs   27.8GiB  100.0%   323KiB
+     relax         127k    87.6s   97.2%   690μs   27.0GiB   97.1%   223KiB
+     dominance    90.3k    909ms    1.0%  10.1μs    344MiB    1.2%  3.91KiB
+     incumbent    91.6k    105ms    0.1%  1.15μs   4.91MiB    0.0%    56.2B
+   next node      90.3k   60.6ms    0.1%   671ns   7.03MiB    0.0%    81.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 45.35 
+total_nodes = 66251 
+pruned_nodes = 33112 
+GAP = 0.0 
+relaxation_time = 29.23 
+test_dominance_time = 0.07 
+update_incumbent_time = 0.01 
+tree_size = 145.043 
+nb_nodes_EPB = 4530 
+nb_nodes_VB = 61720 
+root_relax = false 
+TO = false 
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+method : bc
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          122s /  74.1%           30.8GiB /  90.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             11    90.2s  100.0%   8.20s   27.8GiB  100.0%  2.53GiB
+   iteration      90.3k    90.0s   99.8%   996μs   27.8GiB  100.0%   323KiB
+     relax         127k    87.7s   97.2%   690μs   27.1GiB   97.1%   223KiB
+     dominance    90.3k    909ms    1.0%  10.1μs    344MiB    1.2%  3.90KiB
+     incumbent    91.6k    105ms    0.1%  1.15μs   4.92MiB    0.0%    56.3B
+   next node      90.3k   60.6ms    0.1%   671ns   7.03MiB    0.0%    81.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 41
+ # informations of B&B algorithm : 
+total_times_used = 0.11 
+total_nodes = 77 
+pruned_nodes = 39 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.175 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 76 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 59 
+cuts_applied = 41 
+sp_cuts = 38 
+mp_cuts = 3 
+cuts_total = 41 
+times_calling_dicho = 0.03 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.07 
+times_total_for_cuts = 0.1 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          122s /  74.1%           30.8GiB /  90.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             12    90.2s  100.0%   7.52s   27.9GiB  100.0%  2.32GiB
+   iteration      90.4k    90.0s   99.8%   996μs   27.8GiB  100.0%   323KiB
+     relax         127k    87.7s   97.2%   689μs   27.1GiB   97.1%   223KiB
+     dominance    90.4k    909ms    1.0%  10.1μs    344MiB    1.2%  3.90KiB
+     incumbent    91.7k    105ms    0.1%  1.15μs   4.93MiB    0.0%    56.4B
+   next node      90.4k   60.6ms    0.1%   671ns   7.03MiB    0.0%    81.6B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 41
+ # informations of B&B algorithm : 
+total_times_used = 0.04 
+total_nodes = 77 
+pruned_nodes = 39 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.175 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 76 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 59 
+cuts_applied = 41 
+sp_cuts = 38 
+mp_cuts = 3 
+cuts_total = 41 
+times_calling_dicho = 0.03 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.03 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          122s /  74.0%           30.8GiB /  90.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             13    90.5s  100.0%   6.96s   27.9GiB  100.0%  2.15GiB
+   iteration      90.6k    90.3s   99.8%   997μs   27.9GiB  100.0%   323KiB
+     relax         127k    88.0s   97.2%   691μs   27.1GiB   97.1%   223KiB
+     dominance    90.6k    910ms    1.0%  10.0μs    345MiB    1.2%  3.90KiB
+     incumbent    91.9k    106ms    0.1%  1.15μs   4.95MiB    0.0%    56.4B
+   next node      90.6k   60.7ms    0.1%   670ns   7.04MiB    0.0%    81.5B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 296
+ # informations of B&B algorithm : 
+total_times_used = 0.33 
+total_nodes = 227 
+pruned_nodes = 114 
+GAP = 0.0 
+relaxation_time = 0.3 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.694 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 226 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 211 
+cuts_applied = 296 
+sp_cuts = 214 
+mp_cuts = 82 
+cuts_total = 296 
+times_calling_dicho = 0.3 
+times_calling_separators = 0.01 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.32 
+times_add_retrieve_cuts = 0.01 
+
+
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          126s /  74.6%           31.6GiB /  90.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             14    93.8s  100.0%   6.70s   28.7GiB  100.0%  2.05GiB
+   iteration      92.2k    93.5s   99.8%  1.01ms   28.7GiB  100.0%   326KiB
+     relax         129k    91.2s   97.3%   706μs   27.9GiB   97.2%   226KiB
+     dominance    92.2k    940ms    1.0%  10.2μs    354MiB    1.2%  3.94KiB
+     incumbent    93.6k    115ms    0.1%  1.23μs   6.01MiB    0.0%    67.3B
+   next node      92.2k   61.3ms    0.1%   664ns   7.09MiB    0.0%    80.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 1151
+ # informations of B&B algorithm : 
+total_times_used = 3.25 
+total_nodes = 1687 
+pruned_nodes = 844 
+GAP = 0.0 
+relaxation_time = 2.83 
+test_dominance_time = 0.02 
+update_incumbent_time = 0.01 
+tree_size = 6.671 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 1686 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 1688 
+cuts_applied = 1151 
+sp_cuts = 858 
+mp_cuts = 293 
+cuts_total = 1151 
+times_calling_dicho = 2.83 
+times_calling_separators = 0.11 
+times_oper_cutPool = 0.02 
+times_total_for_cuts = 3.15 
+times_add_retrieve_cuts = 0.17 
+
+
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          174s /  80.3%           45.9GiB /  93.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             15     140s  100.0%   9.34s   42.8GiB  100.0%  2.85GiB
+   iteration       105k     140s   99.8%  1.33ms   42.8GiB  100.0%   426KiB
+     relax         143k     137s   97.9%   961μs   41.9GiB   97.8%   308KiB
+     dominance     105k    1.20s    0.9%  11.4μs    427MiB    1.0%  4.15KiB
+     incumbent     107k    142ms    0.1%  1.33μs   7.85MiB    0.0%    76.9B
+   next node       105k   66.7ms    0.0%   633ns   7.49MiB    0.0%    74.5B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 13638
+ # informations of B&B algorithm : 
+total_times_used = 46.35 
+total_nodes = 13527 
+pruned_nodes = 6764 
+GAP = 0.0 
+relaxation_time = 41.78 
+test_dominance_time = 0.14 
+update_incumbent_time = 0.02 
+tree_size = 84.637 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 13526 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 13386 
+cuts_applied = 13638 
+sp_cuts = 11584 
+mp_cuts = 2054 
+cuts_total = 13638 
+times_calling_dicho = 41.78 
+times_calling_separators = 1.67 
+times_oper_cutPool = 0.22 
+times_total_for_cuts = 45.4 
+times_add_retrieve_cuts = 1.41 
+
+
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+method : bc_EPB
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          175s /  80.2%           45.9GiB /  93.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             16     140s  100.0%   8.76s   42.8GiB  100.0%  2.68GiB
+   iteration       105k     140s   99.8%  1.33ms   42.8GiB  100.0%   426KiB
+     relax         143k     137s   97.9%   961μs   41.9GiB   97.8%   308KiB
+     dominance     105k    1.20s    0.9%  11.3μs    427MiB    1.0%  4.15KiB
+     incumbent     107k    142ms    0.1%  1.33μs   7.86MiB    0.0%    77.0B
+   next node       105k   66.7ms    0.0%   632ns   7.50MiB    0.0%    74.5B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 41
+ # informations of B&B algorithm : 
+total_times_used = 0.04 
+total_nodes = 77 
+pruned_nodes = 39 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.175 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 76 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 59 
+cuts_applied = 41 
+sp_cuts = 38 
+mp_cuts = 3 
+cuts_total = 41 
+times_calling_dicho = 0.03 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.03 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          175s /  80.2%           45.9GiB /  93.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             17     140s  100.0%   8.24s   42.8GiB  100.0%  2.52GiB
+   iteration       106k     140s   99.8%  1.33ms   42.8GiB  100.0%   425KiB
+     relax         143k     137s   97.9%   961μs   41.9GiB   97.8%   308KiB
+     dominance     106k    1.20s    0.9%  11.3μs    427MiB    1.0%  4.15KiB
+     incumbent     107k    142ms    0.1%  1.33μs   7.87MiB    0.0%    77.1B
+   next node       106k   66.7ms    0.0%   632ns   7.50MiB    0.0%    74.5B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 41
+ # informations of B&B algorithm : 
+total_times_used = 0.04 
+total_nodes = 77 
+pruned_nodes = 39 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.175 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 76 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 59 
+cuts_applied = 41 
+sp_cuts = 38 
+mp_cuts = 3 
+cuts_total = 41 
+times_calling_dicho = 0.03 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.03 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          175s /  80.1%           46.0GiB /  93.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             18     140s  100.0%   7.80s   42.9GiB  100.0%  2.38GiB
+   iteration       106k     140s   99.8%  1.33ms   42.9GiB  100.0%   425KiB
+     relax         143k     137s   97.9%   961μs   42.0GiB   97.8%   308KiB
+     dominance     106k    1.20s    0.9%  11.3μs    427MiB    1.0%  4.14KiB
+     incumbent     107k    143ms    0.1%  1.33μs   7.88MiB    0.0%    77.1B
+   next node       106k   66.8ms    0.0%   632ns   7.50MiB    0.0%    74.4B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 273
+ # informations of B&B algorithm : 
+total_times_used = 0.34 
+total_nodes = 223 
+pruned_nodes = 108 
+GAP = 0.0 
+relaxation_time = 0.31 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.674 
+nb_nodes_EPB = 12 
+nb_nodes_VB = 210 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 205 
+cuts_applied = 273 
+sp_cuts = 194 
+mp_cuts = 79 
+cuts_total = 273 
+times_calling_dicho = 0.31 
+times_calling_separators = 0.01 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.33 
+times_add_retrieve_cuts = 0.01 
+
+
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          180s /  80.5%           47.4GiB /  93.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             19     145s  100.0%   7.65s   44.3GiB  100.0%  2.33GiB
+   iteration       109k     145s   99.8%  1.33ms   44.3GiB  100.0%   427KiB
+     relax         148k     142s   97.9%   958μs   43.4GiB   97.8%   306KiB
+     dominance     109k    1.27s    0.9%  11.6μs    446MiB    1.0%  4.20KiB
+     incumbent     110k    147ms    0.1%  1.34μs   8.23MiB    0.0%    78.1B
+   next node       109k   68.4ms    0.0%   629ns   7.60MiB    0.0%    73.2B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 743
+ # informations of B&B algorithm : 
+total_times_used = 4.81 
+total_nodes = 5441 
+pruned_nodes = 2754 
+GAP = 0.0 
+relaxation_time = 3.45 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.0 
+tree_size = 11.957 
+nb_nodes_EPB = 508 
+nb_nodes_VB = 4932 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 3360 
+cuts_applied = 743 
+sp_cuts = 546 
+mp_cuts = 197 
+cuts_total = 743 
+times_calling_dicho = 3.45 
+times_calling_separators = 0.09 
+times_oper_cutPool = 0.01 
+times_total_for_cuts = 3.53 
+times_add_retrieve_cuts = 0.16 
+
+
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          240s /  84.2%           65.4GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             20     202s  100.0%   10.1s   62.1GiB  100.0%  3.11GiB
+   iteration       137k     202s   99.8%  1.47ms   62.1GiB  100.0%   474KiB
+     relax         198k     198s   97.9%  1.00ms   60.8GiB   97.9%   322KiB
+     dominance     137k    1.84s    0.9%  13.4μs    591MiB    0.9%  4.41KiB
+     incumbent     139k    169ms    0.1%  1.22μs   9.42MiB    0.0%    71.0B
+   next node       137k   83.6ms    0.0%   609ns   8.47MiB    0.0%    64.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 4949
+ # informations of B&B algorithm : 
+total_times_used = 57.25 
+total_nodes = 49383 
+pruned_nodes = 24713 
+GAP = 0.0 
+relaxation_time = 42.8 
+test_dominance_time = 0.08 
+update_incumbent_time = 0.01 
+tree_size = 112.625 
+nb_nodes_EPB = 3498 
+nb_nodes_VB = 45884 
+root_relax = false 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 29234 
+cuts_applied = 4949 
+sp_cuts = 3464 
+mp_cuts = 1485 
+cuts_total = 4949 
+times_calling_dicho = 42.8 
+times_calling_separators = 1.46 
+times_oper_cutPool = 0.1 
+times_total_for_cuts = 44.29 
+times_add_retrieve_cuts = 1.46 
+
+
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+method : bc_rootRelax
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          242s /  83.7%           65.5GiB /  94.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             21     203s  100.0%   9.65s   62.1GiB  100.0%  2.96GiB
+   iteration       137k     202s   99.8%  1.47ms   62.1GiB  100.0%   474KiB
+     relax         198k     199s   97.9%  1.00ms   60.8GiB   97.9%   322KiB
+     dominance     137k    1.84s    0.9%  13.4μs    591MiB    0.9%  4.41KiB
+     incumbent     139k    169ms    0.1%  1.22μs   9.46MiB    0.0%    71.3B
+   next node       137k   83.7ms    0.0%   609ns   8.47MiB    0.0%    64.6B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 1.53 
+total_nodes = 107 
+pruned_nodes = 44 
+GAP = 0.0 
+relaxation_time = 1.53 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.16 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 106 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          242s /  83.7%           65.5GiB /  94.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             22     203s  100.0%   9.22s   62.1GiB  100.0%  2.82GiB
+   iteration       137k     202s   99.8%  1.47ms   62.1GiB  100.0%   474KiB
+     relax         198k     199s   97.9%  1.00ms   60.8GiB   97.9%   322KiB
+     dominance     137k    1.84s    0.9%  13.4μs    591MiB    0.9%  4.41KiB
+     incumbent     139k    170ms    0.1%  1.22μs   9.50MiB    0.0%    71.5B
+   next node       137k   83.7ms    0.0%   609ns   8.47MiB    0.0%    64.6B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.09 
+total_nodes = 107 
+pruned_nodes = 44 
+GAP = 0.0 
+relaxation_time = 0.08 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.16 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 106 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          243s /  83.6%           65.6GiB /  94.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             23     203s  100.0%   8.84s   62.2GiB  100.0%  2.70GiB
+   iteration       138k     203s   99.8%  1.47ms   62.1GiB  100.0%   473KiB
+     relax         198k     199s   97.9%  1.00ms   60.9GiB   97.9%   322KiB
+     dominance     138k    1.84s    0.9%  13.3μs    592MiB    0.9%  4.40KiB
+     incumbent     140k    170ms    0.1%  1.22μs   9.72MiB    0.0%    73.0B
+   next node       138k   83.8ms    0.0%   608ns   8.48MiB    0.0%    64.5B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.41 
+total_nodes = 375 
+pruned_nodes = 166 
+GAP = 0.0 
+relaxation_time = 0.39 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.854 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 374 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          247s /  83.8%           65.9GiB /  94.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             24     207s  100.0%   8.63s   62.5GiB  100.0%  2.60GiB
+   iteration       140k     207s   99.8%  1.48ms   62.5GiB  100.0%   469KiB
+     relax         200k     203s   97.9%  1.01ms   61.2GiB   97.9%   320KiB
+     dominance     140k    1.90s    0.9%  13.6μs    607MiB    0.9%  4.45KiB
+     incumbent     141k    185ms    0.1%  1.31μs   12.4MiB    0.0%    92.3B
+   next node       140k   84.6ms    0.0%   605ns   8.54MiB    0.0%    64.1B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 3.87 
+total_nodes = 1977 
+pruned_nodes = 941 
+GAP = 0.0 
+relaxation_time = 3.63 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.05 
+tree_size = 5.364 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 1976 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          259s /  84.5%           67.0GiB /  94.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             25     219s  100.0%   8.75s   63.5GiB  100.0%  2.54GiB
+   iteration       144k     218s   99.8%  1.52ms   63.5GiB  100.0%   463KiB
+     relax         205k     214s   97.8%  1.04ms   62.1GiB   97.8%   318KiB
+     dominance     144k    2.34s    1.1%  16.3μs    660MiB    1.0%  4.69KiB
+     incumbent     146k    269ms    0.1%  1.85μs   20.2MiB    0.0%     145B
+   next node       144k   86.3ms    0.0%   599ns   8.67MiB    0.0%    63.1B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 11.71 
+total_nodes = 4411 
+pruned_nodes = 2121 
+GAP = 0.0 
+relaxation_time = 10.66 
+test_dominance_time = 0.21 
+update_incumbent_time = 0.2 
+tree_size = 12.859 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4410 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+method : bc_rootRelaxEPB
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          259s /  84.4%           67.0GiB /  94.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             26     219s  100.0%   8.42s   63.5GiB  100.0%  2.44GiB
+   iteration       144k     219s   99.8%  1.52ms   63.5GiB  100.0%   462KiB
+     relax         205k     214s   97.8%  1.04ms   62.1GiB   97.8%   318KiB
+     dominance     144k    2.34s    1.1%  16.3μs    660MiB    1.0%  4.69KiB
+     incumbent     146k    269ms    0.1%  1.85μs   20.2MiB    0.0%     145B
+   next node       144k   86.3ms    0.0%   599ns   8.67MiB    0.0%    63.1B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.1 
+total_nodes = 152 
+pruned_nodes = 67 
+GAP = 0.0 
+relaxation_time = 0.09 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.218 
+nb_nodes_EPB = 9 
+nb_nodes_VB = 142 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          259s /  84.4%           67.0GiB /  94.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             27     219s  100.0%   8.11s   63.5GiB  100.0%  2.35GiB
+   iteration       144k     219s   99.8%  1.52ms   63.5GiB  100.0%   462KiB
+     relax         205k     214s   97.8%  1.04ms   62.1GiB   97.8%   318KiB
+     dominance     144k    2.34s    1.1%  16.3μs    660MiB    1.0%  4.69KiB
+     incumbent     146k    269ms    0.1%  1.85μs   20.2MiB    0.0%     145B
+   next node       144k   86.4ms    0.0%   599ns   8.68MiB    0.0%    63.1B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.1 
+total_nodes = 152 
+pruned_nodes = 67 
+GAP = 0.0 
+relaxation_time = 0.09 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.218 
+nb_nodes_EPB = 9 
+nb_nodes_VB = 142 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          260s /  84.4%           67.0GiB /  94.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             28     219s  100.0%   7.83s   63.6GiB  100.0%  2.27GiB
+   iteration       144k     219s   99.8%  1.52ms   63.6GiB  100.0%   461KiB
+     relax         205k     214s   97.8%  1.04ms   62.2GiB   97.8%   317KiB
+     dominance     144k    2.35s    1.1%  16.2μs    661MiB    1.0%  4.68KiB
+     incumbent     146k    270ms    0.1%  1.85μs   20.4MiB    0.0%     146B
+   next node       144k   86.5ms    0.0%   598ns   8.69MiB    0.0%    63.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.34 
+total_nodes = 347 
+pruned_nodes = 156 
+GAP = 0.0 
+relaxation_time = 0.31 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.723 
+nb_nodes_EPB = 4 
+nb_nodes_VB = 342 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          262s /  84.4%           67.5GiB /  94.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             29     222s  100.0%   7.64s   64.0GiB  100.0%  2.21GiB
+   iteration       146k     221s   99.8%  1.52ms   64.0GiB  100.0%   460KiB
+     relax         208k     217s   97.8%  1.04ms   62.6GiB   97.8%   316KiB
+     dominance     146k    2.40s    1.1%  16.4μs    672MiB    1.0%  4.72KiB
+     incumbent     148k    273ms    0.1%  1.85μs   20.8MiB    0.0%     148B
+   next node       146k   87.1ms    0.0%   597ns   8.73MiB    0.0%    62.8B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 2.32 
+total_nodes = 2536 
+pruned_nodes = 1230 
+GAP = 0.0 
+relaxation_time = 1.75 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.01 
+tree_size = 4.419 
+nb_nodes_EPB = 69 
+nb_nodes_VB = 2466 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          274s /  85.0%           69.1GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             30     233s  100.0%   7.76s   65.6GiB  100.0%  2.19GiB
+   iteration       149k     232s   99.9%  1.56ms   65.6GiB  100.0%   461KiB
+     relax         215k     227s   97.7%  1.06ms   64.1GiB   97.7%   313KiB
+     dominance     149k    2.81s    1.2%  18.8μs    719MiB    1.1%  4.93KiB
+     incumbent     151k    282ms    0.1%  1.87μs   21.9MiB    0.0%     152B
+   next node       149k   88.9ms    0.0%   595ns   8.84MiB    0.0%    62.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 11.04 
+total_nodes = 6777 
+pruned_nodes = 3362 
+GAP = 0.0 
+relaxation_time = 8.74 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.07 
+tree_size = 11.936 
+nb_nodes_EPB = 262 
+nb_nodes_VB = 6514 
+root_relax = true 
+TO = false 
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+method : bc_rootRelaxCP
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          274s /  85.0%           69.1GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             31     233s  100.0%   7.51s   65.6GiB  100.0%  2.12GiB
+   iteration       149k     232s   99.9%  1.55ms   65.6GiB  100.0%   460KiB
+     relax         215k     227s   97.7%  1.06ms   64.1GiB   97.7%   313KiB
+     dominance     149k    2.81s    1.2%  18.8μs    719MiB    1.1%  4.93KiB
+     incumbent     151k    283ms    0.1%  1.87μs   22.0MiB    0.0%     152B
+   next node       149k   88.9ms    0.0%   595ns   8.84MiB    0.0%    62.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.09 
+total_nodes = 107 
+pruned_nodes = 44 
+GAP = 0.0 
+relaxation_time = 0.08 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.16 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 106 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 83 
+cuts_applied = 0 
+sp_cuts = 0 
+mp_cuts = 0 
+cuts_total = 0 
+times_calling_dicho = 0.08 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.08 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          274s /  84.9%           69.1GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             32     233s  100.0%   7.28s   65.6GiB  100.0%  2.05GiB
+   iteration       150k     232s   99.9%  1.55ms   65.6GiB  100.0%   460KiB
+     relax         215k     227s   97.7%  1.06ms   64.2GiB   97.7%   313KiB
+     dominance     150k    2.81s    1.2%  18.8μs    719MiB    1.1%  4.92KiB
+     incumbent     151k    283ms    0.1%  1.87μs   22.0MiB    0.0%     152B
+   next node       150k   88.9ms    0.0%   595ns   8.84MiB    0.0%    62.0B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.09 
+total_nodes = 107 
+pruned_nodes = 44 
+GAP = 0.0 
+relaxation_time = 0.08 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.16 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 106 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 83 
+cuts_applied = 0 
+sp_cuts = 0 
+mp_cuts = 0 
+cuts_total = 0 
+times_calling_dicho = 0.08 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.08 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          275s /  84.9%           69.2GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+──────────────────────────────────────────────────────────────────────────
+ BB loop             33     233s  100.0%   7.07s   65.7GiB  100.0%  1.99GiB
+   iteration       150k     233s   99.9%  1.55ms   65.7GiB  100.0%   459KiB
+     relax         215k     228s   97.7%  1.06ms   64.2GiB   97.7%   313KiB
+     dominance     150k    2.81s    1.2%  18.7μs    720MiB    1.1%  4.92KiB
+     incumbent     152k    284ms    0.1%  1.87μs   22.2MiB    0.0%     154B
+   next node       150k   89.1ms    0.0%   594ns   8.85MiB    0.0%    61.9B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 4
+ # informations of B&B algorithm : 
+total_times_used = 0.52 
+total_nodes = 373 
+pruned_nodes = 165 
+GAP = 0.0 
+relaxation_time = 0.48 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.919 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 372 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 351 
+cuts_applied = 4 
+sp_cuts = 4 
+mp_cuts = 0 
+cuts_total = 4 
+times_calling_dicho = 0.48 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.5 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          279s /  85.0%           69.5GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             34     237s  100.0%   6.97s   66.0GiB  100.0%  1.94GiB
+   iteration       152k     237s   99.9%  1.56ms   66.0GiB  100.0%   456KiB
+     relax         217k     232s   97.7%  1.07ms   64.5GiB   97.7%   311KiB
+     dominance     152k    2.87s    1.2%  18.9μs    736MiB    1.1%  4.96KiB
+     incumbent     154k    298ms    0.1%  1.94μs   25.0MiB    0.0%     171B
+   next node       152k   89.8ms    0.0%   591ns   8.91MiB    0.0%    61.5B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 10
+ # informations of B&B algorithm : 
+total_times_used = 3.9 
+total_nodes = 2023 
+pruned_nodes = 964 
+GAP = 0.0 
+relaxation_time = 3.64 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.05 
+tree_size = 5.554 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 2022 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 1983 
+cuts_applied = 10 
+sp_cuts = 10 
+mp_cuts = 0 
+cuts_total = 10 
+times_calling_dicho = 3.64 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 3.69 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          291s /  85.6%           70.6GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             35     249s  100.0%   7.12s   67.1GiB  100.0%  1.92GiB
+   iteration       156k     249s   99.9%  1.59ms   67.1GiB  100.0%   450KiB
+     relax         222k     243s   97.6%  1.10ms   65.5GiB   97.6%   310KiB
+     dominance     156k    3.26s    1.3%  20.9μs    788MiB    1.1%  5.17KiB
+     incumbent     158k    355ms    0.1%  2.25μs   32.9MiB    0.0%     218B
+   next node       156k   91.5ms    0.0%   586ns   9.04MiB    0.0%    60.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 150
+ # informations of B&B algorithm : 
+total_times_used = 12.22 
+total_nodes = 4415 
+pruned_nodes = 2123 
+GAP = 0.0 
+relaxation_time = 11.18 
+test_dominance_time = 0.18 
+update_incumbent_time = 0.18 
+tree_size = 13.057 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4414 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 4259 
+cuts_applied = 150 
+sp_cuts = 150 
+mp_cuts = 0 
+cuts_total = 150 
+times_calling_dicho = 11.18 
+times_calling_separators = 0.01 
+times_oper_cutPool = 0.01 
+times_total_for_cuts = 11.33 
+times_add_retrieve_cuts = 0.02 
+
+
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+method : bc_rootRelaxCPEPB
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          292s /  85.5%           70.6GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             36     249s  100.0%   6.93s   67.1GiB  100.0%  1.86GiB
+   iteration       156k     249s   99.9%  1.59ms   67.1GiB  100.0%   450KiB
+     relax         222k     243s   97.6%  1.10ms   65.5GiB   97.6%   310KiB
+     dominance     156k    3.26s    1.3%  20.9μs    788MiB    1.1%  5.17KiB
+     incumbent     158k    355ms    0.1%  2.25μs   32.9MiB    0.0%     218B
+   next node       156k   91.6ms    0.0%   586ns   9.05MiB    0.0%    60.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.1 
+total_nodes = 152 
+pruned_nodes = 67 
+GAP = 0.0 
+relaxation_time = 0.09 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.218 
+nb_nodes_EPB = 9 
+nb_nodes_VB = 142 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 97 
+cuts_applied = 0 
+sp_cuts = 0 
+mp_cuts = 0 
+cuts_total = 0 
+times_calling_dicho = 0.09 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.08 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=10
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          292s /  85.5%           70.6GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             37     250s  100.0%   6.74s   67.1GiB  100.0%  1.81GiB
+   iteration       156k     249s   99.9%  1.59ms   67.1GiB  100.0%   450KiB
+     relax         222k     244s   97.6%  1.10ms   65.5GiB   97.6%   309KiB
+     dominance     156k    3.26s    1.3%  20.9μs    789MiB    1.1%  5.17KiB
+     incumbent     158k    355ms    0.1%  2.25μs   32.9MiB    0.0%     218B
+   next node       156k   91.6ms    0.0%   586ns   9.05MiB    0.0%    60.7B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 0
+ # informations of B&B algorithm : 
+total_times_used = 0.1 
+total_nodes = 152 
+pruned_nodes = 67 
+GAP = 0.0 
+relaxation_time = 0.09 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.218 
+nb_nodes_EPB = 9 
+nb_nodes_VB = 142 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 97 
+cuts_applied = 0 
+sp_cuts = 0 
+mp_cuts = 0 
+cuts_total = 0 
+times_calling_dicho = 0.09 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.08 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 7
+length X_E = 7
+displayGraphics
+n=20
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          292s /  85.5%           70.7GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             38     250s  100.0%   6.58s   67.2GiB  100.0%  1.77GiB
+   iteration       157k     250s   99.9%  1.59ms   67.1GiB  100.0%   449KiB
+     relax         222k     244s   97.6%  1.10ms   65.6GiB   97.6%   309KiB
+     dominance     157k    3.26s    1.3%  20.8μs    789MiB    1.1%  5.16KiB
+     incumbent     158k    356ms    0.1%  2.25μs   33.1MiB    0.0%     219B
+   next node       157k   91.7ms    0.0%   586ns   9.06MiB    0.0%    60.6B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 4
+ # informations of B&B algorithm : 
+total_times_used = 0.34 
+total_nodes = 345 
+pruned_nodes = 155 
+GAP = 0.0 
+relaxation_time = 0.32 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.788 
+nb_nodes_EPB = 4 
+nb_nodes_VB = 340 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 282 
+cuts_applied = 4 
+sp_cuts = 4 
+mp_cuts = 0 
+cuts_total = 4 
+times_calling_dicho = 0.32 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 0.31 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 5
+length X_E = 5
+displayGraphics
+n=30
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          295s /  85.5%           71.1GiB /  95.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             39     252s  100.0%   6.47s   67.6GiB  100.0%  1.73GiB
+   iteration       158k     252s   99.9%  1.59ms   67.6GiB  100.0%   448KiB
+     relax         225k     246s   97.6%  1.09ms   66.0GiB   97.6%   307KiB
+     dominance     158k    3.31s    1.3%  21.0μs    801MiB    1.2%  5.19KiB
+     incumbent     160k    359ms    0.1%  2.25μs   33.4MiB    0.0%     220B
+   next node       158k   92.4ms    0.0%   585ns   9.10MiB    0.0%    60.4B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 3
+ # informations of B&B algorithm : 
+total_times_used = 2.35 
+total_nodes = 2536 
+pruned_nodes = 1230 
+GAP = 0.0 
+relaxation_time = 1.77 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.01 
+tree_size = 4.505 
+nb_nodes_EPB = 69 
+nb_nodes_VB = 2466 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 1367 
+cuts_applied = 3 
+sp_cuts = 3 
+mp_cuts = 0 
+cuts_total = 3 
+times_calling_dicho = 1.77 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 1.44 
+times_add_retrieve_cuts = 0.0 
+
+
+
+Querying...
+length Y_N = 28
+length X_E = 28
+displayGraphics
+n=40
+Building...
+Solving...
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          306s /  86.0%           72.8GiB /  95.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop             40     264s  100.0%   6.59s   69.2GiB  100.0%  1.73GiB
+   iteration       161k     263s   99.9%  1.63ms   69.2GiB  100.0%   449KiB
+     relax         232k     257s   97.5%  1.11ms   67.5GiB   97.6%   306KiB
+     dominance     161k    3.70s    1.4%  22.9μs    847MiB    1.2%  5.37KiB
+     incumbent     163k    368ms    0.1%  2.25μs   34.5MiB    0.0%     222B
+   next node       161k   94.2ms    0.0%   583ns   9.21MiB    0.0%    59.8B
+ ──────────────────────────────────────────────────────────────────────────
+ total cuts : 49
+ # informations of B&B algorithm : 
+total_times_used = 11.31 
+total_nodes = 6813 
+pruned_nodes = 3384 
+GAP = 0.0 
+relaxation_time = 8.99 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.04 
+tree_size = 11.994 
+nb_nodes_EPB = 276 
+nb_nodes_VB = 6536 
+root_relax = true 
+TO = false 
+
+
+ # ----------- info about cuts : 
+ite_total = 3510 
+cuts_applied = 49 
+sp_cuts = 49 
+mp_cuts = 0 
+cuts_total = 49 
+times_calling_dicho = 8.99 
+times_calling_separators = 0.01 
+times_oper_cutPool = 0.0 
+times_total_for_cuts = 7.02 
+times_add_retrieve_cuts = 0.01 
+
+
+
+Querying...
+length Y_N = 43
+length X_E = 43
+displayGraphics
+./MOBKP/set3/Wcollage-tube.DAT
