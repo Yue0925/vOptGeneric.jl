@@ -277,12 +277,9 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             fathomed = false
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
-
-                elseif (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2])
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
                 else 
-                    push!(node.localNadirPts, u.y)
+                    push!(node.localNadirPts, u.y) 
                 end 
             else
                 return fathomed
@@ -290,7 +287,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             
         end
 
-        if !compared && (u.y[1] ≥ ptr.y[1] && u.y[2] ≥ ptl.y[2] )
+        if !compared && (u.y[1] ≥ ptr.y[1] && u.y[2] ≥ ptl.y[2])
             if EPB node.localNadirPts = Vector{Vector{Float64}}() end               # no need to (extended) pareto branching
             return false
         end

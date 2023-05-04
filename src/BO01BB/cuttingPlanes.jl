@@ -16,9 +16,9 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     #------------------------------------------------------------------------------
     if pb.param.root_relax
 
-        println("----------------------------------------")
-        @info "node $(node.num) \t |LBS| = $(length(node.RBS.natural_order_vect.sols)) \t computing LBS ... "
-        println("----------------------------------------")
+        # println("----------------------------------------")
+        # println("node $(node.num) \t |LBS| = $(length(node.RBS.natural_order_vect.sols)) \t computing LBS ... ")
+        # println("----------------------------------------")
 
         start = time()
         Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
@@ -39,7 +39,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             return true
         end
     else
-        if length(node.RBS.natural_order_vect.sols) == 0
+        # if length(node.RBS.natural_order_vect.sols) == 0
             start = time()
             solve_dicho(pb.m, round_results, false ; args...)
             pb.info.relaxation_time += (time() - start)
@@ -61,9 +61,9 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             for i = 1:length(vd_LP.Y_N)
                 push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
             end
-        else 
-            # todo : take intersection 
-        end
+        # else 
+        #     # todo : take intersection 
+        # end
     end
 
     return false
@@ -84,7 +84,6 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
         if pb.param.root_relax
 
             start = time() 
-            # Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)  
             Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ, false ; args...)      
             pb.info.relaxation_time += (time() - start)
     
@@ -259,12 +258,12 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
 
         if cut_counter > 0
 
-            # if pb.param.root_relax
+            if pb.param.root_relax
                 reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
-            # else
-            #     pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-            #     if pruned return true end
-            # end
+            else
+                pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+                if pruned return true end
+            end
 
             LBS = node.RBS.natural_order_vect.sols
 
