@@ -194,11 +194,11 @@ A fully explicit dominance test, and prune the given node if it's fathomed by do
 Return `true` if the given node is fathomed by dominance.
 """
 function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
-    # todo : 
-    if length(node.RBS.natural_order_vect) == 0
-        @info "pred |LBS| = $(length(node.pred.RBS.natural_order_vect)) \t $(hasNonExploredChild(node.pred))"
-        println(node.pred)
-    end
+    # # todo : 
+    # if length(node.RBS.natural_order_vect) == 0
+    #     @info "pred |LBS| = $(length(node.pred.RBS.natural_order_vect)) \t $(hasNonExploredChild(node.pred))"
+    #     println(node.pred)
+    # end
     @assert length(node.RBS.natural_order_vect) > 0 "relaxed bound set is empty for node $(node.num)"
 
     # we can't compare the LBS and UBS if the incumbent set is empty
@@ -282,9 +282,12 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             fathomed = false
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
+
+                elseif (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2])
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
                 else 
-                    push!(node.localNadirPts, u.y) 
+                    push!(node.localNadirPts, u.y)
                 end 
             else
                 return fathomed

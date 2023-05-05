@@ -161,13 +161,14 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     if !isRoot(node)
         # if exists non-explored child, don't liberate
         if node.EPB || hasNonExploredChild(node.pred) 
-        # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
-        elseif length(node.pred.RBS.natural_order_vect.sols) > 0
+        else
+            if length(node.pred.RBS.natural_order_vect.sols) > 0
                 node.pred.RBS = RelaxedBoundSet() ; node.pred.assignment = Dict{Int64, Int64}()
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
                 end
+            end
         end
     end
 
