@@ -194,6 +194,11 @@ A fully explicit dominance test, and prune the given node if it's fathomed by do
 Return `true` if the given node is fathomed by dominance.
 """
 function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
+    # todo : 
+    if length(node.RBS.natural_order_vect) == 0
+        @info "pred |LBS| = $(length(node.pred.RBS.natural_order_vect)) \t $(hasNonExploredChild(node.pred))"
+        println(node.pred)
+    end
     @assert length(node.RBS.natural_order_vect) > 0 "relaxed bound set is empty for node $(node.num)"
 
     # we can't compare the LBS and UBS if the incumbent set is empty

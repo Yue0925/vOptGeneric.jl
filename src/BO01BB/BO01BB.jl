@@ -163,7 +163,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         if node.EPB || hasNonExploredChild(node.pred) 
         # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
-        elseif length(node.pred.RBS.natural_order_vect) > 0
+        elseif length(node.pred.RBS.natural_order_vect.sols) > 0
                 node.pred.RBS = RelaxedBoundSet() ; node.pred.assignment = Dict{Int64, Int64}()
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
@@ -187,7 +187,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
             # todo : copy parent's LBS 
             if length(node.RBS.natural_order_vect.sols) ≥ 2 
-                nodeChild.RBS.natural_order_vect.sols = node.RBS.natural_order_vect.sols
+                nodeChild.RBS.natural_order_vect.sols = copy(node.RBS.natural_order_vect.sols)
             end
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
@@ -214,7 +214,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         # todo : copy parent's LBS 
         if length(node.RBS.natural_order_vect.sols) ≥ 2 
-            node1.RBS.natural_order_vect.sols = node.RBS.natural_order_vect.sols
+            node1.RBS.natural_order_vect.sols = copy(node.RBS.natural_order_vect.sols)
         end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
@@ -234,7 +234,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         # todo : copy parent's LBS 
         if length(node.RBS.natural_order_vect.sols) ≥ 2 
-            node2.RBS.natural_order_vect.sols = node.RBS.natural_order_vect.sols
+            node2.RBS.natural_order_vect.sols = copy(node.RBS.natural_order_vect.sols)
         end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
