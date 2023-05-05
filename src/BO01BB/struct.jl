@@ -310,7 +310,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             r  = m-1
         # in case of equality
         else
-            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return m
+            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return -1
         end
     end
 
