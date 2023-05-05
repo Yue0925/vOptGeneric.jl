@@ -535,7 +535,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             continue 
         end 
 
-        bckp = L.natural_order_vect.sols[idx].y 
+        bckp = L.natural_order_vect.sols[idx].y
         # filter lower bounds under current line 
         filtering(val, L, λ)
 
@@ -667,6 +667,8 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         if !valid 
             # @info "out of box !"
             deleteat!(L.natural_order_vect.sols, idx) ; 
+            filtering(val, L, λ)
+
             # add new intersection points 
             for s in intersection
                 push!(L.natural_order_vect, s)
