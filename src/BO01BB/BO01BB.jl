@@ -134,10 +134,6 @@ Argument :
     - pb : BO01Problem 
 """
 function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results, verbose; args...)
-    if verbose
-        @info "at node $(node.num) |Y_N| = $(length(incumbent.natural_order_vect)), EPB ? $(node.EPB)"
-    end
-
     # get the actual node
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
@@ -163,7 +159,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         if node.EPB || hasNonExploredChild(node.pred) 
             nothing
         else
-            if length(node.pred.RBS.natural_order_vect.sols) > 0
+            if length(node.pred.assignment) > 0
                 node.pred.RBS = RelaxedBoundSet() ; node.pred.assignment = Dict{Int64, Int64}()
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
@@ -187,9 +183,9 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
 
             # todo : copy parent's LBS 
-            if length(node.RBS.natural_order_vect.sols) ≥ 2 
+            # if length(node.RBS.natural_order_vect.sols) ≥ 2 
                 nodeChild.RBS.natural_order_vect.sols = copy(node.RBS.natural_order_vect.sols)
-            end
+            # end
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
                 ( @timeit tmr "incumbent" updateIncumbent(nodeChild, pb, incumbent, verbose) )
@@ -214,9 +210,9 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
         # todo : copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 
+        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
             node1.RBS.natural_order_vect.sols = copy(node.RBS.natural_order_vect.sols)
-        end
+        # end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
@@ -234,9 +230,9 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
         # todo : copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 
+        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
             node2.RBS.natural_order_vect.sols = copy(node.RBS.natural_order_vect.sols)
-        end
+        # end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
