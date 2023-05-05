@@ -1164,6 +1164,123 @@ end
 
 
 
+# ----------------------------------------
+
+
+function comparisons7(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonLBSTable.tex", "w")
+
+    latex = raw"""\begin{sidewaystable}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{lcccccccccccccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(LP+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex+CP)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex+CP)}} \\
+    
+    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} \cmidrule(r){10-11} \cmidrule(r){12-13} \cmidrule(r){14-15} \cmidrule(r){16-17} \cmidrule(r){18-19}
+    ~ & ~ & ~ & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} \\
+    \midrule
+    """
+
+    println(fout, latex)
+    methods = ["bb", "bc", "bc_rootRelax", "bb_EPB", "bc_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCP", "bc_rootRelaxCPEPB"] ; record_n = []
+    record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods)
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/bc_rootRelax") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/bc_rootRelax/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            times = [] ; pts = []
+
+            include(work_dir * "/bc_rootRelax/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(times, total_times_used); push!(pts, total_nodes)
+    
+                    avgT[m] += total_times_used ; avgY[m] += total_nodes
+                else
+                    push!(times, -1); push!(pts, -1)
+                end
+            end
+
+            # ------------------
+            for i=1:length(methods)-1
+                if times[i] == -1
+                    print(fout, " - & ")
+                elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                else
+                    print(fout, string(times[i]) * " & ")
+                end
+    
+                if pts[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(pts[i]) * " & ")
+                end
+
+            end
+
+            if times[end] == minimum(filter(x -> x > 0 ,times))
+                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+            else
+                print(fout, string(times[end]) * " & ") 
+            end
+            
+            println(fout, string(pts[end]) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        end
+
+        print(fout, "\\cline{1-19} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        end
+
+        println(fout, "} \\\\ \\cline{1-19}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the different algorithms performances for instances $instances .}")
+    println(fout, "\\label{tab:table_compare_$instances }")
+    println(fout, "\\end{sidewaystable}")
+    close(fout)
+
+end
+
+
+comparisons7("momhMKPstu/MOBKP/set3")
+
+
+
+
 comparisons("momhMKPstu/MOBKP/set3")
 
 
