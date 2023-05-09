@@ -150,9 +150,9 @@ function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, v
         end
     end
 
-    if pb.param.root_relax 
-        pb.info.update_incumb_time += (time() - start) ; return false 
-    end 
+    # if pb.param.root_relax 
+    #     pb.info.update_incumb_time += (time() - start) ; return false 
+    # end 
 
     if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
         prune!(node, OPTIMALITY)
@@ -180,7 +180,7 @@ function getNadirPoints(incumbent::IncumbentSet) # , ptl, ptr
             [incumbent.natural_order_vect.sols[i].y[1],
             incumbent.natural_order_vect.sols[i+1].y[2]
             ],
-            true, Vector{Float64}(), 0.0), filtered=true
+            true, Vector{Float64}(), 0.0)# , filtered=true
         )
     end
 
@@ -215,8 +215,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     # if the LBS consists of a single point
     # ------------------------------------------
     if length(node.RBS.natural_order_vect) == 1
-        l = node.RBS.natural_order_vect.sols[1]
-        return weak_dom(l)
+        return weak_dom(node.RBS.natural_order_vect.sols[1])
     end
 
     # ----------------------------------------------
@@ -228,11 +227,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     # Case 1 :  if only one feasible point in UBS 
     if length(incumbent.natural_order_vect) == 1 
         u = incumbent.natural_order_vect.sols[1]
-        if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
-            return true
-        else
-            return false
-        end
+        return u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
     end
 
     # test range condition necessary 1 : LBS ⊆ UBS 
@@ -259,6 +254,20 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[i+1]
 
+            if sol_l.y[1] == sol_r.y[1] # horizon
+                if u.y[1] < sol_l.y[1]
+                    existence = true ; break
+                else
+                    continue
+                end
+            elseif sol_l.y[2] == sol_r.y[2] # vertical
+                if u.y[2] < sol_l.y[2]
+                    existence = true ; break
+                else
+                    continue
+                end
+            end
+
             if (u.y[1] > sol_l.y[1] || u.y[1] < sol_r.y[1]) && (u.y[2] > sol_r.y[2] || u.y[2] < sol_l.y[2])
                 continue
             end
@@ -278,9 +287,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
-                    # nothing 
+
+                elseif (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2])
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
                 else 
-                    push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
+                    push!(node.localNadirPts, u.y)
                 end 
             else
                 return fathomed

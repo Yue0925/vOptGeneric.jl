@@ -134,15 +134,6 @@ Argument :
     - pb : BO01Problem 
 """
 function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results, verbose; args...)
-    if verbose
-        @info "at node $(node.num) |Y_N| = $(length(incumbent.natural_order_vect)), EPB ? $(node.EPB)"
-    end
-
-    # println("----------------------------------------------------")
-    # println("node $(node.num) , LBS => $(node.RBS.natural_order_vect) ")
-    # println("----------------------------------------------------")
-
-
     # get the actual node
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
@@ -151,14 +142,14 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     # test dominance 
     #--------------------
     start = time()
-        if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
-            prune!(node, DOMINANCE)
-            if verbose
-                @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
-            end
-            pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            return
+    if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
+        prune!(node, DOMINANCE)
+        if verbose
+            @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
         end
+        pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
+        return
+    end
 
     #-----------------------------------------
     # liberate parent's useless data 
@@ -166,19 +157,20 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     if !isRoot(node)
         # if exists non-explored child, don't liberate
         if node.EPB || hasNonExploredChild(node.pred) 
-        # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
-        elseif length(node.pred.RBS.natural_order_vect) > 0
+        else
+            if length(node.pred.assignment) > 0
                 node.pred.RBS = RelaxedBoundSet() ; node.pred.assignment = Dict{Int64, Int64}()
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
                 end
+            end
         end
     end
 
     # objective branching 
     if pb.param.EPB && length(node.localNadirPts) > 0
-        # todo : to be improved ... 
+        # todo : to be improved for collision... 
         for i = 1:length(node.localNadirPts)
             pt =  node.localNadirPts[i] ; duplicationBound_z1 = Inf
             if i < length(node.localNadirPts) duplicationBound_z1 = node.localNadirPts[i+1][1] end
