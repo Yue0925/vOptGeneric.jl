@@ -288,7 +288,6 @@ end
 
 """
 Dominance test designed for the LBS that is the convex intersection of the set of lines passing lower bound and perpendicular to it's normal.
-
     Return `True` if this node is pruned by dominance.
 """
 function fullyExplicitDominanceTestByNormal(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)
@@ -393,7 +392,6 @@ end
 # -------------------------------------------
 """
 Dominance test designed for the LBS connected by consecutive local ideal points.
-
     Return `True` if this node is pruned by dominance.
 """
 function fullyExplicitDominanceTestNonConvex(node::Node, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, EPB::Bool)::Bool

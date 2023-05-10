@@ -198,7 +198,7 @@ function parseMOP(fname::AbstractString, optimizer_factory = nothing)
         ln = nextline(f)
         if ln[1] == "OBJSENSE"
             ln = nextline(f)
-            if ln[1] == "MAXIMIZE" || ln[1] == "MAX"
+            if ln[1] == "MAXIMIZE" || ln[1] == "MAX"
                 objSense = MOI.MAX_SENSE
             end
             ln = nextline(f)

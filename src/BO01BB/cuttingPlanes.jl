@@ -13,7 +13,6 @@ const max_step = 2
 
 """
 Compute the lower bound set of the LP polyhedron by dichotomy method.
-
 Return `true` if this node is fathomed by infeasibility.
 """
 function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
@@ -105,7 +104,6 @@ end
 
 """
 A single point cut off algorithm. 
-
 Returns :
     - the fractional/integer point
     - true, if new cut(s) has benn found 
@@ -167,7 +165,6 @@ end
 """
 Cutting planes scheme for the multi-point cuts. For now we assume that every point `y` in criteria space has only
 one corresponding vector `x` in decision space. 
-
 Return ture if the node is infeasible after adding cuts.
 """
 function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)

@@ -1,7 +1,6 @@
 """
     This file contains objects types used for BO01BB algorithm.
     Consider the following multi-objective program :
-
     min     f1(⋅), f2(⋅)
     s.t.      Ax ≤ b
               x∈{0,1}
@@ -277,7 +276,6 @@ end
 """
 Push a solution into a vector of natrual ordered solutions, return `true` if it is successfully added;
 or `false`, if it is weakly dominated by one (or more) solution(s) in the vector. 
-
 In case of successfully added and `filtered=true` (by defaut false), delete the old solutions that are weakly dominated by the new one.
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)
@@ -343,7 +341,6 @@ end
 
 """
 The relaxed bound set consists of segments and natural ordered solutions. 
-
 Since all solutions are natural ordered, segments is defined by a dictionary where each point solution s is associated
 with a boolean if s and the next/adjacent point in right forms a segment.
 """
