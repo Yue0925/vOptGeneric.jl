@@ -63,14 +63,9 @@ function pickUpAFreeVar(assignment::Dict{Int64, Int64}, pb::BO01Problem)
     #     filter!(v -> v ∉ fixed_var, free_vars)
     #     return (length(free_vars) > 0) ? free_vars[rand(1:length(free_vars))] : 0
     # else
-        # todo the last n vars :: only for QKP instances 
-        n = round(Int64, (sqrt(8*length(pb.varArray) + 9)-3)/2 )
-
-        for ind in length(pb.varArray):-1:length(pb.varArray)-n+1
-            if !haskey(assignment, ind) 
-                # @info "branching $(pb.varArray[ind])"
-                return ind 
-            end 
+        # todo : fixed order
+        for ind in 1:length(pb.varArray)
+            if !haskey(assignment, ind) return ind end 
         end
         return 0
     # end
