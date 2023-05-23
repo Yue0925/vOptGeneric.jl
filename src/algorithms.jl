@@ -134,7 +134,7 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
 
 
             # time limit 
-            if time() - time_acc >= 3600.0
+            if time() - time_acc >= 1800.0
                 break
             end
 

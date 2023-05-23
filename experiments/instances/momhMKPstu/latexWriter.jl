@@ -169,56 +169,56 @@ function comparisonThreeMethods(instances::String)
     println(fout, "\\end{table}")
     close(fout)
 
-    labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
+    # labels = [10, 20, 30, 40] ; loc = [0, 1, 2, 3] ; width = 0.3 # the width of the bars
 
-    plt.bar(loc .- width, record_times["epsilon"], width, label="epsilon")
-    plt.bar(loc, record_times["B&B"], width, label="B&B")
-    plt.bar(loc .+ width, record_times["B&C"], width, label="B&C")
-    plt.xticks(loc, labels)
-    plt.xlabel("Number of variables")
-    plt.ylabel("Computation time(s)", fontsize=14)
-    plt.legend(methods)
+    # plt.bar(loc .- width, record_times["epsilon"], width, label="epsilon")
+    # plt.bar(loc, record_times["B&B"], width, label="B&B")
+    # plt.bar(loc .+ width, record_times["B&C"], width, label="B&C")
+    # plt.xticks(loc, labels)
+    # plt.xlabel("Number of variables")
+    # plt.ylabel("Computation time(s)", fontsize=14)
+    # plt.legend(methods)
 
 
-    pos = loc .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["epsilon"][i]+0.5, s = record_times["epsilon"][i], size = 7)
-    end
+    # pos = loc .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_times["epsilon"][i]+0.5, s = record_times["epsilon"][i], size = 7)
+    # end
 
-    pos = loc .+ (width) .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["B&B"][i]+0.5, s = record_times["B&B"][i], size = 7)
-    end
+    # pos = loc .+ (width) .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_times["B&B"][i]+0.5, s = record_times["B&B"][i], size = 7)
+    # end
 
-    pos = loc .+ (2 * width) .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_times["B&C"][i]+0.5, s = record_times["B&C"][i], size = 7)
-    end
-    title("Influence of instance size on different algorithms' performance", fontsize=14)
-    savefig(work_dir * "/comparisonTable.png")
-    plt.close()
+    # pos = loc .+ (2 * width) .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_times["B&C"][i]+0.5, s = record_times["B&C"][i], size = 7)
+    # end
+    # title("Influence of instance size on different algorithms' performance", fontsize=14)
+    # savefig(work_dir * "/comparisonTable.png")
+    # plt.close()
 
-    # ---------------
-    width = 0.4
-    plt.bar(loc .- width/2, record_nodes["B&B"], width, label="B&B", color="darkorange")
-    plt.bar(loc .+ width/2, record_nodes["B&C"], width, label="B&C", color="forestgreen")
-    plt.xticks(loc, labels)
-    plt.xlabel("Number of variables")
-    plt.ylabel("Number of explored nodes", fontsize=14)
-    plt.legend(methods[2:end])
+    # # ---------------
+    # width = 0.4
+    # plt.bar(loc .- width/2, record_nodes["B&B"], width, label="B&B", color="darkorange")
+    # plt.bar(loc .+ width/2, record_nodes["B&C"], width, label="B&C", color="forestgreen")
+    # plt.xticks(loc, labels)
+    # plt.xlabel("Number of variables")
+    # plt.ylabel("Number of explored nodes", fontsize=14)
+    # plt.legend(methods[2:end])
 
-    pos = loc .+ (width)/2# .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_nodes["B&B"][i]+0.5, s = record_nodes["B&B"][i], size = 7)
-    end
+    # pos = loc .+ (width)/2# .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_nodes["B&B"][i]+0.5, s = record_nodes["B&B"][i], size = 7)
+    # end
 
-    pos = loc .+ (3 *width)/2# .+ (width/2)
-    for i =1:4
-        plt.text(x = pos[i]-0.6 , y = record_nodes["B&C"][i]+0.5, s = record_nodes["B&C"][i], size = 7)
-    end
-    title("Influence of instance size on different algorithms' tree size", fontsize=14)
-    savefig(work_dir * "/comparisonNodes.png")
-    plt.close()
+    # pos = loc .+ (3 *width)/2# .+ (width/2)
+    # for i =1:4
+    #     plt.text(x = pos[i]-0.6 , y = record_nodes["B&C"][i]+0.5, s = record_nodes["B&C"][i], size = 7)
+    # end
+    # title("Influence of instance size on different algorithms' tree size", fontsize=14)
+    # savefig(work_dir * "/comparisonNodes.png")
+    # plt.close()
 end
 
 # todo : pic ... BB and EPB  
@@ -1050,7 +1050,124 @@ function comparisons5(instances::String)
 
 end
 
+
+
+function comparisons_tri(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonTable2.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{lcccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\epsilon$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}}
+    \\
+    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} 
+    ~ & ~ & ~ & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["epsilon", "bb", "bc_rootRelaxEPB"] ; record_n = []
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+        countY_N = 0
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+            times = [] ; pts = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(times, total_times_used); push!(pts, size_Y_N)
+    
+                    avgT[m] += total_times_used ; avgY[m] += size_Y_N
+                else
+                    push!(times, -1); push!(pts, -1)
+                end
+            end
+
+            # ------------------
+            for i=1:length(methods)-1
+                if times[i] == -1
+                    print(fout, " - & ")
+                elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                else
+                    print(fout, string(times[i]) * " & ")
+                end
+    
+                if pts[i] == -1
+                    print(fout, " - & ")
+                else
+                    print(fout, string(pts[i]) * " & ")
+                end
+
+            end
+
+            if times[end] == minimum(filter(x -> x > 0 ,times))
+                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+            else
+                print(fout, string(times[end]) * " & ") 
+            end
+            
+            println(fout, string(pts[end]) * " \\\\")
+    
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        end
+
+        print(fout, "\\cline{1-9} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+        for m in methods
+            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        end
+
+        println(fout, "} " * "\\\\ \\cline{1-9}")
+    end
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{ instances $instances .}")
+    println(fout, "\\label{tab:table_compareBB_$instances }")
+    println(fout, "\\end{table}")
+    close(fout)
+
+end
+
+# -------------------------------------------------
 comparisons5("momhMKPstu/MOBKP/set3")
+comparisons4("momhMKPstu/MOBKP/set3")
+comparisons_bis("momhMKPstu/MOBKP/set3")
+comparisonsCP("momhMKPstu/MOBKP/set3")
+comparisonThreeMethods("momhMKPstu/MOBKP/set3")
+comparisons_tri("momhMKPstu/MOBKP/set3")
+# -------------------------------------------------
 
 
 
