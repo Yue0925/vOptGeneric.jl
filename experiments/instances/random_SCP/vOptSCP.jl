@@ -108,6 +108,7 @@ function solve(fname::String, method::String)
     println(" solving mono $(inst_name) ... ")
     println(" -----------------------------")
 
+    if n%2 > 0 return end # todo 
     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[1:n], Bin )
     @objective(model, Min, x'* c1)

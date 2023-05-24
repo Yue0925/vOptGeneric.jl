@@ -10,7 +10,7 @@
 #SBATCH --output=alea_BOSCP_new_exp_OUTPUT.txt
 #SBATCH --error=alea_BOSCP_new_exp_ERROR.txt
 
-methodes=("bb" "bc" "bb_EPB" "bc_EPB")
+methodes=("epsilon" "bb" "bc" "bb_EPB" "bc_EPB")
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do

@@ -374,7 +374,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
             end
 
             # time limit 
-            if time() - time_acc >= 1800.0
+            if time() - time_acc >= 3600.0
                 problem.info.TO = true ; break
             end
         end
