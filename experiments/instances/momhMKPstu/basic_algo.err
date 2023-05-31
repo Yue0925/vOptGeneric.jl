@@ -1,0 +1,1082 @@
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+ERROR: LoadError: StackOverflowError:
+Stacktrace:
+  [1] CPXlpopt
+    @ ~/.julia/packages/CPLEX/a0nA7/src/gen2210/libcpx_api.jl:834 [inlined]
+  [2] _optimize!(model::CPLEX.Optimizer)
+    @ CPLEX ~/.julia/packages/CPLEX/a0nA7/src/MOI/MOI_wrapper.jl:2701
+  [3] optimize!(model::CPLEX.Optimizer)
+    @ CPLEX ~/.julia/packages/CPLEX/a0nA7/src/MOI/MOI_wrapper.jl:2769
+  [4] optimize!
+    @ ~/.julia/packages/MathOptInterface/wx5Ea/src/Bridges/bridge_optimizer.jl:376 [inlined]
+  [5] optimize!(m::MathOptInterface.Utilities.CachingOptimizer{MathOptInterface.Bridges.LazyBridgeOptimizer{CPLEX.Optimizer}, MathOptInterface.Utilities.UniversalFallback{MathOptInterface.Utilities.Model{Float64}}})
+    @ MathOptInterface.Utilities ~/.julia/packages/MathOptInterface/wx5Ea/src/Utilities/cachingoptimizer.jl:325
+  [6] optimize!(model::Model; ignore_optimize_hook::Bool, kwargs::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ JuMP ~/.julia/packages/JuMP/0STkJ/src/optimizer_interface.jl:161
+  [7] dichoRecursion(m::Model, yr_1::Float64, yr_2::Float64, ys_1::Float64, ys_2::Float64, varArray::Vector{VariableRef}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/algorithms.jl:809
+  [8] dichoRecursion(m::Model, yr_1::Float64, yr_2::Float64, ys_1::Float64, ys_2::Float64, varArray::Vector{VariableRef}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}}) (repeats 10877 times)
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/algorithms.jl:820
+  [9] solve_dicho(m::Model, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/algorithms.jl:753
+ [10] compute_LBS(node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/cuttingPlanes.jl:36
+ [11] LPRelaxByDicho(node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/fathoming.jl:82
+ [12] LPRelaxByDicho
+    @ ~/vOptGeneric.jl/src/BO01BB/fathoming.jl:76 [inlined]
+ [13] macro expansion
+    @ ~/.julia/packages/TimerOutputs/LHjFw/src/TimerOutput.jl:237 [inlined]
+ [14] iterative_procedure(todo::DataStructures.Queue{Base.RefValue{Main.vOptGeneric.Node}}, node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:199
+ [15] iterative_procedure(todo::DataStructures.Queue{Base.RefValue{Main.vOptGeneric.Node}}, node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results::Bool, verbose::Bool)
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:136
+ [16] macro expansion
+    @ ~/.julia/packages/TimerOutputs/LHjFw/src/TimerOutput.jl:237 [inlined]
+ [17] macro expansion
+    @ ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:373 [inlined]
+ [18] macro expansion
+    @ ~/.julia/packages/TimerOutputs/LHjFw/src/TimerOutput.jl:237 [inlined]
+ [19] solve_branchboundcut(m::Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:366
+ [20] solve_branchboundcut
+    @ ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:305 [inlined]
+ [21] vSolve(m::Model; relax::Bool, method::Symbol, step::Float64, round_results::Bool, verbose::Bool, args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/vOptGeneric.jl:74
+ [22] vSolveBi01IP(solverSelected::Type, C::Matrix{Int64}, A::Matrix{Int64}, B::Vector{Int64}, fname::String, method::Symbol)
+    @ Main ~/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:135
+ [23] main(fname::String)
+    @ Main ~/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:196
+ [24] top-level scope
+    @ ~/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:204
+in expression starting at /users/yue.zhang/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:204
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+ERROR: LoadError: StackOverflowError:
+Stacktrace:
+  [1] CPXlpopt
+    @ ~/.julia/packages/CPLEX/a0nA7/src/gen2210/libcpx_api.jl:834 [inlined]
+  [2] _optimize!(model::CPLEX.Optimizer)
+    @ CPLEX ~/.julia/packages/CPLEX/a0nA7/src/MOI/MOI_wrapper.jl:2701
+  [3] optimize!(model::CPLEX.Optimizer)
+    @ CPLEX ~/.julia/packages/CPLEX/a0nA7/src/MOI/MOI_wrapper.jl:2769
+  [4] optimize!
+    @ ~/.julia/packages/MathOptInterface/wx5Ea/src/Bridges/bridge_optimizer.jl:376 [inlined]
+  [5] optimize!(m::MathOptInterface.Utilities.CachingOptimizer{MathOptInterface.Bridges.LazyBridgeOptimizer{CPLEX.Optimizer}, MathOptInterface.Utilities.UniversalFallback{MathOptInterface.Utilities.Model{Float64}}})
+    @ MathOptInterface.Utilities ~/.julia/packages/MathOptInterface/wx5Ea/src/Utilities/cachingoptimizer.jl:325
+  [6] optimize!(model::Model; ignore_optimize_hook::Bool, kwargs::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ JuMP ~/.julia/packages/JuMP/0STkJ/src/optimizer_interface.jl:161
+  [7] dichoRecursion(m::Model, yr_1::Float64, yr_2::Float64, ys_1::Float64, ys_2::Float64, varArray::Vector{VariableRef}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/algorithms.jl:809
+  [8] dichoRecursion(m::Model, yr_1::Float64, yr_2::Float64, ys_1::Float64, ys_2::Float64, varArray::Vector{VariableRef}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}}) (repeats 10878 times)
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/algorithms.jl:820
+  [9] solve_dicho(m::Model, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/algorithms.jl:753
+ [10] compute_LBS(node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, Tuple{Symbol}, NamedTuple{(:args,), Tuple{Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/cuttingPlanes.jl:36
+ [11] LPRelaxByDicho(node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/fathoming.jl:82
+ [12] LPRelaxByDicho
+    @ ~/vOptGeneric.jl/src/BO01BB/fathoming.jl:76 [inlined]
+ [13] macro expansion
+    @ ~/.julia/packages/TimerOutputs/LHjFw/src/TimerOutput.jl:237 [inlined]
+ [14] iterative_procedure(todo::DataStructures.Queue{Base.RefValue{Main.vOptGeneric.Node}}, node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:221
+ [15] iterative_procedure(todo::DataStructures.Queue{Base.RefValue{Main.vOptGeneric.Node}}, node::Main.vOptGeneric.Node, pb::Main.vOptGeneric.BO01Problem, incumbent::Main.vOptGeneric.IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results::Bool, verbose::Bool)
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:136
+ [16] macro expansion
+    @ ~/.julia/packages/TimerOutputs/LHjFw/src/TimerOutput.jl:237 [inlined]
+ [17] macro expansion
+    @ ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:373 [inlined]
+ [18] macro expansion
+    @ ~/.julia/packages/TimerOutputs/LHjFw/src/TimerOutput.jl:237 [inlined]
+ [19] solve_branchboundcut(m::Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results::Bool, verbose::Bool; args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:366
+ [20] solve_branchboundcut
+    @ ~/vOptGeneric.jl/src/BO01BB/BO01BB.jl:305 [inlined]
+ [21] vSolve(m::Model; relax::Bool, method::Symbol, step::Float64, round_results::Bool, verbose::Bool, args::Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}})
+    @ Main.vOptGeneric ~/vOptGeneric.jl/src/vOptGeneric.jl:62
+ [22] vSolveBi01IP(solverSelected::Type, C::Matrix{Int64}, A::Matrix{Int64}, B::Vector{Int64}, fname::String, method::Symbol)
+    @ Main ~/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:123
+ [23] main(fname::String)
+    @ Main ~/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:196
+ [24] top-level scope
+    @ ~/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:204
+in expression starting at /users/yue.zhang/vOptGeneric.jl/experiments/instances/momhMKPstu/vOptMomkp.jl:204
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Node :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isRoot :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.hasNonExploredChild :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.delete! :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.prune! :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.PrunedType}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.getPartialAssign :: Tuple{Main.vOptGeneric.Node}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarObjBounds :: Tuple{Main.vOptGeneric.Node, Main.vOptGeneric.BO01Problem, Any, Any}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.removeVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setVarBound :: Tuple{Main.vOptGeneric.BO01Problem, Int64, Int64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.setObjBound :: Tuple{Main.vOptGeneric.BO01Problem, Vector{Float64}, Float64}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.CutsInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.StatInfo :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BBparam :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.BO01Problem :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.Solution :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.isBinary :: Tuple{Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.addEquivX :: Tuple{Main.vOptGeneric.Solution, Vector{Float64}}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.show :: Tuple{IO, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.dominate :: Tuple{Main.vOptGeneric.Solution, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.NaturalOrderVector :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.NaturalOrderVector, Main.vOptGeneric.Solution}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.RelaxedBoundSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Main.vOptGeneric.IncumbentSet :: Union{}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+┌ Warning: Replacing docs for `Base.push! :: Tuple{Main.vOptGeneric.CutPool, Main.vOptGeneric.Cut}` in module `Main.vOptGeneric`
+└ @ Base.Docs docs/Docs.jl:240
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
+[ Info: ϵ = 0.01
