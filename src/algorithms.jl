@@ -428,7 +428,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
 
         ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
 
-        if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
+        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
 
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, JuMP.value.(varArray))
@@ -459,7 +459,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         ys_1 = x_star'* c[1, 2:end] + c[1, 1]
         ys_2 = x_star'* c[2, 2:end] + c[2, 1]
 
-        if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
+        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, x_star)
             push!(vd.lambda, [0.0, 1.0])
@@ -761,7 +761,7 @@ end
 #             ys_1 = JuMP.value(f1)
 #             ys_2 = JuMP.value(f2)
 
-#             if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
+#             if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
 #                 push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
 #                 push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [0.0, 1.0])
 #                 dichoRecursion(m, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
@@ -867,7 +867,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
             ys_1 = JuMP.value(f1)
             ys_2 = JuMP.value(f2)
 
-            if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
+            if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
                 push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
                 push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [0.0, 1.0])
             end
