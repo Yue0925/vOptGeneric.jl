@@ -50,9 +50,9 @@ function vSolve(m::JuMP.Model ; relax=false, method=nothing, step = 1., round_re
     
     if method == :epsilon
         solve_eps(m, step, round_results, verbose ; relaxation=relax, args...)
-    elseif method == :dicho || method == :dichotomy
+    elseif method == :dicho || method == :dichotomy
         solve_dicho(m, round_results, verbose ; relaxation=relax, args...)
-    elseif method == :Chalmet || method == :chalmet
+    elseif method == :Chalmet || method == :chalmet
         solve_Chalmet(m, step, verbose ; relaxation=relax, args...)
     elseif method == :lex || method == :lexico
         solve_lexico(m, verbose ; relaxation=relax, args...)

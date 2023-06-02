@@ -5,7 +5,7 @@
 #SBATCH --output=./basic_algo.out
 #SBATCH --error=./basic_algo.err
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=40
+#SBATCH --cpus-per-task=20
 #SBATCH --ntasks-per-node=1
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr

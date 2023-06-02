@@ -403,7 +403,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
             #Store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, JuMP.value.(varArray))
@@ -437,7 +437,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         ys_1 = x_star'* c[1, 2:end] + c[1, 1]
         ys_2 = x_star'* c[2, 2:end] + c[2, 1]
 
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
             #Store results in vOptData
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, x_star)
@@ -602,7 +602,7 @@ function solve_Chalmet(m::JuMP.Model, step, verbose ; args...)
             ys_1 = JuMP.value(f1)
             ys_2 = JuMP.value(f2)
 
-            if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+            if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
                 push!(vd.Y_N, [ys_1, ys_2])
                 push!(vd.X_E, JuMP.value.(varArray))
                 #Declare the constraints on z1 and z2 (RHS will be set later)

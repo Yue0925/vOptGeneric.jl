@@ -161,6 +161,7 @@ end
 
 """
 Going through all the predecessors until the root, add variables or objective bounds branched in the predecessors.
+
 Return a list of objective bounds (symbolic constraint).
 """
 function setVarObjBounds(actual::Node, pb::BO01Problem)
