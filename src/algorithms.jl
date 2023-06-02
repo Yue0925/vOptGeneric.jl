@@ -132,7 +132,6 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
             JuMP.optimize!(m, ignore_optimize_hook=true)
             status = JuMP.termination_status(m)
 
-
             # time limit 
             if time() - time_acc >= 3600.0
                 break
@@ -155,17 +154,28 @@ end
 global varArray = Array{JuMP.VariableRef}
 global x_star = []
 global model 
+global bst_val = -Inf 
+global curr_λ = []
+global C 
 
 function callback_noCuts(cb_data)
     global varArray
     global x_star
     global model 
+    global C
+    global bst_val
+    global curr_λ
 
     node_statut = callback_node_status(cb_data, model)
      
-    # if node_statut == MOI.CALLBACK_NODE_STATUS_FRACTIONAL
+    if node_statut == MOI.CALLBACK_NODE_STATUS_FRACTIONAL
+        # tmp = callback_value.(cb_data, varArray)
+        # val = (tmp'* C[1, 2:end] + C[1, 1]) * curr_λ[1] + (tmp'* C[2, 2:end] + C[2, 1]) * curr_λ[2] 
+        # if val > bst_val
+        #     bst_val = val ; x_star = callback_value.(cb_data, varArray)
+        # end
         x_star = callback_value.(cb_data, varArray)
-    # end
+    end
 end
 
 function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
@@ -180,12 +190,20 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     return Y_integer, X_integer
 end
 
+"""
+Solving a mono-objective scalarization integer problem, take the best fractional solution at root.
 
+Return the integer heuristic solutions offered by IP solver, the relaxation solution is stored in vOptData.
+"""
 function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, round_results, verbose; args...)
     global varArray
     global x_star
     global model = m
+    global C = c 
+    global curr_λ = [λ1, λ2]
 
+    # ---------------------------------
+    # ------ initialize data ----------
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) 
     f1, f2 = vd.objs
@@ -193,20 +211,15 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
     varArray = JuMP.all_variables(m)
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    # todo : incompatible
-    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
     f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
     f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
-    #Set the first objective as an objective in the JuMP JuMP.Model
+    # set objective function in JuMP Model & solve 
     JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ1*f1_copied + λ2*f2_copied)
     verbose && println("solving for $λ1*f1 + $λ2*f2")
-    
-    #Solve with that objective
-    x_star = []
+    x_star = [] ; bst_val = -Inf 
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
@@ -244,8 +257,6 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
             end
         end
 
-        # y_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        # y_2 = x_star'* collect(values(f2.terms)) + f2.constant
         y_1 = x_star'* c[1, 2:end] + c[1, 1]
         y_2 = x_star'* c[2, 2:end] + c[2, 1]
         #Store results in vOptData
@@ -258,30 +269,38 @@ function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, 
     return Y_integer, X_integer
 end
 
+"""
+Solve a series of scalarization problems with integer variables in a dichtomic search, 
+    store the root relaxation results in vOptData and 
+    return the heuristic integer variables offered by IP solver. 
+"""
 function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_results, verbose; args...)
     global varArray
     global x_star
     global model = m
+    global C = c
+    global curr_λ
+    global bst_val
 
+    # ---------------------------------
+    # ---------- initialize data ------
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E) ; empty!(vd.lambda) 
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(m)
+    Gap = 0.0
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    #todo : incompatible
-    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
     f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
     f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
-    R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
+    # todo : check 1
+    weak_dom(a, b) = a[1]<= b[1] && a[2] <= b[2] && a[1]!= b[1] && a[2]!= b[2]
 
+    # todo : check 2
     function sorting()
         # sort in a natural order 
         s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
@@ -327,21 +346,25 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         end
     end
 
-    #Set the first objective as an objective in the JuMP JuMP.Model
+    # -----------------------------------------------------------------------
+    # ---- Step 1 : start with extreme point and set the first objective ---- 
     JuMP.set_objective(m, f1Sense, f1) ; JuMP.set_objective(lp_copied, f1Sense, f1_copied)
     verbose && println("solving for z1")
     
-    #Solve with that objective
-    x_star = []
+    x_star = [] ; bst_val = -Inf 
+    curr_λ = [1.0, 0.0]
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
-    # whether a solution exists
+    # in case infeasible 
     yr_1 = 0.0 ; yr_2 = 0.0 
     if status == MOI.INFEASIBLE 
         sorting()
-        return Y_integer, X_integer 
+        return Y_integer, X_integer, Gap
     end
+
+    # Gap += MOI.get(m, MOI.RelativeGap())*100
+
     if status == MOI.OPTIMAL
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
@@ -353,7 +376,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         push!(vd.X_E, JuMP.value.(varArray))
         push!(vd.lambda, [1.0, 0.0])
 
-    elseif status == MOI.NODE_LIMIT
+    elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         # stock heuristic sol 
         if has_values(m)
             Y, X = stock_all_primal_sols(m, f1, f2, varArray) ; append!(Y_integer, Y) ; append!(X_integer, X)
@@ -371,12 +394,10 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
                 JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
             end
         end
-
-        # yr_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        # yr_2 = x_star'* collect(values(f2.terms)) + f2.constant
+        
         yr_1 = x_star'* c[1, 2:end] + c[1, 1]
         yr_2 = x_star'* c[2, 2:end] + c[2, 1]
-        #Store results in vOptData
+
         push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
         push!(vd.X_E, x_star) ; push!(vd.lambda, [1.0, 0.0])
     else
@@ -384,27 +405,31 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
         error("Condition  status $status ")
     end
 
-    #Set the second objective as an objective in the JuMP JuMP.Model
+    # -----------------------------------------------------------------------
+    # ---- Step 2 : start with extreme point and set the second objective ---- 
     JuMP.set_objective(m, f2Sense, f2) ; JuMP.set_objective(lp_copied, f2Sense, f2_copied)
     verbose && println("solving for z2")
 
-    #Solve with that objective
-    x_star = []
+    x_star = [] ; bst_val = -Inf 
+    curr_λ = [0.0, 1.0]
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
     ys_1 = 0.0 ; ys_2 = 0.0 
     if status == MOI.INFEASIBLE
         sorting()
-        return Y_integer, X_integer
+        return Y_integer, X_integer, Gap
     end
+    # Gap += MOI.get(m, MOI.RelativeGap())*100
+
     if status == MOI.OPTIMAL
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
-            #Store results in vOptData
+
+        if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
+
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, JuMP.value.(varArray))
             push!(vd.lambda, [0.0, 1.0])
@@ -413,7 +438,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
 
-    elseif status == MOI.NODE_LIMIT 
+    elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         if has_values(m)
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
@@ -431,14 +456,10 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
                 JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
             end
         end
-
-        # ys_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        # ys_2 = x_star'* collect(values(f2.terms)) + f2.constant
         ys_1 = x_star'* c[1, 2:end] + c[1, 1]
         ys_2 = x_star'* c[2, 2:end] + c[2, 1]
 
-        if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
-            #Store results in vOptData
+        if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
             push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
             push!(vd.X_E, x_star)
             push!(vd.lambda, [0.0, 1.0])
@@ -446,19 +467,21 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
-
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
 
     sorting()
-    return Y_integer, X_integer
+    return Y_integer, X_integer, Gap
 end
+
 
 function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
     global varArray
     global x_star
+    global curr_λ
+    global bst_val
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
@@ -467,9 +490,6 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
     f1Sense, f2Sense = vd.objSenses
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    # todo : incompatible
-    # f1_copied = varArray_copied'* collect(values(f1.terms)) + f1.constant
-    # f2_copied = varArray_copied'* collect(values(f2.terms)) + f2.constant
     f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
     f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
 
@@ -478,32 +498,25 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
 
     f = AffExpr(0.0)
 
-    if f1Sense==f2Sense
-        lb = λ1*yr_1 + λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ1*f1_copied + λ2*f2_copied)
-        verbose && println("solving for $λ1*f1 + $λ2*f2")    
-        f = λ1*f1 + λ2*f2
-    else
-        lb = λ1*yr_1 - λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 - λ2*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ1*f1_copied - λ2*f2_copied)
-        verbose && println("solving for $λ1*f1 - $λ2*f2") 
-        f = λ1*f1 - λ2*f2
-    end
+    lb = λ1*yr_1 + λ2*yr_2
+    JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ1*f1_copied + λ2*f2_copied)
+    verbose && println("solving for $λ1*f1 + $λ2*f2")    
+    f = λ1*f1 + λ2*f2
 
-    x_star = []
+    x_star = [] ;  bst_val = -Inf 
+    curr_λ = [λ1, λ2]
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
-    #If a solution exists
     yt_1 = 0.0 ; yt_2 = 0.0 
-
     if status == MOI.INFEASIBLE return Y_integer, X_integer end
+
     if status == MOI.OPTIMAL 
         # stock heur sol 
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
-        val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
+        val = λ1*yt_1 + λ2*yt_2
 
         if (val < lb - 1e-4)
             push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
@@ -537,11 +550,9 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
             end
         end
 
-        # yt_1 = x_star'* collect(values(f1.terms)) + f1.constant
-        # yt_2 = x_star'* collect(values(f2.terms)) + f2.constant
         yt_1 = x_star'* c[1, 2:end] + c[1, 1]
         yt_2 = x_star'* c[2, 2:end] + c[2, 1]
-        val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
+        val = λ1*yt_1 + λ2*yt_2
 
         if ( val < lb - 1e-4)
             push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
@@ -683,6 +694,7 @@ function ChalmetRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, rhs_z
     end
 end
 
+#todo : useless 
 function opt_scalar(m::JuMP.Model, λ1, λ2, round_results, verbose; args...)
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)
@@ -709,6 +721,117 @@ function opt_scalar(m::JuMP.Model, λ1, λ2, round_results, verbose; args...)
     end
 end
 
+# todo : check sorting() and filterage at the end 
+
+# function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
+#     vd = getvOptData(m)
+#     empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)
+#     f1, f2 = vd.objs
+#     f1Sense, f2Sense = vd.objSenses
+#     varArray = JuMP.all_variables(m)
+
+#     #Set the first objective as an objective in the JuMP JuMP.Model
+#     JuMP.set_objective(m, f1Sense, f1)
+#     verbose && println("solving for z1")
+    
+#     #Solve with that objective
+#     JuMP.optimize!(m, ignore_optimize_hook=true)
+#     status = JuMP.termination_status(m)
+
+#     #If a solution exists
+#     if status == MOI.OPTIMAL
+
+#         yr_1 = JuMP.value(f1)
+#         yr_2 = JuMP.value(f2)
+
+#         #Store results in vOptData
+#         push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
+#         push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [1.0, 0.0])
+
+#         #Set the second objective as an objective in the JuMP JuMP.Model
+#         JuMP.set_objective(m, f2Sense, f2)
+#         verbose && println("solving for z2")
+
+#         #Solve with that objective
+#         JuMP.optimize!(m, ignore_optimize_hook=true)
+#         status = JuMP.termination_status(m)
+
+#         if status == MOI.OPTIMAL
+
+#             ys_1 = JuMP.value(f1)
+#             ys_2 = JuMP.value(f2)
+
+#             if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
+#                 push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
+#                 push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [0.0, 1.0])
+#                 dichoRecursion(m, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+#             end
+        
+#             #Sort X_E and Y_N
+#             s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
+#             vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
+
+#             R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
+#             R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
+#             weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
+
+#             i = 1
+#             while i < length(vd.Y_N)
+#                 j = i+1
+#                 while j<= length(vd.Y_N)
+#                     if weak_dom(vd.Y_N[i], vd.Y_N[j])
+#                         deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j) ; deleteat!(vd.lambda, j)
+#                     elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
+#                         deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i) ; deleteat!(vd.lambda, i)
+#                         j -= 1 ; break
+#                     else
+#                         j += 1
+#                     end
+#                 end
+#                 if j > length(vd.Y_N) i += 1 end 
+#             end
+    
+#         end
+#     end
+
+# end
+
+# function dichoRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+
+#     vd = getvOptData(m)
+#     f1, f2 = vd.objs
+#     f1Sense, f2Sense = vd.objSenses
+
+#     λ1 = abs(yr_2 - ys_2)
+#     λ2 = abs(ys_1 - yr_1)
+
+#     f = AffExpr(0.0)
+
+#     lb = λ1*yr_1 + λ2*yr_2
+#     JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
+#     verbose && println("solving for $λ1*f1 + $λ2*f2")    
+#     f = λ1*f1 + λ2*f2
+
+
+#     JuMP.optimize!(m, ignore_optimize_hook=true)
+
+#     yt_1 = JuMP.value(f1)
+#     yt_2 = JuMP.value(f2)
+
+#     val = λ1*yt_1 + λ2*yt_2
+
+#     if (val < lb - 1e-4) 
+#         push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
+#         push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, [λ1, λ2])
+
+#         dichoRecursion(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+#         dichoRecursion(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+#     end
+
+# end
+
+
+# todo : iterative 
 function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     vd = getvOptData(m)
     empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)
@@ -716,11 +839,11 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(m)
 
-    #Set the first objective as an objective in the JuMP JuMP.Model
+    # --------------------------------------
+    # --- start with two extreme points 
+    # --------------------------------------
     JuMP.set_objective(m, f1Sense, f1)
     verbose && println("solving for z1")
-    
-    #Solve with that objective
     JuMP.optimize!(m, ignore_optimize_hook=true)
     status = JuMP.termination_status(m)
 
@@ -737,88 +860,74 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
         #Set the second objective as an objective in the JuMP JuMP.Model
         JuMP.set_objective(m, f2Sense, f2)
         verbose && println("solving for z2")
-
-        #Solve with that objective
         JuMP.optimize!(m, ignore_optimize_hook=true)
         status = JuMP.termination_status(m)
 
         if status == MOI.OPTIMAL
-
             ys_1 = JuMP.value(f1)
             ys_2 = JuMP.value(f2)
 
-            if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+            if !isapprox(yr_1, ys_1, atol=1e-3) && !isapprox(yr_2, ys_2, atol=1e-3)
                 push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
                 push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [0.0, 1.0])
-                dichoRecursion(m, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
             end
-        
-            #Sort X_E and Y_N
-            s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
-            vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
-
-            R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-            R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-            weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
-
-            i = 1
-            while i < length(vd.Y_N)
-                j = i+1
-                while j<= length(vd.Y_N)
-                    if weak_dom(vd.Y_N[i], vd.Y_N[j])
-                        deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j) ; deleteat!(vd.lambda, j)
-                    elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
-                        deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i) ; deleteat!(vd.lambda, i)
-                        j -= 1 ; break
-                    else
-                        j += 1
-                    end
-                end
-                if j > length(vd.Y_N) i += 1 end 
-            end
-    
         end
     end
 
-    status
-end
+    # --------------
+    # loop iterative 
+    # ---------------
+    if length(vd.Y_N) == 2    
+        todo = []; push!(todo, [vd.Y_N[1], vd.Y_N[2]] )
 
-function dichoRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+        while length(todo) > 0
+            p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
+            λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
+        
+            # solve the mono scalarization problem 
+            f = AffExpr(0.0)    
+            lb = λ[1] * yl[1] + λ[2] * yl[2]  
+            JuMP.set_objective(m, f1Sense, λ[1]*f1 + λ[2]*f2) 
+            f = λ[1]*f1 + λ[2]*f2
+        
+            JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
-    vd = getvOptData(m)
-    f1, f2 = vd.objs
-    f1Sense, f2Sense = vd.objSenses
-
-    λ1 = abs(yr_2 - ys_2)
-    λ2 = abs(ys_1 - yr_1)
-
-    f = AffExpr(0.0)
-
-    if f1Sense==f2Sense
-        lb = λ1*yr_1 + λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
-        verbose && println("solving for $λ1*f1 + $λ2*f2")    
-        f = λ1*f1 + λ2*f2
-    else
-        lb = λ1*yr_1 - λ2*yr_2
-        JuMP.set_objective(m, f1Sense, λ1*f1 - λ2*f2)
-        verbose && println("solving for $λ1*f1 - $λ2*f2") 
-        f = λ1*f1 - λ2*f2
+            if status == MOI.OPTIMAL
+                yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
+                val = λ[1]*yt_1 + λ[2]*yt_2  
+                if (val < lb - 1e-4) 
+                    push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
+                    push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, λ)
+                    push!(todo, [yl, [yt_1, yt_2]]) ; push!(todo, [[yt_1, yt_2], yr])
+                end
+            end
+        end
     end
 
-    JuMP.optimize!(m, ignore_optimize_hook=true)
 
-    yt_1 = JuMP.value(f1)
-    yt_2 = JuMP.value(f2)
+    # ---------------------
+    # sort X_E and Y_N
+    # ---------------------
+    s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
+    vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
 
-    val = f1Sense == f2Sense ? λ1*yt_1 + λ2*yt_2 : λ1*yt_1 - λ2*yt_2
+    R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
+    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
 
-    if (f1Sense == MOI.MIN_SENSE && val < lb - 1e-4) || (f1Sense == MOI.MAX_SENSE && val > lb + 1e-4)
-        push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
-        push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, [λ1, λ2])
-
-        dichoRecursion(m, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
-        dichoRecursion(m, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+    i = 1
+    while i < length(vd.Y_N)
+        j = i+1
+        while j<= length(vd.Y_N)
+            if weak_dom(vd.Y_N[i], vd.Y_N[j])
+                deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j) ; deleteat!(vd.lambda, j)
+            elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
+                deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i) ; deleteat!(vd.lambda, i)
+                j -= 1 ; break
+            else
+                j += 1
+            end
+        end
+        if j > length(vd.Y_N) i += 1 end 
     end
-
 end
