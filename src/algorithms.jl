@@ -434,7 +434,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             push!(vd.X_E, JuMP.value.(varArray))
             push!(vd.lambda, [0.0, 1.0])
 
-            Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            Y, X = dichoRecursion_callback(m, lp_copied, c, ys_1, ys_2, yr_1, yr_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
 
@@ -464,7 +464,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
             push!(vd.X_E, x_star)
             push!(vd.lambda, [0.0, 1.0])
 
-            Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+            Y, X = dichoRecursion_callback(m, lp_copied, c, ys_1, ys_2, yr_1, yr_2, varArray, round_results, verbose ; args...)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
     else
@@ -476,7 +476,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     return Y_integer, X_integer, Gap
 end
 
-
+# todo : local ideal point wrongly compared 
 function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
     global varArray
     global x_star
@@ -523,10 +523,10 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
             push!(vd.X_E, JuMP.value.(varArray))
             push!(vd.lambda, [λ1, λ2])
 
-            if yt_1 > ys_1+1e-4 && yt_2 > yr_2+1e-4
-                Y, X = dichoRecursion_callback(m, lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+            if yt_1 > yr_1+1e-4 && yt_2 > ys_2+1e-4 # todo : corrected 
+                Y, X = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, yr_1, yr_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
-                Y, X = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+                Y, X = dichoRecursion_callback(m, lp_copied, c, ys_1, ys_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
             end
         end
@@ -558,10 +558,10 @@ function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, 
             push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
             push!(vd.X_E, x_star) ; push!(vd.lambda, [λ1, λ2])
 
-            if yt_1 > ys_1 +1e-4 && yt_2 > yr_2 +1e-4 
-                Y, X = dichoRecursion_callback(m,lp_copied, c, yr_1, yr_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
+            if yt_1 > yr_1 +1e-4 && yt_2 > ys_2 +1e-4 # todo : corrected 
+                Y, X = dichoRecursion_callback(m,lp_copied, c, yt_1, yt_2, yr_1, yr_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
-                Y, X = dichoRecursion_callback(m, lp_copied, c, yt_1, yt_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
+                Y, X = dichoRecursion_callback(m, lp_copied, c, ys_1, ys_2, yt_1, yt_2, varArray, round_results, verbose ; args...)
                 append!(Y_integer, Y) ; append!(X_integer, X)
             end
         end
@@ -878,7 +878,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     # loop iterative 
     # ---------------
     if length(vd.Y_N) == 2    
-        todo = []; push!(todo, [vd.Y_N[1], vd.Y_N[2]] )
+        todo = []; push!(todo, [vd.Y_N[2], vd.Y_N[1]] )
 
         while length(todo) > 0
             p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
@@ -895,7 +895,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
             if status == MOI.OPTIMAL
                 yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
                 val = λ[1]*yt_1 + λ[2]*yt_2  
-                if (val < lb - 1e-4) 
+                if (val < lb - 1e-4) && yt_1 >= yr[1] && yt_2 >= yl[2]
                     push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                     push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, λ)
                     push!(todo, [yl, [yt_1, yt_2]]) ; push!(todo, [[yt_1, yt_2], yr])
