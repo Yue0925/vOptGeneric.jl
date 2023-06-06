@@ -139,26 +139,28 @@ mutable struct Solution
     y::Vector{Float64}
     is_binary::Bool
     λ::Vector{Float64}
+    ct::Float64
 end
 
 function Solution()
-    return Solution(Vector{Vector{Float64}}(), Vector{Float64}(), false, Vector{Float64}())
+    return Solution(Vector{Vector{Float64}}(), Vector{Float64}(), false, Vector{Float64}(), Inf)
 end
 
-function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}())
-    is_binary = true
+function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}(), ct::Float64=Inf)
+    is_binary = length(x) >0 ? true : false 
     for i = 1:length(x)
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             is_binary = false; break
         end
     end
-    return Solution([x], y, is_binary, λ)
+    return Solution([x], y, is_binary, λ, ct)
 end
 
 """
 Given a vector `x`, return true if `x` is approximately binary.
 """
 function isBinary(x::Vector{Float64})
+    if length(x) == 0 return false end 
     for i in 1:length(x)
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             return false
@@ -193,9 +195,11 @@ end
 Overload operators for the dominance order between two solutions.
 """
 function Base.:show(io::IO, s::Solution)
-    println(io, "Solution( \n |xEquiv| = ", length(s.xEquiv),
+    println(io, "Solution( \n |xEquiv| = ", length(s.xEquiv), 
+    "\t is_binary ? ", s.is_binary,
     "\n y = ", s.y,
-    "\n is_binary ? ", s.is_binary, " )")
+    "\n λ = ", s.λ, "\t ct = ", s.ct, 
+    " )")
 end
 
 
@@ -243,10 +247,17 @@ end
 
 
 """
-Return `true` if solution `a` dominates sobution `b`; `false` otherwise.
+Return `true` if solution `a` (weakly) dominates sobution `b`; `false` otherwise.
 """
 function dominate(a::Solution, b::Solution)
     return a ≤ b && a ≠ b
+end
+
+"""
+Return `true` if solution `a` strictly dominates sobution `b`; `false` otherwise.
+"""
+function strictDominate(a::Solution, b::Solution)
+    return a ≤ b && a.y[1] ≠ b.y[1] && a.y[2] ≠ b.y[2] 
 end
 
 
@@ -279,32 +290,35 @@ Push a solution into a vector of natrual ordered solutions, return `true` if it 
 or `false`, if it is weakly dominated by one (or more) solution(s) in the vector. 
 
 In case of successfully added and `filtered=true` (by defaut false), delete the old solutions that are weakly dominated by the new one.
+
+Return the position successfully inserted, -1 in case of strictly dominated or equality.
 """
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)
-    sol.y = round.(sol.y, digits = 4)
+# todo check 1 : using strict dominate
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Int
+    sol.y = round.(sol.y, digits = 4) ; idx = -1
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
-        push!(natural_sols.sols, sol) ; return true
+        push!(natural_sols.sols, sol) ; return 1
     end
 
     # a binary/dichotomy search finds the location to insert 
     l = 1; r = length(natural_sols); m = 0
     while l ≤ r
         m = Int(floor((l+r)/2))
-        # compare the first objective
-        if sol.y[1] < natural_sols.sols[m].y[1]
+
+        if sol.y[2] < natural_sols.sols[m].y[2]
             l = m+1
-        elseif sol.y[1] > natural_sols.sols[m].y[1]
+        elseif sol.y[2] > natural_sols.sols[m].y[2]
             r = m-1
         # in case of the equality on the first objective, compare the second obj
-        elseif sol.y[2] > natural_sols.sols[m].y[2]
+        elseif sol.y[1] > natural_sols.sols[m].y[1]
             l = m+1
-        elseif sol.y[2] < natural_sols.sols[m].y[2]
+        elseif sol.y[1] < natural_sols.sols[m].y[1]
             r  = m-1
         # in case of equality
         else
-            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return true
+            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return -1
         end
     end
 
@@ -318,8 +332,9 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         m = m > Int(floor((l+r)/2)) ? m : m+1
         natural_sols.sols = vcat(vcat(natural_sols.sols[1:m-1], sol), natural_sols.sols[m:end])
     end
+    idx = m 
 
-    # find points weakly dominated by the new point and delete it/them
+    # find points strictly dominated by the new point and delete it/them
     if filtered
         i = 1
         while i < length(natural_sols.sols)
@@ -327,9 +342,11 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             while j<= length(natural_sols.sols)
                 if dominate(natural_sols.sols[i], natural_sols.sols[j])
                     deleteat!(natural_sols.sols, j)
+                    if j == m idx= -1 elseif m > j idx -= 1 end 
                     
                 elseif dominate(natural_sols.sols[j], natural_sols.sols[i])
                     deleteat!(natural_sols.sols, i)
+                    if i == m idx= -1 elseif m > i idx -= 1 end 
                     j -= 1 ; break
                 else
                     j += 1
@@ -338,6 +355,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             if j > length(natural_sols.sols) i += 1 end 
         end
     end
+    return idx 
 end
 
 

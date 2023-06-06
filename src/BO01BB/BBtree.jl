@@ -26,6 +26,7 @@ mutable struct Node
     con_cuts_copied::Vector{ConstraintRef} 
     cutpool::CutPool
     assignment::Dict{Int64, Int64}
+    Gap::Float64
 
     Node() = new()
 
@@ -57,6 +58,7 @@ mutable struct Node
         n.con_cuts_copied = Vector{ConstraintRef}()
         n.cutpool = CutPool()
         n.assignment = Dict{Int64, Int64}()
+        n.Gap = 0.0
     
         f(t) = nothing # @async println("Finalizing node $(t.num).")
         finalizer(f, n)
@@ -257,9 +259,9 @@ function setObjBound(pb::BO01Problem, nadirPt::Vector{Float64}, duplication_boun
         con = JuMP.@constraint(pb.lp_copied, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray_copied ≤ nadirPt[1]) ; push!(cons_obj_copied, con)
         con = JuMP.@constraint(pb.lp_copied, pb.c[2, 1] + pb.c[2, 2:end]'*pb.varArray_copied ≤ nadirPt[2]) ; push!(cons_obj_copied, con)
         if duplication_bound != Inf 
-            con = JuMP.@constraint(pb.m, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray ≥ duplication_bound) ; push!(cons_obj, con) 
+            con = JuMP.@constraint(pb.m, pb.c[2, 1] + pb.c[2, 2:end]'*pb.varArray ≥ duplication_bound) ; push!(cons_obj, con) 
 
-            con = JuMP.@constraint(pb.lp_copied, pb.c[1, 1] + pb.c[1, 2:end]'*pb.varArray_copied ≥ duplication_bound) ; push!(cons_obj_copied, con) 
+            con = JuMP.@constraint(pb.lp_copied, pb.c[2, 1] + pb.c[2, 2:end]'*pb.varArray_copied ≥ duplication_bound) ; push!(cons_obj_copied, con) 
         end 
     # end
     return cons_obj, cons_obj_copied

@@ -134,9 +134,6 @@ Argument :
     - pb : BO01Problem 
 """
 function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::IncumbentSet, worst_nadir_pt::Vector{Float64}, round_results, verbose; args...)
-    if verbose
-        @info "at node $(node.num) |Y_N| = $(length(incumbent.natural_order_vect)), EPB ? $(node.EPB)"
-    end
     # get the actual node
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
@@ -145,25 +142,13 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     # test dominance 
     #--------------------
     start = time()
-    if pb.param.root_relax
-        # fullyExplicitDominanceTestByNormal   ,   fullyExplicitDominanceTestNonConvex
-        if ( @timeit tmr "dominance" fullyExplicitDominanceTestByNormal(node, incumbent, worst_nadir_pt, pb.param.EPB) )
-            prune!(node, DOMINANCE)
-            if verbose
-                @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
-            end
-            pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            return
+    if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
+        prune!(node, DOMINANCE)
+        if verbose
+            @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
         end
-    else
-        if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
-            prune!(node, DOMINANCE)
-            if verbose
-                @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
-            end
-            pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
-            return
-        end
+        pb.info.nb_nodes_pruned += 1 ; pb.info.test_dom_time += (time() - start)
+        return
     end
 
     #-----------------------------------------
@@ -172,26 +157,27 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     if !isRoot(node)
         # if exists non-explored child, don't liberate
         if node.EPB || hasNonExploredChild(node.pred) 
-        # if length(node.pred.succs) != 2 || node.pred.succs[1].activated || node.pred.succs[2].activated
             nothing
-        elseif length(node.pred.RBS.natural_order_vect) > 0
+        else
+            if length(node.pred.RBS.natural_order_vect) > 0 #todo ? length(node.pred.assignment) > 0
                 node.pred.RBS = RelaxedBoundSet() ; node.pred.assignment = Dict{Int64, Int64}()
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
                 end
+            end
         end
     end
 
     # objective branching 
     if pb.param.EPB && length(node.localNadirPts) > 0
-        # todo : to be improved ... 
+        # todo : to be improved for collision... 
         for i = 1:length(node.localNadirPts)
-            pt =  node.localNadirPts[i] ; duplicationBound_z1 = Inf
-            if i < length(node.localNadirPts) duplicationBound_z1 = node.localNadirPts[i+1][1] end
+            pt =  node.localNadirPts[i] ; duplicationBound_z2 = Inf
+            if i < length(node.localNadirPts) duplicationBound_z2 = node.localNadirPts[i+1][2] end
             nodeChild = Node(
                 pb.info.nb_nodes + 1, node.depth + 1, 
                 pred = node,
-                EPB = true, nadirPt = pt, duplicationBound = duplicationBound_z1
+                EPB = true, nadirPt = pt, duplicationBound = duplicationBound_z2
             )
             nodeChild.assignment = getPartialAssign(nodeChild)
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
@@ -266,6 +252,7 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     problem.info.relaxation_time = round(problem.info.relaxation_time, digits = 2)
     problem.info.test_dom_time = round(problem.info.test_dom_time, digits = 2)
     problem.info.update_incumb_time = round(problem.info.update_incumb_time, digits = 2)
+    problem.info.Gap = round(problem.info.Gap/problem.info.nb_nodes, digits = 2)
 
     if problem.info.cp_activated
         problem.info.cuts_infos.times_calling_dicho = round(problem.info.cuts_infos.times_calling_dicho, digits = 2)
@@ -315,16 +302,19 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
     standard_form(problem) ; problem.param.EPB = EPB
 
-    # copy alternative model
-    copy_model_LP(problem) ; set_silent(problem.lp_copied)
-
     # relaxation LP
     undo_relax = JuMP.relax_integrality(problem.m)
+
+    # copy alternative model
+    copy_model_LP(problem) ; set_silent(problem.lp_copied)
 
     if root_relax 
         undo_relax()
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0)
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo disable heur 
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo disable preprocessing 
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.01) # todo : time limit in sec 
     end
 
     if cp
@@ -358,7 +348,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     addTodo(todo, problem, root)
 
     ptl = root.RBS.natural_order_vect.sols[1].y ; ptr = root.RBS.natural_order_vect.sols[end].y
-    worst_nadir_pt = [ptl[1], ptr[2]] 
+    worst_nadir_pt = [ptr[1], ptl[2]] 
 
 
     # continue to fathom the node until todo list is empty
@@ -399,3 +389,4 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
     return problem.info
 end
+

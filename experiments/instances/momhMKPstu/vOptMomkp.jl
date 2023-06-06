@@ -181,16 +181,16 @@ function main(fname::String)
 
   solverSelected = CPLEX.Optimizer
   for method in [
-    # :bc_rootRelax , 
-    # :bc_rootRelaxEPB,
-    # :bc_rootRelaxCP, 
-    # :bc_rootRelaxCPEPB,
+    :bc_rootRelax , 
+    :bc_rootRelaxEPB,
+    :bc_rootRelaxCP, 
+    :bc_rootRelaxCPEPB,
 
     # :dicho, 
     # :epsilon, 
-    :bb, 
+    # :bb, 
     # :bb_EPB,
-    :bc, 
+    # :bc, 
     # :bc_EPB,
     ] # 
 
