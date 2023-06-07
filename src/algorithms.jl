@@ -151,6 +151,7 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     return MOI.OPTIMAL
 end
 
+# todo : to discard 
 global varArray = Array{JuMP.VariableRef}
 global x_star = []
 global model 
@@ -158,6 +159,7 @@ global bst_val = -Inf
 global curr_λ = []
 global C 
 
+# todo : to discard 
 function callback_noCuts(cb_data)
     global varArray
     global x_star
@@ -178,6 +180,7 @@ function callback_noCuts(cb_data)
     end
 end
 
+# todo : to discard 
 function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
     sols_nb = result_count(m)
@@ -195,6 +198,7 @@ Solving a mono-objective scalarization integer problem, take the best fractional
 
 Return the integer heuristic solutions offered by IP solver, the relaxation solution is stored in vOptData.
 """
+# todo : to discard 
 function opt_scalar_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, λ1, λ2, round_results, verbose; args...)
     global varArray
     global x_star
@@ -274,6 +278,7 @@ Solve a series of scalarization problems with integer variables in a dichtomic s
     store the root relaxation results in vOptData and 
     return the heuristic integer variables offered by IP solver. 
 """
+# todo : to discard 
 function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_results, verbose; args...)
     global varArray
     global x_star
@@ -297,7 +302,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
 
-    # todo : check 1
+    # strict dominated 
     weak_dom(a, b) = a[1]<= b[1] && a[2] <= b[2] && a[1]!= b[1] && a[2]!= b[2]
 
     # todo : check 2
@@ -476,7 +481,7 @@ function solve_dicho_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, round_res
     return Y_integer, X_integer, Gap
 end
 
-# todo : local ideal point wrongly compared 
+# todo : to discard 
 function dichoRecursion_callback(m::JuMP.Model, lp_copied::JuMP.Model, c, yr_1, yr_2, ys_1, ys_2, varArray, round_results, verbose ; args...)
     global varArray
     global x_star
@@ -722,7 +727,6 @@ function opt_scalar(m::JuMP.Model, λ1, λ2, round_results, verbose; args...)
 end
 
 # todo : check sorting() and filterage at the end 
-
 # function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
 #     vd = getvOptData(m)
 #     empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)
@@ -878,11 +882,11 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     # loop iterative 
     # ---------------
     if length(vd.Y_N) == 2    
-        todo = []; push!(todo, [vd.Y_N[2], vd.Y_N[1]] )
+        todo = []; push!(todo, [vd.Y_N[1], vd.Y_N[2]] )
 
         while length(todo) > 0
             p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
-            λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
+            λ = [abs(yr[2] - yl[2]), abs(yl[1] - yr[1]) ] 
         
             # solve the mono scalarization problem 
             f = AffExpr(0.0)    
@@ -895,7 +899,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
             if status == MOI.OPTIMAL
                 yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
                 val = λ[1]*yt_1 + λ[2]*yt_2  
-                if (val < lb - 1e-4) && yt_1 >= yr[1] && yt_2 >= yl[2]
+                if (val < lb - 1e-4) && yt_1 >= yl[1] && yt_2 >= yr[2]
                     push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                     push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, λ)
                     push!(todo, [yl, [yt_1, yt_2]]) ; push!(todo, [[yt_1, yt_2], yr])
@@ -908,20 +912,18 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     # ---------------------
     # sort X_E and Y_N
     # ---------------------
-    s = sortperm(vd.Y_N, by = x -> (-x[1], x[2]))
+    s = sortperm(vd.Y_N, by = x -> (-x[2], x[1]))
     vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
-
-    R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && a[1]!= b[1] && a[2]!= b[2]
+    # strictly dominance
+    strict_dom(a, b) = a[1] <= b[1] && a[2] <= b[2] && a[1]!= b[1] && a[2]!= b[2]
 
     i = 1
     while i < length(vd.Y_N)
         j = i+1
         while j<= length(vd.Y_N)
-            if weak_dom(vd.Y_N[i], vd.Y_N[j])
+            if strict_dom(vd.Y_N[i], vd.Y_N[j])
                 deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j) ; deleteat!(vd.lambda, j)
-            elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
+            elseif strict_dom(vd.Y_N[j], vd.Y_N[i])
                 deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i) ; deleteat!(vd.lambda, i)
                 j -= 1 ; break
             else
