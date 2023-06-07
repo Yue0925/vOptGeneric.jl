@@ -161,7 +161,6 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     global curr_λ
     global bst_val
 
-    # L = RelaxedBoundSet()
     vd = getvOptData(m)
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
