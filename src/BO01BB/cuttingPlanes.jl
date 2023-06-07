@@ -70,11 +70,11 @@ end
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
     n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
-    # delete all points cut off 
-    for indx in cut_off
-        push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
-    end
-    deleteat!(node.RBS.natural_order_vect.sols, cut_off)
+    # # delete all points cut off 
+    # for indx in cut_off
+    #     push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
+    # end
+    # deleteat!(node.RBS.natural_order_vect.sols, cut_off)
 
     # in each direction, re-optimize 
     for λ in lambdas
@@ -90,16 +90,6 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
                 if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
             end
             pb.info.update_incumb_time += (time() - start)
-        # todo : for LP relaxation reoptimize entire LBS  
-        # else
-        #     start = time()
-        #     opt_scalar(pb.m, λ[1], λ[2], round_results, false ; args...)
-        #     pb.info.relaxation_time += (time() - start)
-
-        #     vd_LP = getvOptData(pb.m)
-        #     if size(vd_LP.Y_N, 1) != 0
-        #         push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[1], vd_LP.Y_N[1], λ) ) # , filtered=true
-        #     end
         end
     end
 

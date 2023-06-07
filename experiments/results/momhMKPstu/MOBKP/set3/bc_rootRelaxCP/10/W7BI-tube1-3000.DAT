@@ -7,7 +7,7 @@ GAP = 0.0
 relaxation_time = 0.04 
 test_dominance_time = 0.0 
 update_incumbent_time = 0.0 
-tree_size = 0.035 
+tree_size = 0.036 
 nb_nodes_EPB = 0 
 nb_nodes_VB = 20 
 root_relax = true 
@@ -15,7 +15,7 @@ TO = false
 
 
  # ----------- info about cuts : 
-ite_total = 19 
+ite_total = 20 
 cuts_applied = 0 
 sp_cuts = 0 
 mp_cuts = 0 
