@@ -296,7 +296,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         valid = true
         for s in L.natural_order_vect.sols         # todo : compared with segments if the current pt is under LBS ?
-            if s.λ[1] * yr_1 + s.λ[2] * yr_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
+            if s.λ[1] * ys_1 + s.λ[2] * ys_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
                 valid = false ; break
             end
         end
