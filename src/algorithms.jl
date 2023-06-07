@@ -700,31 +700,31 @@ function ChalmetRecursion(m::JuMP.Model, yr_1, yr_2, ys_1, ys_2, varArray, rhs_z
 end
 
 #todo : useless 
-function opt_scalar(m::JuMP.Model, λ1, λ2, round_results, verbose; args...)
-    vd = getvOptData(m)
-    empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)
-    f1, f2 = vd.objs
-    f1Sense, f2Sense = vd.objSenses
-    varArray = JuMP.all_variables(m)
+# function opt_scalar(m::JuMP.Model, λ1, λ2, round_results, verbose; args...)
+#     vd = getvOptData(m)
+#     empty!(vd.Y_N) ; empty!(vd.X_E); empty!(vd.lambda)
+#     f1, f2 = vd.objs
+#     f1Sense, f2Sense = vd.objSenses
+#     varArray = JuMP.all_variables(m)
 
-    #Set the first objective as an objective in the JuMP JuMP.Model
-    JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
-    verbose && println("solving for $λ1*f1 + $λ2*f2")
+#     #Set the first objective as an objective in the JuMP JuMP.Model
+#     JuMP.set_objective(m, f1Sense, λ1*f1 + λ2*f2)
+#     verbose && println("solving for $λ1*f1 + $λ2*f2")
     
-    #Solve with that objective
-    JuMP.optimize!(m, ignore_optimize_hook=true)
-    status = JuMP.termination_status(m)
+#     #Solve with that objective
+#     JuMP.optimize!(m, ignore_optimize_hook=true)
+#     status = JuMP.termination_status(m)
 
-    #If a solution exists
-    if status == MOI.OPTIMAL
+#     #If a solution exists
+#     if status == MOI.OPTIMAL
 
-        y_1 = JuMP.value(f1) ; y_2 = JuMP.value(f2)
+#         y_1 = JuMP.value(f1) ; y_2 = JuMP.value(f2)
 
-        #Store results in vOptData
-        push!(vd.Y_N, round_results ? round.([y_1, y_2]) : [y_1, y_2])
-        push!(vd.X_E, JuMP.value.(varArray))
-    end
-end
+#         #Store results in vOptData
+#         push!(vd.Y_N, round_results ? round.([y_1, y_2]) : [y_1, y_2])
+#         push!(vd.X_E, JuMP.value.(varArray))
+#     end
+# end
 
 # todo : check sorting() and filterage at the end 
 # function solve_dicho(m::JuMP.Model, round_results, verbose; args...)

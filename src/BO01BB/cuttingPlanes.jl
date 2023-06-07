@@ -1,14 +1,13 @@
 # This file contains functions of cutting planes algorithm.
 include("BBtree.jl")
 include("../algorithms.jl")
-include("struct.jl")
 include("separators.jl")
 include("cutPool.jl")
 
 using JuMP 
+include("LBSwithIPsolver.jl")
 
 const max_step = 2
-
 
 
 """
@@ -21,9 +20,8 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
-
         start = time()
-        Y_integer, X_integer = solve_dicho_callback(pb.m, pb.lp_copied, pb.c, round_results, false ; args...)        
+        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
         pb.info.relaxation_time += (time() - start)
 
         start = time()
@@ -32,52 +30,58 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
+
+        if length(node.RBS.natural_order_vect.sols) == 0
+            prune!(node, INFEASIBILITY)
+            if verbose
+                @info "node $(node.num) is unfeasible !"
+            end
+            return true
+        end
     else
         start = time()
         solve_dicho(pb.m, round_results, false ; args...)
         pb.info.relaxation_time += (time() - start)
-    end
-    vd_LP = getvOptData(pb.m)
 
-    #-------------------------------------------------------------------------------
-    # in case of the LP relaxed (sub) problem is infeasible, prune the actual node
-    #-------------------------------------------------------------------------------
-    if size(vd_LP.Y_N, 1) == 0
-        prune!(node, INFEASIBILITY)
-        if verbose
-            @info "node $(node.num) is unfeasible !"
+        vd_LP = getvOptData(pb.m)
+    
+        #-------------------------------------------------------------------------------
+        # in case of the LP relaxed (sub) problem is infeasible, prune the actual node
+        #-------------------------------------------------------------------------------
+        if size(vd_LP.Y_N, 1) == 0
+            prune!(node, INFEASIBILITY)
+            if verbose
+                @info "node $(node.num) is unfeasible !"
+            end
+            return true
         end
-        return true
-    end
-
-    # construct/complete the relaxed bound set
-    node.RBS = RelaxedBoundSet()
-    for i = 1:length(vd_LP.Y_N)
-        # if pb.param.root_relax
+    
+        # construct/complete the relaxed bound set
+        node.RBS = RelaxedBoundSet()
+        for i = 1:length(vd_LP.Y_N)
             push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
-        # else
-        #     push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i]), filtered=true)  
-        # end
+        end
     end
 
     return false
 end
 
-
+# todo : partial reoptimize for root relaxation 
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
     n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
-    for indx in cut_off
-        push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
-    end
-    deleteat!(node.RBS.natural_order_vect.sols, cut_off)
+    # # delete all points cut off 
+    # for indx in cut_off
+    #     push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
+    # end
+    # deleteat!(node.RBS.natural_order_vect.sols, cut_off)
 
-    # in each direction 
+    # in each direction, re-optimize 
     for λ in lambdas
         if pb.param.root_relax
 
-            start = time()
-            Y_integer, X_integer = opt_scalar_callback(pb.m, pb.lp_copied, pb.c, λ[1], λ[2], round_results, false ; args...)        
+            start = time() 
+            Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ, false ; args...)      
             pb.info.relaxation_time += (time() - start)
     
             start = time()
@@ -85,16 +89,7 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
                 s = Solution(X_integer[i], Y_integer[i])
                 if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
             end
-            pb.info.update_incumb_time += (time() - start) 
-        else
-            start = time()
-            opt_scalar(pb.m, λ[1], λ[2], round_results, false ; args...)
-            pb.info.relaxation_time += (time() - start)
-        end
-
-        vd_LP = getvOptData(pb.m)
-        if size(vd_LP.Y_N, 1) != 0
-            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[1], vd_LP.Y_N[1], λ), filtered=true )
+            pb.info.update_incumb_time += (time() - start)
         end
     end
 
@@ -185,7 +180,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         cut_off = []
 
         while l ≤ length(LBS)
-            if LBS[l].is_binary 
+            if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
                 l += 1 ; continue    
             end
             
@@ -198,7 +193,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     l += 1
                 else 
                     r = l+∇
-                    if r > length(LBS) || LBS[r].is_binary continue end
+                    if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
 
                     if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
 
@@ -248,7 +243,6 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         # ---------------------------------------------------
         # 3. otherwise, re-optimize by solving dicho -> LBS
         # ---------------------------------------------------
-
         if cut_counter > 0
 
             if pb.param.root_relax

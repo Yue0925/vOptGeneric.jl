@@ -1,4 +1,4 @@
-# This file contains functions related to node fathoming.
+## This file contains functions related to node fathoming.
 
 include("cuttingPlanes.jl")
 
@@ -14,7 +14,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
     l = 1 ; LBS = node.RBS.natural_order_vect.sols
 
     while l ≤ length(LBS)
-        if LBS[l].is_binary 
+        if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
             l += 1 ; continue
         end
 
@@ -40,7 +40,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
             else 
                 applied = false
                 r = l+∇
-                if r > length(LBS) || LBS[r].is_binary continue end
+                if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
 
                 xᵣ_star = LBS[r].xEquiv[1]
                 # multi-point cut 
@@ -115,6 +115,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
 end
 
 
+
 """
 At the given node, update (filtered by dominance) the global incumbent set.
 Return `true` if the node is pruned by optimality.
@@ -132,9 +133,9 @@ function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, v
         end
     end
 
-    if pb.param.root_relax 
-        pb.info.update_incumb_time += (time() - start) ; return false 
-    end 
+    # if pb.param.root_relax 
+    #     pb.info.update_incumb_time += (time() - start) ; return false 
+    # end 
 
     if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
         prune!(node, OPTIMALITY)
@@ -236,8 +237,30 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[i+1]
 
-            # ----------------
+            # --------------------------------------
             #todo : complete ? 
+            if sol_l.y[2] == sol_r.y[2] # horizon line 
+                if u.y[1] < sol_l.y[1] || u.y[1] > sol_r.y[1]
+                    continue
+                end
+
+                compared = true 
+                if u.y[2] < sol_l.y[2]
+                    existence = true ; break
+                end
+            end
+
+            if sol_l.y[1] == sol_r.y[1] # vertical line 
+                if u.y[2] < sol_r.y[2] || u.y[2] > sol_l.y[2]
+                    continue
+                end
+
+                compared = true 
+                if u.y[1] < sol_l.y[1]
+                    existence = true ; break
+                end
+            end
+            # -------------------------------------
 
             if (u.y[2] > sol_l.y[2] || u.y[2] < sol_r.y[2]) && (u.y[1] > sol_r.y[1] || u.y[1] < sol_l.y[1])
                 continue
@@ -258,7 +281,10 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             if EPB
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
-                    # nothing 
+
+                elseif (u.y[2] ≥ ptl.y[2] && u.y[1] ≥ ptr.y[1])
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
+
                 else 
                     push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
                 end 
