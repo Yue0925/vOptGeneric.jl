@@ -187,10 +187,10 @@ function main(fname::String)
     :bb_EPB,
     :bc, 
     :bc_EPB,
-    # :bc_rootRelax , 
-    # :bc_rootRelaxEPB,
-    # :bc_rootRelaxCP, 
-    # :bc_rootRelaxCPEPB
+    :bc_rootRelax , 
+    :bc_rootRelaxEPB,
+    :bc_rootRelaxCP, 
+    :bc_rootRelaxCPEPB
     ] # 
 
     vSolveBi01IP(solverSelected, dat.C, dat.A, dat.b, fname, method) 
