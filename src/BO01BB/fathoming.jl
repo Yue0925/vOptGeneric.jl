@@ -112,6 +112,9 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     end
 
     removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
+    
+    # todo  check LBS where no pt dominates other 
+
 end
 
 
