@@ -260,6 +260,19 @@ function strictDominate(a::Solution, b::Solution)
     return a ≤ b && a.y[1] ≠ b.y[1] && a.y[2] ≠ b.y[2] 
 end
 
+"""
+straight line       a x + b y = c 
+            <=>   -Δz2 z1 + Δz1 z2 = Δz1 c 
+
+a = -Δz2 = -λ1   b = Δz1 = -λ2    ct = Δz1 c 
+        # todo : λ always absolute value 
+"""
+function updateCT(s::Solution)
+    if length(s.λ) ≠ 2 || s.λ == [0.0, 0.0] return end  # s.ct ≠ Inf || 
+
+    s.ct = -s.λ[1] * s.y[1] - s.λ[2] * s.y[2]
+end
+
 
 """
 A vector of solutions in the natrual order (from left to right in bi-objective space). 
@@ -323,25 +336,16 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             r  = m-1
         #todo :  in case of equality  =>  update only & retuen -1
         else
-            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return -1
             # # todo : different λ same pente
-            # if length(sol.λ) == 2
-            #     if length(natural_sols.sols[m].λ) == 2 
-            #         if (abs(sol.λ[1]- natural_sols.sols[m].λ[1]) <1e-4 && abs(sol.λ[2] - natural_sols.sols[m].λ[2])< 1e-4 ) # || 
-            #             # (sol.λ[1] != 0.0 && natural_sols.sols[m].λ[1] != 0.0 && abs(sol.λ[2]/sol.λ[1] -natural_sols.sols[m].λ[2]/natural_sols.sols[m].λ[1] ) < 1e-4 )
-            #             return -1
-            #         end
-            #     end 
-            #     # update 
-            #     natural_sols.sols[m].λ = sol.λ
-            #     addEquivX(natural_sols.sols[m], sol.xEquiv)
-            #     natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
-            #     # todo here directly : 
-            #     return m 
-            # else  # no need to update ct 
-            #     # error("pushing ill solution ! ") # nadir pts UBS
-            #     return -1
-            # end
+            if length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
+                if (abs(sol.λ[1]- natural_sols.sols[m].λ[1]) > 1e-4 || abs(sol.λ[2] - natural_sols.sols[m].λ[2]) > 1e-4 )
+
+                    natural_sols.sols[m].λ = sol.λ
+                    natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
+                end
+            end
+            addEquivX(natural_sols.sols[m], sol.xEquiv) ; updateCT(natural_sols.sols[m])
+            return -1
         end
     end
 

@@ -41,18 +41,6 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     return Y_integer, X_integer
 end  
 
-"""
-straight line       a x + b y = c 
-            <=>   -Δz2 z1 + Δz1 z2 = Δz1 c 
-
-a = -Δz2 = -λ1   b = Δz1 = -λ2    ct = Δz1 c 
-        # todo : λ always absolute value 
-"""
-function updateCT(s::Solution)
-    if s.ct ≠ Inf || length(s.λ) ≠ 2 || s.λ == [0.0, 0.0] return end 
-
-    s.ct = -s.λ[1] * s.y[1] - s.λ[2] * s.y[2]
-end
 
 """
 Supprime all lower bounds under current straight line.
@@ -188,8 +176,9 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
     # in case of infeasibility => !! no single extreme point 
     yr_1 = 0.0 ; yr_2 = 0.0 
+    ext_l = Solution()
     if status == MOI.INFEASIBLE 
-        # todo : empty!(L.natural_order_vect.sols)
+        empty!(L.natural_order_vect.sols)
         return Y_integer, X_integer
     end
 
@@ -202,6 +191,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
+        ext_l = Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ) ; updateCT(ext_l)
         idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ))
         idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
@@ -229,7 +219,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         yr_2 = x_star'* c[2, 2:end] + c[2, 1]
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ))
+        ext_l = Solution(x_star, [yr_1, yr_2], curr_λ ) ; updateCT(ext_l)
+        idx = push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ ))
         idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -275,6 +266,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     ys_1 = 0.0 ; ys_2 = 0.0 
     if status == MOI.INFEASIBLE
         # todo : return single point OR the last updated LBS ??
+        empty!(L.natural_order_vect.sols) ; push!(L.natural_order_vect, ext_l)
         return Y_integer, X_integer
     end
 
@@ -313,7 +305,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         ys_2 = x_star'* c[2, 2:end] + c[2, 1]
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [ys_1, ys_2], curr_λ ))
+        idx = push!(L.natural_order_vect, Solution(x_star, [ys_1, ys_2], curr_λ ))
         idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -436,7 +428,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             val = λ[1]*yt_1 + λ[2]*yt_2
 
             # add new sol in LBS without filtering 
-            idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) )
+            idx = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], curr_λ ) )
             idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
         else
@@ -566,7 +558,7 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         val = λ[1]*yt_1 + λ[2]*yt_2
 
         # add new sol in LBS without filtering 
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) )
+        idx = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], curr_λ ) )
         idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
 
     else
