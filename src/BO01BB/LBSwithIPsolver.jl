@@ -438,7 +438,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # -----------------------------
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
-        if (abs(val - lb) ≤ 1e-4) || idx < 0 continue end #todo :  
+        if (abs(val - lb) ≤ 1e-4) || idx < 0 continue end
 
         # find point intersection 
         intersection = intersectionPts(L, idx)

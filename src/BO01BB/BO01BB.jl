@@ -168,7 +168,8 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         end
     end
 
-    # objective branching 
+    # todo : objective branching 
+    # todo : - LBS initial , no need to 
     if pb.param.EPB && length(node.localNadirPts) > 0
         # todo : to be improved for collision... 
         for i = 1:length(node.localNadirPts)
@@ -183,9 +184,9 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
 
             # todo : copy parent's LBS 
-            if length(node.RBS.natural_order_vect.sols) ≥ 2 
-            if pb.param.root_relax nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
-            end
+            # if length(node.RBS.natural_order_vect.sols) ≥ 2 
+            # if pb.param.root_relax nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
+            # end
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
                 ( @timeit tmr "incumbent" updateIncumbent(nodeChild, pb, incumbent, verbose) )
