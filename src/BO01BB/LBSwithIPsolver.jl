@@ -81,7 +81,6 @@ function next_direc(idx::Int64, L::RelaxedBoundSet, todo)
     r ≤ length(L.natural_order_vect.sols) ? push!(todo, [L.natural_order_vect.sols[idx].y, L.natural_order_vect.sols[r].y]) : nothing 
 end
 
-
 """
 Computing intersected points between current point `idx` and LBS.
 straight line       a x + b y = c 
@@ -439,7 +438,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # -----------------------------
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
-        if (abs(val - lb) ≤ 1e-4) || idx < 0 continue end
+        if  idx < 0 continue end # (abs(val - lb) ≤ 1e-4) ||
 
         # find point intersection 
         intersection = intersectionPts(L, idx)
