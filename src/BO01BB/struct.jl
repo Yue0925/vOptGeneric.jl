@@ -260,6 +260,19 @@ function strictDominate(a::Solution, b::Solution)
     return a ≤ b && a.y[1] ≠ b.y[1] && a.y[2] ≠ b.y[2] 
 end
 
+"""
+straight line       a x + b y = c 
+            <=>   -Δz2 z1 + Δz1 z2 = Δz1 c 
+
+a = -Δz2 = -λ1   b = Δz1 = -λ2    ct = Δz1 c 
+        # todo : λ always absolute value 
+"""
+function updateCT(s::Solution)
+    if length(s.λ) ≠ 2 || s.λ == [0.0, 0.0] return end  # s.ct ≠ Inf || 
+
+    s.ct = -s.λ[1] * s.y[1] - s.λ[2] * s.y[2]
+end
+
 
 """
 A vector of solutions in the natrual order (from left to right in bi-objective space). 
@@ -291,10 +304,15 @@ or `false`, if it is weakly dominated by one (or more) solution(s) in the vector
 
 In case of successfully added and `filtered=true` (by defaut false), delete the old solutions that are weakly dominated by the new one.
 
-Return the position successfully inserted, -1 in case of strictly dominated or equality.
+Return 
+
+    -   the position `idx` successfully inserted,
+# todo : return 
+    -   in case of same point with different ct , update ct and return `idx`
+    -   -1 : the same point with exactly ct
+            OR  the inconming point is dominated 
 """
-# todo check 1 : using strict dominate
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Int
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)# ::Tuple{Int,Bool}
     sol.y = round.(sol.y, digits = 4) ; idx = -1
 
     # add s directly if sols is empty
@@ -316,9 +334,18 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             l = m+1
         elseif sol.y[1] < natural_sols.sols[m].y[1]
             r  = m-1
-        # in case of equality
+        #todo :  in case of equality  =>  update only & retuen -1
         else
-            addEquivX(natural_sols.sols[m], sol.xEquiv) ; return -1
+            # # todo : different λ same pente
+            if length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
+                if (abs(sol.λ[1]- natural_sols.sols[m].λ[1]) > 1e-4 || abs(sol.λ[2] - natural_sols.sols[m].λ[2]) > 1e-4 )
+
+                    natural_sols.sols[m].λ = sol.λ
+                    natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
+                end
+            end
+            addEquivX(natural_sols.sols[m], sol.xEquiv) ; updateCT(natural_sols.sols[m])
+            return -1
         end
     end
 
@@ -334,7 +361,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     end
     idx = m 
 
-    # find points strictly dominated by the new point and delete it/them
+    # find points weakly dominated by the new point and delete it/them
     if filtered
         i = 1
         while i < length(natural_sols.sols)
@@ -355,7 +382,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             if j > length(natural_sols.sols) i += 1 end 
         end
     end
-    return idx 
+    return idx # < 1 ? (idx, false) : (idx, true)
 end
 
 
