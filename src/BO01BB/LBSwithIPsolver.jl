@@ -186,7 +186,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     
     # set up callback 
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
-    # pureL = RelaxedBoundSet()
+    pureL = RelaxedBoundSet()
 
     # -------------------------------------------
     # step 1 : calculate the left extreme point
@@ -218,9 +218,11 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         ext_l = Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ) ; updateCT(ext_l)
         idx, newPt = push!(L.natural_order_vect, ext_l) ; updateCT(L.natural_order_vect.sols[idx])
+        updateLBS(L, idx, val, curr_λ, [yr_1, yr_2])
 
-        # idx, newPt = push!(pureL.natural_order_vect, ext_l)
-        # newPt ? updateCT(pureL.natural_order_vect.sols[idx]) : nothing
+        idx, newPt = push!(pureL.natural_order_vect, ext_l) ; updateCT(pureL.natural_order_vect.sols[idx])
+        updateLBS(pureL, idx, val, curr_λ, [yr_1, yr_2])
+
     # otherwise, take the best primal sol so far 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         # stock heuristic sol 
@@ -247,15 +249,17 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         ext_l = Solution(x_star, [yr_1, yr_2], curr_λ ) ; updateCT(ext_l)
         idx, newPt = push!(L.natural_order_vect, ext_l) ;  updateCT(L.natural_order_vect.sols[idx])
+        updateLBS(L, idx, val, curr_λ, [yr_1, yr_2])
 
-        # idx, newPt = push!(pureL.natural_order_vect, ext_l)
-        # newPt ? updateCT(pureL.natural_order_vect.sols[idx]) : nothing
+        idx, newPt = push!(pureL.natural_order_vect, ext_l)
+        newPt ? updateCT(pureL.natural_order_vect.sols[idx]) : nothing
+        updateLBS(pureL, idx, val, curr_λ, [yr_1, yr_2])
+
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
 
-    updateLBS(L, idx, val, curr_λ, [yr_1, yr_2])
 
     # -------------------------------------------
     # step 2 : calculate the right extreme point
