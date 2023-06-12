@@ -312,12 +312,12 @@ Return
     -   -1 : the same point with exactly ct
             OR  the inconming point is dominated 
 """
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)# ::Tuple{Int,Bool}
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
     sol.y = round.(sol.y, digits = 4) ; idx = -1
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
-        push!(natural_sols.sols, sol) ; return 1
+        push!(natural_sols.sols, sol) ; return 1, true
     end
 
     # a binary/dichotomy search finds the location to insert 
@@ -344,8 +344,8 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
                     natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
                 end
             end
-            addEquivX(natural_sols.sols[m], sol.xEquiv) ; updateCT(natural_sols.sols[m])
-            return -1
+            addEquivX(natural_sols.sols[m], sol.xEquiv) 
+            return m, false
         end
     end
 
@@ -382,7 +382,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             if j > length(natural_sols.sols) i += 1 end 
         end
     end
-    return idx # < 1 ? (idx, false) : (idx, true)
+    return idx< 1 ? (idx, false) : (idx, true)
 end
 
 

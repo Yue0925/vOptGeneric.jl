@@ -168,8 +168,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         end
     end
 
-    # todo : objective branching 
-    # todo : - LBS initial , no need to 
+    # objective branching 
     if pb.param.EPB && length(node.localNadirPts) > 0
         # todo : to be improved for collision... 
         for i = 1:length(node.localNadirPts)
@@ -183,7 +182,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             nodeChild.assignment = getPartialAssign(nodeChild)
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
 
-            # todo : copy parent's LBS 
+            # # todo : copy parent's LBS 
             # if length(node.RBS.natural_order_vect.sols) ≥ 2 
             # if pb.param.root_relax nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
             # end
@@ -210,10 +209,10 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node1.assignment = getPartialAssign(node1)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # todo : copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 
-        if pb.param.root_relax node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
-        end
+        # # todo : copy parent's LBS 
+        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
+        # if pb.param.root_relax node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
+        # end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
@@ -230,10 +229,10 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node2.assignment = getPartialAssign(node2)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # todo : copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 
-        if pb.param.root_relax node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
-        end
+        # # todo : copy parent's LBS 
+        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
+        # if pb.param.root_relax node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
+        # end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
