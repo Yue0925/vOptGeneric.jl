@@ -103,8 +103,7 @@ z2 = (a1 ct2 - a2 ct1)/det
     complexity : O(|L|^2)  #todo : improve complexity 
 """
 function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
-    s2 = L.natural_order_vect.sols[idx] ; 
-    res = Set{Solution}()
+    s2 = L.natural_order_vect.sols[idx] ; res = Set{Solution}()
 
     for i = 1:length(L.natural_order_vect.sols)
         if i== idx continue end 
@@ -276,6 +275,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     if status == MOI.INFEASIBLE
         # todo : return single point OR the last updated LBS ??
         empty!(L.natural_order_vect.sols) ; push!(L.natural_order_vect, ext_l)
+        # L.natural_order_vect.sols = deepcopy(pureL.natural_order_vect.sols)
         return Y_integer, X_integer
     end
 
@@ -428,7 +428,6 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             error("Condition  status $status ")
         end
 
-        
         # -----------------------------
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
