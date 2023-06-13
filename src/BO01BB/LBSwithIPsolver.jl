@@ -251,8 +251,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         idx, newPt = push!(L.natural_order_vect, ext_l) ;  updateCT(L.natural_order_vect.sols[idx])
         updateLBS(L, idx, val, curr_λ, [yr_1, yr_2])
 
-        idx, newPt = push!(pureL.natural_order_vect, ext_l)
-        newPt ? updateCT(pureL.natural_order_vect.sols[idx]) : nothing
+        idx, newPt = push!(pureL.natural_order_vect, ext_l) ; updateCT(pureL.natural_order_vect.sols[idx]) 
         updateLBS(pureL, idx, val, curr_λ, [yr_1, yr_2])
 
     else
@@ -290,6 +289,10 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         ext_r = Solution(JuMP.value.(varArray), [ys_1, ys_2], curr_λ ) ; updateCT(ext_r)
         idx, newPt = push!(L.natural_order_vect, ext_r) ; updateCT(L.natural_order_vect.sols[idx])
+        updateLBS(L, idx, val, curr_λ, [ys_1, ys_2])
+
+        idx, newPt = push!(pureL.natural_order_vect, ext_r) ; updateCT(pureL.natural_order_vect.sols[idx])
+        updateLBS(pureL, idx, val, curr_λ, [ys_1, ys_2])
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         if has_values(m)
@@ -317,37 +320,39 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         ext_r = Solution(x_star, [ys_1, ys_2], curr_λ ) ; updateCT(ext_r)
         idx, newPt = push!(L.natural_order_vect, ext_r) ; updateCT(L.natural_order_vect.sols[idx])
+        updateLBS(L, idx, val, curr_λ, [ys_1, ys_2])
+
+        idx, newPt = push!(pureL.natural_order_vect, ext_r) ; updateCT(pureL.natural_order_vect.sols[idx])
+        updateLBS(pureL, idx, val, curr_λ, [ys_1, ys_2])
 
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
 
-    updateLBS(L, idx, val, curr_λ, [ys_1, ys_2])
-
     # -----------------------------------------
     # step 3 : fix the next search direction 
     # -----------------------------------------
-    if length(L.natural_order_vect.sols) < 2 
+    if length(pureL.natural_order_vect.sols) < 2 
         return Y_integer, X_integer
     end
 
-    l = 0 ; r = length(L.natural_order_vect.sols) +1
-    while l < length(L.natural_order_vect.sols)
+    l = 0 ; r = length(pureL.natural_order_vect.sols) +1
+    while l < length(pureL.natural_order_vect.sols)
         l += 1
-        if length(L.natural_order_vect.sols[l].xEquiv) > 0 break end 
+        if length(pureL.natural_order_vect.sols[l].xEquiv) > 0 break end 
     end
 
     while r > 1
         r -= 1
-        if length(L.natural_order_vect.sols[r].xEquiv) > 0 break end 
+        if length(pureL.natural_order_vect.sols[r].xEquiv) > 0 break end 
     end
 
     if l ≥ r return Y_integer, X_integer end 
 
     todo = []; 
     
-    push!(todo, [L.natural_order_vect.sols[l].y, L.natural_order_vect.sols[r].y] )
+    push!(todo, [pureL.natural_order_vect.sols[l].y, pureL.natural_order_vect.sols[r].y] )
 
     # ----------------------------------------------------------------
     # repeat the same procedure until no more direction in todo list 
@@ -370,6 +375,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     
         yt_1 = 0.0 ; yt_2 = 0.0 
         val = -Inf ; idx = -1
+        idxL = -1 ; newPtL = false 
         pt = Solution()
         if status == MOI.INFEASIBLE continue end
 
@@ -383,7 +389,9 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             # add new sol in LBS without filtering 
             pt = Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) ; updateCT(pt)
-            idx, newPt = push!(L.natural_order_vect, pt ) ; updateCT(L.natural_order_vect.sols[idx])
+            idxL, newPtL = push!(L.natural_order_vect, pt ) ; updateCT(L.natural_order_vect.sols[idxL])
+
+            idx, newPt = push!(pureL.natural_order_vect, pt ) ; updateCT(pureL.natural_order_vect.sols[idx])
 
         elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
             if has_values(m)
@@ -411,7 +419,9 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             # add new sol in LBS without filtering 
             pt = Solution(x_star, [yt_1, yt_2], curr_λ ); updateCT(pt)
-            idx, newPt = push!(L.natural_order_vect, pt ) ; updateCT(L.natural_order_vect.sols[idx])
+            idxL, newPtL = push!(L.natural_order_vect, pt ) ; updateCT(L.natural_order_vect.sols[idxL])
+
+            idx, newPt = push!(pureL.natural_order_vect, pt ) ; updateCT(pureL.natural_order_vect.sols[idx])
 
         else
             println("has primal ? $(JuMP.has_values(m))")
@@ -423,12 +433,13 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
         if (abs(val - lb) ≤ 1e-4) ||!newPt continue end # 
+        updateLBS(L, idxL, val, curr_λ, [yt_1, yt_2])
 
         # find point intersection 
-        intersection = intersectionPts(L, idx)
+        intersection = intersectionPts(pureL, idx)
 
         valid = true
-        for s in L.natural_order_vect.sols # todo : compared with segments if yt is under LBS 
+        for s in pureL.natural_order_vect.sols # todo : compared with segments if yt is under LBS 
             if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
                 valid = false ; break
             end
@@ -436,32 +447,32 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         # under the current LBS 
         if !valid 
-            deleteat!(L.natural_order_vect.sols, idx) ; 
-            filtering(val, L, λ)
+            deleteat!(pureL.natural_order_vect.sols, idx) ; 
+            filtering(val, pureL, λ)
 
             # add new intersection points 
             for s in intersection
-                push!(L.natural_order_vect, s)
+                push!(pureL.natural_order_vect, s)
             end
             continue 
         end 
 
-        bckp = L.natural_order_vect.sols[idx].y 
+        bckp = pureL.natural_order_vect.sols[idx].y 
         # filter lower bounds under current line 
-        filtering(val, L, λ)
+        filtering(val, pureL, λ)
 
         # add new intersection points 
         for s in intersection
-            push!(L.natural_order_vect, s)
+            push!(pureL.natural_order_vect, s)
         end
 
         # define new search direction 
         idx = 0 ; located = false
-        for s in L.natural_order_vect.sols
+        for s in pureL.natural_order_vect.sols
             idx +=1
             if s.y[1] == bckp[1] && s.y[2] == bckp[2] located = true ; break end
         end
-        located ? next_direc(idx, L, todo) : nothing 
+        located ? next_direc(idx, pureL, todo) : nothing 
     end
 
     return Y_integer, X_integer
