@@ -64,6 +64,7 @@ Find the next search direction from current point idx.
 
     complexity : O(|L|)             #todo :  searching from extreme pts 
 """
+#todo : to discard 
 function next_direc(idx::Int64, L::RelaxedBoundSet, todo)
     i = idx ; j = idx ; l = 0 ; r = length(L.natural_order_vect.sols) + 1
     while i > 1
@@ -136,6 +137,30 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
     return res
 end
 
+function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
+    intersection = intersectionPts(L, idx)
+
+    valid = true
+    for s in L.natural_order_vect.sols         # todo : compared with segments if the current pt is under LBS ?
+        if s.λ'* yt < s.y'*s.λ -1e-4
+            valid = false ; break
+        end
+    end
+
+    # under the current LBS 
+    if !valid 
+        deleteat!(L.natural_order_vect.sols, idx) ; 
+    end
+
+    # filter lower bounds under current line 
+    filtering(val, L, curr_λ)
+
+    # add new intersection points 
+    for s in intersection
+        push!(L.natural_order_vect, s)
+    end
+end
+
 """
 New correction iterative algorithm for LBS 
     taking account into intersection with odd LBS
@@ -161,6 +186,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     
     # set up callback 
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
+    # pureL = RelaxedBoundSet()
 
     # -------------------------------------------
     # step 1 : calculate the left extreme point
@@ -170,7 +196,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
-    curr_λ = [1.0, 0.0]
+    curr_λ = [1.0, 0.0] ; newPt = false
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
     # in case of infeasibility => !! no single extreme point 
@@ -191,9 +217,10 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
         ext_l = Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ) ; updateCT(ext_l)
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ))
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        idx, newPt = push!(L.natural_order_vect, ext_l) ; updateCT(L.natural_order_vect.sols[idx])
 
+        # idx, newPt = push!(pureL.natural_order_vect, ext_l)
+        # newPt ? updateCT(pureL.natural_order_vect.sols[idx]) : nothing
     # otherwise, take the best primal sol so far 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         # stock heuristic sol 
@@ -219,37 +246,16 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
         ext_l = Solution(x_star, [yr_1, yr_2], curr_λ ) ; updateCT(ext_l)
-        idx = push!(L.natural_order_vect, Solution(x_star, [yr_1, yr_2], curr_λ ))
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        idx, newPt = push!(L.natural_order_vect, ext_l) ;  updateCT(L.natural_order_vect.sols[idx])
+
+        # idx, newPt = push!(pureL.natural_order_vect, ext_l)
+        # newPt ? updateCT(pureL.natural_order_vect.sols[idx]) : nothing
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
 
-    # find intersections and filtering 
-    if idx > 0
-        intersection = intersectionPts(L, idx)
-
-        valid = true
-        for s in L.natural_order_vect.sols         # todo : compared with segments if the current pt is under LBS ?
-            if s.λ[1] * yr_1 + s.λ[2] * yr_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
-                valid = false ; break
-            end
-        end
-
-        # under the current LBS 
-        if !valid 
-            deleteat!(L.natural_order_vect.sols, idx) ; 
-        end
-
-        # filter lower bounds under current line 
-        filtering(val, L, curr_λ)
-
-        # add new intersection points 
-        for s in intersection
-            push!(L.natural_order_vect, s)
-        end
-    end
+    updateLBS(L, idx, val, curr_λ, [yr_1, yr_2])
 
     # -------------------------------------------
     # step 2 : calculate the right extreme point
@@ -259,10 +265,11 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
-    curr_λ = [0.0, 1.0]
+    curr_λ = [0.0, 1.0] ; newPt = false
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
 
     ys_1 = 0.0 ; ys_2 = 0.0 
+    ext_r = Solution()
     if status == MOI.INFEASIBLE
         # todo : return single point OR the last updated LBS ??
         empty!(L.natural_order_vect.sols) ; push!(L.natural_order_vect, ext_l)
@@ -277,8 +284,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [ys_1, ys_2], curr_λ ))
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        ext_r = Solution(JuMP.value.(varArray), [ys_1, ys_2], curr_λ ) ; updateCT(ext_r)
+        idx, newPt = push!(L.natural_order_vect, ext_r) ; updateCT(L.natural_order_vect.sols[idx])
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         if has_values(m)
@@ -304,38 +311,15 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         ys_2 = x_star'* c[2, 2:end] + c[2, 1]
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
-        idx = push!(L.natural_order_vect, Solution(x_star, [ys_1, ys_2], curr_λ ))
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        ext_r = Solution(x_star, [ys_1, ys_2], curr_λ ) ; updateCT(ext_r)
+        idx, newPt = push!(L.natural_order_vect, ext_r) ; updateCT(L.natural_order_vect.sols[idx])
+
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
 
-    # find intersections and filtering 
-    if idx > 0
-        intersection = intersectionPts(L, idx)
-
-        valid = true
-        for s in L.natural_order_vect.sols         # todo : compared with segments if the current pt is under LBS ?
-            if s.λ[1] * ys_1 + s.λ[2] * ys_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
-                valid = false ; break
-            end
-        end
-
-        # under the current LBS 
-        if !valid 
-            deleteat!(L.natural_order_vect.sols, idx) ; 
-        end
-
-        # filter lower bounds under current line 
-        filtering(val, L, curr_λ)
-
-        # add new intersection points 
-        for s in intersection
-            push!(L.natural_order_vect, s)
-        end
-
-    end
+    updateLBS(L, idx, val, curr_λ, [ys_1, ys_2])
 
     # -----------------------------------------
     # step 3 : fix the next search direction 
@@ -364,12 +348,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     # ----------------------------------------------------------------
     # repeat the same procedure until no more direction in todo list 
     # ----------------------------------------------------------------
-    iter = 1
     while length(todo) > 0
-        # println("----------------------")
-        # @info "iter = $iter "
-        # iter += 1
-        # println("----------------------")
 
         p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
         λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
@@ -382,12 +361,12 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         f = λ[1]*f1 + λ[2]*f2
 
         x_star = [] ; bst_val = -Inf 
-        curr_λ = λ 
+        curr_λ = λ ; newPt = false 
         JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
     
         yt_1 = 0.0 ; yt_2 = 0.0 
         val = -Inf ; idx = -1
-
+        pt = Solution()
         if status == MOI.INFEASIBLE continue end
 
         if status == MOI.OPTIMAL 
@@ -399,8 +378,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             val = λ[1]*yt_1 + λ[2]*yt_2 
 
             # add new sol in LBS without filtering 
-            idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) )
-            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+            pt = Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) ; updateCT(pt)
+            idx, newPt = push!(L.natural_order_vect, pt ) ; updateCT(L.natural_order_vect.sols[idx])
 
         elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
             if has_values(m)
@@ -427,18 +406,19 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             val = λ[1]*yt_1 + λ[2]*yt_2
 
             # add new sol in LBS without filtering 
-            idx = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], curr_λ ) )
-            idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+            pt = Solution(x_star, [yt_1, yt_2], curr_λ ); updateCT(pt)
+            idx, newPt = push!(L.natural_order_vect, pt ) ; updateCT(L.natural_order_vect.sols[idx])
 
         else
             println("has primal ? $(JuMP.has_values(m))")
             error("Condition  status $status ")
         end
 
+        
         # -----------------------------
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
-        if (abs(val - lb) ≤ 1e-4) || idx < 0 continue end
+        if (abs(val - lb) ≤ 1e-4) ||!newPt continue end # 
 
         # find point intersection 
         intersection = intersectionPts(L, idx)
@@ -481,6 +461,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     end
 
     return Y_integer, X_integer
+
 end
 
 
@@ -514,6 +495,7 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
 
     yt_1 = 0.0 ; yt_2 = 0.0 
     val = -Inf ; idx = -1
+    newPt = false ;
 
     # in case of infeasibility 
     if status == MOI.INFEASIBLE 
@@ -529,8 +511,8 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         val = λ[1]*yt_1 + λ[2]*yt_2 
 
         # add new sol in LBS without filtering 
-        idx = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) )
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        idx, newPt = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], curr_λ ) )
+        updateCT(L.natural_order_vect.sols[idx])
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         if has_values(m)
@@ -557,38 +539,15 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         val = λ[1]*yt_1 + λ[2]*yt_2
 
         # add new sol in LBS without filtering 
-        idx = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], curr_λ ) )
-        idx > 0 ? updateCT(L.natural_order_vect.sols[idx]) : nothing
+        idx, newPt = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], curr_λ ) )
+        updateCT(L.natural_order_vect.sols[idx])
 
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
     end
-
-    if idx > 0 
-        # find point intersection 
-        intersection = intersectionPts(L, idx)
-
-        valid = true
-        for s in L.natural_order_vect.sols # todo :  compared with segments if yt is under LBS 
-            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
-                valid = false ; break
-            end
-        end
-
-        # under the current LBS 
-        if !valid 
-            deleteat!(L.natural_order_vect.sols, idx) ; 
-        end 
-
-        # filter lower bounds under current line 
-        filtering(val, L, λ)
-
-        # add new intersection points 
-        for s in intersection
-            push!(L.natural_order_vect, s)
-        end
-    end
+    
+    updateLBS(L, idx, val, λ, [yt_1, yt_2])
 
     return Y_integer, X_integer
 end
