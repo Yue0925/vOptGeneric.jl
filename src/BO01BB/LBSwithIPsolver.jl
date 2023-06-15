@@ -64,7 +64,6 @@ Find the next search direction from current point idx.
 
     complexity : O(|L|)             #todo :  searching from extreme pts 
 """
-#todo : to discard 
 function next_direc(idx::Int64, L::RelaxedBoundSet, todo)
     i = idx ; j = idx ; l = 0 ; r = length(L.natural_order_vect.sols) + 1
     while i > 1

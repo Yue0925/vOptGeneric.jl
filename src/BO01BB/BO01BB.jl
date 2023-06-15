@@ -243,6 +243,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         node.succs = [node1, node2]
     end
+    #todo : println(node)
 end
 
 function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::IncumbentSet, round_results, verbose; args...)
