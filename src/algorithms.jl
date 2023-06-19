@@ -886,7 +886,9 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
 
         while length(todo) > 0
             p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
-            λ = [abs(yr[2] - yl[2]), abs(yl[1] - yr[1]) ] 
+            Δ2 = abs(yr[2] - yl[2]) ; Δ1 = abs(yl[1] - yr[1]) 
+            w = Δ2/(Δ2+Δ1)
+            λ = [w, 1-w]      # normal to the segment
         
             # solve the mono scalarization problem 
             f = AffExpr(0.0)    

@@ -51,7 +51,7 @@ function filtering(lb::Float64, L::RelaxedBoundSet, λ)
     # remove all points under current line 
     to_delete = Int64[] ; i = 1
     for s in L.natural_order_vect.sols
-        if s.y[1]*λ[1] + s.y[2]*λ[2] < lb - 1e-4 push!(to_delete, i) end
+        if s.y[1]*λ[1] + s.y[2]*λ[2] < lb - 1e-3 push!(to_delete, i) end
         i += 1
     end
 
@@ -140,7 +140,7 @@ function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
 
     valid = true
     for s in L.natural_order_vect.sols         # todo : compared with segments if the current pt is under LBS ?
-        if s.λ'* yt < s.y'*s.λ -1e-4
+        if s.λ'* yt < s.y'*s.λ -1e-3
             valid = false ; break
         end
     end
@@ -186,11 +186,25 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
     pureL = RelaxedBoundSet()
 
+    # todo : 
+    if verbose
+        print("parent LBS = [ ")
+        for s in L.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+        println()
+        print("pureL = [ ")
+        for s in pureL.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+    end
+
     # -------------------------------------------
     # step 1 : calculate the left extreme point
     # ------------------------------------------- 
     JuMP.set_objective(m, f1Sense, f1) ; JuMP.set_objective(lp_copied, f1Sense, f1_copied)
-    verbose && println("solving for z1")
     
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
@@ -257,12 +271,27 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         error("Condition  status $status ")
     end
 
+    # todo : 
+    if verbose
+        println("extl ", ext_l)
+        print("parent LBS = [ ")
+        for s in L.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+        println()
+        print("pureL = [ ")
+        for s in pureL.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+    end
+
 
     # -------------------------------------------
     # step 2 : calculate the right extreme point
     # ------------------------------------------- 
     JuMP.set_objective(m, f2Sense, f2) ; JuMP.set_objective(lp_copied, f2Sense, f2_copied)
-    verbose && println("solving for z2")
 
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
@@ -329,6 +358,22 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         error("Condition  status $status ")
     end
 
+    # todo : 
+    if verbose
+        println("extr ", ext_r)
+        print("parent LBS = [ ")
+        for s in L.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+        println()
+        print("pureL = [ ")
+        for s in pureL.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+    end
+
     # -----------------------------------------
     # step 3 : fix the next search direction 
     # -----------------------------------------
@@ -359,13 +404,17 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     while length(todo) > 0
 
         p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
-        λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
+        Δ2 = abs(yr[2] - yl[2])  ; Δ1 = abs(yl[1] - yr[1]) 
+        w = Δ2/(Δ2+Δ1)
+        λ = [w, 1-w]      # normal to the segment
 
+        if verbose
+            println("yl = ", yl , " yr = ", yr )
+        end
         # solve the mono scalarization problem 
         f = AffExpr(0.0)    
         lb = λ[1] * yl[1] + λ[2] * yl[2]  
         JuMP.set_objective(m, f1Sense, λ[1]*f1 + λ[2]*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ[1]*f1_copied + λ[2]*f2_copied)
-        verbose && println("solving for $(λ[1])*f1 + $(λ[2])*f2")    
         f = λ[1]*f1 + λ[2]*f2
 
         x_star = [] ; bst_val = -Inf 
@@ -427,18 +476,31 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             error("Condition  status $status ")
         end
 
+        # todo : 
+        if verbose
+            println("pt ", pt)
+        end
         # -----------------------------
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
-        if (abs(val - lb) ≤ 1e-4) ||!newPt continue end # 
+        if (abs(val - lb) ≤ 1e-3) ||!newPt continue end # 
         updateLBS(L, idxL, val, curr_λ, [yt_1, yt_2])
+
+        # todo : 
+        if verbose
+            print("parent LBS = [ ")
+            for s in L.natural_order_vect.sols
+                print("$(s.y) , ")
+            end
+            println("] ")
+        end
 
         # find point intersection 
         intersection = intersectionPts(pureL, idx)
 
         valid = true
         for s in pureL.natural_order_vect.sols # todo : compared with segments if yt is under LBS 
-            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-4
+            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-1e-3
                 valid = false ; break
             end
         end
@@ -451,6 +513,14 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             # add new intersection points 
             for s in intersection
                 push!(pureL.natural_order_vect, s)
+            end
+            if verbose
+                println()
+                print("pureL = [ ")
+                for s in pureL.natural_order_vect.sols
+                    print("$(s.y) , ")
+                end
+                println("] ")
             end
             continue 
         end 
@@ -471,6 +541,29 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             if s.y[1] == bckp[1] && s.y[2] == bckp[2] located = true ; break end
         end
         located ? next_direc(idx, pureL, todo) : nothing 
+        if verbose
+            println()
+            print("pureL = [ ")
+            for s in pureL.natural_order_vect.sols
+                print("$(s.y) , ")
+            end
+            println("] ")
+        end
+    end
+
+    # todo : 
+    if verbose
+        print("pureL = [ ")
+        for s in pureL.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+        println()
+        print("parent LBS = [ ")
+        for s in L.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
     end
 
     return Y_integer, X_integer

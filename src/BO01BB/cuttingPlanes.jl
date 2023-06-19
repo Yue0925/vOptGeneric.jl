@@ -21,7 +21,14 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     #------------------------------------------------------------------------------
     if pb.param.root_relax
         start = time()
-        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
+        if node.num == 392
+            println("# ------------------------")
+            println("node ", node.num)
+            Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, true ; args...)  
+            println("# ------------------------")    
+        else
+            Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)  
+        end
         pb.info.relaxation_time += (time() - start)
 
         start = time()
