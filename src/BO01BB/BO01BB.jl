@@ -138,6 +138,14 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
 
+    if node.num == 102# node.num == 62 || node.num == 100
+        println("node ", node.num)
+        print("UBS = [ ")
+        for s in incumbent.natural_order_vect.sols
+            print("$(s.y) , ")
+        end
+        println("] ")
+    end
     #--------------------
     # test dominance 
     #--------------------
@@ -210,11 +218,11 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
         # todo : copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 
-            if pb.param.root_relax 
-                node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
-            end 
-        end
+        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
+        #     if pb.param.root_relax 
+        #         node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+        #     end 
+        # end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
@@ -232,11 +240,11 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
         # todo : copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 
-            if pb.param.root_relax 
-                node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
-            end 
-        end
+        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
+        #     if pb.param.root_relax 
+        #         node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+        #     end 
+        # end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
@@ -247,8 +255,8 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         node.succs = [node1, node2]
     end
-    println("# ------------- node ", node.num)
-    println(node)
+    # println("# ------------- node ", node.num)
+    # println(node)
 end
 
 function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::IncumbentSet, round_results, verbose; args...)

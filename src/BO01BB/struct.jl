@@ -338,7 +338,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         else
             # # todo : different λ same pente
             if length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
-                if (abs(sol.λ[1]- natural_sols.sols[m].λ[1]) > 1e-4 || abs(sol.λ[2] - natural_sols.sols[m].λ[2]) > 1e-4 )
+                if sol.λ[1]!= natural_sols.sols[m].λ[1] || sol.λ[2] != natural_sols.sols[m].λ[2]
 
                     natural_sols.sols[m].λ = sol.λ
                     natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary

@@ -147,7 +147,7 @@ function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
 
     # under the current LBS 
     if !valid 
-        deleteat!(L.natural_order_vect.sols, idx) ; 
+        deleteat!(L.natural_order_vect.sols, idx) ; return
     end
 
     # filter lower bounds under current line 
@@ -405,8 +405,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
         Δ2 = abs(yr[2] - yl[2])  ; Δ1 = abs(yl[1] - yr[1]) 
-        w = Δ2/(Δ2+Δ1)
-        λ = [w, 1-w]      # normal to the segment
+        w = round(Δ2/(Δ2+Δ1), digits = 4)
+        λ = [w, round(1-w, digits=4)]      # normal to the segment
 
         if verbose
             println("yl = ", yl , " yr = ", yr )
@@ -508,20 +508,20 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # under the current LBS 
         if !valid 
             deleteat!(pureL.natural_order_vect.sols, idx) ; 
-            filtering(val, pureL, λ)
+            # filtering(val, pureL, λ)
 
-            # add new intersection points 
-            for s in intersection
-                push!(pureL.natural_order_vect, s)
-            end
-            if verbose
-                println()
-                print("pureL = [ ")
-                for s in pureL.natural_order_vect.sols
-                    print("$(s.y) , ")
-                end
-                println("] ")
-            end
+            # # add new intersection points 
+            # for s in intersection
+            #     push!(pureL.natural_order_vect, s)
+            # end
+            # if verbose
+            #     println()
+            #     print("pureL = [ ")
+            #     for s in pureL.natural_order_vect.sols
+            #         print("$(s.y) , ")
+            #     end
+            #     println("] ")
+            # end
             continue 
         end 
 
