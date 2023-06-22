@@ -138,14 +138,16 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
 
-    if node.num == 102# node.num == 62 || node.num == 100
-        println("node ", node.num)
-        print("UBS = [ ")
-        for s in incumbent.natural_order_vect.sols
-            print("$(s.y) , ")
-        end
-        println("] ")
-    end
+    # todo : 
+    # if node.num == 102# node.num == 62 || node.num == 100
+    #     println("node ", node.num)
+    #     print("UBS = [ ")
+    #     for s in incumbent.natural_order_vect.sols
+    #         print("$(s.y) , ")
+    #     end
+    #     println("] ")
+    # end
+
     #--------------------
     # test dominance 
     #--------------------
@@ -217,7 +219,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node1.assignment = getPartialAssign(node1)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # todo : copy parent's LBS 
+        # # todo : copy parent's LBS 
         # if length(node.RBS.natural_order_vect.sols) ≥ 2 
         #     if pb.param.root_relax 
         #         node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
@@ -239,7 +241,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node2.assignment = getPartialAssign(node2)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # todo : copy parent's LBS 
+        # # todo : copy parent's LBS 
         # if length(node.RBS.natural_order_vect.sols) ≥ 2 
         #     if pb.param.root_relax 
         #         node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 

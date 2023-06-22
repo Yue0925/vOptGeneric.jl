@@ -147,7 +147,7 @@ function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
 
     # under the current LBS 
     if !valid 
-        deleteat!(L.natural_order_vect.sols, idx) ; return
+        deleteat!(L.natural_order_vect.sols, idx)
     end
 
     # filter lower bounds under current line 
@@ -404,9 +404,11 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     while length(todo) > 0
 
         p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
-        Δ2 = abs(yr[2] - yl[2])  ; Δ1 = abs(yl[1] - yr[1]) 
-        w = round(Δ2/(Δ2+Δ1), digits = 4)
-        λ = [w, round(1-w, digits=4)]      # normal to the segment
+        # todo 
+        # Δ2 = abs(yr[2] - yl[2])  ; Δ1 = abs(yl[1] - yr[1]) 
+        # w = round(Δ2/(Δ2+Δ1), digits = 4)
+        # λ = [w, round(1-w, digits=4)]      # normal to the segment
+        λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
 
         if verbose
             println("yl = ", yl , " yr = ", yr )
@@ -480,11 +482,13 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         if verbose
             println("pt ", pt)
         end
+        
+        updateLBS(L, idxL, val, curr_λ, [yt_1, yt_2])
+
         # -----------------------------
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
         if (abs(val - lb) ≤ 1e-3) ||!newPt continue end # 
-        updateLBS(L, idxL, val, curr_λ, [yt_1, yt_2])
 
         # todo : 
         if verbose
@@ -508,20 +512,20 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # under the current LBS 
         if !valid 
             deleteat!(pureL.natural_order_vect.sols, idx) ; 
-            # filtering(val, pureL, λ)
+            filtering(val, pureL, λ)
 
-            # # add new intersection points 
-            # for s in intersection
-            #     push!(pureL.natural_order_vect, s)
-            # end
-            # if verbose
-            #     println()
-            #     print("pureL = [ ")
-            #     for s in pureL.natural_order_vect.sols
-            #         print("$(s.y) , ")
-            #     end
-            #     println("] ")
-            # end
+            # add new intersection points 
+            for s in intersection
+                push!(pureL.natural_order_vect, s)
+            end
+            if verbose
+                println()
+                print("pureL = [ ")
+                for s in pureL.natural_order_vect.sols
+                    print("$(s.y) , ")
+                end
+                println("] ")
+            end
             continue 
         end 
 

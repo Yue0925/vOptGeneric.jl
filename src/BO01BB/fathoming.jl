@@ -268,9 +268,13 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             if (u.y[2] > sol_l.y[2] || u.y[2] < sol_r.y[2]) && (u.y[1] > sol_r.y[1] || u.y[1] < sol_l.y[1])
                 continue
             end
-            Δ2 = sol_l.y[2] - sol_r.y[2] ; Δ1 = sol_r.y[1] - sol_l.y[1]
-            w = Δ2/(Δ2+Δ1)
-            λ = [w, 1-w]      # normal to the segment
+            # todo 
+            # Δ2 = sol_l.y[2] - sol_r.y[2] ; Δ1 = sol_r.y[1] - sol_l.y[1]
+            # w = Δ2/(Δ2+Δ1)
+            # λ = [w, 1-w]      # normal to the segment
+
+            λ = [sol_l.y[2] - sol_r.y[2], sol_r.y[1] - sol_l.y[1]]      # normal to the segment
+
 
             compared = true
 
