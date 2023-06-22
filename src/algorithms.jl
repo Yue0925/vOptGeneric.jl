@@ -1,5 +1,6 @@
 # MIT License
 # Copyright (c) 2017: Xavier Gandibleux, Anthony Przybylski, Gauthier Soleilhac, and contributors.
+TOL = 1e-3
 
 using JuMP
 
@@ -871,7 +872,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
             ys_1 = JuMP.value(f1)
             ys_2 = JuMP.value(f2)
 
-            if !isapprox(yr_1, ys_1, atol=1e-3) || !isapprox(yr_2, ys_2, atol=1e-3)
+            if !isapprox(yr_1, ys_1, atol=TOL) || !isapprox(yr_2, ys_2, atol=TOL)
                 push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
                 push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [0.0, 1.0])
             end
@@ -903,7 +904,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
             if status == MOI.OPTIMAL
                 yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
                 val = λ[1]*yt_1 + λ[2]*yt_2  
-                if (val < lb - 1e-4) && yt_1 >= yl[1] && yt_2 >= yr[2]
+                if (val < lb - TOL) && yt_1 >= yl[1]+TOL && yt_2 >= yr[2]+TOL
                     push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                     push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, λ)
                     push!(todo, [yl, [yt_1, yt_2]]) ; push!(todo, [[yt_1, yt_2], yr])
@@ -919,7 +920,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     s = sortperm(vd.Y_N, by = x -> (-x[2], x[1]))
     vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
     # strictly dominance
-    strict_dom(a, b) = a[1] <= b[1] && a[2] <= b[2] && a[1]!= b[1] && a[2]!= b[2]
+    strict_dom(a, b) = a[1] <= b[1]-TOL && a[2] <= b[2]-TOL && abs(a[1]- b[1])>TOL && abs(a[2]- b[2])>TOL
 
     i = 1
     while i < length(vd.Y_N)

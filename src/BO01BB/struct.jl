@@ -9,7 +9,7 @@
 
 @enum PrunedType NONE INFEASIBILITY OPTIMALITY DOMINANCE
 
-TOL = 1e-4
+TOL = 1e-3
 include("cutPool.jl")
 
 """
@@ -206,25 +206,25 @@ end
 function Base.:<=(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1] ≤ b.y[1] && a.y[2] ≤ b.y[2]
+    return a.y[1] ≤ b.y[1] - TOL && a.y[2] ≤ b.y[2] - TOL
 end
 
 function Base.:<(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1] < b.y[1] && a.y[2] < b.y[2]
+    return a.y[1] < b.y[1] - TOL && a.y[2] < b.y[2]-TOL
 end
 
 function Base.:>=(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1] ≥ b.y[1] && a.y[2] ≥ b.y[2]
+    return a.y[1] ≥ b.y[1]+TOL && a.y[2] ≥ b.y[2]+TOL
 end
 
 function Base.:>(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1]>b.y[1] && a.y[2]>b.y[2]
+    return a.y[1]>b.y[1]+TOL && a.y[2]>b.y[2]+TOL
 end
 
 function Base.:(==)(a::Solution, b::Solution)
@@ -313,7 +313,8 @@ Return
             OR  the inconming point is dominated 
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
-    sol.y = round.(sol.y, digits = 4) ; idx = -1
+    # sol.y = round.(sol.y, digits = 4) ; 
+    idx = -1
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
@@ -325,20 +326,20 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     while l ≤ r
         m = Int(floor((l+r)/2))
 
-        if sol.y[2] < natural_sols.sols[m].y[2]
+        if sol.y[2] < natural_sols.sols[m].y[2]-TOL
             l = m+1
-        elseif sol.y[2] > natural_sols.sols[m].y[2]
+        elseif sol.y[2] > natural_sols.sols[m].y[2]+TOL
             r = m-1
         # in case of the equality on the first objective, compare the second obj
-        elseif sol.y[1] > natural_sols.sols[m].y[1]
+        elseif sol.y[1] > natural_sols.sols[m].y[1]+TOL
             l = m+1
-        elseif sol.y[1] < natural_sols.sols[m].y[1]
+        elseif sol.y[1] < natural_sols.sols[m].y[1]-TOL
             r  = m-1
         #todo :  in case of equality  =>  update only & retuen -1
         else
             # # todo : different λ same pente
             if length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
-                if sol.λ[1]!= natural_sols.sols[m].λ[1] || sol.λ[2] != natural_sols.sols[m].λ[2]
+                if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
 
                     natural_sols.sols[m].λ = sol.λ
                     natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary

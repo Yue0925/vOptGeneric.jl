@@ -1,8 +1,7 @@
 ## This file contains functions related to node fathoming.
+TOL = 1e-3
 
 include("cuttingPlanes.jl")
-
-# global TOL
 
 """
 Given a point `x_star`, iterate all valid cuts of parent node and stock the references
@@ -213,13 +212,13 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     # Case 1 :  if only one feasible point in UBS
     if length(incumbent.natural_order_vect) == 1
         u = incumbent.natural_order_vect.sols[1]
-        return u.y[1] < ptl.y[1] && u.y[2] < ptr.y[2]
+        return u.y[1] < ptl.y[1]-TOL && u.y[2] < ptr.y[2]-TOL
     end
 
     # test range condition necessary 1 : LBS ⊆ UBS
     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
 
-    sufficient = (u_l.y[1] < ptl.y[1] && u_r.y[2] < ptr.y[2])
+    sufficient = (u_l.y[1] < ptl.y[1]-TOL && u_r.y[2] < ptr.y[2]-TOL)
 
     if !sufficient return false end
 
@@ -231,7 +230,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         existence = false ; compared = false
 
         # case 1 : if u is dominates the ideal point of LBS
-        if u.y[2] < ptr.y[2] && u.y[1] < ptl.y[1]
+        if u.y[2] < ptr.y[2]-TOL && u.y[1] < ptl.y[1]-TOL
             return true
         end
 
@@ -242,30 +241,30 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             # --------------------------------------
             #todo : complete ?
-            if sol_l.y[2] == sol_r.y[2] # horizon line
-                if u.y[1] < sol_l.y[1] || u.y[1] > sol_r.y[1]
+            if abs(sol_l.y[2] - sol_r.y[2]) ≤ TOL # horizon line
+                if u.y[1] < sol_l.y[1]-TOL || u.y[1] > sol_r.y[1]+TOL
                     continue
                 end
 
                 compared = true
-                if u.y[2] < sol_l.y[2]
+                if u.y[2] < sol_l.y[2]-TOL
                     existence = true ; break
                 end
             end
 
-            if sol_l.y[1] == sol_r.y[1] # vertical line
-                if u.y[2] < sol_r.y[2] || u.y[2] > sol_l.y[2]
+            if abs(sol_l.y[1] - sol_r.y[1])≤TOL # vertical line
+                if u.y[2] < sol_r.y[2]-TOL || u.y[2] > sol_l.y[2]+TOL
                     continue
                 end
 
                 compared = true
-                if u.y[1] < sol_l.y[1]
+                if u.y[1] < sol_l.y[1]-TOL
                     existence = true ; break
                 end
             end
             # -------------------------------------
 
-            if (u.y[2] > sol_l.y[2] || u.y[2] < sol_r.y[2]) && (u.y[1] > sol_r.y[1] || u.y[1] < sol_l.y[1])
+            if (u.y[2] > sol_l.y[2]+TOL || u.y[2] < sol_r.y[2]-TOL) && (u.y[1] > sol_r.y[1]+TOL || u.y[1] < sol_l.y[1]-TOL)
                 continue
             end
             # todo 
@@ -278,7 +277,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             compared = true
 
-            if λ'*u.y < λ'*sol_r.y#&& λ'*u.y < λ'*sol_l.y
+            if λ'*u.y < λ'*sol_r.y-TOL#&& λ'*u.y < λ'*sol_l.y
                 existence = true ; break
             end
         end
@@ -290,7 +289,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
 
-                elseif (u.y[2] ≥ ptl.y[2] && u.y[1] ≥ ptr.y[1])
+                elseif (u.y[2] ≥ ptl.y[2]+TOL && u.y[1] ≥ ptr.y[1]+TOL)
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
 
                 else
@@ -303,7 +302,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         end
 
         # todo : check ???
-        if !compared && (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2] )
+        if !compared && (u.y[1] ≥ ptl.y[1]+TOL && u.y[2] ≥ ptr.y[2]+TOL )
             if EPB node.localNadirPts = Vector{Vector{Float64}}() end               # no need to (extended) pareto branching
             return false
         end
