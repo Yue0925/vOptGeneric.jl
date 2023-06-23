@@ -1,6 +1,6 @@
 # MIT License
 # Copyright (c) 2017: Xavier Gandibleux, Anthony Przybylski, Gauthier Soleilhac, and contributors.
-TOL = 1e-3
+TOL = 1e-5
 
 using JuMP
 
@@ -887,10 +887,10 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
 
         while length(todo) > 0
             p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
-            # todo 
+            # # todo 
             # Δ2 = abs(yr[2] - yl[2]) ; Δ1 = abs(yl[1] - yr[1]) 
-            # w = round(Δ2/(Δ2+Δ1), digits =4)
-            # λ = [w, round(1-w, digits = 4)]      # normal to the segment
+            # w = Δ2/(Δ2+Δ1)
+            # λ = [w, 1-w]      # normal to the segment
             λ = [abs(yr[2] - yl[2]), abs(yl[1] - yr[1]) ] 
         
             # solve the mono scalarization problem 
@@ -904,7 +904,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
             if status == MOI.OPTIMAL
                 yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
                 val = λ[1]*yt_1 + λ[2]*yt_2  
-                if (val < lb - TOL) && yt_1 >= yl[1]+TOL && yt_2 >= yr[2]+TOL
+                if (val < lb - TOL) && yt_1 >= yl[1] && yt_2 >= yr[2]
                     push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
                     push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, λ)
                     push!(todo, [yl, [yt_1, yt_2]]) ; push!(todo, [[yt_1, yt_2], yr])
@@ -919,16 +919,15 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     # ---------------------
     s = sortperm(vd.Y_N, by = x -> (-x[2], x[1]))
     vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
-    # strictly dominance
-    strict_dom(a, b) = a[1] <= b[1]-TOL && a[2] <= b[2]-TOL && abs(a[1]- b[1])>TOL && abs(a[2]- b[2])>TOL
+    weak_dom(a, b) = a[1] <= b[1] && a[2] <= b[2] && (abs(a[1]- b[1])>TOL || abs(a[2]- b[2])>TOL)
 
     i = 1
     while i < length(vd.Y_N)
         j = i+1
         while j<= length(vd.Y_N)
-            if strict_dom(vd.Y_N[i], vd.Y_N[j])
+            if weak_dom(vd.Y_N[i], vd.Y_N[j])
                 deleteat!(vd.Y_N, j) ; deleteat!(vd.X_E, j) ; deleteat!(vd.lambda, j)
-            elseif strict_dom(vd.Y_N[j], vd.Y_N[i])
+            elseif weak_dom(vd.Y_N[j], vd.Y_N[i])
                 deleteat!(vd.Y_N, i) ; deleteat!(vd.X_E, i) ; deleteat!(vd.lambda, i)
                 j -= 1 ; break
             else

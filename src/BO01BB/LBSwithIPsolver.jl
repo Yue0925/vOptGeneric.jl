@@ -1,6 +1,6 @@
 using JuMP
 include("struct.jl")
-TOL = 1e-3
+TOL = 1e-5
 
 
 global varArray = Array{JuMP.VariableRef}
@@ -35,8 +35,8 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     sols_nb = result_count(m)
     for i =1:sols_nb 
         if JuMP.has_values(m, result = Int(i))
-            push!(Y_integer, [JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))])
-            push!(X_integer, JuMP.value.(varArray, result = Int(i)))
+            push!(Y_integer, round.([JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))], digits = 2) )
+            push!(X_integer, round.(JuMP.value.(varArray, result = Int(i)), digits = 2) )
         end
     end
     return Y_integer, X_integer
@@ -128,7 +128,7 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
         end
 
         if valid 
-            new = Solution(Vector{Vector{Float64}}(), y, false, s1.λ, Inf) ; updateCT(new)
+            new = Solution(Vector{Float64}(), y, s1.λ) ; updateCT(new)
             push!(res, new )
         end
     end
@@ -231,7 +231,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         ext_l = Solution(JuMP.value.(varArray), [yr_1, yr_2], curr_λ ) ; updateCT(ext_l)
         idx, newPt = push!(L.natural_order_vect, ext_l) ; updateCT(L.natural_order_vect.sols[idx])
-        updateLBS(L, idx, val, curr_λ, [yr_1, yr_2])
+        updateLBS(L, idx, val, curr_λ, [yr_1, yr_2]) 
 
         idx, newPt = push!(pureL.natural_order_vect, ext_l) ; updateCT(pureL.natural_order_vect.sols[idx])
         updateLBS(pureL, idx, val, curr_λ, [yr_1, yr_2])
@@ -349,7 +349,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         ext_r = Solution(x_star, [ys_1, ys_2], curr_λ ) ; updateCT(ext_r)
         idx, newPt = push!(L.natural_order_vect, ext_r) ; updateCT(L.natural_order_vect.sols[idx])
-        updateLBS(L, idx, val, curr_λ, [ys_1, ys_2])
+        updateLBS(L, idx, val, curr_λ, [ys_1, ys_2]) 
 
         idx, newPt = push!(pureL.natural_order_vect, ext_r) ; updateCT(pureL.natural_order_vect.sols[idx])
         updateLBS(pureL, idx, val, curr_λ, [ys_1, ys_2])
@@ -470,7 +470,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             # add new sol in LBS without filtering 
             pt = Solution(x_star, [yt_1, yt_2], curr_λ ); updateCT(pt)
-            idxL, newPtL = push!(L.natural_order_vect, pt ) ; updateCT(L.natural_order_vect.sols[idxL])
+            idxL, newPtL = push!(L.natural_order_vect, pt) ; updateCT(L.natural_order_vect.sols[idxL])
 
             idx, newPt = push!(pureL.natural_order_vect, pt ) ; updateCT(pureL.natural_order_vect.sols[idx])
 

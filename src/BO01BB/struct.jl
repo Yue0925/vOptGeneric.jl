@@ -9,7 +9,7 @@
 
 @enum PrunedType NONE INFEASIBILITY OPTIMALITY DOMINANCE
 
-TOL = 1e-3
+TOL = 1e-5
 include("cutPool.jl")
 
 """
@@ -152,8 +152,9 @@ function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Ve
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             is_binary = false; break
         end
-    end
-    return Solution([x], y, is_binary, λ, ct)
+    end    
+    return Solution([is_binary ? round.(x, digits = 2) : x ], is_binary ? round.(y, digits = 2) : y ,
+            is_binary, λ, ct)
 end
 
 """
@@ -173,13 +174,19 @@ end
 Add an equivalent solution associated to point `y`. 
 """
 function addEquivX(sol::Solution, x::Vector{Float64})
-    @assert length(x) > 0 "x cannot be empty"
+    # @assert length(x) > 0 "x cannot be empty"
+    if length(x) == 0 return end 
 
-    push!(sol.xEquiv, x)
     # check if x is approximately binary
-    if !sol.is_binary
+    if isBinary(x)
         sol.is_binary = isBinary(x)
+        sol.y = round.(sol.y, digits = 2)
+        push!(sol.xEquiv, round.(x, digits = 2))
+    else
+        push!(sol.xEquiv, x)
+
     end
+    
 end
 
 function addEquivX(sol::Solution, vecX::Vector{Vector{Float64}})
@@ -199,6 +206,7 @@ function Base.:show(io::IO, s::Solution)
     "\t is_binary ? ", s.is_binary,
     "\n y = ", s.y,
     "\n λ = ", s.λ, "\t ct = ", s.ct, 
+    "\n xEquiv = ", s.xEquiv, 
     " )")
 end
 
@@ -206,7 +214,7 @@ end
 function Base.:<=(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1] ≤ b.y[1] - TOL && a.y[2] ≤ b.y[2] - TOL
+    return a.y[1] ≤ b.y[1] && a.y[2] ≤ b.y[2]
 end
 
 function Base.:<(a::Solution, b::Solution)
@@ -218,7 +226,7 @@ end
 function Base.:>=(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1] ≥ b.y[1]+TOL && a.y[2] ≥ b.y[2]+TOL
+    return a.y[1] ≥ b.y[1] && a.y[2] ≥ b.y[2]
 end
 
 function Base.:>(a::Solution, b::Solution)
@@ -250,7 +258,7 @@ end
 Return `true` if solution `a` (weakly) dominates sobution `b`; `false` otherwise.
 """
 function dominate(a::Solution, b::Solution)
-    return a ≤ b && a ≠ b
+    return a ≤ b && a != b
 end
 
 """
@@ -316,6 +324,12 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     # sol.y = round.(sol.y, digits = 4) ; 
     idx = -1
 
+    # verbose = (sol.y == [-118852.0, -260523.0])
+    # if verbose
+    #     println("debug ...")
+    #     println(natural_sols)
+    # end
+
     # add s directly if sols is empty
     if length(natural_sols) == 0
         push!(natural_sols.sols, sol) ; return 1, true
@@ -342,7 +356,7 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
                 if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
 
                     natural_sols.sols[m].λ = sol.λ
-                    natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
+                    # natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
                 end
             end
             addEquivX(natural_sols.sols[m], sol.xEquiv) 
@@ -361,6 +375,8 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         natural_sols.sols = vcat(vcat(natural_sols.sols[1:m-1], sol), natural_sols.sols[m:end])
     end
     idx = m 
+
+    # verbose ? println("idx = $idx ") : nothing
 
     # find points weakly dominated by the new point and delete it/them
     if filtered
