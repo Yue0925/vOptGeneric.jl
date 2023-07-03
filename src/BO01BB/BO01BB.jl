@@ -138,16 +138,6 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     @assert node.activated == true "the actual node is not activated "
     node.activated = false
 
-    # todo : 
-    # if node.num == 102# node.num == 62 || node.num == 100
-    #     println("node ", node.num)
-    #     print("UBS = [ ")
-    #     for s in incumbent.natural_order_vect.sols
-    #         print("$(s.y) , ")
-    #     end
-    #     println("] ")
-    # end
-
     #--------------------
     # test dominance 
     #--------------------
@@ -257,6 +247,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         node.succs = [node1, node2]
     end
+    # # todo : 
     # println("# ------------- node ", node.num)
     # println(node)
 end

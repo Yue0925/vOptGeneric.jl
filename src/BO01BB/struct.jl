@@ -9,7 +9,7 @@
 
 @enum PrunedType NONE INFEASIBILITY OPTIMALITY DOMINANCE
 
-TOL = 1e-5
+TOL = 1e-4
 include("cutPool.jl")
 
 """
@@ -220,7 +220,7 @@ end
 function Base.:<(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1] < b.y[1] - TOL && a.y[2] < b.y[2]-TOL
+    return a.y[1] < b.y[1]  && a.y[2] < b.y[2]
 end
 
 function Base.:>=(a::Solution, b::Solution)
@@ -232,7 +232,7 @@ end
 function Base.:>(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1]>b.y[1]+TOL && a.y[2]>b.y[2]+TOL
+    return a.y[1]>b.y[1] && a.y[2]>b.y[2]
 end
 
 function Base.:(==)(a::Solution, b::Solution)
@@ -321,14 +321,8 @@ Return
             OR  the inconming point is dominated 
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
-    # sol.y = round.(sol.y, digits = 4) ; 
+    sol.y = round.(sol.y, digits = 4) ; 
     idx = -1
-
-    # verbose = (sol.y == [-118852.0, -260523.0])
-    # if verbose
-    #     println("debug ...")
-    #     println(natural_sols)
-    # end
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
@@ -340,14 +334,14 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     while l ≤ r
         m = Int(floor((l+r)/2))
 
-        if sol.y[2] < natural_sols.sols[m].y[2]-TOL
+        if sol.y[2] < natural_sols.sols[m].y[2]
             l = m+1
-        elseif sol.y[2] > natural_sols.sols[m].y[2]+TOL
+        elseif sol.y[2] > natural_sols.sols[m].y[2]
             r = m-1
         # in case of the equality on the first objective, compare the second obj
-        elseif sol.y[1] > natural_sols.sols[m].y[1]+TOL
+        elseif sol.y[1] > natural_sols.sols[m].y[1]
             l = m+1
-        elseif sol.y[1] < natural_sols.sols[m].y[1]-TOL
+        elseif sol.y[1] < natural_sols.sols[m].y[1]
             r  = m-1
         #todo :  in case of equality  =>  update only & retuen -1
         else

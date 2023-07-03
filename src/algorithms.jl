@@ -1,6 +1,6 @@
 # MIT License
 # Copyright (c) 2017: Xavier Gandibleux, Anthony Przybylski, Gauthier Soleilhac, and contributors.
-TOL = 1e-5
+TOL = 1e-4
 
 using JuMP
 
@@ -919,7 +919,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
     # ---------------------
     s = sortperm(vd.Y_N, by = x -> (-x[2], x[1]))
     vd.Y_N = vd.Y_N[s] ; vd.X_E = vd.X_E[s] ; vd.lambda = vd.lambda[s]
-    weak_dom(a, b) = a[1] <= b[1] && a[2] <= b[2] && (abs(a[1]- b[1])>TOL || abs(a[2]- b[2])>TOL)
+    weak_dom(a, b) = a[1] <= b[1] && a[2] <= b[2] && (a[1]!= b[1] || a[2]!= b[2])
 
     i = 1
     while i < length(vd.Y_N)
