@@ -77,8 +77,8 @@ function Base.:show(io::IO, n::Node)
     # "succs = $(n.succs) \n",
     "var[ $(n.var) ] = $(n.var_bound) \n",
     "EPB = $(n.EPB) \n",
-    "localNadirPts = $(n.localNadirPts) \n",
-    "nadirPt = $(n.nadirPt) \n",
+    # "localNadirPts = $(n.localNadirPts) \n",
+    # "nadirPt = $(n.nadirPt) \n",
     # "LBS = $(n.RBS.natural_order_vect) \n",
     "activated = $(n.activated) \n",
     "pruned = $(n.pruned) \n",
@@ -133,8 +133,8 @@ function prune!(node::Node, reason::PrunedType)
     node.pruned = true
     node.prunedType = reason
     # #todo : 
-    # println("# ------------- node ", node.num)
-    # println(node)
+    println("# ------------- node ", node.num)
+    println(node)
     to_delete = node.succs[:]
     node.succs = Vector{Node}()
 

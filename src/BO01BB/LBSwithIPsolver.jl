@@ -52,7 +52,7 @@ function filtering(lb::Float64, L::RelaxedBoundSet, λ)
     # remove all points under current line 
     to_delete = Int64[] ; i = 1
     for s in L.natural_order_vect.sols
-        if s.y[1]*λ[1] + s.y[2]*λ[2] < lb-TOL push!(to_delete, i) end
+        if s.y[1]*λ[1] + s.y[2]*λ[2] ≤ lb-TOL push!(to_delete, i) end
         i += 1
     end
 
@@ -102,7 +102,7 @@ z2 = (a1 ct2 - a2 ct1)/det
 
     complexity : O(|L|^2)  #todo : improve complexity 
 """
-function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
+function intersectionPts(L::RelaxedBoundSet, idx::Int64, verbose::Bool)::Set{Solution}
     s2 = L.natural_order_vect.sols[idx] ; res = Set{Solution}()
 
     for i = 1:length(L.natural_order_vect.sols)
@@ -122,7 +122,7 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
         valid = true
         for j = 1:length(L.natural_order_vect.sols)
             t = L.natural_order_vect.sols[j]                # todo : check compared with segements
-            if y[1] * t.λ[1] + y[2] * t.λ[2] < t.y[1] * t.λ[1] + t.y[2] * t.λ[2] -TOL
+            if y[1] * t.λ[1] + y[2] * t.λ[2] ≤ t.y[1] * t.λ[1] + t.y[2] * t.λ[2] -TOL
                 valid = false ; break
             end
         end
@@ -136,7 +136,7 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
     return res
 end
 
-function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
+function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt, verbose::Bool)
     intersection = intersectionPts(L, idx)
 
     valid = true
@@ -408,7 +408,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # todo 
         # Δ2 = abs(yr[2] - yl[2])  ; Δ1 = abs(yl[1] - yr[1]) 
         # w = round(Δ2/(Δ2+Δ1), digits = 4)
-        # λ = [w, round(1-w, digits=4)]      # normal to the segment
+        # λ = [w, 1-w]      # normal to the segment
         λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
 
         if verbose
@@ -486,11 +486,6 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         
         updateLBS(L, idxL, val, curr_λ, [yt_1, yt_2])
 
-        # -----------------------------
-        # case : equality    # todo : in case equality, filterage skipped 
-        # -----------------------------
-        if !newPt continue end # (abs(val - lb) ≤ TOL) ||
-
         # todo : 
         if verbose
             print("parent LBS = [ ")
@@ -499,6 +494,12 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             end
             println("] ")
         end
+
+
+        # -----------------------------
+        # case : equality    # todo : in case equality, filterage skipped 
+        # -----------------------------
+        if !newPt continue end # (abs(val - lb) ≤ TOL) ||
 
         # find point intersection 
         intersection = intersectionPts(pureL, idx)
