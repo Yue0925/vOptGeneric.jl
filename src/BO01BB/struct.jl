@@ -320,7 +320,7 @@ Return
             OR  the inconming point is dominated 
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
-    sol.y = round.(sol.y, digits = 4) ; 
+    # sol.y = round.(sol.y, digits = 4) ; 
     idx = -1
 
     # add s directly if sols is empty
