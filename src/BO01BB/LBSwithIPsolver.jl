@@ -1,6 +1,6 @@
 using JuMP
 include("struct.jl")
-TOL = 1e-5
+TOL = 1e-4
 
 
 global varArray = Array{JuMP.VariableRef}
@@ -52,7 +52,7 @@ function filtering(lb::Float64, L::RelaxedBoundSet, λ)
     # remove all points under current line 
     to_delete = Int64[] ; i = 1
     for s in L.natural_order_vect.sols
-        if s.y[1]*λ[1] + s.y[2]*λ[2] < lb - TOL push!(to_delete, i) end
+        if s.y[1]*λ[1] + s.y[2]*λ[2] < lb-TOL push!(to_delete, i) end
         i += 1
     end
 
@@ -122,7 +122,7 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
         valid = true
         for j = 1:length(L.natural_order_vect.sols)
             t = L.natural_order_vect.sols[j]                # todo : check compared with segements
-            if y[1] * t.λ[1] + y[2] * t.λ[2] < t.y[1] * t.λ[1] + t.y[2] * t.λ[2] - TOL
+            if y[1] * t.λ[1] + y[2] * t.λ[2] < t.y[1] * t.λ[1] + t.y[2] * t.λ[2] -TOL
                 valid = false ; break
             end
         end
@@ -489,7 +489,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         # -----------------------------
         # case : equality    # todo : in case equality, filterage skipped 
         # -----------------------------
-        if (abs(val - lb) ≤ TOL) ||!newPt continue end # 
+        if !newPt continue end # (abs(val - lb) ≤ TOL) ||
 
         # todo : 
         if verbose
@@ -505,7 +505,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
         valid = true
         for s in pureL.natural_order_vect.sols # todo : compared with segments if yt is under LBS 
-            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2]-TOL
+            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y[1] * s.λ[1] + s.y[2] * s.λ[2] - TOL
                 valid = false ; break
             end
         end
