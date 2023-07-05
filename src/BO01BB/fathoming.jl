@@ -4,24 +4,24 @@ TOL = 1e-4
 include("cuttingPlanes.jl")
 
 """
-Given a point `x_star`, iterate all valid cuts of parent node and stock the references
+Given a point `x_star`, iterate all valid cuts of parent node and stock the references 
 in the current node.
 """
 function loadingCutInPool(node::Node, pb::BO01Problem)
-    if isRoot(node) return end
+    if isRoot(node) return end 
 
     l = 1 ; LBS = node.RBS.natural_order_vect.sols
 
     while l ≤ length(LBS)
-        if LBS[l].is_binary || length(LBS[l].xEquiv) == 0
+        if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
             l += 1 ; continue
         end
 
         xₗ_star = LBS[l].xEquiv[1]
 
-        for ∇ = max_step:-1:0
+        for ∇ = max_step:-1:0 
             if ∇ == 0
-                # single-point cut
+                # single-point cut 
                 for (k, cuts) in node.pred.cutpool.hashMap
                     for cut in cuts
                         α = cut.row
@@ -36,15 +36,15 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                     end
                 end
                 l += 1
-            else
+            else 
                 applied = false
                 r = l+∇
                 if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
 
                 xᵣ_star = LBS[r].xEquiv[1]
-                # multi-point cut
+                # multi-point cut 
                 for (k, cuts) in node.pred.cutpool.hashMap
-                    for cut in cuts
+                    for cut in cuts 
                         α = cut.row
                         violationₗ = maximum([ (xₗ_star'*α[2:end] - α[1]), 0.0 ])
                         violationᵣ = maximum([ (xᵣ_star'*α[2:end] - α[1]), 0.0 ])
@@ -59,9 +59,9 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                         end
                     end
                 end
-                if applied
+                if applied 
                     l = r+1 ; break
-                end
+                end 
             end
         end
     end
@@ -79,21 +79,21 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
 
     # step 1 : calculate LBS of the actual sub-problem
     pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-
+    
     # ------------------------
-    # apply valid cuts
+    # apply valid cuts 
     # ------------------------
     if pb.param.cp_activated && !pruned #&& node.depth < num_var/3
         @assert length(node.RBS.natural_order_vect) > 0 "valid LBS is empty !"
 
-        # step 2 : add valid cuts constraints then re-optimize
+        # step 2 : add valid cuts constraints then re-optimize 
         start_processing = time()
         loadingCutInPool( node, pb)         # complexity O(pt ⋅ cuts)
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
         pruned = MP_cutting_planes(node, pb, incumbent, round_results, verbose ; args...)
 
-        # step 3 : retrieve applied valid cuts
+        # step 3 : retrieve applied valid cuts 
         start_processing = time()
         for con in node.con_cuts
             if JuMP.is_valid( pb.m, con)
@@ -107,12 +107,12 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         end
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
-        pb.info.cuts_infos.times_total_for_cuts += (time() - start)
+        pb.info.cuts_infos.times_total_for_cuts += (time() - start)        
     end
 
     removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
-
-    # todo  check LBS where no pt dominates other
+    
+    # todo  check LBS where no pt dominates other 
 
 end
 
@@ -131,16 +131,9 @@ function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, v
     for i = 1:length(node.RBS.natural_order_vect)
         if node.RBS.natural_order_vect.sols[i].is_binary
             s = node.RBS.natural_order_vect.sols[i]
-            push!(incumbent.natural_order_vect, s, filtered=true)
+            push!(incumbent.natural_order_vect, s, filtered=true) 
         end
     end
-
-    # # todo : 
-    # println("node $(node.num)   UBS = [ ")
-    # for s in incumbent.natural_order_vect.sols
-    #     print("$(s.y) , ")
-    # end
-    # println("] ")
 
     if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
         prune!(node, OPTIMALITY)
@@ -159,22 +152,15 @@ function getNadirPoints(incumbent::IncumbentSet) # , ptl, ptr
     nadir_pts = NaturalOrderVector()
     # @assert length(incumbent.natural_order_vect) > 1 "`getNadirPoints` requires at least two upper bounds in incumbent list."
 
-    if length(incumbent.natural_order_vect) == 1 return incumbent.natural_order_vect end
+    if length(incumbent.natural_order_vect) == 1 return incumbent.natural_order_vect end 
 
     for i = 1:length(incumbent.natural_order_vect)-1
 
-        # push!(nadir_pts, Solution(
-        #     Vector{Float64}(),
-        #     [incumbent.natural_order_vect.sols[i+1].y[1],
-        #     incumbent.natural_order_vect.sols[i].y[2]
-        #     ])#, filtered=true
-        # )
         push!(nadir_pts, Solution(
-            Vector{Vector{Float64}}(),
+            Vector{Float64}(),
             [incumbent.natural_order_vect.sols[i+1].y[1],
             incumbent.natural_order_vect.sols[i].y[2]
-            ],
-            true, Vector{Float64}() , Inf), filtered=true
+            ])#, filtered=true
         )
     end
 
@@ -218,56 +204,56 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     # two extreme points of LBS
     ptl = node.RBS.natural_order_vect.sols[1] ; ptr = node.RBS.natural_order_vect.sols[end]
 
-    # Case 1 :  if only one feasible point in UBS
-    if length(incumbent.natural_order_vect) == 1
+    # Case 1 :  if only one feasible point in UBS 
+    if length(incumbent.natural_order_vect) == 1 
         u = incumbent.natural_order_vect.sols[1]
         return u.y[1] < ptl.y[1] && u.y[2] < ptr.y[2]
     end
 
-    # test range condition necessary 1 : LBS ⊆ UBS
+    # test range condition necessary 1 : LBS ⊆ UBS 
     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
 
     sufficient = (u_l.y[1] < ptl.y[1] && u_r.y[2] < ptr.y[2])
 
     if !sufficient return false end
 
-    # test condition necessary 2 : LBS ≤/dominates UBS
+    # test condition necessary 2 : LBS ≤/dominates UBS 
     fathomed = true# ; dist_naditPt = Vector{Float64}()
 
     # iterate of all local nadir points
     for u ∈ nadir_pts.sols
         existence = false ; compared = false
 
-        # case 1 : if u is dominates the ideal point of LBS
+        # case 1 : if u is dominates the ideal point of LBS 
         if u.y[2] < ptr.y[2] && u.y[1] < ptl.y[1]
             return true
         end
 
         # case 3 : complete pairwise comparison
-        for i=1:length(node.RBS.natural_order_vect)-1              # ∀ segment l ∈ LBS
+        for i=1:length(node.RBS.natural_order_vect)-1              # ∀ segment l ∈ LBS 
 
             sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[i+1]
 
             # --------------------------------------
-            #todo : complete ?
-            if sol_l.y[2] == sol_r.y[2] # horizon line
+            #todo : complete ? 
+            if sol_l.y[2] == sol_r.y[2] # horizon line 
                 if u.y[1] < sol_l.y[1] || u.y[1] > sol_r.y[1]
                     continue
                 end
 
-                compared = true
+                compared = true 
                 if u.y[2] < sol_l.y[2]
                     existence = true ; break
                 end
             end
 
-            if sol_l.y[1] == sol_r.y[1] # vertical line
+            if sol_l.y[1] == sol_r.y[1] # vertical line 
                 if u.y[2] < sol_r.y[2] || u.y[2] > sol_l.y[2]
                     continue
                 end
 
-                compared = true
-                if u.y[1] < sol_l.y[1]-L
+                compared = true 
+                if u.y[1] < sol_l.y[1]
                     existence = true ; break
                 end
             end
@@ -283,31 +269,30 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             λ = [sol_l.y[2] - sol_r.y[2], sol_r.y[1] - sol_l.y[1]]      # normal to the segment
 
-
             compared = true
 
-            if λ'*u.y < λ'*sol_r.y #&& λ'*u.y < λ'*sol_l.y
+            if λ'*u.y < λ'*sol_r.y#&& λ'*u.y < λ'*sol_l.y
                 existence = true ; break
             end
         end
-
+        
         # case 4 : condition dominance violated, then stock the non-dominated local nadir pts to prepare EPB
-        if compared && !existence
+        if compared && !existence 
             fathomed = false
             if EPB
-                if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+                if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 
                 elseif (u.y[2] ≥ ptl.y[2] && u.y[1] ≥ ptr.y[1])
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
 
-                else
+                else 
                     push!(node.localNadirPts, u.y) #; push!(dist_naditPt, dist_ratio(worst_nadir_pt, u.y, ideal_pt))
-                end
+                end 
             else
                 return fathomed
             end
-
+            
         end
 
         # todo : check ???
@@ -363,8 +348,8 @@ Dominance test designed for the LBS that is the convex intersection of the set o
 #     # two extreme points of LBS
 #     ptl = node.RBS.natural_order_vect.sols[1] ; ptr = node.RBS.natural_order_vect.sols[end]
 
-#     # Case 1 :  if only one feasible point in UBS
-#     if length(incumbent.natural_order_vect) == 1
+#     # Case 1 :  if only one feasible point in UBS 
+#     if length(incumbent.natural_order_vect) == 1 
 #         u = incumbent.natural_order_vect.sols[1]
 #         if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
 #             return true
@@ -373,19 +358,19 @@ Dominance test designed for the LBS that is the convex intersection of the set o
 #         end
 #     end
 
-#     # test range condition necessary 1 : LBS ⊆ UBS
+#     # test range condition necessary 1 : LBS ⊆ UBS 
 #     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
 #     # u_l = nadir_pts.sols[1] ; u_r = nadir_pts.sols[end]
 
 #     sufficient = (u_l.y[2] < ptl.y[2] && u_r.y[1] < ptr.y[1])
 #     if !sufficient return false end
 
-#     fathomed = true
+#     fathomed = true 
 #     # iterate of all local nadir points
 #     for u ∈ nadir_pts.sols
 #         in_polygone = true
 
-#         # case 1 : if u is dominates the ideal point of LBS
+#         # case 1 : if u is dominates the ideal point of LBS 
 #         if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
 #             return true
 #         end
@@ -395,27 +380,27 @@ Dominance test designed for the LBS that is the convex intersection of the set o
 #         end
 
 #         # case 3 : complete pairwise comparison
-#         for sol in node.RBS.natural_order_vect.sols # i=1:length(node.RBS.natural_order_vect)              # ∀ segment l ∈ LBS
+#         for sol in node.RBS.natural_order_vect.sols # i=1:length(node.RBS.natural_order_vect)              # ∀ segment l ∈ LBS 
 
 #             λ = sol.λ
 
-#             if λ[1] != 0.0 &&  λ[2] != 0.0 && λ'*u.y < λ'*sol.y # strictly inferior : case limit
+#             if λ[1] != 0.0 &&  λ[2] != 0.0 && λ'*u.y < λ'*sol.y # strictly inferior : case limit 
 #                 in_polygone = false ; break
 #             end
 #         end
 
-#         # the end of comparison
+#         # the end of comparison 
 #         if in_polygone
 #             fathomed = false
 #             if EPB
-#                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched
-#                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+#                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
+#                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 
 #                 elseif (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2])
-#                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
-#                 else
+#                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
+#                 else 
 #                     push!(node.localNadirPts, u.y)
-#                 end
+#                 end 
 #             else
 #                 return fathomed
 #             end
@@ -466,20 +451,20 @@ Dominance test designed for the LBS connected by consecutive local ideal points.
 #     # two extreme points of LBS
 #     ptl = node.RBS.natural_order_vect.sols[1] ; ptr = node.RBS.natural_order_vect.sols[end]
 
-#     # Case 1 :  if only one feasible point in UBS
-#     if length(incumbent.natural_order_vect) == 1
+#     # Case 1 :  if only one feasible point in UBS 
+#     if length(incumbent.natural_order_vect) == 1 
 #         u = incumbent.natural_order_vect.sols[1]
-#         if u.y[1] < ptr.y[1]  && u.y[2] < ptl.y[2]
+#         if u.y[1] < ptr.y[1]  && u.y[2] < ptl.y[2] 
 #             return true
 #         else
 #             return false
 #         end
 #     end
 
-#     # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS
+#     # Case 2 : otherwise, do the pairwise comparison of the local nadir points with LBS  
 #     nadir_pts = getNadirPoints(incumbent) # , ptl, ptr
 
-#     # test range condition necessary 1 : LBS ⊆ UBS
+#     # test range condition necessary 1 : LBS ⊆ UBS 
 #     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
 
 #     sufficient = (u_l.y[2] < ptl.y[2] && u_r.y[1] < ptr.y[1])
@@ -488,30 +473,30 @@ Dominance test designed for the LBS connected by consecutive local ideal points.
 
 #     # (ideal_pts, fathomed) = getIdealPoints(node.RBS, u_l, u_r) ; if fathomed return true end
 
-#     # test condition necessary 2 : LBS ≤/dominates UBS
-#     fathomed = true
+#     # test condition necessary 2 : LBS ≤/dominates UBS 
+#     fathomed = true 
 
 #     # iterate of all local nadir points
 #     for u ∈ nadir_pts.sols
 #         existence = false ; compared = false
 
-#         # case 1 : if u is dominates the ideal point of LBS
+#         # case 1 : if u is dominates the ideal point of LBS 
 #         if u.y[1] < ptr.y[1] && u.y[2] < ptl.y[2]
 #             return true
 #         end
 
 #         # case 3 : complete pairwise comparison
-#         for i=1:length(node.RBS.natural_order_vect)-1              # ∀ segment l ∈ LBS
+#         for i=1:length(node.RBS.natural_order_vect)-1              # ∀ segment l ∈ LBS 
 
 #             sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[i+1]
 
 #             if (u.y[2] > sol_r.y[2] || u.y[2] < sol_l.y[2] )
 #                 continue
 #             end
-
+            
 #             compared = true
 
-#             if u.y[1] < sol_r.y[1]
+#             if u.y[1] < sol_r.y[1] 
 #                 existence = true ; break
 #             end
 #         end
@@ -523,37 +508,37 @@ Dominance test designed for the LBS connected by consecutive local ideal points.
 #         #     end
 #         #     return false
 #         # end
-
+        
 #         # case 4 : condition dominance violated, then stock the non-dominated local nadir pts to prepare EPB
-#         if compared && !existence
+#         if compared && !existence 
 #             fathomed = false
 #             if EPB
-#                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched
-#                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+#                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
+#                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 #                     # nothing
-#                 else
+#                 else 
 #                     push!(node.localNadirPts, u.y)
-#                 end
+#                 end 
 #             else
 #                 return fathomed
 #             end
-
+            
 #         end
-
+ 
 #         if !compared && u.y[2] ≥ ptr.y[2]
 #             if  ptr.y[1] <= u.y[1] <= ptl.y[1]
 #                 fathomed = false
 #                 if EPB
-#                     if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched
-#                         node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed
+#                     if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
+#                         node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 #                         # nothing
-#                     else
+#                     else 
 #                         push!(node.localNadirPts, u.y)
-#                     end
+#                     end 
 #                 else
 #                     return fathomed
 #                 end
-#             elseif u.y[1] > ptl.y[1]
+#             elseif u.y[1] > ptl.y[1] 
 #                 if EPB node.localNadirPts = Vector{Vector{Float64}}() end               # no need to (extended) pareto branching
 #                 return false
 #             end
@@ -573,7 +558,7 @@ Dominance test designed for the LBS connected by consecutive local ideal points.
 Return the orthogonal distance between a point `p` and a segment defined by two points `extl` and `extr`.
 """
 function orthogonal_dist(p::Vector{Float64}, extl::Vector{Float64}, extr::Vector{Float64})
-    return abs((extr[1] - extl[1]) * (extl[2] - p[2]) - (extl[1] - p[1]) * (extr[2] - extl[2])) / sqrt((extr[1] - extl[1])^2 + (extr[2] - extl[2])^2)
+    return abs((extr[1] - extl[1]) * (extl[2] - p[2]) - (extl[1] - p[1]) * (extr[2] - extl[2])) / sqrt((extr[1] - extl[1])^2 + (extr[2] - extl[2])^2) 
 end
 
 
@@ -581,7 +566,7 @@ end
 Given a non-dominated nadir point, return `true` if the decider EP - branch on it, considering the average distance of nadir point from LBS.
 """
 function dist_ratio( worst_nadir_pt::Vector{Float64}, nadir_pt::Vector{Float64}, ideal_pt::Vector{Float64})
-    dist_LBS = sqrt((worst_nadir_pt[1] - ideal_pt[1])^2 + (worst_nadir_pt[2] - ideal_pt[2])^2)
-    dist_nadir = sqrt((nadir_pt[1] - ideal_pt[1])^2 + (nadir_pt[2] - ideal_pt[2])^2)
+    dist_LBS = sqrt((worst_nadir_pt[1] - ideal_pt[1])^2 + (worst_nadir_pt[2] - ideal_pt[2])^2) 
+    dist_nadir = sqrt((nadir_pt[1] - ideal_pt[1])^2 + (nadir_pt[2] - ideal_pt[2])^2) 
     return dist_nadir/dist_LBS
 end

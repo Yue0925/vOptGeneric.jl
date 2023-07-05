@@ -153,7 +153,7 @@ function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Ve
             is_binary = false; break
         end
     end    
-    return Solution([is_binary ? round.(x, digits = 2) : x ], is_binary ? round.(y, digits = 2) : y ,
+    return Solution([is_binary ? round.(x, digits = 4) : x ], is_binary ? round.(y, digits = 4) : y ,
             is_binary, λ, ct)
 end
 
@@ -180,11 +180,10 @@ function addEquivX(sol::Solution, x::Vector{Float64})
     # check if x is approximately binary
     if isBinary(x)
         sol.is_binary = isBinary(x)
-        sol.y = round.(sol.y, digits = 2)
-        push!(sol.xEquiv, round.(x, digits = 2))
+        sol.y = round.(sol.y, digits = 4)
+        push!(sol.xEquiv, round.(x, digits = 4))
     else
         push!(sol.xEquiv, x)
-
     end
     
 end
@@ -369,8 +368,6 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         natural_sols.sols = vcat(vcat(natural_sols.sols[1:m-1], sol), natural_sols.sols[m:end])
     end
     idx = m 
-
-    # verbose ? println("idx = $idx ") : nothing
 
     # find points weakly dominated by the new point and delete it/them
     if filtered
