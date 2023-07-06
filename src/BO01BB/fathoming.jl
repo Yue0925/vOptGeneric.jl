@@ -135,11 +135,12 @@ function updateIncumbent(node::Node, pb::BO01Problem, incumbent::IncumbentSet, v
         end
     end
 
-    println("UBS (node $(node.num)) = [ ")
-    for s in incumbent.natural_order_vect.sols
-        print("$(s.y) , ")
-    end
-    println("] ")
+    # # todo 
+    # println("UBS (node $(node.num)) = [ ")
+    # for s in incumbent.natural_order_vect.sols
+    #     print("$(s.y) , ")
+    # end
+    # println("] ")
 
     if length(node.RBS.natural_order_vect)==1 && node.RBS.natural_order_vect.sols[1].is_binary
         prune!(node, OPTIMALITY)

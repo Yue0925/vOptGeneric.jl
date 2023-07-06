@@ -133,8 +133,8 @@ function prune!(node::Node, reason::PrunedType)
     node.pruned = true
     node.prunedType = reason
     # #todo : 
-    println("# ------------- node ", node.num)
-    println(node)
+    # println("# ------------- node ", node.num)
+    # println(node)
     to_delete = node.succs[:]
     node.succs = Vector{Node}()
 
