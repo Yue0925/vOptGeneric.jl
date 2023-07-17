@@ -333,28 +333,30 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     while l ≤ r
         m = Int(floor((l+r)/2))
 
-        if sol.y[2] < natural_sols.sols[m].y[2]
+        if abs(sol.y[2] - natural_sols.sols[m].y[2]) ≤ TOL
+            # in case of the equality on the first objective, compare the second obj
+            
+            if abs(sol.y[1] - natural_sols.sols[m].y[1]) ≤ TOL
+                # # todo : different λ same pente
+                if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
+                    if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
+                        # todo : 
+                        natural_sols.sols[m].λ .= sol.λ
+                        # natural_sols.sols[m].λ = deepcopy(sol.λ)
+                        updateCT(natural_sols.sols[m])
+                    end
+                end
+                addEquivX(natural_sols.sols[m], sol.xEquiv) 
+                return m, false
+            elseif sol.y[1] > natural_sols.sols[m].y[1]
+                l = m+1
+            elseif sol.y[1] < natural_sols.sols[m].y[1]
+                r  = m-1
+            end
+        elseif sol.y[2] < natural_sols.sols[m].y[2]
             l = m+1
         elseif sol.y[2] > natural_sols.sols[m].y[2]
             r = m-1
-        # in case of the equality on the first objective, compare the second obj
-        elseif sol.y[1] > natural_sols.sols[m].y[1]
-            l = m+1
-        elseif sol.y[1] < natural_sols.sols[m].y[1]
-            r  = m-1
-        #todo :  in case of equality  =>  update only & retuen -1
-        else
-            # # todo : different λ same pente
-            if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
-                if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
-                    # todo : 
-                    natural_sols.sols[m].λ .= sol.λ
-                    # natural_sols.sols[m].λ = deepcopy(sol.λ)
-                    updateCT(natural_sols.sols[m])
-                end
-            end
-            addEquivX(natural_sols.sols[m], sol.xEquiv) 
-            return m, false
         end
     end
 

@@ -121,7 +121,7 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
             ]
         valid = true
         for j = 1:length(L.natural_order_vect.sols)
-            t = L.natural_order_vect.sols[j]                # todo : check compared with segements
+            t = L.natural_order_vect.sols[j]               
             if y'* t.λ ≤ t.y'* t.λ -TOL
                 valid = false ; break
             end
@@ -135,6 +135,7 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
     
     return res
 end
+
 
 function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
     intersection = intersectionPts(L, idx)
@@ -159,6 +160,151 @@ function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
         push!(L.natural_order_vect, s)
     end
 end
+
+
+"""
+straight line       a x + b y = c 
+            <=>   -Δz2 z1 + Δz1 z2 = Δz1 c 
+
+a = -Δz2 = -λ1   b = Δz1 = -λ2    ct = Δz1 c 
+"""
+function updateLBSwithEPB(node::Node)
+    @assert length(node.nadirPt) > 1
+
+    # 1er bounding 
+    pt = Solution(Vector{Float64}(), node.nadirPt, [0.0, 1.0]) ; updateCT(pt)
+    ptl = Solution() ; ptr = Solution()
+
+    for i = 1:length(node.RBS.natural_order_vect.sols)
+        s = node.RBS.natural_order_vect.sols[i]
+
+        a1 = -s.λ[1] ; b1 = -s.λ[2]
+        a2 = -pt.λ[1] ; b2 = -pt.λ[2]
+
+        det = a1 * b2 - a2 * b1
+        if abs(det) ≤ TOL continue end 
+        
+        y = [ (s.ct*b2 - pt.ct*b1)/det ,
+              (a1* pt.ct - a2 * s.ct)/det
+            ]
+        valid = true
+        for j = 1:length(node.RBS.natural_order_vect.sols)
+            t = node.RBS.natural_order_vect.sols[j]               
+            if y'* t.λ ≤ t.y'* t.λ -TOL
+                valid = false ; break
+            end
+        end
+
+        if valid 
+            ptl = Solution(Vector{Float64}(), y, [1.0, 0.0]) ; updateCT(ptl)
+            break
+        end
+    end
+
+    # todo verify if bugs exist 
+    if length(ptl.y) != 2 || ptl.y[1] == Inf || ptl.y[2] == Inf
+        # println("\n --------------------- ")
+        # println("ptl ", ptl)
+        # println("nadri ", node.nadirPt, " \t boundz2 ", node.duplicationBound)
+        # println("LBS ", node.RBS.natural_order_vect.sols)
+        # error("EPB bounding error ! ")
+        empty!(node.RBS.natural_order_vect.sols) ; return
+    end
+    
+    # 2-th bounding 
+    pt.λ = [1.0, 0.0] ; updateCT(pt)
+
+    for i = 1:length(node.RBS.natural_order_vect.sols)
+        s = node.RBS.natural_order_vect.sols[i]
+
+        a1 = -s.λ[1] ; b1 = -s.λ[2]
+        a2 = -pt.λ[1] ; b2 = -pt.λ[2]
+
+        det = a1 * b2 - a2 * b1
+        if abs(det) ≤ TOL continue end 
+        
+        y = [ (s.ct*b2 - pt.ct*b1)/det ,
+              (a1* pt.ct - a2 * s.ct)/det
+            ]
+        valid = true
+        for j = 1:length(node.RBS.natural_order_vect.sols)
+            t = node.RBS.natural_order_vect.sols[j]               
+            if y'* t.λ ≤ t.y'* t.λ -TOL
+                valid = false ; break
+            end
+        end
+
+        if valid 
+            ptr = Solution(Vector{Float64}(), y, [0.0, 1.0]) ; updateCT(ptr)
+            break
+        end
+    end
+
+    # todo verify if bugs exist 
+    if length(ptr.y) != 2 || ptr.y[1] == Inf || ptr.y[2] == Inf
+        # println("\n --------------------- ")
+        # println("ptr ", ptr )
+        # println("nadri ", node.nadirPt, " \t boundz2 ", node.duplicationBound)
+        # println("LBS ", node.RBS.natural_order_vect.sols)
+        # error("EPB bounding error ! ")
+        empty!(node.RBS.natural_order_vect.sols) ; return
+
+    end
+
+    # 3-th bounding 
+    if node.duplicationBound != Inf && node.duplicationBound > ptr.y[2]
+        pt = Solution(Vector{Float64}(), [node.nadirPt[1], node.duplicationBound], [0.0, 1.0]) ; updateCT(pt)
+        for i = 1:length(node.RBS.natural_order_vect.sols)
+            s = node.RBS.natural_order_vect.sols[i]
+    
+            a1 = -s.λ[1] ; b1 = -s.λ[2]
+            a2 = -pt.λ[1] ; b2 = -pt.λ[2]
+    
+            det = a1 * b2 - a2 * b1
+            if abs(det) ≤ TOL continue end 
+            
+            y = [ (s.ct*b2 - pt.ct*b1)/det ,
+                  (a1* pt.ct - a2 * s.ct)/det
+                ]
+            valid = true
+            for j = 1:length(node.RBS.natural_order_vect.sols)
+                t = node.RBS.natural_order_vect.sols[j]               
+                if y'* t.λ ≤ t.y'* t.λ -TOL
+                    valid = false ; break
+                end
+            end
+    
+            if valid 
+                ptr = Solution(Vector{Float64}(), y, [0.0, 1.0]) ; updateCT(ptr)
+                break
+            end
+        end
+    end
+
+    # todo verify if bugs exist 
+    if length(ptr.y) != 2 || ptr.y[1] == Inf || ptr.y[2] == Inf
+        # println("\n --------------------- ")
+        # println("ptr ", ptr )
+        # println("nadri ", node.nadirPt, " \t boundz2 ", node.duplicationBound)
+        # println("LBS ", node.RBS.natural_order_vect.sols)
+        # error("EPB bounding error ! ")
+        empty!(node.RBS.natural_order_vect.sols) ; return
+
+    end
+
+    # remove all points under current line 
+    to_delete = Int64[] ; i = 1
+    for s in node.RBS.natural_order_vect.sols
+        if s.y'*ptl.λ ≤ ptl.y'*ptl.λ -TOL || s.y'*ptr.λ ≤ ptr.y'*ptr.λ -TOL
+            push!(to_delete, i) 
+        end
+        i += 1
+    end
+
+    deleteat!(node.RBS.natural_order_vect.sols, to_delete)
+    push!(node.RBS.natural_order_vect, ptl); push!(node.RBS.natural_order_vect, ptr)
+end
+
 
 """
 New correction iterative algorithm for LBS 
