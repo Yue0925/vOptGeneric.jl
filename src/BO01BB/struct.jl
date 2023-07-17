@@ -319,7 +319,7 @@ Return
     -   -1 : the same point with exactly ct
             OR  the inconming point is dominated 
 """
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false, verbose::Bool=false)::Tuple{Int,Bool}
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
     # sol.y = round.(sol.y, digits = 4) ; 
     idx = -1
 
@@ -347,12 +347,10 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             # # todo : different λ same pente
             if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
                 if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
-
-                    if verbose
-                        println("two equiv pts found ! sol = $(sol) \n  natural_sols.sols[$m] = $(natural_sols.sols[m])")
-                    end
+                    # todo : 
                     natural_sols.sols[m].λ .= sol.λ
-                    # natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
+                    # natural_sols.sols[m].λ = deepcopy(sol.λ)
+                    updateCT(natural_sols.sols[m])
                 end
             end
             addEquivX(natural_sols.sols[m], sol.xEquiv) 

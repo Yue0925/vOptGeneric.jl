@@ -21,12 +21,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     #------------------------------------------------------------------------------
     if pb.param.root_relax
         start = time()
-        # if node.num == 1361
-        #     println("----------------- tracing ")
-        #     Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, true ; args...)      
-        # else
-            Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
-        # end
+        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
         pb.info.relaxation_time += (time() - start)
 
         start = time()
@@ -75,18 +70,12 @@ end
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
     n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
-    # # delete all points cut off 
-    # for indx in cut_off
-    #     push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
-    # end
-    # deleteat!(node.RBS.natural_order_vect.sols, cut_off)
-
     # in each direction, re-optimize 
     for λ in lambdas
         if pb.param.root_relax
 
             start = time() 
-            Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ, false ; args...)      
+            Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ ; args...)      
             pb.info.relaxation_time += (time() - start)
     
             start = time()
@@ -185,7 +174,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         cut_off = []
 
         while l ≤ length(LBS)
-            if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
+            if LBS[l].is_binary || length(LBS[l].xEquiv[1]) == 0 
                 l += 1 ; continue    
             end
             
@@ -198,7 +187,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     l += 1
                 else 
                     r = l+∇
-                    if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
+                    if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv[1]) == 0 continue end
 
                     if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
 
