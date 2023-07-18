@@ -20,6 +20,10 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
+        # todo : EPB LBS
+        if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
+            return false
+        end
         start = time()
         Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
         pb.info.relaxation_time += (time() - start)
@@ -39,6 +43,10 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             return true
         end
     else
+        # todo : EPB LBS
+        if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
+            return false
+        end
         start = time()
         solve_dicho(pb.m, round_results, false ; args...)
         pb.info.relaxation_time += (time() - start)

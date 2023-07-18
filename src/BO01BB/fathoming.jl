@@ -78,12 +78,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     start = time()
 
     # step 1 : calculate LBS of the actual sub-problem
-    # pruned = false
-    # if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
-    #     nothing
-    # else
-        pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
-    # end
+    pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
     
     # ------------------------
     # apply valid cuts 
