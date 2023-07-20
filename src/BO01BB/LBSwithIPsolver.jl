@@ -311,13 +311,14 @@ end
 New correction iterative algorithm for LBS 
     taking account into intersection with odd LBS
 """
-function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, verbose::Bool=false; args...)
+function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64=1024; args...)
     global varArray
     global x_star
     global model = m
     global C = c
     global curr_λ
     global bst_val
+    iter_count = 0
 
     vd = getvOptData(m)
     f1, f2 = vd.objs
@@ -343,6 +344,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     idx = -1 ; val = -Inf
     curr_λ = [1.0, 0.0] ; newPt = false
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+    iter_count += 1
 
     # in case of infeasibility => !! no single extreme point 
     yr_1 = 0.0 ; yr_2 = 0.0 
@@ -406,6 +408,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         error("Condition  status $status ")
     end
 
+    if iter_count ≥ K  return Y_integer, X_integer end
     # -------------------------------------------
     # step 2 : calculate the right extreme point
     # ------------------------------------------- 
@@ -415,6 +418,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     idx = -1 ; val = -Inf
     curr_λ = [0.0, 1.0] ; newPt = false
     JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+    iter_count += 1
 
     ys_1 = 0.0 ; ys_2 = 0.0 
     ext_r = Solution()
@@ -477,6 +481,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         error("Condition  status $status ")
     end
 
+    if iter_count ≥ K return Y_integer, X_integer end
+
     # -----------------------------------------
     # step 3 : fix the next search direction 
     # -----------------------------------------
@@ -505,6 +511,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
     # repeat the same procedure until no more direction in todo list 
     # ----------------------------------------------------------------
     while length(todo) > 0
+        if iter_count ≥ K return Y_integer, X_integer end
 
         p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
 
@@ -519,7 +526,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         x_star = [] ; bst_val = -Inf 
         curr_λ = λ ; newPt = false 
         JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
-    
+        iter_count += 1
+
         yt_1 = 0.0 ; yt_2 = 0.0 
         val = -Inf ; idx = -1
         idxL = -1 ; newPtL = false 
@@ -667,7 +675,7 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
 
     yt_1 = 0.0 ; yt_2 = 0.0 
     val = -Inf ; idx = -1
-    newPt = false ;
+    newPt = false ; pt = Solution()
 
     # in case of infeasibility 
     if status == MOI.INFEASIBLE 
@@ -683,8 +691,8 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         val = λ[1]*yt_1 + λ[2]*yt_2 
 
         # add new sol in LBS without filtering 
-        idx, newPt = push!(L.natural_order_vect, Solution(JuMP.value.(varArray), [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) )
-        updateCT(L.natural_order_vect.sols[idx])
+        pt = Solution(JuMP.value.(varArray), [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+        idx, newPt = push!(L.natural_order_vect, pt )
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         if has_values(m)
@@ -711,8 +719,8 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         val = λ[1]*yt_1 + λ[2]*yt_2
 
         # add new sol in LBS without filtering 
-        idx, newPt = push!(L.natural_order_vect, Solution(x_star, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) )
-        updateCT(L.natural_order_vect.sols[idx])
+        pt = Solution(x_star, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+        idx, newPt = push!(L.natural_order_vect,  pt)
 
     else
         println("has primal ? $(JuMP.has_values(m))")

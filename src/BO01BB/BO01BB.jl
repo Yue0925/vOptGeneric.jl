@@ -334,6 +334,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo disable heur 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo disable preprocessing 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.01) # todo : time limit in sec 
+        # todo : exhaustive computation ?
+        problem.info.LBSexhaustive = false
     end
 
     if cp
@@ -364,7 +366,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         return problem.info
     end
 
-    addTodo(todo, problem, root)
+    addTodo(todo, problem, root) ; problem.info.rootLBS = length(root.RBS.natural_order_vect.sols)
+
 
     ptl = root.RBS.natural_order_vect.sols[1].y ; ptr = root.RBS.natural_order_vect.sols[end].y
     worst_nadir_pt = [ptr[1], ptl[2]] 

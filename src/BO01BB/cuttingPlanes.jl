@@ -20,13 +20,28 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
-        # todo : EPB LBS
-        if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
-            return false
+        # # todo : EPB LBS
+        # if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
+        #     return false
+        # end
+
+        # limit tuning 
+        limits = 1024
+        if pb.info.LBSexhaustive && length(pb.varArray)- length(node.assignment) >10
+            limits = ceil(Int64, (1 - length(node.assignment)/length(pb.varArray))*pb.info.rootLBS ) 
         end
+
+        # dichtomic-like concave-convex algorithm
         start = time()
-        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
+        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)      
         pb.info.relaxation_time += (time() - start)
+
+        # todo : with LBS predecessor copied only !! 
+
+        # chordal improvement 
+
+        # equilibrum directions 
+
 
         start = time()
         for i = 1:length(Y_integer) 
@@ -78,12 +93,19 @@ end
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
     n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
+    for indx in cut_off
+        push!(lambdas, [node.RBS.natural_order_vect.sols[indx].λ[1], node.RBS.natural_order_vect.sols[indx].λ[2] ] )
+    end
+
+    # delete all points cut off 
+    # deleteat!(node.RBS.natural_order_vect.sols, cut_off)
+
     # in each direction, re-optimize 
     for λ in lambdas
         if pb.param.root_relax
 
             start = time() 
-            Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ ; args...)      
+            Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, [λ[1], λ[2] ] ; args...)      
             pb.info.relaxation_time += (time() - start)
     
             start = time()

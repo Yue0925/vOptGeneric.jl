@@ -1,6 +1,6 @@
 vars = 10 ; constr = 2 
  # informations of B&B algorithm : 
-total_times_used = 0.05 
+total_times_used = 0.04 
 total_nodes = 33 
 pruned_nodes = 17 
 GAP = 0.0 

@@ -66,11 +66,13 @@ mutable struct StatInfo
     nb_nodes_VB::Int64
     root_relax::Bool
     TO::Bool
+    rootLBS::Int64
+    LBSexhaustive::Bool
     # status::MOI.TerminationStatusCode 
 end
 
 function StatInfo()
-    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false)
+    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false, 0, true)
 end
 
 function Base.:show(io::IO, info::StatInfo)
@@ -86,7 +88,9 @@ function Base.:show(io::IO, info::StatInfo)
         "nb_nodes_EPB = $(info.nb_nodes_EPB) \n",
         "nb_nodes_VB = $(info.nb_nodes_VB) \n",
         "root_relax = $(info.root_relax) \n",
-        "TO = $(info.TO) "
+        "TO = $(info.TO) \n", 
+        "rootLBS = $(info.rootLBS) \n", 
+        "LBSexhaustive = $(info.LBSexhaustive)"
     )
     if info.cp_activated println(io, info.cuts_infos) end
 end
