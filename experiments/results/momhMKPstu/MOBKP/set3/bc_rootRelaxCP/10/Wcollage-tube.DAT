@@ -12,6 +12,8 @@ nb_nodes_EPB = 0
 nb_nodes_VB = 10 
 root_relax = true 
 TO = false 
+rootLBS = 3 
+LBSexhaustive = true
 
 
  # ----------- info about cuts : 

@@ -27,20 +27,25 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
 
         # limit tuning 
         limits = 1024
-        if pb.info.LBSexhaustive && length(pb.varArray)- length(node.assignment) >10
+        if pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
             limits = ceil(Int64, (1 - length(node.assignment)/length(pb.varArray))*pb.info.rootLBS ) 
         end
 
-        # dichtomic-like concave-convex algorithm
+        # # dichtomic-like concave-convex algorithm
+        # start = time()
+        # Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)      
+        # pb.info.relaxation_time += (time() - start)
+
+
+        # # chordal improvement 
+        # start = time()
+        # Y_integer, X_integer = chordalImptovLBS(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)
+        # pb.info.relaxation_time += (time() - start)
+
+        # dynamic directions {1/K, 2/K, ... K-1/K}
         start = time()
-        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)      
+        Y_integer, X_integer = dynamicImptovLBS(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)
         pb.info.relaxation_time += (time() - start)
-
-        # todo : with LBS predecessor copied only !! 
-
-        # chordal improvement 
-
-        # equilibrum directions 
 
 
         start = time()

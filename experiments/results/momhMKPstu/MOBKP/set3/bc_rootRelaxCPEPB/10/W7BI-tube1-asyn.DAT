@@ -13,7 +13,7 @@ nb_nodes_VB = 16
 root_relax = true 
 TO = false 
 rootLBS = 3 
-LBSexhaustive = false
+LBSexhaustive = true
 
 
  # ----------- info about cuts : 

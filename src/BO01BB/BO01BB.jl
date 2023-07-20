@@ -335,7 +335,7 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo disable preprocessing 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.01) # todo : time limit in sec 
         # todo : exhaustive computation ?
-        problem.info.LBSexhaustive = false
+        problem.info.LBSexhaustive = true
     end
 
     if cp

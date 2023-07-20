@@ -13,7 +13,7 @@ nb_nodes_VB = 10
 root_relax = true 
 TO = false 
 rootLBS = 3 
-LBSexhaustive = false
+LBSexhaustive = true
 
 size_Y_N = 2
 Y_N = [[43965.0, 52907.0], [49923.0, 25759.0]]

@@ -732,3 +732,53 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
     return Y_integer, X_integer
 end
 
+
+
+function chordalImptovLBS(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64=1024; args...)
+    step = max(0, length(L.natural_order_vect.sols) - K) 
+    X = Vector{Vector{Float64}}() ; Y = Vector{Vector{Float64}}() 
+
+    if K == 1024 || step == 0 return LBSinvokingIPsolveer(L, m, lp_copied, c, K=K; args...) end 
+
+    idx_l = 1; idx_r = idx_l + step
+    lambdas = []
+
+    while idx_r ≤ length(L.natural_order_vect.sols) 
+
+        λ = [abs(L.natural_order_vect.sols[idx_l].y[2] - L.natural_order_vect.sols[idx_r].y[2]), 
+                abs(L.natural_order_vect.sols[idx_r].y[1] - L.natural_order_vect.sols[idx_l].y[1])
+            ]
+        push!(lambdas, λ)
+        idx_l += 1 ; idx_r = idx_l + step
+    end
+
+    for λ in lambdas
+        Y_integer, X_integer = opt_scalar_callbackalt(L, m, lp_copied, c, [λ[1], λ[2] ] ; args...)      
+        append!(Y, Y_integer) ; append!(X, X_integer)
+    end
+
+    return X, Y
+end
+
+
+
+function dynamicImptovLBS(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64=1024; args...)
+    X = Vector{Vector{Float64}}() ; Y = Vector{Vector{Float64}}() 
+
+    if K == 1024 return LBSinvokingIPsolveer(L, m, lp_copied, c, K=K; args...) end 
+
+    lambdas = []
+
+    # {1/K, 2/K, ... K-1/K}
+    for i=1:K
+        w = i/(K+1)
+        push!(lambdas, [w, 1-w])
+    end
+
+    for λ in lambdas
+        Y_integer, X_integer = opt_scalar_callbackalt(L, m, lp_copied, c, [λ[1], λ[2] ] ; args...)      
+        append!(Y, Y_integer) ; append!(X, X_integer)
+    end
+
+    return X, Y
+end
