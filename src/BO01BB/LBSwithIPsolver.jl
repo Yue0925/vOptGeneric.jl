@@ -77,7 +77,7 @@ function next_direc(idx::Int64, L::RelaxedBoundSet, todo)
         if length(L.natural_order_vect.sols[j].xEquiv[1]) > 0 r = j ; break end 
     end
 
-    # prepare next directions 
+    # prepare next directions # todo : !! verify deepcopy !! 
     l ≥ 1 ? push!(todo, [L.natural_order_vect.sols[l].y, L.natural_order_vect.sols[idx].y]) : nothing 
     r ≤ length(L.natural_order_vect.sols) ? push!(todo, [L.natural_order_vect.sols[idx].y, L.natural_order_vect.sols[r].y]) : nothing 
 end

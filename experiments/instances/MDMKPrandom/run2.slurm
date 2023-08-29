@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=alea_MDMKP2
+#SBATCH --job-name=aleaMDMKP_EPB_param
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=40
@@ -7,8 +7,8 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=alea_MDMKP2_OUTPUT.txt
-#SBATCH --error=alea_MDMKP2_ERROR.txt
+#SBATCH --output=aleaMDMKP_EPB_param.txt
+#SBATCH --error=aleaMDMKP_EPB_param.txt
 
 methodes=("bb_EPB" "bc_EPB")
 

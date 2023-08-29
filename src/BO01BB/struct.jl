@@ -276,7 +276,7 @@ straight line       a x + b y = c
             <=>   -Δz2 z1 + Δz1 z2 = Δz1 c 
 
 a = -Δz2 = -λ1   b = Δz1 = -λ2    ct = Δz1 c 
-        # todo : λ always absolute value 
+        # todo (attention) : λ always absolute value 
 """
 function updateCT(s::Solution)
     if length(s.λ) ≠ 2 || s.λ == [0.0, 0.0] return end  # s.ct ≠ Inf || 

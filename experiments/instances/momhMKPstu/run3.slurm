@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=testRootRelax
+#SBATCH --job-name=EPB_param
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,12 +8,13 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=testRootRelax_OUTPUT.txt
-#SBATCH --error=testRootRelax_ERROR.txt
+#SBATCH --output=EPB_param.txt
+#SBATCH --error=EPB_param.txt
 
 
 for file in ./MOBKP/set3/*; do
     echo "$file"
-    srun julia vOptMomkp_complementaire.jl "$file"
+    srun julia vOptMomkp2.jl "$file"
 done
 
+# srun julia latexWriter.jl
