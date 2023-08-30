@@ -1,17 +1,19 @@
 vars = 100 ; constr = 20 
  # informations of B&B algorithm : 
-total_times_used = 80.09 
-total_nodes = 14818 
-pruned_nodes = 7459 
+total_times_used = 40.26 
+total_nodes = 2140 
+pruned_nodes = 1124 
 GAP = 0.0 
-relaxation_time = 66.21 
-test_dominance_time = 0.01 
-update_incumbent_time = 0.14 
-tree_size = 42.594 
-nb_nodes_EPB = 443 
-nb_nodes_VB = 14374 
+relaxation_time = 36.89 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.05 
+tree_size = 6.335 
+nb_nodes_EPB = 229 
+nb_nodes_VB = 1910 
 root_relax = true 
 TO = false 
+rootLBS = 13 
+LBSexhaustive = true
 
 size_Y_N = 30
 Y_N = [[98.0, 495.0], [104.0, 484.0], [111.0, 361.0], [128.0, 311.0], [137.0, 310.0], [139.0, 304.0], [143.0, 271.0], [149.0, 243.0], [161.0, 241.0], [166.0, 227.0], [172.0, 225.0], [177.0, 183.0], [178.0, 167.0], [179.0, 164.0], [195.0, 153.0], [199.0, 141.0], [200.0, 138.0], [222.0, 128.0], [226.0, 122.0], [235.0, 94.0], [246.0, 83.0], [263.0, 82.0], [266.0, 63.0], [267.0, 61.0], [292.0, 58.0], [326.0, 57.0], [388.0, 55.0], [424.0, 54.0], [441.0, 53.0], [475.0, 52.0]]
