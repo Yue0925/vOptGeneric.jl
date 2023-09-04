@@ -54,6 +54,8 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
   println(fout, "Y_N = ", Y_N)
   println(fout)
   println(fout, "size_X_E = ", length(X_E))
+  # # todo : ignore
+  # println(fout, "X_E = ", X_E)
 
   close(fout)
 
@@ -104,11 +106,11 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
     println("Solving...")
     if method == :dicho
       start = time()
-      vSolve( Bi01IP, method=:dicho, verbose=false)
+      vSolve( Bi01IP, method=:dicho, round_results=true, verbose=false)
       total_time = round(time() - start, digits = 2)
     elseif method == :epsilon
       start = time()
-      vSolve( Bi01IP, method=:epsilon, step=0.01, verbose=false )
+      vSolve( Bi01IP, method=:epsilon, step=0.01, round_results = true, verbose=false )
       total_time = round(time() - start, digits = 2)
     elseif method == :bb
       infos = vSolve( Bi01IP, method=:bb, verbose=false )
@@ -188,8 +190,8 @@ function main(fname::String)
 
     :dicho, 
     :epsilon, 
-    :bb, 
-    :bc, 
+    # :bb, 
+    # :bc, 
     # :bc_EPB,
     # :bb_EPB,
     ] # 

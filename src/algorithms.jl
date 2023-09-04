@@ -88,7 +88,7 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     
     R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)
-    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2])
+    weak_dom(a, b) = R1(a[1], b[1]) && R2(a[2], b[2]) && (abs(a[1] - b[1])>= 0.01 || abs(a[2]-b[2]) >= 0.01)
 
     #Declare the epsilon-constraint (RHS will be set later)
     RHS = JuMP.@variable(m)
@@ -98,14 +98,31 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     JuMP.optimize!(m, ignore_optimize_hook=true)
     status = JuMP.termination_status(m)
 
+    varIndex = Dict(varArray[i] => i for i=1:length(varArray))
+    c1 = zeros(length(varArray) + 1) ; c2 = zeros(length(varArray) + 1)
+    c1[1] = f1.constant ; c2[1] = f2.constant 
+    for (var, coeff) in f1.terms
+        c1[varIndex[var]+1] = coeff
+    end
+    for (var, coeff) in f2.terms
+        c2[varIndex[var]+1] = coeff
+    end
+    x = zeros(length(varArray)) ; f1Val = 0.0 ; f2Val = 0.0
+
     time_acc = time()
     if status == MOI.OPTIMAL
         #While a solution exists
         while status == MOI.OPTIMAL
             #Get the score on the objectives
-            f1Val = JuMP.value(f1)
-            f2Val = JuMP.value(f2)
-    
+            if round_results
+                x = round.(Int64, JuMP.value.(varArray))
+                f1Val = x'*c1[2:end]+c1[1] ; f2Val = x'*c2[2:end]+c2[1]
+            else
+                x = JuMP.value.(varArray)
+                f1Val = JuMP.value(f1)
+                f2Val = JuMP.value(f2)
+            end
+
             #If last solution found is dominated by this one
             if length(vd.Y_N) > 0
                 if weak_dom((f1Val, f2Val), vd.Y_N[end])
@@ -115,7 +132,7 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
             end
 
             #Store results in vOptData
-            push!(vd.X_E, JuMP.value.(varArray))
+            push!(vd.X_E, x)
             push!(vd.Y_N, [f1Val, f2Val])
 
             verbose && print("z1 = ", f1Val, ", z2 = ", f2Val)
