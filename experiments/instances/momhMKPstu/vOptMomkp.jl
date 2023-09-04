@@ -54,8 +54,8 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
   println(fout, "Y_N = ", Y_N)
   println(fout)
   println(fout, "size_X_E = ", length(X_E))
-  # # todo : ignore
-  # println(fout, "X_E = ", X_E)
+  # todo : ignore
+  println(fout, "X_E = ", X_E)
 
   close(fout)
 
@@ -97,6 +97,7 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
     # ---- setting the model
     println("Building...")
     Bi01IP = vModel( solverSelected ) ; JuMP.set_silent(Bi01IP)
+    # JuMP.set_optimizer_attribute(Bi01IP, "CPX_PARAM_EPINT", 1e-4) 
     @variable( Bi01IP, x[1:n], Bin )
     @addobjective( Bi01IP, Max, sum(C[1,j] * x[j] for j=1:n) )
     @addobjective( Bi01IP, Max, sum(C[2,j] * x[j] for j=1:n) )
@@ -110,7 +111,7 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
       total_time = round(time() - start, digits = 2)
     elseif method == :epsilon
       start = time()
-      vSolve( Bi01IP, method=:epsilon, step=0.01, round_results = true, verbose=false )
+      vSolve( Bi01IP, method=:epsilon, step=0.5, round_results = true, verbose=true )
       total_time = round(time() - start, digits = 2)
     elseif method == :bb
       infos = vSolve( Bi01IP, method=:bb, verbose=false )

@@ -183,7 +183,7 @@ function main(fname::String)
   for method in [
     :bc_rootRelax , 
     :bc_rootRelaxEPB,
-    :bc_rootRelaxCP, 
+    :bc_rootRelaxCP, #
     :bc_rootRelaxCPEPB,
 
     # :dicho, 

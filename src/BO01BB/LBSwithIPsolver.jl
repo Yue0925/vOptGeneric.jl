@@ -360,10 +360,11 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        yr_1 = JuMP.value(f1) ; yr_2 = JuMP.value(f2)
+        x_round = round.(Int64, JuMP.value.(varArray)) .*1.0
+        yr_1 = x_round'*c[1, 2:end] + c[1, 1] ; yr_2 = x_round'*c[2, 2:end] + c[2, 1]
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
-        ext_l = Solution(JuMP.value.(varArray), [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
+        ext_l = Solution(x_round, [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
 
         idx, newPt = push!(L.natural_order_vect, ext_l) 
         updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [yr_1, yr_2]) 
@@ -434,10 +435,11 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        ys_1 = JuMP.value(f1) ; ys_2 = JuMP.value(f2)
+        x_round = round.(Int64, JuMP.value.(varArray)) .*1.0
+        ys_1 = x_round'*c[1, 2:end] + c[1, 1]; ys_2 = x_round'*c[2, 2:end] + c[2, 1]
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
-        ext_r = Solution(JuMP.value.(varArray), [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
+        ext_r = Solution(x_round, [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
 
         idx, newPt = push!(L.natural_order_vect, ext_r)
         updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2])
@@ -539,7 +541,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
     
-            yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
+            x_round = round.(Int64, JuMP.value.(varArray)) .* 1.0
+            yt_1 = x_round'*c[1, 2:end] + c[1, 1] ; yt_2 = x_round'*c[2, 2:end] + c[2, 1]
             val = λ[1]*yt_1 + λ[2]*yt_2 
             if (isapprox(yt_1, yl[1], atol=TOL) && isapprox(yt_2, yl[2], atol=TOL) ) || 
                 (isapprox(yr[1], yt_1, atol=TOL) && isapprox(yr[2], yt_2, atol=TOL) )
@@ -547,7 +550,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             end
 
             # add new sol in LBS without filtering 
-            pt = Solution(JuMP.value.(varArray), [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+            pt = Solution(x_round, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
 
             idxL, newPtL = push!(L.natural_order_vect, pt)
 
@@ -687,11 +690,12 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
+        x_round = round.(Int64, JuMP.value.(varArray)) .* 1.0
+        yt_1 = x_round'*c[1, 2:end] + c[1, 1] ; yt_2 = x_round'*c[2, 2:end] + c[2, 1]
         val = λ[1]*yt_1 + λ[2]*yt_2 
 
         # add new sol in LBS without filtering 
-        pt = Solution(JuMP.value.(varArray), [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+        pt = Solution(x_round, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
         idx, newPt = push!(L.natural_order_vect, pt )
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT

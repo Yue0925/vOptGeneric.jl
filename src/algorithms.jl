@@ -1,8 +1,18 @@
 # MIT License
 # Copyright (c) 2017: Xavier Gandibleux, Anthony Przybylski, Gauthier Soleilhac, and contributors.
-TOL = 1e-4
+TOL = 1e-9
 
 using JuMP
+function is_binary(x::Vector{Float64})
+    if length(x) == 0 return false end 
+    for i in 1:length(x)
+        if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
+            return false
+        end
+    end
+    return true
+end
+
 
 function solve_lexico(m::JuMP.Model, verbose; args...)
     #Retrieve objectives and their senses from vOptData
@@ -98,44 +108,30 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     JuMP.optimize!(m, ignore_optimize_hook=true)
     status = JuMP.termination_status(m)
 
-    varIndex = Dict(varArray[i] => i for i=1:length(varArray))
-    c1 = zeros(length(varArray) + 1) ; c2 = zeros(length(varArray) + 1)
-    c1[1] = f1.constant ; c2[1] = f2.constant 
-    for (var, coeff) in f1.terms
-        c1[varIndex[var]+1] = coeff
-    end
-    for (var, coeff) in f2.terms
-        c2[varIndex[var]+1] = coeff
-    end
-    x = zeros(length(varArray)) ; f1Val = 0.0 ; f2Val = 0.0
-
     time_acc = time()
     if status == MOI.OPTIMAL
         #While a solution exists
         while status == MOI.OPTIMAL
             #Get the score on the objectives
-            if round_results
-                x = round.(Int64, JuMP.value.(varArray))
-                f1Val = x'*c1[2:end]+c1[1] ; f2Val = x'*c2[2:end]+c2[1]
-            else
-                x = JuMP.value.(varArray)
-                f1Val = JuMP.value(f1)
-                f2Val = JuMP.value(f2)
-            end
 
-            #If last solution found is dominated by this one
-            if length(vd.Y_N) > 0
-                if weak_dom((f1Val, f2Val), vd.Y_N[end])
-                    verbose && println(vd.Y_N[end], "dominated by ($f1Val, $f2Val)")
-                    pop!(vd.Y_N) ; pop!(vd.X_E) #Remove last solution from Y_N and X_E
+            x = JuMP.value.(varArray)
+            f1Val = JuMP.value(f1) ; f2Val = JuMP.value(f2)
+
+            if !round_results || is_binary(x) # if cplex return a fractional solution
+                #If last solution found is dominated by this one
+                if length(vd.Y_N) > 0
+                    if weak_dom((f1Val, f2Val), vd.Y_N[end])
+                        verbose && println(vd.Y_N[end], "dominated by ($f1Val, $f2Val)")
+                        pop!(vd.Y_N) ; pop!(vd.X_E) #Remove last solution from Y_N and X_E
+                    end
                 end
+
+                #Store results in vOptData
+                push!(vd.X_E, x)
+                push!(vd.Y_N, [f1Val, f2Val])
+
+                verbose && print("z1 = ", f1Val, ", z2 = ", f2Val)
             end
-
-            #Store results in vOptData
-            push!(vd.X_E, x)
-            push!(vd.Y_N, [f1Val, f2Val])
-
-            verbose && print("z1 = ", f1Val, ", z2 = ", f2Val)
 
             #Set the RHS of the epsilon-constraint
             if f2Sense == MOI.MIN_SENSE
