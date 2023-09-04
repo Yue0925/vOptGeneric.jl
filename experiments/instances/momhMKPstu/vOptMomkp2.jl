@@ -54,7 +54,9 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
   println(fout, "Y_N = ", Y_N)
   println(fout)
   println(fout, "size_X_E = ", length(X_E))
-
+  # todo : ignore
+  println(fout, "X_E = ", X_E)
+  
   close(fout)
 
   displayGraphics(fname,Y_N, outputName)

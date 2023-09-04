@@ -1,12 +1,12 @@
 # MIT License
 # Copyright (c) 2017: Xavier Gandibleux, Anthony Przybylski, Gauthier Soleilhac, and contributors.
-TOL = 1e-9
+TOL = 1e-4
 
 using JuMP
 function is_binary(x::Vector{Float64})
     if length(x) == 0 return false end 
     for i in 1:length(x)
-        if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
+        if !(abs(x[i]-0.0) ==0.0 || abs(x[i]-1.0) == 0.0)
             return false
         end
     end

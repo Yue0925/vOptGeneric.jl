@@ -35,8 +35,8 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     sols_nb = result_count(m)
     for i =1:sols_nb 
         if JuMP.has_values(m, result = Int(i))
-            push!(Y_integer, round.([JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))], digits = 2) )
-            push!(X_integer, round.(JuMP.value.(varArray, result = Int(i)), digits = 2) )
+            push!(Y_integer, round.([JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))], digits = 4) )
+            push!(X_integer, round.(JuMP.value.(varArray, result = Int(i)), digits = 4) )
         end
     end
     return Y_integer, X_integer
@@ -360,7 +360,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        x_round = round.(Int64, JuMP.value.(varArray)) .*1.0
+        x_round = JuMP.value.(varArray)
         yr_1 = x_round'*c[1, 2:end] + c[1, 1] ; yr_2 = x_round'*c[2, 2:end] + c[2, 1]
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
@@ -435,7 +435,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        x_round = round.(Int64, JuMP.value.(varArray)) .*1.0
+        x_round = JuMP.value.(varArray)
         ys_1 = x_round'*c[1, 2:end] + c[1, 1]; ys_2 = x_round'*c[2, 2:end] + c[2, 1]
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
@@ -541,7 +541,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
             Y, X = stock_all_primal_sols(m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
     
-            x_round = round.(Int64, JuMP.value.(varArray)) .* 1.0
+            x_round = JuMP.value.(varArray)
             yt_1 = x_round'*c[1, 2:end] + c[1, 1] ; yt_2 = x_round'*c[2, 2:end] + c[2, 1]
             val = λ[1]*yt_1 + λ[2]*yt_2 
             if (isapprox(yt_1, yl[1], atol=TOL) && isapprox(yt_2, yl[2], atol=TOL) ) || 
@@ -690,7 +690,7 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
         Y, X = stock_all_primal_sols(m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        x_round = round.(Int64, JuMP.value.(varArray)) .* 1.0
+        x_round = JuMP.value.(varArray)
         yt_1 = x_round'*c[1, 2:end] + c[1, 1] ; yt_2 = x_round'*c[2, 2:end] + c[2, 1]
         val = λ[1]*yt_1 + λ[2]*yt_2 
 
