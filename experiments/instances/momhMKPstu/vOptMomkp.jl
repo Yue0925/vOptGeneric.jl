@@ -111,7 +111,7 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
       total_time = round(time() - start, digits = 2)
     elseif method == :epsilon
       start = time()
-      vSolve( Bi01IP, method=:epsilon, step=0.5, round_results = true, verbose=false )
+      vSolve( Bi01IP, method=:epsilon, step=0.01, round_results = true, verbose=false )
       total_time = round(time() - start, digits = 2)
     elseif method == :bb
       infos = vSolve( Bi01IP, method=:bb, verbose=false )
@@ -191,8 +191,8 @@ function main(fname::String)
 
     :dicho, 
     :epsilon, 
-    :bb, 
-    :bc, 
+    # :bb, 
+    # :bc, 
     # :bc_EPB,
     # :bb_EPB,
     ] # 

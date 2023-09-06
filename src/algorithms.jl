@@ -117,6 +117,13 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
             x = JuMP.value.(varArray)
             f1Val = JuMP.value(f1) ; f2Val = JuMP.value(f2)
 
+            echo = false
+            if f1Val == 757311.0
+                echo = true 
+                println("x = $x")
+                println("f1Val = $f1Val  , f2Val = $f2Val ")
+            end
+
             if !round_results || is_binary(x) # if cplex return a fractional solution
                 #If last solution found is dominated by this one
                 if length(vd.Y_N) > 0
@@ -130,9 +137,12 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
                 push!(vd.X_E, x)
                 push!(vd.Y_N, [f1Val, f2Val])
 
+                echo && println("is binary and pushing")
                 verbose && print("z1 = ", f1Val, ", z2 = ", f2Val)
             end
 
+            echo = false 
+            
             #Set the RHS of the epsilon-constraint
             if f2Sense == MOI.MIN_SENSE
                 JuMP.fix(RHS, f2Val - ϵ)
