@@ -252,7 +252,7 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     empty!(vd.Y_N) ; empty!(vd.X_E)
 
     for sol in incumbent.natural_order_vect.sols
-        push!(vd.Y_N, round_results ? round.(sol.y) : sol.y)
+        push!(vd.Y_N, sol.y)
         for x in sol.xEquiv
             push!(vd.X_E, x)
         end

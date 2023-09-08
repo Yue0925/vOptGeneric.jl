@@ -153,11 +153,11 @@ end
 function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}(), ct::Float64=Inf)
     is_binary = length(x) >0 ? true : false 
     for i = 1:length(x)
-        if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
+        if !(abs(x[i]-0.0) ≤ 1e-16 || abs(x[i]-1.0) ≤ 1e-16)
             is_binary = false; break
         end
     end    
-    return Solution([is_binary ? round.(x, digits = 4) : x ], is_binary ? round.(y, digits = 4) : y ,
+    return Solution([ x ], y ,
             is_binary, λ, ct)
 end
 
@@ -167,7 +167,7 @@ Given a vector `x`, return true if `x` is approximately binary.
 function isBinary(x::Vector{Float64})
     if length(x) == 0 return false end 
     for i in 1:length(x)
-        if !(abs(x[i]-0.0) ==0.0 || abs(x[i]-1.0) ==0.0)
+        if !(abs(x[i]-0.0)<=1e-16 || abs(x[i]-1.0) <=1e-16)
             return false
         end
     end
@@ -184,8 +184,8 @@ function addEquivX(sol::Solution, x::Vector{Float64})
     # check if x is approximately binary
     if isBinary(x)
         sol.is_binary = isBinary(x)
-        sol.y = round.(sol.y, digits = 4)
-        push!(sol.xEquiv, round.(x, digits = 4))
+        # sol.y = round.(sol.y, digits = 4)
+        push!(sol.xEquiv, x) # round.(x, digits = 4)
     else
         push!(sol.xEquiv, x)
     end

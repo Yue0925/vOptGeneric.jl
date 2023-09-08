@@ -189,7 +189,7 @@ function main(fname::String)
     # :bc_rootRelaxCP, 
     # :bc_rootRelaxCPEPB,
 
-    :dicho, 
+    # :dicho, 
     :epsilon, 
     # :bb, 
     # :bc, 

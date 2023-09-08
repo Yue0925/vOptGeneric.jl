@@ -6,7 +6,7 @@ using JuMP
 function is_binary(x::Vector{Float64})
     if length(x) == 0 return false end 
     for i in 1:length(x)
-        if !(abs(x[i]-0.0) ==0.0 || abs(x[i]-1.0) == 0.0)
+        if !(abs(x[i]-0.0) <=1e-10 || abs(x[i]-1.0) <= 1e-10)
             return false
         end
     end
@@ -117,13 +117,6 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
             x = JuMP.value.(varArray)
             f1Val = JuMP.value(f1) ; f2Val = JuMP.value(f2)
 
-            echo = false
-            if f1Val == 757311.0
-                echo = true 
-                println("x = $x")
-                println("f1Val = $f1Val  , f2Val = $f2Val ")
-            end
-
             if !round_results || is_binary(x) # if cplex return a fractional solution
                 #If last solution found is dominated by this one
                 if length(vd.Y_N) > 0
@@ -136,13 +129,9 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
                 #Store results in vOptData
                 push!(vd.X_E, x)
                 push!(vd.Y_N, [f1Val, f2Val])
-
-                echo && println("is binary and pushing")
                 verbose && print("z1 = ", f1Val, ", z2 = ", f2Val)
             end
 
-            echo = false 
-            
             #Set the RHS of the epsilon-constraint
             if f2Sense == MOI.MIN_SENSE
                 JuMP.fix(RHS, f2Val - ϵ)
@@ -883,7 +872,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
         yr_2 = JuMP.value(f2)
 
         #Store results in vOptData
-        push!(vd.Y_N, round_results ? round.([yr_1, yr_2]) : [yr_1, yr_2])
+        push!(vd.Y_N, [yr_1, yr_2])
         push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [1.0, 0.0])
 
         #Set the second objective as an objective in the JuMP JuMP.Model
@@ -897,7 +886,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
             ys_2 = JuMP.value(f2)
 
             if !isapprox(yr_1, ys_1, atol=TOL) || !isapprox(yr_2, ys_2, atol=TOL)
-                push!(vd.Y_N, round_results ? round.([ys_1, ys_2]) : [ys_1, ys_2])
+                push!(vd.Y_N,  [ys_1, ys_2])
                 push!(vd.X_E, JuMP.value.(varArray)) ; push!(vd.lambda, [0.0, 1.0])
             end
         end
@@ -926,7 +915,7 @@ function solve_dicho(m::JuMP.Model, round_results, verbose; args...)
                 yt_1 = JuMP.value(f1) ; yt_2 = JuMP.value(f2)
                 val = λ[1]*yt_1 + λ[2]*yt_2  
                 if (val < lb - TOL) && yt_1 >= yl[1] && yt_2 >= yr[2]
-                    push!(vd.Y_N, round_results ? round.([yt_1, yt_2]) : [yt_1, yt_2])
+                    push!(vd.Y_N, [yt_1, yt_2])
                     push!(vd.X_E, JuMP.value.(varArray)); push!(vd.lambda, λ)
                     push!(todo, [yl, [yt_1, yt_2]]) ; push!(todo, [[yt_1, yt_2], yr])
                 end

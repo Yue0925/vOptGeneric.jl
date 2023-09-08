@@ -35,8 +35,16 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     sols_nb = result_count(m)
     for i =1:sols_nb 
         if JuMP.has_values(m, result = Int(i))
-            push!(Y_integer, round.([JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))], digits = 4) )
-            push!(X_integer, round.(JuMP.value.(varArray, result = Int(i)), digits = 4) )
+            if isBinary(JuMP.value.(varArray, result = Int(i)))
+                # push!(Y_integer, round.([JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))], digits = 4) )
+                # push!(X_integer, round.(JuMP.value.(varArray, result = Int(i)), digits = 4) )
+                push!(Y_integer, [JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))] )
+                push!(X_integer, JuMP.value.(varArray, result = Int(i)) )
+            else
+                println("heuristic ", [JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))] )
+                println(JuMP.value.(varArray, result = Int(i)))
+            end
+
         end
     end
     return Y_integer, X_integer

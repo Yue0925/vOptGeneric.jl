@@ -1,5 +1,4 @@
 ## This file contains functions related to node fathoming.
-TOL = 1e-4
 
 include("cuttingPlanes.jl")
 
