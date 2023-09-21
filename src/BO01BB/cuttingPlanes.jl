@@ -20,7 +20,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
-        limits = 1024 
+        limits = 2^20 
 
         # # todo (option) : EPB no LBS computation (bounding directly)
         # if node.EPB && length(node.RBS.natural_order_vect.sols) > 0

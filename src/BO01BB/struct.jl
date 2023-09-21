@@ -153,7 +153,7 @@ end
 function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Vector{Float64}(), ct::Float64=Inf)
     is_binary = length(x) >0 ? true : false 
     for i = 1:length(x)
-        if !(abs(x[i]-0.0) ≤ 1e-16 || abs(x[i]-1.0) ≤ 1e-16)
+        if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             is_binary = false; break
         end
     end    
@@ -167,7 +167,7 @@ Given a vector `x`, return true if `x` is approximately binary.
 function isBinary(x::Vector{Float64})
     if length(x) == 0 return false end 
     for i in 1:length(x)
-        if !(abs(x[i]-0.0)<=1e-16 || abs(x[i]-1.0) <=1e-16)
+        if !(abs(x[i]-0.0)<=TOL || abs(x[i]-1.0) <=TOL)
             return false
         end
     end
@@ -345,8 +345,8 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
                 if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
                     if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
                         # todo : 
-                        natural_sols.sols[m].λ .= sol.λ
-                        # natural_sols.sols[m].λ = deepcopy(sol.λ)
+                        # natural_sols.sols[m].λ .= sol.λ
+                        natural_sols.sols[m].λ = deepcopy(sol.λ)
                         updateCT(natural_sols.sols[m])
                     end
                 end
