@@ -183,7 +183,7 @@ function addEquivX(sol::Solution, x::Vector{Float64})
 
     # check if x is approximately binary
     if isBinary(x)
-        sol.is_binary = isBinary(x)
+        sol.is_binary = true
         # sol.y = round.(sol.y, digits = 4)
         push!(sol.xEquiv, x) # round.(x, digits = 4)
     else
