@@ -319,7 +319,7 @@ end
 New correction iterative algorithm for LBS 
     taking account into intersection with odd LBS
 """
-function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64=1024; args...)
+function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64; args...)
     global varArray
     global x_star
     global model = m
@@ -373,6 +373,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
         ext_l = Solution(x_round, [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
+        roundSol(pb, ext_l)
 
         idx, newPt = push!(L.natural_order_vect, ext_l) 
         updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [yr_1, yr_2]) 
@@ -405,6 +406,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
         ext_l = Solution(x_star, [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
+        roundSol(pb, ext_l)
 
         idx, newPt = push!(L.natural_order_vect, ext_l)
         updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [yr_1, yr_2])
@@ -448,6 +450,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
         ext_r = Solution(x_round, [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
+        roundSol(pb, ext_r)
 
         idx, newPt = push!(L.natural_order_vect, ext_r)
         updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2])
@@ -480,6 +483,8 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
         ext_r = Solution(x_star, [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
+        roundSol(pb, ext_r)
+
         idx, newPt = push!(L.natural_order_vect, ext_r) 
         updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2]) 
 
@@ -559,6 +564,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             # add new sol in LBS without filtering 
             pt = Solution(x_round, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+            roundSol(pb, pt)
 
             idxL, newPtL = push!(L.natural_order_vect, pt)
 
@@ -594,6 +600,7 @@ function LBSinvokingIPsolveer(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuM
 
             # add new sol in LBS without filtering 
             pt = Solution(x_star, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ); updateCT(pt)
+            roundSol(pb, pt)
 
             idxL, newPtL = push!(L.natural_order_vect, pt) 
 
@@ -657,7 +664,7 @@ end
 
 
 #todo : improve for re-optimization 
-function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, λ; args...)
+function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, λ; args...)
     global varArray
     global x_star
     global model = m
@@ -704,6 +711,8 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
 
         # add new sol in LBS without filtering 
         pt = Solution(x_round, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+        roundSol(pb, pt)
+
         idx, newPt = push!(L.natural_order_vect, pt )
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
@@ -732,6 +741,8 @@ function opt_scalar_callbackalt(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::J
 
         # add new sol in LBS without filtering 
         pt = Solution(x_star, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+        roundSol(pb, pt)
+
         idx, newPt = push!(L.natural_order_vect,  pt)
 
     else

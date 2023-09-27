@@ -34,7 +34,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
 
         # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
         start = time()
-        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)      
+        Y_integer, X_integer = LBSinvokingIPsolveer(pb, node.RBS, pb.m, pb.lp_copied, pb.c, limits; args...)      
         pb.info.relaxation_time += (time() - start)
 
 
@@ -51,7 +51,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
 
         start = time()
         for i = 1:length(Y_integer) 
-            s = Solution(X_integer[i], Y_integer[i])
+            s = Solution(X_integer[i], Y_integer[i]) ; roundSol(pb, s)
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 

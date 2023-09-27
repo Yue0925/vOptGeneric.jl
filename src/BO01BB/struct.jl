@@ -161,6 +161,18 @@ function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Ve
             is_binary, λ, ct)
 end
 
+function roundSol(pb::BO01Problem, sol::Solution)
+    if !sol.is_binary return end 
+    x_ = round.(sol.xEquiv[1])
+
+    for i in size(pb.A, 1)
+        if pb.A[i, :]'* x_ > pb.b[i] return end 
+    end
+
+    sol.xEquiv[1][:] = x_[:] 
+    sol.y = [x_'*pb.c[1, 2:end] + pb.c[1, 1] ,x_'*pb.c[2, 2:end] + pb.c[2, 1]  ]
+end
+
 """
 Given a vector `x`, return true if `x` is approximately binary.
 """
