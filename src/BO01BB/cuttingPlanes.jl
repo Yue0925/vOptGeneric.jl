@@ -34,7 +34,7 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
 
         # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
         start = time()
-        Y_integer, X_integer = LBSinvokingIPsolveer(pb, node.RBS, pb.m, pb.lp_copied, pb.c, limits; args...)      
+        Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
         pb.info.relaxation_time += (time() - start)
 
 
@@ -88,7 +88,8 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         # construct/complete the relaxed bound set
         node.RBS = RelaxedBoundSet()
         for i = 1:length(vd_LP.Y_N)
-            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
+            s = Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]) ; roundSol(pb, s)
+            push!(node.RBS.natural_order_vect, s, filtered=true )
         end
     end
 
@@ -111,12 +112,12 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
         if pb.param.root_relax
 
             start = time() 
-            Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, [λ[1], λ[2] ] ; args...)      
+            Y_integer, X_integer = opt_scalar_callbackalt(pb, node.RBS, [λ[1], λ[2] ] ; args...)      
             pb.info.relaxation_time += (time() - start)
     
             start = time()
             for i = 1:length(Y_integer) 
-                s = Solution(X_integer[i], Y_integer[i])
+                s = Solution(X_integer[i], Y_integer[i]) ; roundSol(pb, s)
                 if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
             end
             pb.info.update_incumb_time += (time() - start)

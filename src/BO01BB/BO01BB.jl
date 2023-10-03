@@ -346,6 +346,10 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)
 
+    # println("model : \n", problem.m)
+
+    # println("A : \n", problem.A) ; println("b : \n", problem.b) ; println("c : ", problem.c)
+
     start = time() # todo : presolving 
 
     # step 0 : create the root and add to the todo list

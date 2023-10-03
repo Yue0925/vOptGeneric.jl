@@ -319,39 +319,39 @@ end
 New correction iterative algorithm for LBS 
     taking account into intersection with odd LBS
 """
-function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64; args...)
+function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; args...)
     global varArray
     global x_star
-    global model = m
-    global C = c
+    global model = pb.m
+    global C = pb.c
     global curr_λ
     global bst_val
     iter_count = 0
 
-    vd = getvOptData(m)
+    vd = getvOptData(pb.m)
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
-    varArray = JuMP.all_variables(m)
+    varArray = JuMP.all_variables(pb.m)
 
-    varArray_copied = JuMP.all_variables(lp_copied)
-    f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
-    f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
+    varArray_copied = JuMP.all_variables(pb.lp_copied)
+    f1_copied = varArray_copied'* pb.c[1, 2:end] + pb.c[1, 1]
+    f2_copied = varArray_copied'* pb.c[2, 2:end] + pb.c[2, 1]
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
     
     # set up callback 
-    MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
+    MOI.set(pb.m, MOI.NumberOfThreads(), 1) ; MOI.set(pb.m, MOI.UserCutCallback(), callback_noCuts)
     pureL = RelaxedBoundSet()
 
     # -------------------------------------------
     # step 1 : calculate the left extreme point
     # ------------------------------------------- 
-    JuMP.set_objective(m, f1Sense, f1) ; JuMP.set_objective(lp_copied, f1Sense, f1_copied)
+    JuMP.set_objective(pb.m, f1Sense, f1) ; JuMP.set_objective(pb.lp_copied, f1Sense, f1_copied)
     
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
     curr_λ = [1.0, 0.0] ; newPt = false
-    JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+    JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
     iter_count += 1
 
     # in case of infeasibility => !! no single extreme point 
@@ -365,11 +365,11 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
     # in case of optimality 
     if status == MOI.OPTIMAL
         # stock heur sol 
-        Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+        Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         x_round = JuMP.value.(varArray)
-        yr_1 = x_round'*c[1, 2:end] + c[1, 1] ; yr_2 = x_round'*c[2, 2:end] + c[2, 1]
+        yr_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1] ; yr_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
         ext_l = Solution(x_round, [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
@@ -384,25 +384,25 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
     # otherwise, take the best primal sol so far 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         # stock heuristic sol 
-        if has_values(m)
-            Y, X = stock_all_primal_sols(m, f1, f2, varArray) ; append!(Y_integer, Y) ; append!(X_integer, X)
+        if has_values(pb.m)
+            Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray) ; append!(Y_integer, Y) ; append!(X_integer, X)
         end
 
         if length(x_star) > 0
             nothing
         else
-            best_bound = objective_bound(m)
-            ctr_bound = JuMP.@constraint(lp_copied, f1_copied >= best_bound)
-            JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
+            best_bound = objective_bound(pb.m)
+            ctr_bound = JuMP.@constraint(pb.lp_copied, f1_copied >= best_bound)
+            JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
             x_star = JuMP.value.(varArray_copied)
 
-            if JuMP.is_valid(lp_copied, ctr_bound)
-                JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
+            if JuMP.is_valid(pb.lp_copied, ctr_bound)
+                JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
             end
         end
 
-        yr_1 = x_star'* c[1, 2:end] + c[1, 1]
-        yr_2 = x_star'* c[2, 2:end] + c[2, 1]
+        yr_1 = x_star'* pb.c[1, 2:end] + pb.c[1, 1]
+        yr_2 = x_star'* pb.c[2, 2:end] + pb.c[2, 1]
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
         ext_l = Solution(x_star, [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
@@ -423,12 +423,12 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
     # -------------------------------------------
     # step 2 : calculate the right extreme point
     # ------------------------------------------- 
-    JuMP.set_objective(m, f2Sense, f2) ; JuMP.set_objective(lp_copied, f2Sense, f2_copied)
+    JuMP.set_objective(pb.m, f2Sense, f2) ; JuMP.set_objective(pb.lp_copied, f2Sense, f2_copied)
 
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
     curr_λ = [0.0, 1.0] ; newPt = false
-    JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+    JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
     iter_count += 1
 
     ys_1 = 0.0 ; ys_2 = 0.0 
@@ -442,11 +442,11 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
 
     if status == MOI.OPTIMAL
         # stock heur sol 
-        Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+        Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         x_round = JuMP.value.(varArray)
-        ys_1 = x_round'*c[1, 2:end] + c[1, 1]; ys_2 = x_round'*c[2, 2:end] + c[2, 1]
+        ys_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1]; ys_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
         ext_r = Solution(x_round, [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
@@ -459,27 +459,27 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
         updateLBS(pureL, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2])
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
-        if has_values(m)
-            Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+        if has_values(pb.m)
+            Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
 
         if length(x_star) > 0
             nothing
         else
-            best_bound = objective_bound(m)
-            ctr_bound = JuMP.@constraint(lp_copied, f2_copied >= best_bound)
-            JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
+            best_bound = objective_bound(pb.m)
+            ctr_bound = JuMP.@constraint(pb.lp_copied, f2_copied >= best_bound)
+            JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
 
             x_star = JuMP.value.(varArray_copied)
 
-            if JuMP.is_valid(lp_copied, ctr_bound)
-                JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
+            if JuMP.is_valid(pb.lp_copied, ctr_bound)
+                JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
             end
         end
 
-        ys_1 = x_star'* c[1, 2:end] + c[1, 1]
-        ys_2 = x_star'* c[2, 2:end] + c[2, 1]
+        ys_1 = x_star'* pb.c[1, 2:end] + pb.c[1, 1]
+        ys_2 = x_star'* pb.c[2, 2:end] + pb.c[2, 1]
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
         ext_r = Solution(x_star, [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
@@ -535,12 +535,12 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
         # solve the mono scalarization problem 
         f = AffExpr(0.0)    
         lb = λ'* yl
-        JuMP.set_objective(m, f1Sense, λ[1]*f1 + λ[2]*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ[1]*f1_copied + λ[2]*f2_copied)
+        JuMP.set_objective(pb.m, f1Sense, λ[1]*f1 + λ[2]*f2) ; JuMP.set_objective(pb.lp_copied, f1Sense, λ[1]*f1_copied + λ[2]*f2_copied)
         f = λ[1]*f1 + λ[2]*f2
 
         x_star = [] ; bst_val = -Inf 
         curr_λ = λ ; newPt = false 
-        JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+        JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
         iter_count += 1
 
         yt_1 = 0.0 ; yt_2 = 0.0 
@@ -551,11 +551,11 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
 
         if status == MOI.OPTIMAL 
             # stock heur sol 
-            Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+            Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
     
             x_round = JuMP.value.(varArray)
-            yt_1 = x_round'*c[1, 2:end] + c[1, 1] ; yt_2 = x_round'*c[2, 2:end] + c[2, 1]
+            yt_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1] ; yt_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
             val = λ[1]*yt_1 + λ[2]*yt_2 
             if (isapprox(yt_1, yl[1], atol=TOL) && isapprox(yt_2, yl[2], atol=TOL) ) || 
                 (isapprox(yr[1], yt_1, atol=TOL) && isapprox(yr[2], yt_2, atol=TOL) )
@@ -571,27 +571,27 @@ function LBSinvokingIPsolveer(pb::BO01Problem , L::RelaxedBoundSet , m::JuMP.Mod
             idx, newPt = push!(pureL.natural_order_vect, pt)
 
         elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
-            if has_values(m)
-                Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+            if has_values(pb.m)
+                Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
                 append!(Y_integer, Y) ; append!(X_integer, X)
             end
     
             if length(x_star) > 0
                 nothing
             else
-                best_bound = objective_bound(m)
-                ctr_bound = JuMP.@constraint(lp_copied, λ[1]*f1_copied + λ[2]*f2_copied >= best_bound)
-                JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
+                best_bound = objective_bound(pb.m)
+                ctr_bound = JuMP.@constraint(pb.lp_copied, λ[1]*f1_copied + λ[2]*f2_copied >= best_bound)
+                JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
     
                 x_star = JuMP.value.(varArray_copied)
     
-                if JuMP.is_valid(lp_copied, ctr_bound)
-                    JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
+                if JuMP.is_valid(pb.lp_copied, ctr_bound)
+                    JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
                 end
             end
     
-            yt_1 = x_star'* c[1, 2:end] + c[1, 1]
-            yt_2 = x_star'* c[2, 2:end] + c[2, 1]
+            yt_1 = x_star'* pb.c[1, 2:end] + pb.c[1, 1]
+            yt_2 = x_star'* pb.c[2, 2:end] + pb.c[2, 1]
             val = λ[1]*yt_1 + λ[2]*yt_2
             if (isapprox(yt_1, yl[1], atol=TOL) && isapprox(yt_2, yl[2], atol=TOL) ) || 
                 (isapprox(yr[1], yt_1, atol=TOL) && isapprox(yr[2], yt_2, atol=TOL) )
@@ -664,32 +664,32 @@ end
 
 
 #todo : improve for re-optimization 
-function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, λ; args...)
+function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet, λ; args...)
     global varArray
     global x_star
-    global model = m
-    global C = c
+    global model = pb.m
+    global C = pb.c
     global curr_λ = λ
     global bst_val
 
-    vd = getvOptData(m)
+    vd = getvOptData(pb.m)
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
-    varArray = JuMP.all_variables(m)
+    varArray = JuMP.all_variables(pb.m)
 
     varArray_copied = JuMP.all_variables(lp_copied)
-    f1_copied = varArray_copied'* c[1, 2:end] + c[1, 1]
-    f2_copied = varArray_copied'* c[2, 2:end] + c[2, 1]
+    f1_copied = varArray_copied'* pb.c[1, 2:end] + pb.c[1, 1]
+    f2_copied = varArray_copied'* pb.c[2, 2:end] + pb.c[2, 1]
 
     Y_integer = Vector{Vector{Float64}}() ; X_integer = Vector{Vector{Float64}}()
     
     # set up callback 
-    MOI.set(m, MOI.NumberOfThreads(), 1) ; MOI.set(m, MOI.UserCutCallback(), callback_noCuts)
+    MOI.set(pb.m, MOI.NumberOfThreads(), 1) ; MOI.set(pb.m, MOI.UserCutCallback(), callback_noCuts)
 
-    JuMP.set_objective(m, f1Sense, λ[1]*f1 + λ[2]*f2) ; JuMP.set_objective(lp_copied, f1Sense, λ[1]*f1_copied + λ[2]*f2_copied)
+    JuMP.set_objective(pb.m, f1Sense, λ[1]*f1 + λ[2]*f2) ; JuMP.set_objective(pb.lp_copied, f1Sense, λ[1]*f1_copied + λ[2]*f2_copied)
     
     x_star = [] ; bst_val = -Inf 
-    JuMP.optimize!(m, ignore_optimize_hook=true) ; status = JuMP.termination_status(m)
+    JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
 
     yt_1 = 0.0 ; yt_2 = 0.0 
     val = -Inf ; idx = -1
@@ -702,11 +702,11 @@ function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet , m::JuMP.Mo
 
     if status == MOI.OPTIMAL 
         # stock heur sol 
-        Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+        Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         x_round = JuMP.value.(varArray)
-        yt_1 = x_round'*c[1, 2:end] + c[1, 1] ; yt_2 = x_round'*c[2, 2:end] + c[2, 1]
+        yt_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1] ; yt_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
         val = λ[1]*yt_1 + λ[2]*yt_2 
 
         # add new sol in LBS without filtering 
@@ -724,19 +724,19 @@ function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet , m::JuMP.Mo
         if length(x_star) > 0
             nothing
         else
-            best_bound = objective_bound(m)
-            ctr_bound = JuMP.@constraint(lp_copied, λ[1]*f1_copied + λ[2]*f2_copied >= best_bound)
-            JuMP.optimize!(lp_copied, ignore_optimize_hook=true)
+            best_bound = objective_bound(pb.m)
+            ctr_bound = JuMP.@constraint(pb.lp_copied, λ[1]*f1_copied + λ[2]*f2_copied >= best_bound)
+            JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
 
             x_star = JuMP.value.(varArray_copied)
 
-            if JuMP.is_valid(lp_copied, ctr_bound)
-                JuMP.delete(lp_copied, ctr_bound) ; JuMP.unregister(lp_copied, :ctr_bound)
+            if JuMP.is_valid(pb.lp_copied, ctr_bound)
+                JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
             end
         end
 
-        yt_1 = x_star'* c[1, 2:end] + c[1, 1]
-        yt_2 = x_star'* c[2, 2:end] + c[2, 1]
+        yt_1 = x_star'* pb.c[1, 2:end] + pb.c[1, 1]
+        yt_2 = x_star'* pb.c[2, 2:end] + pb.c[2, 1]
         val = λ[1]*yt_1 + λ[2]*yt_2
 
         # add new sol in LBS without filtering 
