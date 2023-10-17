@@ -86,8 +86,11 @@ function next_direc(idx::Int64, L::RelaxedBoundSet, todo)
     end
 
     # prepare next directions # todo : !! verify deepcopy !! 
-    l ≥ 1 ? push!(todo, [L.natural_order_vect.sols[l].y, L.natural_order_vect.sols[idx].y]) : nothing 
-    r ≤ length(L.natural_order_vect.sols) ? push!(todo, [L.natural_order_vect.sols[idx].y, L.natural_order_vect.sols[r].y]) : nothing 
+    l ≥ 1 ? push!(todo, [[L.natural_order_vect.sols[l].y[1], L.natural_order_vect.sols[l].y[2] ], 
+                        [L.natural_order_vect.sols[idx].y[1], L.natural_order_vect.sols[idx].y[2]] ] ) : nothing 
+
+    r ≤ length(L.natural_order_vect.sols) ? push!(todo, [[L.natural_order_vect.sols[idx].y[1], L.natural_order_vect.sols[idx].y[2]] , 
+                                                        [L.natural_order_vect.sols[r].y[1], L.natural_order_vect.sols[r].y[2]] ]) : nothing 
 end
 
 """
@@ -150,7 +153,7 @@ function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
 
     valid = true
     for s in L.natural_order_vect.sols        
-        if s.λ'* yt < s.y'*s.λ -TOL
+        if s.λ'* yt <= s.y'*s.λ -TOL
             valid = false ; break
         end
     end
@@ -176,6 +179,7 @@ straight line       a x + b y = c
 
 a = -Δz2 = -λ1   b = Δz1 = -λ2    ct = Δz1 c 
 """
+# todo : non plus utile 
 function updateLBSwithEPB(node::Node)
     @assert length(node.nadirPt) > 1
 
@@ -420,6 +424,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
     end
 
     if iter_count ≥ K  return Y_integer, X_integer end
+
     # -------------------------------------------
     # step 2 : calculate the right extreme point
     # ------------------------------------------- 
@@ -520,7 +525,9 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
 
     todo = []; 
     
-    push!(todo, [pureL.natural_order_vect.sols[l].y, pureL.natural_order_vect.sols[r].y] )
+    push!(todo, [ [pureL.natural_order_vect.sols[l].y[1], pureL.natural_order_vect.sols[l].y[2]], 
+                  [pureL.natural_order_vect.sols[r].y[1], pureL.natural_order_vect.sols[r].y[2]]
+    ] )
 
     # ----------------------------------------------------------------
     # repeat the same procedure until no more direction in todo list 
@@ -677,7 +684,7 @@ function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet, λ; args...
     f1Sense, f2Sense = vd.objSenses
     varArray = JuMP.all_variables(pb.m)
 
-    varArray_copied = JuMP.all_variables(lp_copied)
+    varArray_copied = JuMP.all_variables(pb.lp_copied)
     f1_copied = varArray_copied'* pb.c[1, 2:end] + pb.c[1, 1]
     f2_copied = varArray_copied'* pb.c[2, 2:end] + pb.c[2, 1]
 
@@ -716,8 +723,8 @@ function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet, λ; args...
         idx, newPt = push!(L.natural_order_vect, pt )
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
-        if has_values(m)
-            Y, X = stock_all_primal_sols(m, f1, f2, varArray)
+        if has_values(pb.m)
+            Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
         end
 
@@ -757,11 +764,11 @@ end
 
 
 
-function chordalImptovLBS(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64=1024; args...)
+function chordalImptovLBS(pb::BO01Problem, L::RelaxedBoundSet, K::Int64; args...)
     step = max(0, length(L.natural_order_vect.sols) - K) 
     X = Vector{Vector{Float64}}() ; Y = Vector{Vector{Float64}}() 
 
-    if K == 1024 || step == 0 return LBSinvokingIPsolveer(L, m, lp_copied, c, K=K; args...) end 
+    if K == 2^20 || step == 0 return LBSinvokingIPsolver(pb, L, K; args...) end 
 
     idx_l = 1; idx_r = idx_l + step
     lambdas = []
@@ -776,7 +783,7 @@ function chordalImptovLBS(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Mo
     end
 
     for λ in lambdas
-        Y_integer, X_integer = opt_scalar_callbackalt(L, m, lp_copied, c, [λ[1], λ[2] ] ; args...)      
+        Y_integer, X_integer = opt_scalar_callbackalt(pb, L, [λ[1], λ[2] ] ; args...)      
         append!(Y, Y_integer) ; append!(X, X_integer)
     end
 
@@ -785,10 +792,10 @@ end
 
 
 
-function dynamicImptovLBS(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Model, c, K::Int64=1024; args...)
+function dynamicImptovLBS(pb::BO01Problem, L::RelaxedBoundSet , K::Int64; args...)
     X = Vector{Vector{Float64}}() ; Y = Vector{Vector{Float64}}() 
 
-    if K == 1024 return LBSinvokingIPsolveer(L, m, lp_copied, c, K=K; args...) end 
+    if K == 2^20 return LBSinvokingIPsolver(pb, L, K; args...) end 
 
     lambdas = []
 
@@ -799,7 +806,7 @@ function dynamicImptovLBS(L::RelaxedBoundSet , m::JuMP.Model, lp_copied::JuMP.Mo
     end
 
     for λ in lambdas
-        Y_integer, X_integer = opt_scalar_callbackalt(L, m, lp_copied, c, [λ[1], λ[2] ] ; args...)      
+        Y_integer, X_integer = opt_scalar_callbackalt(pb, L, [λ[1], λ[2] ] ; args...)      
         append!(Y, Y_integer) ; append!(X, X_integer)
     end
 

@@ -183,7 +183,9 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
 
             if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
-                nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+                # # todo option (serve predecessor intersection): copy parent's LBS 
+                # nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+                
                 # # todo option : update EPB bounding (doesn't help to fathom here ...)
                 # updateLBSwithEPB(nodeChild)
             end

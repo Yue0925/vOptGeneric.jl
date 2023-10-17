@@ -20,14 +20,14 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
-        limits = 2^20 
-
+        limits = 2^20
+         
         # # todo (option) : EPB no LBS computation (bounding directly)
         # if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
         #     return false
         # end
 
-        # # todo (option) : λ limit tuning decreasing in depth 
+        # # todo (option) : λ limit tuning decreasing in depth (adaptive)
         # if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
         #     limits = ceil(Int64 , pb.info.rootLBS / 3 ) 
         # end
@@ -40,12 +40,12 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
 
         # # todo (option) : chordal improvement 
         # start = time()
-        # Y_integer, X_integer = chordalImptovLBS(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)
+        # Y_integer, X_integer = chordalImptovLBS(pb, node.RBS, limits; args...)
         # pb.info.relaxation_time += (time() - start)
 
         # # todo (option) : dynamic/equitable directions {1/K, 2/K, ... K-1/K}
         # start = time()
-        # Y_integer, X_integer = dynamicImptovLBS(node.RBS, pb.m, pb.lp_copied, pb.c, K=limits; args...)
+        # Y_integer, X_integer = dynamicImptovLBS(pb, node.RBS, limits; args...)
         # pb.info.relaxation_time += (time() - start)
 
 
