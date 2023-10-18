@@ -162,8 +162,14 @@ end
 
 
 function roundSol(pb::BO01Problem, sol::Solution)
-    # if !sol.is_binary return end 
-    x_ = round.(sol.xEquiv[1], digits=4) ; 
+    if !sol.is_binary return end
+
+    x_ = round.(sol.xEquiv[1]) ; 
+    for x_i in x_
+        if x_i < 0.0 && x_i > 1.0
+            println("!!! error rounding x = $(sol.xEquiv[1]) \n !!! x_rounded = $x_")
+        end
+    end
 
     for i in size(pb.A, 1)
         if pb.A[i, :]'* x_ > pb.b[i] return end 
@@ -355,33 +361,33 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
             # in case of the approximately equality on the first objective, compare the second obj
             if abs(sol.y[1] - natural_sols.sols[m].y[1]) ≤ TOL
                 
-                if natural_sols.sols[m].is_binary
-                    if sol.is_binary
-                        addEquivX(natural_sols.sols[m], sol.xEquiv)
-                        natural_sols.sols[m].λ = deepcopy(sol.λ) ; updateCT(natural_sols.sols[m])
-                    end
-                else
-                    # replaced by the new solution directly 
-                    if length(sol.xEquiv[1])>0 
-                        natural_sols.sols[m].xEquiv = deepcopy(sol.xEquiv)
-                        natural_sols.sols[m].y = deepcopy(sol.y)
-                        natural_sols.sols[m].is_binary = sol.is_binary
-                        natural_sols.sols[m].λ = deepcopy(sol.λ)
-                        natural_sols.sols[m].ct = sol.ct
-                    end
-                end                
+                # if natural_sols.sols[m].is_binary
+                #     if sol.is_binary
+                #         addEquivX(natural_sols.sols[m], sol.xEquiv)
+                #         natural_sols.sols[m].λ = deepcopy(sol.λ) ; updateCT(natural_sols.sols[m])
+                #     end
+                # else
+                #     # replaced by the new solution directly 
+                #     if length(sol.xEquiv[1])>0 
+                #         natural_sols.sols[m].xEquiv = deepcopy(sol.xEquiv)
+                #         natural_sols.sols[m].y = deepcopy(sol.y)
+                #         natural_sols.sols[m].is_binary = sol.is_binary
+                #         natural_sols.sols[m].λ = deepcopy(sol.λ)
+                #         natural_sols.sols[m].ct = sol.ct
+                #     end
+                # end                
 
                 # ------------------------------------------------
-                # # # todo : different λ same pente
-                # if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
+                # # todo : different λ same pente
+                if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
 
-                #     if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
+                    if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
 
-                #         natural_sols.sols[m].λ = deepcopy(sol.λ)
-                #         updateCT(natural_sols.sols[m])
-                #     end
-                # end
-                # addEquivX(natural_sols.sols[m], sol.xEquiv) 
+                        natural_sols.sols[m].λ = deepcopy(sol.λ)
+                        updateCT(natural_sols.sols[m])
+                    end
+                end
+                addEquivX(natural_sols.sols[m], sol.xEquiv) 
                 # -------------------------------------------------
 
                 return m, false

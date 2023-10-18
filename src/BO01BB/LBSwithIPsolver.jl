@@ -319,11 +319,20 @@ function updateLBSwithEPB(node::Node)
 end
 
 
+function test(x::Vector{Float64}, m)
+    for x_i in x
+        if x_i < 0.0 || x_i > 1.0
+            println("!!! error cplex x = $x , model : $m") ; return
+        end
+    end
+end
+
+
 """
 New correction iterative algorithm for LBS 
     taking account into intersection with odd LBS
 """
-function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; args...)
+function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, echo::Bool=false; args...)
     global varArray
     global x_star
     global model = pb.m
@@ -331,6 +340,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
     global curr_λ
     global bst_val
     iter_count = 0
+
+    if echo
+        println("\n iter $(iter_count) \t L=$L")
+    end
 
     vd = getvOptData(pb.m)
     f1, f2 = vd.objs
@@ -372,7 +385,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
         Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        x_round = JuMP.value.(varArray)
+        x_round = JuMP.value.(varArray)# ; test(x_round, pb.m)
         yr_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1] ; yr_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
         val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
@@ -398,7 +411,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
             best_bound = objective_bound(pb.m)
             ctr_bound = JuMP.@constraint(pb.lp_copied, f1_copied >= best_bound)
             JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
-            x_star = JuMP.value.(varArray_copied)
+            x_star = JuMP.value.(varArray_copied) #; test(x_star, pb.lp_copied)
 
             if JuMP.is_valid(pb.lp_copied, ctr_bound)
                 JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
@@ -421,6 +434,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
+    end
+
+    if echo
+        println("\n iter $(iter_count) curr_λ = $curr_λ \t ext_l = $ext_l \n L=$L")
     end
 
     if iter_count ≥ K  return Y_integer, X_integer end
@@ -450,7 +467,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
         Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
         append!(Y_integer, Y) ; append!(X_integer, X)
 
-        x_round = JuMP.value.(varArray)
+        x_round = JuMP.value.(varArray) #; test(x_round, pb.m)
         ys_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1]; ys_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
         val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
@@ -476,7 +493,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
             ctr_bound = JuMP.@constraint(pb.lp_copied, f2_copied >= best_bound)
             JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
 
-            x_star = JuMP.value.(varArray_copied)
+            x_star = JuMP.value.(varArray_copied) #; test(x_star, pb.lp_copied)
 
             if JuMP.is_valid(pb.lp_copied, ctr_bound)
                 JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
@@ -499,6 +516,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
+    end
+
+    if echo
+        println("\n iter $(iter_count) curr_λ = $curr_λ \t ext_r = $ext_r \n L=$L")
     end
 
     if iter_count ≥ K return Y_integer, X_integer end
@@ -539,6 +560,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
 
         λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
 
+
         # solve the mono scalarization problem 
         f = AffExpr(0.0)    
         lb = λ'* yl
@@ -561,7 +583,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
             Y, X = stock_all_primal_sols(pb.m, f1, f2, varArray)
             append!(Y_integer, Y) ; append!(X_integer, X)
     
-            x_round = JuMP.value.(varArray)
+            x_round = JuMP.value.(varArray) #; test(x_round, pb.m)
             yt_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1] ; yt_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
             val = λ[1]*yt_1 + λ[2]*yt_2 
             if (isapprox(yt_1, yl[1], atol=TOL) && isapprox(yt_2, yl[2], atol=TOL) ) || 
@@ -590,7 +612,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
                 ctr_bound = JuMP.@constraint(pb.lp_copied, λ[1]*f1_copied + λ[2]*f2_copied >= best_bound)
                 JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
     
-                x_star = JuMP.value.(varArray_copied)
+                x_star = JuMP.value.(varArray_copied) #; test(x_star, pb.lp_copied)
     
                 if JuMP.is_valid(pb.lp_copied, ctr_bound)
                     JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
@@ -619,6 +641,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64; ar
         end
         
         updateLBS(L, idxL, val, [curr_λ[1], curr_λ[2]], [yt_1, yt_2])
+
+        if echo
+            println("\n iter $(iter_count) curr_λ = $λ \t pt = $pt \n L=$L")
+        end
 
         # -----------------------------
         # case : equality    

@@ -246,6 +246,9 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         node.succs = [node1, node2]
     end
+    # todo : debug B&B tree 
+    # println("# ------------- node ", node.num)
+    # println(node)
 
 end
 
@@ -296,7 +299,8 @@ function copy_model_LP(pb::BO01Problem)
     for i=1:n         
         if has_lower_bound(pb.varArray[i])
             set_lower_bound(var[i], lower_bound(pb.varArray[i]))
-        elseif has_upper_bound(pb.varArray[i])
+        end
+        if has_upper_bound(pb.varArray[i])
             set_upper_bound(var[i], upper_bound(pb.varArray[i]))
         end
     end
@@ -349,8 +353,10 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     todo = initQueue(problem)
 
     # println("model : \n", problem.m)
+    # println("lp model : \n", problem.lp_copied)
 
     # println("A : \n", problem.A) ; println("b : \n", problem.b) ; println("c : ", problem.c)
+
 
     start = time() # todo : presolving 
 

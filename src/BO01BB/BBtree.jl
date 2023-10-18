@@ -76,12 +76,12 @@ function Base.:show(io::IO, n::Node)
     "pred = $(n.pred.num) \n",
     # "succs = $(n.succs) \n",
     "var[ $(n.var) ] = $(n.var_bound) \n",
-    "EPB = $(n.EPB) \n",
-    "localNadirPts = $(n.localNadirPts) \n",
-    "nadirPt = $(n.nadirPt) \n",
+    # "EPB = $(n.EPB) \n",
+    # "localNadirPts = $(n.localNadirPts) \n",
+    # "nadirPt = $(n.nadirPt) \n",
     # "LBS = $(n.RBS.natural_order_vect) \n",
-    "activated = $(n.activated) \n",
-    "pruned = $(n.pruned) \n",
+    # "activated = $(n.activated) \n",
+    # "pruned = $(n.pruned) \n",
     "prunedType = $(n.prunedType)"
     )
     print(io, "succs = [ ")
@@ -132,6 +132,9 @@ Prune the given node in a B&B tree and delete all successors of the pruned node.
 function prune!(node::Node, reason::PrunedType)
     node.pruned = true
     node.prunedType = reason
+    # #todo : 
+    # println("# ------------- node ", node.num)
+    # println(node)
 
     to_delete = node.succs[:]
     node.succs = Vector{Node}()

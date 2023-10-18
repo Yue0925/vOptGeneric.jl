@@ -32,10 +32,20 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         #     limits = ceil(Int64 , pb.info.rootLBS / 3 ) 
         # end
 
+        # if node.num == 7
+            # println("\n # ------------------ node $(node.num)")
+            start = time()
+            Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)    # , echo=true  
+            pb.info.relaxation_time += (time() - start)
+            # println("\n # -------------------------------- \n \n \n ")
+
+        # else
+        #     start = time()
+        #     Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits, verbose=false; args...)      
+        #     pb.info.relaxation_time += (time() - start)
+        # end
         # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
-        start = time()
-        Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
-        pb.info.relaxation_time += (time() - start)
+
 
 
         # # todo (option) : chordal improvement 
