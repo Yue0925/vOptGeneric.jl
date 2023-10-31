@@ -7,7 +7,6 @@ global varArray = Array{JuMP.VariableRef}
 global x_star = []
 global model 
 global bst_val = -Inf 
-global curr_λ = []
 global C 
 
 function callback_noCuts(cb_data)
@@ -16,7 +15,6 @@ function callback_noCuts(cb_data)
     global model 
     global C
     global bst_val
-    global curr_λ
 
     node_statut = callback_node_status(cb_data, model)
      
@@ -60,7 +58,7 @@ function filtering(lb::Float64, L::RelaxedBoundSet, λ)
     # remove all points under current line 
     to_delete = Int64[] ; i = 1
     for s in L.natural_order_vect.sols
-        if s.y'*λ ≤ lb-TOL push!(to_delete, i) end
+        if s.y'*λ < lb-TOL push!(to_delete, i) end
         i += 1
     end
 
@@ -148,12 +146,13 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
 end
 
 
-function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
+function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)#ver::Bool=false
     intersection = intersectionPts(L, idx)
+    # ver ? println("\t updating L intersection = $intersection ") : nothing
 
     valid = true
     for s in L.natural_order_vect.sols        
-        if s.λ'* yt <= s.y'*s.λ -TOL
+        if s.λ'* yt < s.y'*s.λ -TOL
             valid = false ; break
         end
     end
@@ -161,10 +160,12 @@ function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
     # under the current LBS 
     if !valid 
         deleteat!(L.natural_order_vect.sols, idx)
+        # ver ? println("\t updating L delete idx $idx ...") : nothing
     end
 
     # filter lower bounds under current line 
     filtering(val, L, curr_λ)
+    # ver ? println("\t updating L filtering L=$L") : nothing
 
     # add new intersection points 
     for s in intersection
@@ -337,7 +338,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     global x_star
     global model = pb.m
     global C = pb.c
-    global curr_λ
     global bst_val
     iter_count = 0
 
@@ -367,12 +367,11 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
-    curr_λ = [1.0, 0.0] ; newPt = false
+    λ = [1.0, 0.0] ; newPt = false
     JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
     iter_count += 1
 
     # in case of infeasibility => !! no single extreme point 
-    yr_1 = 0.0 ; yr_2 = 0.0 
     ext_l = Solution()
     if status == MOI.INFEASIBLE 
         empty!(L.natural_order_vect.sols)
@@ -386,17 +385,18 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         x_round = JuMP.value.(varArray)# ; test(x_round, pb.m)
-        yr_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1] ; yr_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
-        val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
 
-        ext_l = Solution(x_round, [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
-        roundSol(pb, ext_l)
+        ext_l = Solution(x_round, [x_round'*pb.c[1, 2:end] + pb.c[1, 1],
+                                x_round'*pb.c[2, 2:end] + pb.c[2, 1]], [λ[1], λ[2]] 
+                        ) ; updateCT(ext_l)
+        roundSol(pb, ext_l) ; val = λ'*ext_l.y
+
 
         idx, newPt = push!(L.natural_order_vect, ext_l) 
-        updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [yr_1, yr_2]) 
+        updateLBS(L, idx, val, [λ[1], λ[2]], ext_l.y) 
 
         idx, newPt = push!(pureL.natural_order_vect, ext_l) 
-        updateLBS(pureL, idx, val, [curr_λ[1], curr_λ[2]], [yr_1, yr_2])
+        updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_l.y)
 
     # otherwise, take the best primal sol so far 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
@@ -418,18 +418,16 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             end
         end
 
-        yr_1 = x_star'* pb.c[1, 2:end] + pb.c[1, 1]
-        yr_2 = x_star'* pb.c[2, 2:end] + pb.c[2, 1]
-        val = curr_λ[1]*yr_1 + curr_λ[2]*yr_2
-
-        ext_l = Solution(x_star, [yr_1, yr_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_l)
-        roundSol(pb, ext_l)
+        ext_l = Solution(x_star, [x_star'* pb.c[1, 2:end] + pb.c[1, 1],
+                                x_star'* pb.c[2, 2:end] + pb.c[2, 1]], [λ[1], λ[2]] 
+                        ) ; updateCT(ext_l)
+        roundSol(pb, ext_l) ; val = λ'*ext_l.y
 
         idx, newPt = push!(L.natural_order_vect, ext_l)
-        updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [yr_1, yr_2])
+        updateLBS(L, idx, val, [λ[1], λ[2]], ext_l.y)
 
         idx, newPt = push!(pureL.natural_order_vect, ext_l)
-        updateLBS(pureL, idx, val, [curr_λ[1], curr_λ[2]], [yr_1, yr_2])
+        updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_l.y)
 
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -437,7 +435,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     end
 
     if echo
-        println("\n iter $(iter_count) curr_λ = $curr_λ \t ext_l = $ext_l \n L=$L")
+        println("\n iter $(iter_count) λ = $λ \t ext_l = $ext_l \n L=$L")
     end
 
     if iter_count ≥ K  return Y_integer, X_integer end
@@ -449,11 +447,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
-    curr_λ = [0.0, 1.0] ; newPt = false
+    λ = [0.0, 1.0] ; newPt = false
     JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
     iter_count += 1
 
-    ys_1 = 0.0 ; ys_2 = 0.0 
     ext_r = Solution()
     if status == MOI.INFEASIBLE
         # todo : return single point OR the last updated LBS ??
@@ -468,17 +465,18 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         x_round = JuMP.value.(varArray) #; test(x_round, pb.m)
-        ys_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1]; ys_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
-        val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
 
-        ext_r = Solution(x_round, [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
-        roundSol(pb, ext_r)
+        ext_r = Solution(x_round, [x_round'*pb.c[1, 2:end] + pb.c[1, 1], 
+                            x_round'*pb.c[2, 2:end] + pb.c[2, 1]], [λ[1], λ[2]] 
+                        ) ; updateCT(ext_r)
+
+        roundSol(pb, ext_r) ; val = λ'*ext_r.y
 
         idx, newPt = push!(L.natural_order_vect, ext_r)
-        updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2])
+        updateLBS(L, idx, val, [λ[1], λ[2]], ext_r.y)
 
         idx, newPt = push!(pureL.natural_order_vect, ext_r) 
-        updateLBS(pureL, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2])
+        updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_r.y)
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         if has_values(pb.m)
@@ -500,18 +498,17 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             end
         end
 
-        ys_1 = x_star'* pb.c[1, 2:end] + pb.c[1, 1]
-        ys_2 = x_star'* pb.c[2, 2:end] + pb.c[2, 1]
-        val = curr_λ[1]*ys_1 + curr_λ[2]*ys_2
+        ext_r = Solution(x_star, [x_star'* pb.c[1, 2:end] + pb.c[1, 1], 
+                            x_star'* pb.c[2, 2:end] + pb.c[2, 1]], [λ[1], λ[2]] 
+                        ) ; updateCT(ext_r)
 
-        ext_r = Solution(x_star, [ys_1, ys_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(ext_r)
-        roundSol(pb, ext_r)
+        roundSol(pb, ext_r) ; val = λ'*ext_r.y
 
         idx, newPt = push!(L.natural_order_vect, ext_r) 
-        updateLBS(L, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2]) 
+        updateLBS(L, idx, val, [λ[1], λ[2]], ext_r.y) 
 
         idx, newPt = push!(pureL.natural_order_vect, ext_r)
-        updateLBS(pureL, idx, val, [curr_λ[1], curr_λ[2]], [ys_1, ys_2])
+        updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_r.y)
 
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -519,7 +516,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     end
 
     if echo
-        println("\n iter $(iter_count) curr_λ = $curr_λ \t ext_r = $ext_r \n L=$L")
+        println("\n iter $(iter_count) λ = $λ \t ext_r = $ext_r \n L=$L")
     end
 
     if iter_count ≥ K return Y_integer, X_integer end
@@ -555,11 +552,15 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     # ----------------------------------------------------------------
     while length(todo) > 0
         if iter_count ≥ K return Y_integer, X_integer end
+        iter_count += 1
 
         p = popfirst!(todo) ; yl = p[1] ;  yr = p[2]
 
         λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
 
+        if echo
+            print("\n iter $(iter_count) λ = $λ \t ")
+        end
 
         # solve the mono scalarization problem 
         f = AffExpr(0.0)    
@@ -568,11 +569,9 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         f = λ[1]*f1 + λ[2]*f2
 
         x_star = [] ; bst_val = -Inf 
-        curr_λ = λ ; newPt = false 
+        newPt = false 
         JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
-        iter_count += 1
 
-        yt_1 = 0.0 ; yt_2 = 0.0 
         val = -Inf ; idx = -1
         idxL = -1 ; newPtL = false 
         pt = Solution()
@@ -584,20 +583,27 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             append!(Y_integer, Y) ; append!(X_integer, X)
     
             x_round = JuMP.value.(varArray) #; test(x_round, pb.m)
-            yt_1 = x_round'*pb.c[1, 2:end] + pb.c[1, 1] ; yt_2 = x_round'*pb.c[2, 2:end] + pb.c[2, 1]
-            val = λ[1]*yt_1 + λ[2]*yt_2 
-            if (isapprox(yt_1, yl[1], atol=TOL) && isapprox(yt_2, yl[2], atol=TOL) ) || 
-                (isapprox(yr[1], yt_1, atol=TOL) && isapprox(yr[2], yt_2, atol=TOL) )
+
+            # add new sol in LBS without filtering 
+            pt = Solution(x_round, [ x_round'*pb.c[1, 2:end] + pb.c[1, 1], 
+                                x_round'*pb.c[2, 2:end] + pb.c[2, 1]], [λ[1], λ[2]] 
+                         ) ; updateCT(pt)
+            roundSol(pb, pt) ; val = λ'*pt.y
+
+            if (isapprox(pt.y[1], yl[1], atol=TOL) && isapprox(pt.y[2], yl[2], atol=TOL) ) || 
+                (isapprox(yr[1], pt.y[1], atol=TOL) && isapprox(yr[2], pt.y[2], atol=TOL) )
                 continue
             end
 
-            # add new sol in LBS without filtering 
-            pt = Solution(x_round, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
-            roundSol(pb, pt)
 
             idxL, newPtL = push!(L.natural_order_vect, pt)
 
             idx, newPt = push!(pureL.natural_order_vect, pt)
+
+            # todo 
+            if echo
+                println("pushing pt = $pt \n L=$L idxL=$idxL")
+            end
 
         elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
             if has_values(pb.m)
@@ -618,32 +624,36 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
                     JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
                 end
             end
-    
-            yt_1 = x_star'* pb.c[1, 2:end] + pb.c[1, 1]
-            yt_2 = x_star'* pb.c[2, 2:end] + pb.c[2, 1]
-            val = λ[1]*yt_1 + λ[2]*yt_2
-            if (isapprox(yt_1, yl[1], atol=TOL) && isapprox(yt_2, yl[2], atol=TOL) ) || 
-                (isapprox(yr[1], yt_1, atol=TOL) && isapprox(yr[2], yt_2, atol=TOL) )
-                continue
-            end
 
             # add new sol in LBS without filtering 
-            pt = Solution(x_star, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ); updateCT(pt)
-            roundSol(pb, pt)
+            pt = Solution(x_star, [x_star'* pb.c[1, 2:end] + pb.c[1, 1], 
+                                x_star'* pb.c[2, 2:end] + pb.c[2, 1]], [λ[1], λ[2]] 
+                        ); updateCT(pt)
+            roundSol(pb, pt) ; val = λ'*pt.y
+
+            if (isapprox(pt.y[1], yl[1], atol=TOL) && isapprox(pt.y[2], yl[2], atol=TOL) ) || 
+                (isapprox(yr[1], pt.y[1], atol=TOL) && isapprox(yr[2], pt.y[2], atol=TOL) )
+                continue
+            end
 
             idxL, newPtL = push!(L.natural_order_vect, pt) 
 
             idx, newPt = push!(pureL.natural_order_vect, pt ) 
+
+            # todo 
+            if echo
+                println("pushing pt = $pt \n L=$L idxL=$idxL")
+            end
 
         else
             println("has primal ? $(JuMP.has_values(m))")
             error("Condition  status $status ")
         end
         
-        updateLBS(L, idxL, val, [curr_λ[1], curr_λ[2]], [yt_1, yt_2])
+        updateLBS(L, idxL, val, [λ[1], λ[2]], pt.y)
 
         if echo
-            println("\n iter $(iter_count) curr_λ = $λ \t pt = $pt \n L=$L")
+            println("\n after updating L=$L")
         end
 
         # -----------------------------
@@ -656,7 +666,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
         valid = true
         for s in pureL.natural_order_vect.sols
-            if s.λ[1] * yt_1 + s.λ[2] * yt_2 < s.y'* s.λ - TOL
+            if s.λ'*pt.y < s.y'* s.λ - TOL
                 valid = false ; break
             end
         end
@@ -702,7 +712,6 @@ function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet, λ; args...
     global x_star
     global model = pb.m
     global C = pb.c
-    global curr_λ = λ
     global bst_val
 
     vd = getvOptData(pb.m)
@@ -743,7 +752,7 @@ function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet, λ; args...
         val = λ[1]*yt_1 + λ[2]*yt_2 
 
         # add new sol in LBS without filtering 
-        pt = Solution(x_round, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+        pt = Solution(x_round, [yt_1, yt_2], [λ[1], λ[2]] ) ; updateCT(pt)
         roundSol(pb, pt)
 
         idx, newPt = push!(L.natural_order_vect, pt )
@@ -773,7 +782,7 @@ function opt_scalar_callbackalt(pb::BO01Problem, L::RelaxedBoundSet, λ; args...
         val = λ[1]*yt_1 + λ[2]*yt_2
 
         # add new sol in LBS without filtering 
-        pt = Solution(x_star, [yt_1, yt_2], [curr_λ[1], curr_λ[2]] ) ; updateCT(pt)
+        pt = Solution(x_star, [yt_1, yt_2], [λ[1], λ[2]] ) ; updateCT(pt)
         roundSol(pb, pt)
 
         idx, newPt = push!(L.natural_order_vect,  pt)

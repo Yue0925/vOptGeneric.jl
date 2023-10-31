@@ -175,8 +175,7 @@ function roundSol(pb::BO01Problem, sol::Solution)
         if pb.A[i, :]'* x_ > pb.b[i] return end 
     end
 
-    # todo : verify deepcopy ?
-    sol.xEquiv[1] = x_; sol.is_binary = isBinary(x_)
+    sol.xEquiv[1] = x_ #; sol.is_binary = isBinary(x_)
     sol.y = [x_'*pb.c[1, 2:end] + pb.c[1, 1] ,x_'*pb.c[2, 2:end] + pb.c[2, 1]  ]
 end
 
@@ -343,7 +342,7 @@ Return
     -   -1 : the same point with exactly ct
             OR  the inconming point is dominated 
 """
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false, verbose::Bool=false)::Tuple{Int,Bool}
     # sol.y = round.(sol.y, digits = 4) ; 
     idx = -1
 
@@ -352,10 +351,17 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         push!(natural_sols.sols, sol) ; return 1, true
     end
 
+    if verbose
+        println("\t in pushing L ...")
+    end
+
     # a binary/dichotomy search finds the location to insert 
     l = 1; r = length(natural_sols); m = 0
     while l ≤ r
         m = Int(floor((l+r)/2))
+        if verbose
+            println("l=$l ; r=$r ; m=$m ")
+        end
 
         if abs(sol.y[2] - natural_sols.sols[m].y[2]) ≤ TOL
             # in case of the approximately equality on the first objective, compare the second obj
@@ -413,7 +419,11 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         m = m > Int(floor((l+r)/2)) ? m : m+1
         natural_sols.sols = vcat(vcat(natural_sols.sols[1:m-1], sol), natural_sols.sols[m:end])
     end
+
     idx = m 
+    if verbose
+        println("l=$l ; r=$r ; m=$m ")
+    end
 
     # find points weakly dominated by the new point and delete it/them
     if filtered

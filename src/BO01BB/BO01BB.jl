@@ -143,6 +143,15 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     #--------------------
     start = time()
     if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
+        # # todo : print UBS 
+        # println("# ------------- node ", node.num)
+        # print("UBS = [ ")
+        # for s in incumbent.natural_order_vect.sols
+        #     print("$(s.y) , ")
+        # end
+        # println("] ")
+
+
         prune!(node, DOMINANCE)
         if verbose
             @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
@@ -246,9 +255,18 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         node.succs = [node1, node2]
     end
-    # todo : debug B&B tree 
+
+    # # todo : debug B&B tree 
+    #     println("# ------------- node ", node.num)
+    #     println(node)
+
+    # # todo : print UBS 
     # println("# ------------- node ", node.num)
-    # println(node)
+    # print("UBS = [ ")
+    # for s in incumbent.natural_order_vect.sols
+    #     print("$(s.y) , ")
+    # end
+    # println("] ")
 
 end
 

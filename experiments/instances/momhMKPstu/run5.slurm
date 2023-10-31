@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=logN30
+#SBATCH --job-name=inst1_cplex
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,8 +8,13 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=logN30.txt
-#SBATCH --error=logN30.txt
+#SBATCH --output=inst1_cplex.txt
+#SBATCH --error=inst1_cplex.txt
 
 
-srun julia vOptMomkp_complementaire.jl ./MOBKP/set3/Wcollage-tube.DAT 
+
+
+
+# srun julia vOptMomkp3.jl ./MOBKP/set3/W7BI-tube1-asyn.DAT 
+
+srun julia vOptMomkp3.jl ./MOBKP/set3/W7BI-tube1-1800.DAT 

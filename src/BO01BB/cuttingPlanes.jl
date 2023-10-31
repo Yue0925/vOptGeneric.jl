@@ -32,17 +32,17 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         #     limits = ceil(Int64 , pb.info.rootLBS / 3 ) 
         # end
 
-        # if node.num == 7
-            # println("\n # ------------------ node $(node.num)")
-            start = time()
-            Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)    # , echo=true  
-            pb.info.relaxation_time += (time() - start)
-            # println("\n # -------------------------------- \n \n \n ")
+        # if node.num == 364
+        #     println("\n # ------------------ node $(node.num)")
+        #     start = time()
+        #     Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits, true; args...)    # , echo=true  
+        #     pb.info.relaxation_time += (time() - start)
+        #     println("\n # -------------------------------- \n \n \n ")
 
         # else
-        #     start = time()
-        #     Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits, verbose=false; args...)      
-        #     pb.info.relaxation_time += (time() - start)
+            start = time()
+            Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
+            pb.info.relaxation_time += (time() - start)
         # end
         # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
 
@@ -65,6 +65,19 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
+
+
+
+        # # todo : disply UBS at certain node 
+        # if node.num == 364
+        #     println("# ------------- node ", node.num)
+        #     print("UBS = [ ")
+        #     for s in incumbent.natural_order_vect.sols
+        #         print("$(s.y) , ")
+        #     end
+        #     println("] ")
+        # end
+
 
         if length(node.RBS.natural_order_vect.sols) == 0
             prune!(node, INFEASIBILITY)
@@ -102,6 +115,13 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             push!(node.RBS.natural_order_vect, s, filtered=true )
         end
     end
+
+    # # todo : looking for missing point in node 
+    # for s in node.RBS.natural_order_vect.sols
+    #     if s.y[1] == -575310.0 
+    #         println("# -----------------\n point $(s.y) in node $(node.num) \n")
+    #     end
+    # end
 
     return false
 end

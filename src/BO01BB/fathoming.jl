@@ -1,7 +1,7 @@
 ## This file contains functions related to node fathoming.
 
 include("cuttingPlanes.jl")
-
+TOL = 1e-4
 """
 Given a point `x_star`, iterate all valid cuts of parent node and stock the references 
 in the current node.
@@ -262,7 +262,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             compared = true
 
-            if λ'*u.y < λ'*sol_r.y#&& λ'*u.y < λ'*sol_l.y
+            if λ'*u.y < λ'*sol_r.y -TOL # todo : - TOL
                 existence = true ; break
             end
         end
