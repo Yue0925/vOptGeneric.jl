@@ -175,6 +175,8 @@ function solve_eps(m::JuMP.Model, ϵ::Float64, round_results, verbose ; args...)
     
     #Set the first objective as an objective in the JuMP Model
     JuMP.set_objective(m, f1Sense, f1)
+    JuMP.set_optimizer_attribute(m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) # todo : root limit 
+
     
     R1 = f1Sense==MOI.MIN_SENSE ? (<=) : (>=)
     R2 = f2Sense==MOI.MIN_SENSE ? (<=) : (>=)

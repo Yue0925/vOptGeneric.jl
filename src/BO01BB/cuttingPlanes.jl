@@ -27,12 +27,12 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         #     return false
         # end
 
-        # # todo (option) : λ limit tuning decreasing in depth (adaptive)
-        # if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
-        #     limits = ceil(Int64 , pb.info.rootLBS / 3 ) 
-        # end
+        # todo (option) : λ limit tuning decreasing in depth (adaptive)
+        if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
+            limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 4 ) ) )
+        end
 
-        # if node.num == 364
+        # if node.num == 353
         #     println("\n # ------------------ node $(node.num)")
         #     start = time()
         #     Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits, true; args...)    # , echo=true  
@@ -116,12 +116,37 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         end
     end
 
-    # # todo : looking for missing point in node 
+    # todo : looking for missing point in node 
     # for s in node.RBS.natural_order_vect.sols
-    #     if s.y[1] == -575310.0 
+    #     if s.y[1] == -662396.0 
     #         println("# -----------------\n point $(s.y) in node $(node.num) \n")
+    #         println("node : ", node)
     #     end
     # end
+
+    # x_missing = [1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0]    
+    # y_missing = [-662396.0, -3.543324e6]
+    # isRightBranching = true
+    # for (k, v) in node.assignment
+    #     if x_missing[k] != v
+    #         isRightBranching = false ; break
+    #     end
+    # end
+
+    # if isRightBranching && node.EPB 
+    #     isRightBranching = y_missing ≤ node.nadirPt && y_missing[2] >= node.duplicationBound
+    # end
+
+    # if isRightBranching
+        
+    #     for s in node.RBS.natural_order_vect.sols
+    #         if s.λ'*y_missing < s.y'*s.λ
+    #             println("\n # -------------------------")
+    #             println("node violated : ", node)
+    #         end
+    #     end
+    # end
+
 
     return false
 end

@@ -387,11 +387,22 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
                 # # todo : different λ same pente
                 if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
 
-                    if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
+                    # if sol.is_binary
+                    #     natural_sols.sols[m].y = deepcopy(sol.y)
+                    #     natural_sols.sols[m].λ = deepcopy(sol.λ)
+                    #     natural_sols.sols[m].ct = sol.ct
+                    #     natural_sols.sols[m].is_binary = sol.is_binary
+                    #     natural_sols.sols[m].xEquiv = deepcopy(sol.xEquiv)
+                    # else
+                        if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
 
-                        natural_sols.sols[m].λ = deepcopy(sol.λ)
-                        updateCT(natural_sols.sols[m])
-                    end
+                            natural_sols.sols[m].λ = deepcopy(sol.λ)
+                            updateCT(natural_sols.sols[m])
+                        end
+                        # addEquivX(natural_sols.sols[m], sol.xEquiv) 
+                    # end
+
+                    
                 end
                 addEquivX(natural_sols.sols[m], sol.xEquiv) 
                 # -------------------------------------------------
