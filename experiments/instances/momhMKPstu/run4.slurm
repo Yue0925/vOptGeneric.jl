@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=lambda_rootrelax_param
+#SBATCH --job-name=rootrelax_param
 
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
@@ -8,8 +8,8 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=lambda_rootrelax_param.txt
-#SBATCH --error=lambda_rootrelax_param.txt
+#SBATCH --output=rootrelax_param.txt
+#SBATCH --error=rootrelax_param.txt
 
 
 for file in ./MOBKP/set3/*; do

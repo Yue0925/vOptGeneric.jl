@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=alea_MDMKP5
+#SBATCH --job-name=KQKP_basic_param
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=40
@@ -7,14 +7,14 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=alea_MDMKP5_OUTPUT.txt
-#SBATCH --error=alea_MDMKP5_ERROR.txt
+#SBATCH --output=KQKP_basic_param.txt
+#SBATCH --error=KQKP_basic_param.txt
 
-methodes=("epsilon")
+methodes=("epsilon") # "bb" "bc"
 
-for file in ./instances/PCC/*; do
+for file in ./instances/*; do
     for mthd in ${methodes[@]}; do
         echo "$file ... " $mthd
-        srun julia vOptMDMKP.jl "$file" $mthd
+        srun julia vOptQKP.jl "$file" $mthd
     done
 done

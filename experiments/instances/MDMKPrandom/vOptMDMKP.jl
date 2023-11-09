@@ -29,7 +29,7 @@ end
 
 
 
-function vopt_solve(method, outputName; step=0.1) 
+function vopt_solve(method, outputName; step=0.5) 
     # ---- setting the model
     model = vModel( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 

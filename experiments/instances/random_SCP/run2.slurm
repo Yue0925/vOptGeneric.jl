@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=alea_BOSCP_new_exp2
+#SBATCH --job-name=BOSCP_EPB_param
 #SBATCH --nodes=1-1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=40
@@ -7,10 +7,10 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=yue.zhang@lipn.univ-paris13.fr
 #SBATCH --partition=COMPUTE-SHORT
-#SBATCH --output=alea_BOSCP_new_exp2_OUTPUT.txt
-#SBATCH --error=alea_BOSCP_new_exp2_ERROR.txt
+#SBATCH --output=BOSCP_EPB_param.txt
+#SBATCH --error=BOSCP_EPB_param.txt
 
-methodes=("bc_rootRelaxCPEPB" "bc_rootRelaxCP")
+methodes=("bc_EPB" "bb_EPB")
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do
