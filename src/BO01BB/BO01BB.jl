@@ -320,7 +320,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     )
 
     standard_form(problem) ; problem.param.EPB = EPB
-    JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) # todo : root limit 
+    # todo :  strict tolerance following objective coeff 
+    length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
 
     # relaxation LP
     undo_relax = JuMP.relax_integrality(problem.m)

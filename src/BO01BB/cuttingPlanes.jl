@@ -28,8 +28,8 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         # end
 
         # # todo (option) : λ limit tuning decreasing in depth (adaptive)
-        # if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
-        #     limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 4 ) ) )
+        # if !node.EPB && !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
+        #     limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 5 ) ) )
         # end
 
         # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
