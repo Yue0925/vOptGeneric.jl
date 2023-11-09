@@ -27,25 +27,15 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         #     return false
         # end
 
-        # todo (option) : λ limit tuning decreasing in depth (adaptive)
-        if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
-            limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 4 ) ) )
-        end
-
-        # if node.num == 353
-        #     println("\n # ------------------ node $(node.num)")
-        #     start = time()
-        #     Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits, true; args...)    # , echo=true  
-        #     pb.info.relaxation_time += (time() - start)
-        #     println("\n # -------------------------------- \n \n \n ")
-
-        # else
-            start = time()
-            Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
-            pb.info.relaxation_time += (time() - start)
+        # # todo (option) : λ limit tuning decreasing in depth (adaptive)
+        # if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
+        #     limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 4 ) ) )
         # end
-        # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
 
+        # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
+        start = time()
+        Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
+        pb.info.relaxation_time += (time() - start)
 
 
         # # todo (option) : chordal improvement 
@@ -65,19 +55,6 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
-
-
-
-        # # todo : disply UBS at certain node 
-        # if node.num == 364
-        #     println("# ------------- node ", node.num)
-        #     print("UBS = [ ")
-        #     for s in incumbent.natural_order_vect.sols
-        #         print("$(s.y) , ")
-        #     end
-        #     println("] ")
-        # end
-
 
         if length(node.RBS.natural_order_vect.sols) == 0
             prune!(node, INFEASIBILITY)
@@ -115,38 +92,6 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             push!(node.RBS.natural_order_vect, s, filtered=true )
         end
     end
-
-    # todo : looking for missing point in node 
-    # for s in node.RBS.natural_order_vect.sols
-    #     if s.y[1] == -662396.0 
-    #         println("# -----------------\n point $(s.y) in node $(node.num) \n")
-    #         println("node : ", node)
-    #     end
-    # end
-
-    # x_missing = [1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0]    
-    # y_missing = [-662396.0, -3.543324e6]
-    # isRightBranching = true
-    # for (k, v) in node.assignment
-    #     if x_missing[k] != v
-    #         isRightBranching = false ; break
-    #     end
-    # end
-
-    # if isRightBranching && node.EPB 
-    #     isRightBranching = y_missing ≤ node.nadirPt && y_missing[2] >= node.duplicationBound
-    # end
-
-    # if isRightBranching
-        
-    #     for s in node.RBS.natural_order_vect.sols
-    #         if s.λ'*y_missing < s.y'*s.λ
-    #             println("\n # -------------------------")
-    #             println("node violated : ", node)
-    #         end
-    #     end
-    # end
-
 
     return false
 end

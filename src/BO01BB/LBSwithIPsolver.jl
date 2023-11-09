@@ -34,8 +34,6 @@ function stock_all_primal_sols(m::JuMP.Model, f1, f2, varArray)
     for i =1:sols_nb 
         if JuMP.has_values(m, result = Int(i))
             if isBinary(JuMP.value.(varArray, result = Int(i)))
-                # push!(Y_integer, round.([JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))], digits = 4) )
-                # push!(X_integer, round.(JuMP.value.(varArray, result = Int(i)), digits = 4) )
                 push!(Y_integer, [JuMP.value(f1, result = Int(i)), JuMP.value(f2, result = Int(i))] )
                 push!(X_integer, JuMP.value.(varArray, result = Int(i)) )
             else
@@ -146,9 +144,8 @@ function intersectionPts(L::RelaxedBoundSet, idx::Int64)::Set{Solution}
 end
 
 
-function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)#ver::Bool=false
+function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)
     intersection = intersectionPts(L, idx)
-    # ver ? println("\t updating L intersection = $intersection ") : nothing
 
     valid = true
     for s in L.natural_order_vect.sols        
@@ -160,12 +157,10 @@ function updateLBS(L::RelaxedBoundSet, idx::Int, val::Float64, curr_λ, yt)#ver:
     # under the current LBS 
     if !valid 
         deleteat!(L.natural_order_vect.sols, idx)
-        # ver ? println("\t updating L delete idx $idx ...") : nothing
     end
 
     # filter lower bounds under current line 
     filtering(val, L, curr_λ)
-    # ver ? println("\t updating L filtering L=$L") : nothing
 
     # add new intersection points 
     for s in intersection
@@ -212,16 +207,6 @@ function updateLBSwithEPB(node::Node)
             ptl = Solution(Vector{Float64}(), y, [1.0, 0.0]) ; updateCT(ptl)
             break
         end
-    end
-
-    # todo verify if bugs exist 
-    if length(ptl.y) != 2 || ptl.y[1] == Inf || ptl.y[2] == Inf
-        # println("\n --------------------- ")
-        # println("ptl ", ptl)
-        # println("nadri ", node.nadirPt, " \t boundz2 ", node.duplicationBound)
-        # println("LBS ", node.RBS.natural_order_vect.sols)
-        # error("EPB bounding error ! ")
-        empty!(node.RBS.natural_order_vect.sols) ; return
     end
     
     # 2-th bounding 
@@ -332,10 +317,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     global bst_val
     iter_count = 0
 
-    if echo
-        println("\n iter $(iter_count) \t L=$L")
-    end
-
     vd = getvOptData(pb.m)
     f1, f2 = vd.objs
     f1Sense, f2Sense = vd.objSenses
@@ -425,10 +406,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         error("Condition  status $status ")
     end
 
-    if echo
-        println("\n iter $(iter_count) λ = $λ \t ext_l = $ext_l \n L=$L")
-    end
-
     if iter_count ≥ K  return Y_integer, X_integer end
 
     # -------------------------------------------
@@ -439,14 +416,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
     λ = [0.0, 1.0] ; newPt = false
-    # con = JuMP.ConstraintRef
-
-    # if echo
-    #     # con = JuMP.@constraint(pb.m, pb.varArray[10] == 1.0)
-    #     con = JuMP.@constraint(pb.m, f2 == -3.543324e6)
-    #     unset_silent(pb.m)
-    #     println(pb.m)
-    # end
 
     JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
     iter_count += 1
@@ -465,12 +434,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         append!(Y_integer, Y) ; append!(X_integer, X)
 
         x_round = JuMP.value.(varArray)
-        # if echo 
-        #     println("x opt found by cplex : ", x_round)
-        #     println("heuristics : \n")
-        #     println("Y : ", Y)
-        #     println("X : ", X)
-        # end
 
         ext_r = Solution(x_round, [x_round'*pb.c[1, 2:end] + pb.c[1, 1], 
                             x_round'*pb.c[2, 2:end] + pb.c[2, 1]], [λ[1], λ[2]] 
@@ -498,10 +461,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
 
             x_star = JuMP.value.(varArray_copied)
-            # if echo 
-            #     println("x limit found by cplex : ", x_star)
-            # end
-
             if JuMP.is_valid(pb.lp_copied, ctr_bound)
                 JuMP.delete(pb.lp_copied, ctr_bound) ; JuMP.unregister(pb.lp_copied, :ctr_bound)
             end
@@ -522,12 +481,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     else
         println("has primal ? $(JuMP.has_values(m))")
         error("Condition  status $status ")
-    end
-
-    if echo
-        println("\n iter $(iter_count) λ = $λ \t ext_r = $ext_r \n L=$L")
-        # set_silent(pb.m)
-        # JuMP.delete( pb.m, con) ; JuMP.unregister( pb.m, :con)
     end
 
     if iter_count ≥ K return Y_integer, X_integer end
@@ -569,10 +522,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
         λ = [ abs(yr[2] - yl[2]) , abs(yl[1] - yr[1]) ] 
 
-        if echo
-            print("\n iter $(iter_count) λ = $λ \t ")
-        end
-
         # solve the mono scalarization problem 
         f = AffExpr(0.0)    
         lb = λ'* yl
@@ -587,9 +536,6 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         idxL = -1 ; newPtL = false 
         pt = Solution()
         if status == MOI.INFEASIBLE
-            # if echo
-            #     println(" INFEASIBLE ")
-            # end
              continue 
         end
 
@@ -610,16 +556,9 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
                 (isapprox(yr[1], pt.y[1], atol=TOL) && isapprox(yr[2], pt.y[2], atol=TOL) )
                 continue
             end
-
-
             idxL, newPtL = push!(L.natural_order_vect, pt)
 
             idx, newPt = push!(pureL.natural_order_vect, pt)
-
-            # # todo 
-            # if echo
-            #     println("pushing pt = $pt \n L=$L idxL=$idxL")
-            # end
 
         elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
             if has_values(pb.m)
@@ -657,21 +596,12 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
             idx, newPt = push!(pureL.natural_order_vect, pt ) 
 
-            # # todo 
-            # if echo
-            #     println("pushing pt = $pt \n L=$L idxL=$idxL")
-            # end
-
         else
             println("has primal ? $(JuMP.has_values(m))")
             error("Condition  status $status ")
         end
         
         updateLBS(L, idxL, val, [λ[1], λ[2]], pt.y)
-
-        if echo
-            println("\n after updating L=$L")
-        end
 
         # -----------------------------
         # case : equality    

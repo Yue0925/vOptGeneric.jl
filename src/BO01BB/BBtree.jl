@@ -133,11 +133,6 @@ Prune the given node in a B&B tree and delete all successors of the pruned node.
 function prune!(node::Node, reason::PrunedType)
     node.pruned = true
     node.prunedType = reason
-    # #todo : 
-    # if node.num == 364
-    #     println("# ------------- node ", node.num)
-    #     println(node)
-    # end
 
     to_delete = node.succs[:]
     node.succs = Vector{Node}()

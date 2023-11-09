@@ -164,12 +164,7 @@ end
 function roundSol(pb::BO01Problem, sol::Solution)
     if !sol.is_binary return end
 
-    x_ = round.(sol.xEquiv[1]) ; 
-    for x_i in x_
-        if x_i < 0.0 && x_i > 1.0
-            println("!!! error rounding x = $(sol.xEquiv[1]) \n !!! x_rounded = $x_")
-        end
-    end
+    x_ = round.(sol.xEquiv[1])
 
     for i in size(pb.A, 1)
         if pb.A[i, :]'* x_ > pb.b[i] return end 
@@ -197,14 +192,12 @@ end
 Add an equivalent solution associated to point `y`. 
 """
 function addEquivX(sol::Solution, x::Vector{Float64})
-    # @assert length(x) > 0 "x cannot be empty"
     if length(x) == 0 return end 
 
     # check if x is approximately binary
     if isBinary(x)
         sol.is_binary = true
-        # sol.y = round.(sol.y, digits = 4)
-        push!(sol.xEquiv, x) # round.(x, digits = 4)
+        push!(sol.xEquiv, x)
     else
         push!(sol.xEquiv, x)
     end
@@ -343,7 +336,6 @@ Return
             OR  the inconming point is dominated 
 """
 function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false, verbose::Bool=false)::Tuple{Int,Bool}
-    # sol.y = round.(sol.y, digits = 4) ; 
     idx = -1
 
     # add s directly if sols is empty
@@ -351,18 +343,11 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         push!(natural_sols.sols, sol) ; return 1, true
     end
 
-    if verbose
-        println("\t in pushing L ...")
-    end
-
     # a binary/dichotomy search finds the location to insert 
     l = 1; r = length(natural_sols); m = 0
+    
     while l ≤ r
         m = Int(floor((l+r)/2))
-        if verbose
-            println("l=$l ; r=$r ; m=$m ")
-        end
-
         if abs(sol.y[2] - natural_sols.sols[m].y[2]) ≤ TOL
             # in case of the approximately equality on the first objective, compare the second obj
             if abs(sol.y[1] - natural_sols.sols[m].y[1]) ≤ TOL
@@ -432,10 +417,6 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
     end
 
     idx = m 
-    if verbose
-        println("l=$l ; r=$r ; m=$m ")
-    end
-
     # find points weakly dominated by the new point and delete it/them
     if filtered
         i = 1
