@@ -54,15 +54,16 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
   println(fout, "Y_N = ", Y_N)
   println(fout)
   println(fout, "size_X_E = ", length(X_E))
-  # println(fout, "X_E = ", X_E)
-
+  # todo : ignore
+  println(fout, "X_E = ", X_E)
+  
   close(fout)
 
   displayGraphics(fname,Y_N, outputName)
 end
 
 
-function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
+function vSolveBi01IP(solverSelected, C, A, B, fname, method)
 
   println("method : ", string(method))
 
@@ -76,21 +77,21 @@ function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
     mkdir(folder)
   end
 
-  m, n = size(A)
-  # # scale test
-  # for n = 10:10:40
-  #   println("n=$n")
-  #   ratio = n/n_before
+  m, n_before = size(A)
+  # scale test
+  for n in [10, 10, 20, 30, 40, 50]
+    println("n=$n")
+    ratio = n/n_before
 
-    # subfolder = folder * "/" * string(n)
-    # if !isdir(subfolder)
-    #   mkdir(subfolder)
-    # end
+    subfolder = folder * "/" * string(n)
+    if !isdir(subfolder)
+      mkdir(subfolder)
+    end
 
-    outputName = folder * "/" * split(fname, "/")[end]
-    # # TODO : if a file already exists and differ from BB BC 
-    # if isfile(outputName) || method == :dicho && method == :epsilon
-    #   return
+    outputName = subfolder * "/" * split(fname, "/")[end]
+    # # TODO : if a file already exists
+    # if isfile(outputName) #&& method != :bb && method != :bc && method != :bb_EPB && method != :bc_EPB
+    #   continue
     # end
 
     # ---- setting the model
@@ -99,17 +100,17 @@ function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
     @variable( Bi01IP, x[1:n], Bin )
     @addobjective( Bi01IP, Max, sum(C[1,j] * x[j] for j=1:n) )
     @addobjective( Bi01IP, Max, sum(C[2,j] * x[j] for j=1:n) )
-    @constraint( Bi01IP, cte[i=1:m], sum(A[i,j] * x[j] for j=1:n) <= B[i])
+    @constraint( Bi01IP, cte[i=1:m], sum(A[i,j] * x[j] for j=1:n) <= round(Int, B[i]*ratio))
 
     # ---- Invoking the solver (epsilon constraint method)
     println("Solving...")
     if method == :dicho
       start = time()
-      vSolve( Bi01IP, method=:dicho, verbose=false)
+      vSolve( Bi01IP, method=:dicho,round_results=true, verbose=false)
       total_time = round(time() - start, digits = 2)
     elseif method == :epsilon
       start = time()
-      vSolve( Bi01IP, method=:epsilon, step=0.5, verbose=false )
+      vSolve( Bi01IP, method=:epsilon, step=0.01, round_results=true,verbose=false )
       total_time = round(time() - start, digits = 2)
     elseif method == :bb
       infos = vSolve( Bi01IP, method=:bb, verbose=false )
@@ -151,12 +152,12 @@ function vSolveBi01IP2(solverSelected, C, A, B, fname, method)
       writeResults(n, m, fname, outputName, method, Y_N, X_E; total_time)
 
     # return Y_N
-  # end
+  end
 
 end
 
 
-function main2(fname::String)
+function main(fname::String)
   if !isfile(fname)
     @error "This file doesn't exist ! $fname"
   end
@@ -182,17 +183,25 @@ function main2(fname::String)
 
   solverSelected = CPLEX.Optimizer
   for method in [
-    :dicho, :epsilon, 
-    # :bb, :bb_EPB,
-    # :bc, :bc_EPB,
-    # :bc_rootRelax , :bc_rootRelaxEPB,
-    # :bc_rootRelaxCP, :bc_rootRelaxCPEPB
-    ]
-    vSolveBi01IP2(solverSelected, dat.C, dat.A, dat.b, fname, method) 
-    vSolveBi01IP2(solverSelected, dat.C, dat.A, dat.b, fname, method) 
+    # :bc_rootRelax , 
+    # :bc_rootRelaxEPB,
+    # :bc_rootRelaxCP, 
+    # :bc_rootRelaxCPEPB,
+
+    # :dicho, 
+    # :epsilon, 
+    # :bb, 
+    # :bc, 
+    :bc_EPB,
+    :bb_EPB,
+    ] # 
+
+    vSolveBi01IP(solverSelected, dat.C, dat.A, dat.b, fname, method) 
   end
 
 end
 
 
-main2(ARGS[1])
+
+
+main(ARGS[1])

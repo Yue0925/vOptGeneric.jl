@@ -20,16 +20,64 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
     if pb.param.root_relax
-        start = time()
-        Y_integer, X_integer = LBSinvokingIPsolveer(node.RBS, pb.m, pb.lp_copied, pb.c, false ; args...)      
-        pb.info.relaxation_time += (time() - start)
+        limits = 2^20
+         
+        # # todo (option) : EPB no LBS computation (bounding directly)
+        # if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
+        #     return false
+        # end
+
+        # todo (option) : λ limit tuning decreasing in depth (adaptive)
+        if !node.EPB && !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
+            limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 5 ) ) )
+        end
+
+        # if node.num == 353
+        #     println("\n # ------------------ node $(node.num)")
+        #     start = time()
+        #     Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits, true; args...)    # , echo=true  
+        #     pb.info.relaxation_time += (time() - start)
+        #     println("\n # -------------------------------- \n \n \n ")
+
+        # else
+            start = time()
+            Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
+            pb.info.relaxation_time += (time() - start)
+        # end
+        # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
+
+
+
+        # # todo (option) : chordal improvement 
+        # start = time()
+        # Y_integer, X_integer = chordalImptovLBS(pb, node.RBS, limits; args...)
+        # pb.info.relaxation_time += (time() - start)
+
+        # # todo (option) : dynamic/equitable directions {1/K, 2/K, ... K-1/K}
+        # start = time()
+        # Y_integer, X_integer = dynamicImptovLBS(pb, node.RBS, limits; args...)
+        # pb.info.relaxation_time += (time() - start)
+
 
         start = time()
         for i = 1:length(Y_integer) 
-            s = Solution(X_integer[i], Y_integer[i])
+            s = Solution(X_integer[i], Y_integer[i]) ; roundSol(pb, s)
             if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
         end
         pb.info.update_incumb_time += (time() - start) 
+
+
+
+        # # todo : disply UBS at certain node 
+        # if node.num == 364
+        #     println("# ------------- node ", node.num)
+        #     print("UBS = [ ")
+        #     for s in incumbent.natural_order_vect.sols
+        #         print("$(s.y) , ")
+        #     end
+        #     println("] ")
+        # end
+
 
         if length(node.RBS.natural_order_vect.sols) == 0
             prune!(node, INFEASIBILITY)
@@ -39,6 +87,10 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             return true
         end
     else
+        # # todo (option) : EPB no LBS computation (bounding directly)
+        # if node.EPB && length(node.RBS.natural_order_vect.sols) > 0
+        #     return false
+        # end
         start = time()
         solve_dicho(pb.m, round_results, false ; args...)
         pb.info.relaxation_time += (time() - start)
@@ -59,21 +111,55 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         # construct/complete the relaxed bound set
         node.RBS = RelaxedBoundSet()
         for i = 1:length(vd_LP.Y_N)
-            push!(node.RBS.natural_order_vect, Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]), filtered=true )
+            s = Solution(vd_LP.X_E[i], vd_LP.Y_N[i], vd_LP.lambda[i]) ; roundSol(pb, s)
+            push!(node.RBS.natural_order_vect, s, filtered=true )
         end
     end
+
+    # todo : looking for missing point in node 
+    # for s in node.RBS.natural_order_vect.sols
+    #     if s.y[1] == -662396.0 
+    #         println("# -----------------\n point $(s.y) in node $(node.num) \n")
+    #         println("node : ", node)
+    #     end
+    # end
+
+    # x_missing = [1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0]    
+    # y_missing = [-662396.0, -3.543324e6]
+    # isRightBranching = true
+    # for (k, v) in node.assignment
+    #     if x_missing[k] != v
+    #         isRightBranching = false ; break
+    #     end
+    # end
+
+    # if isRightBranching && node.EPB 
+    #     isRightBranching = y_missing ≤ node.nadirPt && y_missing[2] >= node.duplicationBound
+    # end
+
+    # if isRightBranching
+        
+    #     for s in node.RBS.natural_order_vect.sols
+    #         if s.λ'*y_missing < s.y'*s.λ
+    #             println("\n # -------------------------")
+    #             println("node violated : ", node)
+    #         end
+    #     end
+    # end
+
 
     return false
 end
 
-# todo : partial reoptimize for root relaxation 
+# todo : partial reoptimize for root relaxation LBS only 
 function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cut_off, round_results, verbose ; args...)
     n = length(node.RBS.natural_order_vect.sols) ; lambdas = []
 
-    # # delete all points cut off 
-    # for indx in cut_off
-    #     push!(lambdas, node.RBS.natural_order_vect.sols[indx].λ)
-    # end
+    for indx in cut_off
+        push!(lambdas, [node.RBS.natural_order_vect.sols[indx].λ[1], node.RBS.natural_order_vect.sols[indx].λ[2] ] )
+    end
+
+    # delete all points cut off 
     # deleteat!(node.RBS.natural_order_vect.sols, cut_off)
 
     # in each direction, re-optimize 
@@ -81,12 +167,12 @@ function reoptimize_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, cu
         if pb.param.root_relax
 
             start = time() 
-            Y_integer, X_integer = opt_scalar_callbackalt(node.RBS, pb.m, pb.lp_copied, pb.c, λ, false ; args...)      
+            Y_integer, X_integer = opt_scalar_callbackalt(pb, node.RBS, [λ[1], λ[2] ] ; args...)      
             pb.info.relaxation_time += (time() - start)
     
             start = time()
             for i = 1:length(Y_integer) 
-                s = Solution(X_integer[i], Y_integer[i])
+                s = Solution(X_integer[i], Y_integer[i]) ; roundSol(pb, s)
                 if s.is_binary push!(incumbent.natural_order_vect, s, filtered=true) end
             end
             pb.info.update_incumb_time += (time() - start)
@@ -180,7 +266,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         cut_off = []
 
         while l ≤ length(LBS)
-            if LBS[l].is_binary || length(LBS[l].xEquiv) == 0 
+            if LBS[l].is_binary || length(LBS[l].xEquiv[1]) == 0 
                 l += 1 ; continue    
             end
             
@@ -193,7 +279,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     l += 1
                 else 
                     r = l+∇
-                    if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv) == 0 continue end
+                    if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv[1]) == 0 continue end
 
                     if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
 

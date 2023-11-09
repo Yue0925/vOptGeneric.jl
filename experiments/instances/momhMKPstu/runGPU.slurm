@@ -16,3 +16,5 @@ for file in ./MOBKP/set3/*; do
     echo "$file"
     julia vOptMomkp.jl "$file"
 done
+
+# julia vOptMomkp.jl ./MOBKP/set3/Wcollage-tube.DAT

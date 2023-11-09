@@ -143,6 +143,15 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
     #--------------------
     start = time()
     if ( @timeit tmr "dominance" fullyExplicitDominanceTest(node, incumbent, worst_nadir_pt, pb.param.EPB) )
+        # # todo : print UBS 
+        # println("# ------------- node ", node.num)
+        # print("UBS = [ ")
+        # for s in incumbent.natural_order_vect.sols
+        #     print("$(s.y) , ")
+        # end
+        # println("] ")
+
+
         prune!(node, DOMINANCE)
         if verbose
             @info "node $(node.num) is fathomed by dominance ! |LBS|=$(length(node.RBS.natural_order_vect))" 
@@ -159,7 +168,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         if node.EPB || hasNonExploredChild(node.pred) 
             nothing
         else
-            if length(node.pred.RBS.natural_order_vect) > 0 # todo OR ? length(node.pred.assignment) > 0
+            if length(node.pred.RBS.natural_order_vect) > 0 
                 node.pred.RBS = RelaxedBoundSet() ; node.pred.assignment = Dict{Int64, Int64}()
                 if pb.param.cp_activated
                     node.pred.con_cuts = Vector{ConstraintRef}() ; node.pred.cutpool = CutPool()
@@ -170,7 +179,7 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
     # objective branching 
     if pb.param.EPB && length(node.localNadirPts) > 0
-        # todo : to be improved for collision... 
+        # todo : to be improved for block collision... 
         for i = 1:length(node.localNadirPts)
             pt =  node.localNadirPts[i] ; duplicationBound_z2 = Inf
             if i < length(node.localNadirPts) duplicationBound_z2 = node.localNadirPts[i+1][2] end
@@ -182,9 +191,12 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
             nodeChild.assignment = getPartialAssign(nodeChild)
             pb.info.nb_nodes += 1 ; pb.info.nb_nodes_EPB += 1
 
-            # # todo : copy parent's LBS 
-            # if length(node.RBS.natural_order_vect.sols) ≥ 2 
-            # if pb.param.root_relax nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
+            # if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
+            #     # # todo option (serve predecessor intersection): copy parent's LBS 
+            #     # nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+                
+            #     # # todo option : update EPB bounding (doesn't help to fathom here ...)
+            #     # updateLBSwithEPB(nodeChild)
             # end
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
@@ -209,10 +221,10 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node1.assignment = getPartialAssign(node1)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # # todo : copy parent's LBS 
-        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
-        # if pb.param.root_relax node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
-        # end
+        # todo option (serve predecessor intersection): copy parent's LBS 
+        if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
+            node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+        end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node1, pb, incumbent, verbose) )
@@ -229,10 +241,10 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node2.assignment = getPartialAssign(node2)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # # todo : copy parent's LBS 
-        # if length(node.RBS.natural_order_vect.sols) ≥ 2 
-        # if pb.param.root_relax node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) end 
-        # end
+        # todo option (serve predecessor intersection): copy parent's LBS 
+        if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
+            node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+        end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
             ( @timeit tmr "incumbent" updateIncumbent(node2, pb, incumbent, verbose) )
@@ -243,6 +255,19 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
         node.succs = [node1, node2]
     end
+
+    # # todo : debug B&B tree 
+    #     println("# ------------- node ", node.num)
+    #     println(node)
+
+    # # todo : print UBS 
+    # println("# ------------- node ", node.num)
+    # print("UBS = [ ")
+    # for s in incumbent.natural_order_vect.sols
+    #     print("$(s.y) , ")
+    # end
+    # println("] ")
+
 end
 
 function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::IncumbentSet, round_results, verbose; args...)
@@ -250,7 +275,7 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     empty!(vd.Y_N) ; empty!(vd.X_E)
 
     for sol in incumbent.natural_order_vect.sols
-        push!(vd.Y_N, round_results ? round.(sol.y) : sol.y)
+        push!(vd.Y_N, sol.y)
         for x in sol.xEquiv
             push!(vd.X_E, x)
         end
@@ -292,7 +317,8 @@ function copy_model_LP(pb::BO01Problem)
     for i=1:n         
         if has_lower_bound(pb.varArray[i])
             set_lower_bound(var[i], lower_bound(pb.varArray[i]))
-        elseif has_upper_bound(pb.varArray[i])
+        end
+        if has_upper_bound(pb.varArray[i])
             set_upper_bound(var[i], upper_bound(pb.varArray[i]))
         end
     end
@@ -316,6 +342,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     )
 
     standard_form(problem) ; problem.param.EPB = EPB
+    # MOI.set(problem.m, MOI.RelativeGapTolerance(), 1e-6)
+    JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) # todo : root limit 
 
     # relaxation LP
     undo_relax = JuMP.relax_integrality(problem.m)
@@ -330,6 +358,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo disable heur 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo disable preprocessing 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.01) # todo : time limit in sec 
+        # todo (option) : exhaustive computation ?
+        problem.info.LBSexhaustive = false
     end
 
     if cp
@@ -341,6 +371,12 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)
+
+    # println("model : \n", problem.m)
+    # println("lp model : \n", problem.lp_copied)
+
+    # println("A : \n", problem.A) ; println("b : \n", problem.b) ; println("c : ", problem.c)
+
 
     start = time() # todo : presolving 
 
@@ -360,7 +396,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         return problem.info
     end
 
-    addTodo(todo, problem, root)
+    addTodo(todo, problem, root) ; problem.info.rootLBS = length(root.RBS.natural_order_vect.sols)
+
 
     ptl = root.RBS.natural_order_vect.sols[1].y ; ptr = root.RBS.natural_order_vect.sols[end].y
     worst_nadir_pt = [ptr[1], ptl[2]] 
@@ -404,4 +441,3 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
 
     return problem.info
 end
-

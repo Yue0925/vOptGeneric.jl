@@ -66,11 +66,13 @@ mutable struct StatInfo
     nb_nodes_VB::Int64
     root_relax::Bool
     TO::Bool
+    rootLBS::Int64
+    LBSexhaustive::Bool
     # status::MOI.TerminationStatusCode 
 end
 
 function StatInfo()
-    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false)
+    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false, 0, true)
 end
 
 function Base.:show(io::IO, info::StatInfo)
@@ -86,7 +88,9 @@ function Base.:show(io::IO, info::StatInfo)
         "nb_nodes_EPB = $(info.nb_nodes_EPB) \n",
         "nb_nodes_VB = $(info.nb_nodes_VB) \n",
         "root_relax = $(info.root_relax) \n",
-        "TO = $(info.TO) "
+        "TO = $(info.TO) \n", 
+        "rootLBS = $(info.rootLBS) \n", 
+        "LBSexhaustive = $(info.LBSexhaustive)"
     )
     if info.cp_activated println(io, info.cuts_infos) end
 end
@@ -152,9 +156,29 @@ function Solution(x::Vector{Float64}, y::Vector{Float64}, λ::Vector{Float64}=Ve
         if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
             is_binary = false; break
         end
-    end
-    return Solution([x], y, is_binary, λ, ct)
+    end    
+    return Solution([ x ], y , is_binary, λ, ct)
 end
+
+
+function roundSol(pb::BO01Problem, sol::Solution)
+    if !sol.is_binary return end
+
+    x_ = round.(sol.xEquiv[1]) ; 
+    for x_i in x_
+        if x_i < 0.0 && x_i > 1.0
+            println("!!! error rounding x = $(sol.xEquiv[1]) \n !!! x_rounded = $x_")
+        end
+    end
+
+    for i in size(pb.A, 1)
+        if pb.A[i, :]'* x_ > pb.b[i] return end 
+    end
+
+    sol.xEquiv[1] = x_ #; sol.is_binary = isBinary(x_)
+    sol.y = [x_'*pb.c[1, 2:end] + pb.c[1, 1] ,x_'*pb.c[2, 2:end] + pb.c[2, 1]  ]
+end
+
 
 """
 Given a vector `x`, return true if `x` is approximately binary.
@@ -162,7 +186,7 @@ Given a vector `x`, return true if `x` is approximately binary.
 function isBinary(x::Vector{Float64})
     if length(x) == 0 return false end 
     for i in 1:length(x)
-        if !(abs(x[i]-0.0) ≤ TOL || abs(x[i]-1.0) ≤ TOL)
+        if !(abs(x[i]-0.0)<=TOL || abs(x[i]-1.0) <=TOL)
             return false
         end
     end
@@ -173,13 +197,18 @@ end
 Add an equivalent solution associated to point `y`. 
 """
 function addEquivX(sol::Solution, x::Vector{Float64})
-    @assert length(x) > 0 "x cannot be empty"
+    # @assert length(x) > 0 "x cannot be empty"
+    if length(x) == 0 return end 
 
-    push!(sol.xEquiv, x)
     # check if x is approximately binary
-    if !sol.is_binary
-        sol.is_binary = isBinary(x)
+    if isBinary(x)
+        sol.is_binary = true
+        # sol.y = round.(sol.y, digits = 4)
+        push!(sol.xEquiv, x) # round.(x, digits = 4)
+    else
+        push!(sol.xEquiv, x)
     end
+    
 end
 
 function addEquivX(sol::Solution, vecX::Vector{Vector{Float64}})
@@ -199,6 +228,7 @@ function Base.:show(io::IO, s::Solution)
     "\t is_binary ? ", s.is_binary,
     "\n y = ", s.y,
     "\n λ = ", s.λ, "\t ct = ", s.ct, 
+    "\n xEquiv = ", s.xEquiv, 
     " )")
 end
 
@@ -212,7 +242,7 @@ end
 function Base.:<(a::Solution, b::Solution)
     @assert length(a.y) > 0
     @assert length(b.y) > 0
-    return a.y[1] < b.y[1] && a.y[2] < b.y[2]
+    return a.y[1] < b.y[1]  && a.y[2] < b.y[2]
 end
 
 function Base.:>=(a::Solution, b::Solution)
@@ -250,7 +280,7 @@ end
 Return `true` if solution `a` (weakly) dominates sobution `b`; `false` otherwise.
 """
 function dominate(a::Solution, b::Solution)
-    return a ≤ b && a ≠ b
+    return a ≤ b && a != b
 end
 
 """
@@ -265,7 +295,7 @@ straight line       a x + b y = c
             <=>   -Δz2 z1 + Δz1 z2 = Δz1 c 
 
 a = -Δz2 = -λ1   b = Δz1 = -λ2    ct = Δz1 c 
-        # todo : λ always absolute value 
+        # todo (attention) : λ always absolute value 
 """
 function updateCT(s::Solution)
     if length(s.λ) ≠ 2 || s.λ == [0.0, 0.0] return end  # s.ct ≠ Inf || 
@@ -312,40 +342,81 @@ Return
     -   -1 : the same point with exactly ct
             OR  the inconming point is dominated 
 """
-function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false)::Tuple{Int,Bool}
-    sol.y = round.(sol.y, digits = 4) ; idx = -1
+function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::Bool=false, verbose::Bool=false)::Tuple{Int,Bool}
+    # sol.y = round.(sol.y, digits = 4) ; 
+    idx = -1
 
     # add s directly if sols is empty
     if length(natural_sols) == 0
         push!(natural_sols.sols, sol) ; return 1, true
     end
 
+    if verbose
+        println("\t in pushing L ...")
+    end
+
     # a binary/dichotomy search finds the location to insert 
     l = 1; r = length(natural_sols); m = 0
     while l ≤ r
         m = Int(floor((l+r)/2))
+        if verbose
+            println("l=$l ; r=$r ; m=$m ")
+        end
 
-        if sol.y[2] < natural_sols.sols[m].y[2]
+        if abs(sol.y[2] - natural_sols.sols[m].y[2]) ≤ TOL
+            # in case of the approximately equality on the first objective, compare the second obj
+            if abs(sol.y[1] - natural_sols.sols[m].y[1]) ≤ TOL
+                
+                # if natural_sols.sols[m].is_binary
+                #     if sol.is_binary
+                #         addEquivX(natural_sols.sols[m], sol.xEquiv)
+                #         natural_sols.sols[m].λ = deepcopy(sol.λ) ; updateCT(natural_sols.sols[m])
+                #     end
+                # else
+                #     # replaced by the new solution directly 
+                #     if length(sol.xEquiv[1])>0 
+                #         natural_sols.sols[m].xEquiv = deepcopy(sol.xEquiv)
+                #         natural_sols.sols[m].y = deepcopy(sol.y)
+                #         natural_sols.sols[m].is_binary = sol.is_binary
+                #         natural_sols.sols[m].λ = deepcopy(sol.λ)
+                #         natural_sols.sols[m].ct = sol.ct
+                #     end
+                # end                
+
+                # ------------------------------------------------
+                # # todo : different λ same pente
+                if length(sol.xEquiv[1])>0 && length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
+
+                    # if sol.is_binary
+                    #     natural_sols.sols[m].y = deepcopy(sol.y)
+                    #     natural_sols.sols[m].λ = deepcopy(sol.λ)
+                    #     natural_sols.sols[m].ct = sol.ct
+                    #     natural_sols.sols[m].is_binary = sol.is_binary
+                    #     natural_sols.sols[m].xEquiv = deepcopy(sol.xEquiv)
+                    # else
+                        if abs(sol.λ[1]- natural_sols.sols[m].λ[1])>TOL || abs(sol.λ[2]- natural_sols.sols[m].λ[2])>TOL
+
+                            natural_sols.sols[m].λ = deepcopy(sol.λ)
+                            updateCT(natural_sols.sols[m])
+                        end
+                        # addEquivX(natural_sols.sols[m], sol.xEquiv) 
+                    # end
+
+                    
+                end
+                addEquivX(natural_sols.sols[m], sol.xEquiv) 
+                # -------------------------------------------------
+
+                return m, false
+            elseif sol.y[1] > natural_sols.sols[m].y[1]
+                l = m+1
+            elseif sol.y[1] < natural_sols.sols[m].y[1]
+                r  = m-1
+            end
+        elseif sol.y[2] < natural_sols.sols[m].y[2]
             l = m+1
         elseif sol.y[2] > natural_sols.sols[m].y[2]
             r = m-1
-        # in case of the equality on the first objective, compare the second obj
-        elseif sol.y[1] > natural_sols.sols[m].y[1]
-            l = m+1
-        elseif sol.y[1] < natural_sols.sols[m].y[1]
-            r  = m-1
-        #todo :  in case of equality  =>  update only & retuen -1
-        else
-            # # todo : different λ same pente
-            if length(sol.λ) == 2 && length(natural_sols.sols[m].λ) == 2 
-                if (abs(sol.λ[1]- natural_sols.sols[m].λ[1]) > 1e-4 || abs(sol.λ[2] - natural_sols.sols[m].λ[2]) > 1e-4 )
-
-                    natural_sols.sols[m].λ = sol.λ
-                    natural_sols.sols[m].is_binary = natural_sols.sols[m].is_binary ? natural_sols.sols[m].is_binary : sol.is_binary
-                end
-            end
-            addEquivX(natural_sols.sols[m], sol.xEquiv) 
-            return m, false
         end
     end
 
@@ -359,7 +430,11 @@ function Base.push!(natural_sols::NaturalOrderVector, sol::Solution; filtered::B
         m = m > Int(floor((l+r)/2)) ? m : m+1
         natural_sols.sols = vcat(vcat(natural_sols.sols[1:m-1], sol), natural_sols.sols[m:end])
     end
+
     idx = m 
+    if verbose
+        println("l=$l ; r=$r ; m=$m ")
+    end
 
     # find points weakly dominated by the new point and delete it/them
     if filtered
