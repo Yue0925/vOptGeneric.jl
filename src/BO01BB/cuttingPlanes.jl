@@ -27,23 +27,25 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         #     return false
         # end
 
-        # # todo (option) : λ limit tuning decreasing in depth (adaptive)
-        # if !node.EPB && !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
-        #     limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 5 ) ) )
-        # end
+        # todo (option) : λ limit tuning decreasing in depth (adaptive)
+        # !node.EPB &&
+        if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
+            limits = 2
+            # limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 5 ) ) )
+        end
 
-        # todo (option) : dichtomic-like concave-convex algorithm (default unlimited λ)
+        # todo (option 1) : dichtomic-like concave-convex algorithm (default unlimited λ)
         start = time()
         Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
         pb.info.relaxation_time += (time() - start)
 
 
-        # # todo (option) : chordal improvement 
+        # # todo (option 2) : chordal improvement 
         # start = time()
         # Y_integer, X_integer = chordalImptovLBS(pb, node.RBS, limits; args...)
         # pb.info.relaxation_time += (time() - start)
 
-        # # todo (option) : dynamic/equitable directions {1/K, 2/K, ... K-1/K}
+        # # todo (option 3) : dynamic/equitable directions {1/K, 2/K, ... K-1/K}
         # start = time()
         # Y_integer, X_integer = dynamicImptovLBS(pb, node.RBS, limits; args...)
         # pb.info.relaxation_time += (time() - start)
