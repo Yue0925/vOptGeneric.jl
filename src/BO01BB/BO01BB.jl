@@ -212,9 +212,11 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node1.assignment = getPartialAssign(node1)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # todo option (serve predecessor intersection): copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
-            node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+        # option (serve predecessor intersection): copy parent's LBS 
+        if !pb.info.LBSexhaustive
+            if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
+                node1.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+            end
         end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node1, pb, incumbent, round_results, verbose; args...) ) || 
@@ -232,9 +234,11 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
         node2.assignment = getPartialAssign(node2)
         pb.info.nb_nodes += 1 ; pb.info.nb_nodes_VB += 1
 
-        # todo option (serve predecessor intersection): copy parent's LBS 
-        if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
-            node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+        # option (serve predecessor intersection): copy parent's LBS 
+        if !pb.info.LBSexhaustive
+            if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
+                node2.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+            end
         end
 
         if ( @timeit tmr "relax" LPRelaxByDicho(node2, pb, incumbent, round_results, verbose; args...) ) || 
@@ -281,7 +285,7 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     end
 end
 
-
+# todo : compare relax integrity direct and copy LP model 
 function copy_model_LP(pb::BO01Problem)
     n = size(pb.A, 2) ; numRows = size(pb.A, 1)
 
@@ -308,7 +312,16 @@ end
 """
 A bi-objective binary(0-1) branch and bound algorithm.
 """
-function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bool, round_results, verbose; args...)
+function solve_branchboundcut(m::JuMP.Model; 
+                                            cp = false,         # multi-point cutting plane active ?
+                                            root_relax = false, # using cplex's cuts before root relaxation ?
+                                            EPB = false,        # de pareto branching ?
+                                            round_results = false, 
+                                            verbose = false ,
+                                            LBSexhaustive = true,       # LBS construction exhaustive at each node 
+                                            λ_strategy = 0,         # λ searching strategy 0 -> dicho, 1 -> chordal, 2 -> dynamic
+                                            λ_limit = 2^20 ,        # the number of λ optimized in each node             
+                                            args...)
     converted, f = formatting(m)
 
     varArray = JuMP.all_variables(m)
@@ -320,7 +333,8 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
     )
 
     standard_form(problem) ; problem.param.EPB = EPB
-    # todo :  strict tolerance following objective coeff 
+
+    #  strict tolerance following objective coeff 
     length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
 
     # relaxation LP
@@ -336,8 +350,11 @@ function solve_branchboundcut(m::JuMP.Model, cp::Bool, root_relax::Bool, EPB::Bo
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo disable heur 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo disable preprocessing 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.01) # todo : time limit in sec 
-        # todo (option) : exhaustive computation ?
-        problem.info.LBSexhaustive = false
+
+        # (option) : exhaustive LBS computation ?
+        problem.info.LBSexhaustive = LBSexhaustive
+        problem.info.λ_strategy = λ_strategy
+        problem.info.λ_limit = λ_limit
     end
 
     if cp

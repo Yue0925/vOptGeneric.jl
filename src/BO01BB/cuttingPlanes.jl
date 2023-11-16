@@ -30,25 +30,30 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         # todo (option) : λ limit tuning decreasing in depth (adaptive)
         # !node.EPB &&
         if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
-            limits = 2
+            limits = pb.info.λ_limit
             # limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 5 ) ) )
         end
 
         # todo (option 1) : dichtomic-like concave-convex algorithm (default unlimited λ)
-        start = time()
-        Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
-        pb.info.relaxation_time += (time() - start)
+        if pb.info.λ_strategy == 0
+            start = time()
+            Y_integer, X_integer = LBSinvokingIPsolver(pb, node.RBS, limits; args...)      
+            pb.info.relaxation_time += (time() - start)
+            
+        # todo (option 2) : chordal improvement 
+        elseif pb.info.λ_strategy == 1
+            start = time()
+            Y_integer, X_integer = chordalImptovLBS(pb, node.RBS, limits; args...)
+            pb.info.relaxation_time += (time() - start)
 
-
-        # # todo (option 2) : chordal improvement 
-        # start = time()
-        # Y_integer, X_integer = chordalImptovLBS(pb, node.RBS, limits; args...)
-        # pb.info.relaxation_time += (time() - start)
-
-        # # todo (option 3) : dynamic/equitable directions {1/K, 2/K, ... K-1/K}
-        # start = time()
-        # Y_integer, X_integer = dynamicImptovLBS(pb, node.RBS, limits; args...)
-        # pb.info.relaxation_time += (time() - start)
+        # todo (option 3) : dynamic/equitable directions {1/K, 2/K, ... K-1/K}
+        elseif pb.info.λ_strategy == 2
+            start = time()
+            Y_integer, X_integer = dynamicImptovLBS(pb, node.RBS, limits; args...)
+            pb.info.relaxation_time += (time() - start)
+        else
+            @warn("λ searching strategy unknown with $(pb.info.λ_strategy)")
+        end
 
 
         start = time()

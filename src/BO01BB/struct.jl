@@ -68,11 +68,13 @@ mutable struct StatInfo
     TO::Bool
     rootLBS::Int64
     LBSexhaustive::Bool
+    λ_strategy::Int64         # λ searching strategy 0 -> dicho, 1 -> chordal, 2 -> dynamic
+    λ_limit::Int64        # the number of λ optimized in each node             
     # status::MOI.TerminationStatusCode 
 end
 
 function StatInfo()
-    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false, 0, true)
+    return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false, 0, true, 0, 2^20)
 end
 
 function Base.:show(io::IO, info::StatInfo)
@@ -90,7 +92,9 @@ function Base.:show(io::IO, info::StatInfo)
         "root_relax = $(info.root_relax) \n",
         "TO = $(info.TO) \n", 
         "rootLBS = $(info.rootLBS) \n", 
-        "LBSexhaustive = $(info.LBSexhaustive)"
+        "LBSexhaustive = $(info.LBSexhaustive) \n ",
+        "λ_strategy = $(info.λ_strategy) \n ", 
+        "λ_limit = $(info.λ_limit) \n "
     )
     if info.cp_activated println(io, info.cuts_infos) end
 end

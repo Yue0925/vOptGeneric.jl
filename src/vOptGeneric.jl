@@ -40,7 +40,15 @@ function vModel(; args...)
     return m
 end
 
-function vSolve(m::JuMP.Model ; relax=false, method=nothing, step = 1., round_results = false, verbose = true, args...)
+function vSolve(m::JuMP.Model ; relax=false,    # LP relaxation
+                                method=nothing, # method symbolic
+                                step = 1.,      # ϵ step 
+                                round_results = false,  # rounding option
+                                verbose = true,     # if display 
+                                LBSexhaustive = true,       # LBS construction exhaustive at each node 
+                                λ_strategy = 0,         # λ searching strategy 0 -> dicho, 1 -> chordal, 2 -> dynamic
+                                λ_limit = 2^20 ,        # the number of λ optimized in each node 
+                                args...)
 
     vd = getvOptData(m)
 
@@ -57,21 +65,21 @@ function vSolve(m::JuMP.Model ; relax=false, method=nothing, step = 1., round_re
     elseif method == :lex || method == :lexico
         solve_lexico(m, verbose ; relaxation=relax, args...)
     elseif method == :bb || method == :branchbound
-        return solve_branchboundcut(m, false, false, false, round_results, verbose ; args...)
+        return solve_branchboundcut(m)
     elseif method == :bb_EPB || method == :branchboundEPB
-        return solve_branchboundcut(m, false, false, true, round_results, verbose ; args...)
+        return solve_branchboundcut(m, EPB = true)
     elseif method == :bc_rootRelax || method == :branchcutRootRelax
-        return solve_branchboundcut(m, false, true, false, round_results, verbose ; args...)
+        return solve_branchboundcut(m, root_relax = true, LBSexhaustive = LBSexhaustive , λ_strategy = λ_strategy, λ_limit = λ_limit)
     elseif method == :bc_rootRelaxEPB || method == :branchcutRootRelaxEPB
-        return solve_branchboundcut(m, false, true, true, round_results, verbose ; args...)
+        return solve_branchboundcut(m, root_relax = true, EPB = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit)
     elseif method == :bc_rootRelaxCP || method == :branchcutRootRelaxCP
-        return solve_branchboundcut(m, true, true, false, round_results, verbose ; args...)
+        return solve_branchboundcut(m, cp = true, root_relax = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit)
     elseif method == :bc_rootRelaxCPEPB || method == :branchcutRootRelaxCPEPB
-        return solve_branchboundcut(m, true, true, true, round_results, verbose ; args...)
+        return solve_branchboundcut(m, cp = true, root_relax = true, EPB = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit)
     elseif method == :bc || method == :branchcut
-        return solve_branchboundcut(m, true, false, false, round_results, verbose ; args...)
+        return solve_branchboundcut(m, cp = true )
     elseif method == :bc_EPB || method == :branchcutEPB
-        return solve_branchboundcut(m, true, false, true, round_results, verbose ; args...)
+        return solve_branchboundcut(m, cp = true, EPB = true)
     else
         @warn("use solve(m, method = :(epsilon | dichotomy | chalmet | lexico | branchbound) )")
     end
