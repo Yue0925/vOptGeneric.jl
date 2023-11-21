@@ -1,34 +1,38 @@
 vars = 30 ; constr = 6 
  # informations of B&B algorithm : 
-total_times_used = 619.79 
-total_nodes = 301465 
-pruned_nodes = 150733 
+total_times_used = 825.25 
+total_nodes = 261515 
+pruned_nodes = 130758 
 GAP = 0.0 
-relaxation_time = 535.61 
-test_dominance_time = 0.21 
-update_incumbent_time = 0.13 
-tree_size = 831.038 
+relaxation_time = 727.88 
+test_dominance_time = 0.2 
+update_incumbent_time = 0.02 
+tree_size = 770.039 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 301464 
+nb_nodes_VB = 261514 
 root_relax = false 
 TO = false 
+rootLBS = 15 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_limit = 1048576 
+ 
 
 
  # ----------- info about cuts : 
-ite_total = 208274 
-cuts_applied = 230187 
-sp_cuts = 144876 
-mp_cuts = 85311 
-cuts_total = 230187 
-times_calling_dicho = 535.61 
-times_calling_separators = 47.7 
-times_oper_cutPool = 3.62 
-times_total_for_cuts = 592.09 
-times_add_retrieve_cuts = 14.42 
+ite_total = 177722 
+cuts_applied = 238590 
+sp_cuts = 140779 
+mp_cuts = 97811 
+cuts_total = 238590 
+times_calling_dicho = 727.88 
+times_calling_separators = 51.71 
+times_oper_cutPool = 4.87 
+times_total_for_cuts = 792.67 
+times_add_retrieve_cuts = 17.89 
 
 
 
 size_Y_N = 17
-Y_N = [[5223.3333, 6724.1667], [5223.6667, 6722.1667], [5401.3333, 6442.1667], [5733.1667, 5853.6667], [5777.6667, 5307.8333], [5787.3333, 5298.1667], [5826.0, 5136.3333], [5844.5, 5000.3333], [5844.8333, 4998.3333], [5952.8333, 4984.3333], [6004.0, 4854.3333], [6004.5, 4840.1667], [6023.3333, 4744.3333], [6037.6667, 4612.3333], [6072.3333, 4607.6667], [6137.8333, 4274.6667], [6211.6667, 4220.6667]]
+Y_N = [[5223.333333333333, 6724.166666666666], [5223.666666666667, 6722.166666666666], [5401.333333333334, 6442.166666666666], [5733.166666666667, 5853.666666666666], [5777.666666666667, 5307.833333333333], [5787.333333333333, 5298.166666666666], [5826.0, 5136.333333333333], [5844.5, 5000.333333333333], [5844.833333333333, 4998.333333333333], [5952.833333333333, 4984.333333333333], [6004.0, 4854.333333333333], [6004.5, 4840.166666666666], [6023.333333333333, 4744.333333333333], [6037.666666666667, 4612.333333333333], [6072.333333333333, 4607.666666666666], [6137.833333333333, 4274.666666666666], [6211.666666666667, 4220.666666666666]]
 
-size_X_E = 17

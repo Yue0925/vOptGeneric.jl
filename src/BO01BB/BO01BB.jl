@@ -184,10 +184,10 @@ function iterative_procedure(todo, node::Node, pb::BO01Problem, incumbent::Incum
 
             # if length(node.RBS.natural_order_vect.sols) ≥ 2 && pb.param.root_relax 
             #     # # todo option (serve predecessor intersection): copy parent's LBS 
-            #     # nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
+            #     nodeChild.RBS.natural_order_vect.sols = deepcopy(node.RBS.natural_order_vect.sols) 
                 
             #     # # todo option : update EPB bounding (doesn't help to fathom here ...)
-            #     # updateLBSwithEPB(nodeChild)
+            #     updateLBSwithEPB(nodeChild)
             # end
 
             if ( @timeit tmr "relax" LPRelaxByDicho(nodeChild, pb, incumbent, round_results, verbose; args...) ) || 
@@ -334,8 +334,8 @@ function solve_branchboundcut(m::JuMP.Model;
 
     standard_form(problem) ; problem.param.EPB = EPB
 
-    #  strict tolerance following objective coeff 
-    length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
+    # # todo : strict tolerance following objective coeff 
+    # length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
 
     # relaxation LP
     undo_relax = JuMP.relax_integrality(problem.m)

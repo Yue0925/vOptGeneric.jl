@@ -20,7 +20,7 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
     println(fout, "size_Y_N = ", length(Y_N))
     println(fout, "Y_N = ", Y_N)
     println(fout)
-    println(fout, "size_X_E = ", length(X_E))
+    # println(fout, "size_X_E = ", length(X_E))
   
     close(fout)
   
@@ -112,6 +112,9 @@ function solve(fname::String, method::String)
     println("\n -----------------------------")
     println(" solving mono $(name) ... ")
     println(" -----------------------------")
+
+    # todo : 
+    if !(n==20 || n== 30) return end
         
     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[1:n], Bin )

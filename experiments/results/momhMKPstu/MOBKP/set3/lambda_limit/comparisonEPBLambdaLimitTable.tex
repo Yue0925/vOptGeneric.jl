@@ -1,0 +1,60 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccccccccccccccccccccc}
+\toprule
+% line 1 
+\textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$\mathcal{Y}_N$}
+& \multicolumn{3}{c}{\textbf{$|\lambda| = Inf$}} & \multicolumn{3}{c}{\textbf{$|\lambda| = 2$}} & \multicolumn{3}{c}{\textbf{$|\lambda| = 3$}} & \multicolumn{3}{c}{\textbf{$|\lambda| = 4$}} & \multicolumn{3}{c}{\textbf{$|\lambda| = 6$}} & \multicolumn{3}{c}{\textbf{$|\lambda| = 8$}} \\
+
+%line 2
+\cmidrule(r){5-7} \cmidrule(r){8-10} \cmidrule(r){11-13} \cmidrule(r){14-16} \cmidrule(r){17-19} \cmidrule(r){20-22} 
+~ & ~ & ~ & ~ & \textbf{Time(s)} & \textbf{\#VB} & \textbf{\#EPB} & \textbf{Time(s)} & \textbf{\#VB} & \textbf{\#EPB} & \textbf{Time(s)} & \textbf{\#VB} & \textbf{\#EPB} & \textbf{Time(s)} & \textbf{\#VB} & \textbf{\#EPB} & \textbf{Time(s)} & \textbf{\#VB} & \textbf{\#EPB} & \textbf{Time(s)} & \textbf{\#VB} & \textbf{\#EPB} \\
+\midrule
+
+W7BI-rnd1-1800.DAT & 10 & 2 & 8 &  \textcolor{blue2}{0.09} & 36 & 5 & 0.13 & 36 & 5 &  \textcolor{blue2}{0.09} & 36 & 5 &  \textcolor{blue2}{0.09} & 36 & 5 &  \textcolor{blue2}{0.09} & 36 & 5 &  \textcolor{blue2}{0.09} & 36 & 5 \\
+W7BI-rnd1-3000.DAT & 10 & 2 & 7 &  \textcolor{blue2}{0.08} & 32 & 3 &  \textcolor{blue2}{0.08} & 32 & 3 &  \textcolor{blue2}{0.08} & 32 & 3 & 0.09 & 32 & 3 & 0.09 & 32 & 3 &  \textcolor{blue2}{0.08} & 32 & 3 \\
+W7BI-tube1-1800.DAT & 10 & 2 & 8 &  \textcolor{blue2}{0.07} & 32 & 4 &  \textcolor{blue2}{0.07} & 32 & 4 & 0.09 & 32 & 4 &  \textcolor{blue2}{0.07} & 32 & 4 &  \textcolor{blue2}{0.07} & 32 & 4 & 0.08 & 32 & 4 \\
+W7BI-tube1-3000.DAT & 10 & 2 & 5 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 \\
+W7BI-tube1-asyn.DAT & 10 & 2 & 5 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 &  \textcolor{blue2}{0.04} & 18 & 0 \\
+W7BI-tube2-1800.DAT & 10 & 2 & 7 & 0.07 & 30 & 9 & 0.07 & 30 & 9 & 0.07 & 30 & 9 & 0.07 & 30 & 9 &  \textcolor{blue2}{0.06} & 30 & 9 &  \textcolor{blue2}{0.06} & 30 & 9 \\
+Wcollage-tube.DAT & 10 & 2 & 2 &  \textcolor{blue2}{0.03} & 10 & 0 &  \textcolor{blue2}{0.03} & 10 & 0 &  \textcolor{blue2}{0.03} & 10 & 0 & 0.04 & 10 & 0 &  \textcolor{blue2}{0.03} & 10 & 0 &  \textcolor{blue2}{0.03} & 10 & 0 \\
+\cline{1-22} \textbf{avg} & \textbf{10} & \textbf{2} & \textbf{6} & \textbf{0.06} & \textbf{25.14} & \textbf{3.0} & \textbf{0.07} & \textbf{25.14} & \textbf{3.0} & \textbf{0.06} & \textbf{25.14} & \textbf{3.0} & \textbf{0.06} & \textbf{25.14} & \textbf{3.0} & \textbf{0.06} & \textbf{25.14} & \textbf{3.0} & \textbf{0.06} & \textbf{25.14} & \textbf{3.0} \\ \cline{1-22}
+W7BI-rnd1-1800.DAT & 20 & 2 & 7 & 0.29 & 50 & 17 & 0.25 & 50 & 17 &  \textcolor{blue2}{0.24} & 50 & 17 & 0.27 & 50 & 17 & 0.25 & 50 & 17 & 0.25 & 50 & 17 \\
+W7BI-rnd1-3000.DAT & 20 & 2 & 4 &  \textcolor{blue2}{0.11} & 22 & 2 &  \textcolor{blue2}{0.11} & 22 & 2 & 0.14 & 22 & 2 &  \textcolor{blue2}{0.11} & 22 & 2 &  \textcolor{blue2}{0.11} & 22 & 2 & 0.13 & 22 & 2 \\
+W7BI-tube1-1800.DAT & 20 & 2 & 5 & 0.3 & 64 & 5 & 0.3 & 64 & 5 & 0.3 & 64 & 5 & 0.3 & 64 & 5 &  \textcolor{blue2}{0.29} & 64 & 5 &  \textcolor{blue2}{0.29} & 64 & 5 \\
+W7BI-tube1-3000.DAT & 20 & 2 & 14 & 0.81 & 78 & 20 &  \textcolor{blue2}{0.31} & 78 & 20 &  \textcolor{blue2}{0.31} & 78 & 20 & 0.33 & 78 & 20 &  \textcolor{blue2}{0.31} & 78 & 20 &  \textcolor{blue2}{0.31} & 78 & 20 \\
+W7BI-tube1-asyn.DAT & 20 & 2 & 14 & 0.89 & 78 & 20 &  \textcolor{blue2}{0.31} & 78 & 20 &  \textcolor{blue2}{0.31} & 78 & 20 &  \textcolor{blue2}{0.31} & 78 & 20 & 0.32 & 78 & 20 & 0.33 & 78 & 20 \\
+W7BI-tube2-1800.DAT & 20 & 2 & 5 & 0.26 & 52 & 4 &  \textcolor{blue2}{0.2} & 52 & 4 &  \textcolor{blue2}{0.2} & 52 & 4 &  \textcolor{blue2}{0.2} & 52 & 4 &  \textcolor{blue2}{0.2} & 52 & 4 &  \textcolor{blue2}{0.2} & 52 & 4 \\
+Wcollage-tube.DAT & 20 & 2 & 27 & 3.32 & 176 & 97 & 1.32 & 176 & 97 & 1.34 & 176 & 97 &  \textcolor{blue2}{1.28} & 176 & 97 & 1.38 & 176 & 97 & 1.3 & 176 & 97 \\
+\cline{1-22} \textbf{avg} & \textbf{20} & \textbf{2} & \textbf{11} & \textbf{0.85} & \textbf{74.29} & \textbf{23.57} & \textbf{0.4} & \textbf{74.29} & \textbf{23.57} & \textbf{0.41} & \textbf{74.29} & \textbf{23.57} & \textbf{0.4} & \textbf{74.29} & \textbf{23.57} & \textbf{0.41} & \textbf{74.29} & \textbf{23.57} & \textbf{0.4} & \textbf{74.29} & \textbf{23.57} \\ \cline{1-22}
+W7BI-rnd1-1800.DAT & 30 & 2 & 8 &  \textcolor{blue2}{0.44} & 78 & 19 & 0.45 & 78 & 19 & 0.45 & 78 & 19 &  \textcolor{blue2}{0.44} & 78 & 19 & 0.47 & 78 & 19 & 0.45 & 78 & 19 \\
+W7BI-rnd1-3000.DAT & 30 & 2 & 2 &  \textcolor{blue2}{0.12} & 26 & 1 & 0.15 & 26 & 1 &  \textcolor{blue2}{0.12} & 26 & 1 &  \textcolor{blue2}{0.12} & 26 & 1 &  \textcolor{blue2}{0.12} & 26 & 1 & 0.14 & 26 & 1 \\
+W7BI-tube1-1800.DAT & 30 & 2 & 31 & 1.56 & 312 & 90 & 1.48 & 312 & 90 & 1.45 & 312 & 90 & 1.52 & 312 & 90 &  \textcolor{blue2}{1.44} & 312 & 90 & 1.46 & 312 & 90 \\
+W7BI-tube1-3000.DAT & 30 & 2 & 12 & 0.4 & 80 & 53 &  \textcolor{blue2}{0.33} & 80 & 53 & 0.36 & 80 & 53 &  \textcolor{blue2}{0.33} & 80 & 53 &  \textcolor{blue2}{0.33} & 80 & 53 & 0.35 & 80 & 53 \\
+W7BI-tube1-asyn.DAT & 30 & 2 & 12 & 0.51 & 80 & 13 &  \textcolor{blue2}{0.43} & 80 & 13 &  \textcolor{blue2}{0.43} & 80 & 13 & 0.45 & 80 & 13 & 0.46 & 80 & 13 & 0.44 & 80 & 13 \\
+W7BI-tube2-1800.DAT & 30 & 2 & 28 & 1.47 & 326 & 66 & 1.34 & 326 & 66 & 1.34 & 326 & 66 &  \textcolor{blue2}{1.33} & 326 & 66 & 1.34 & 326 & 66 &  \textcolor{blue2}{1.33} & 326 & 66 \\
+Wcollage-tube.DAT & 30 & 2 & 46 & 8.1 & 646 & 313 & 7.63 & 646 & 313 & 8.12 & 646 & 313 & 7.6 & 646 & 313 &  \textcolor{blue2}{7.57} & 646 & 313 & 7.68 & 646 & 313 \\
+\cline{1-22} \textbf{avg} & \textbf{30} & \textbf{2} & \textbf{20} & \textbf{1.8} & \textbf{221.14} & \textbf{79.29} & \textbf{1.69} & \textbf{221.14} & \textbf{79.29} & \textbf{1.75} & \textbf{221.14} & \textbf{79.29} & \textbf{1.68} & \textbf{221.14} & \textbf{79.29} & \textbf{1.68} & \textbf{221.14} & \textbf{79.29} & \textbf{1.69} & \textbf{221.14} & \textbf{79.29} \\ \cline{1-22}
+W7BI-rnd1-1800.DAT & 40 & 2 & 11 &  \textcolor{blue2}{1.08} & 126 & 60 &  \textcolor{blue2}{1.08} & 126 & 60 & 1.12 & 126 & 60 & 1.11 & 126 & 60 & 1.09 & 126 & 60 & 1.12 & 126 & 60 \\
+W7BI-rnd1-3000.DAT & 40 & 2 & 7 & 0.48 & 64 & 13 &  \textcolor{blue2}{0.43} & 64 & 13 &  \textcolor{blue2}{0.43} & 64 & 13 &  \textcolor{blue2}{0.43} & 64 & 13 &  \textcolor{blue2}{0.43} & 64 & 13 &  \textcolor{blue2}{0.43} & 64 & 13 \\
+W7BI-tube1-1800.DAT & 40 & 2 & 51 & 6.38 & 796 & 358 & 6.1 & 796 & 358 & 6.09 & 796 & 358 &  \textcolor{blue2}{6.03} & 796 & 358 & 6.04 & 796 & 358 & 6.08 & 796 & 358 \\
+W7BI-tube1-3000.DAT & 40 & 2 & 8 &  \textcolor{blue2}{0.9} & 118 & 17 & 0.94 & 118 & 17 & 0.91 & 118 & 17 & 0.96 & 118 & 17 & 0.92 & 118 & 17 & 0.91 & 118 & 17 \\
+W7BI-tube1-asyn.DAT & 40 & 2 & 49 & 16.67 & 1670 & 456 & 16.53 & 1670 & 456 & 16.74 & 1670 & 456 &  \textcolor{blue2}{16.51} & 1670 & 456 & 16.95 & 1670 & 456 & 16.9 & 1670 & 456 \\
+W7BI-tube2-1800.DAT & 40 & 2 & 43 & 4.73 & 602 & 225 & 4.58 & 602 & 225 &  \textcolor{blue2}{4.56} & 602 & 225 & 4.64 & 602 & 225 & 4.57 & 602 & 225 & 4.92 & 602 & 225 \\
+Wcollage-tube.DAT & 40 & 2 & 80 & 90.94 & 6588 & 2044 & 92.0 & 6588 & 2044 & 91.81 & 6588 & 2044 &  \textcolor{blue2}{90.77} & 6588 & 2044 & 91.58 & 6588 & 2044 & 90.99 & 6588 & 2044 \\
+\cline{1-22} \textbf{avg} & \textbf{40} & \textbf{2} & \textbf{36} & \textbf{17.31} & \textbf{1423.43} & \textbf{453.29} & \textbf{17.38} & \textbf{1423.43} & \textbf{453.29} & \textbf{17.38} & \textbf{1423.43} & \textbf{453.29} & \textbf{17.21} & \textbf{1423.43} & \textbf{453.29} & \textbf{17.37} & \textbf{1423.43} & \textbf{453.29} & \textbf{17.34} & \textbf{1423.43} & \textbf{453.29} \\ \cline{1-22}
+W7BI-rnd1-1800.DAT & 50 & 2 & 16 &  \textcolor{blue2}{1.76} & 174 & 99 & 1.78 & 174 & 99 & 1.85 & 174 & 99 &  \textcolor{blue2}{1.76} & 174 & 99 & 1.8 & 174 & 99 & 1.85 & 174 & 99 \\
+W7BI-rnd1-3000.DAT & 50 & 2 & 6 &  \textcolor{blue2}{0.51} & 78 & 16 &  \textcolor{blue2}{0.51} & 78 & 16 & 0.52 & 78 & 16 & 0.53 & 78 & 16 & 0.53 & 78 & 16 & 0.53 & 78 & 16 \\
+W7BI-tube1-1800.DAT & 50 & 2 & 65 & 12.07 & 1330 & 487 & 11.95 & 1330 & 487 & 11.83 & 1330 & 487 & 11.93 & 1330 & 487 & 11.91 & 1330 & 487 &  \textcolor{blue2}{11.81} & 1330 & 487 \\
+W7BI-tube1-3000.DAT & 50 & 2 & 28 & 1.59 & 312 & 75 & 1.5 & 312 & 75 & 1.57 & 312 & 75 &  \textcolor{blue2}{1.49} & 312 & 75 & 1.5 & 312 & 75 & 1.58 & 312 & 75 \\
+W7BI-tube1-asyn.DAT & 50 & 2 & 81 & 37.44 & 3160 & 1442 &  \textcolor{blue2}{37.34} & 3160 & 1442 & 37.36 & 3160 & 1442 & 37.95 & 3160 & 1442 & 38.2 & 3160 & 1442 & 37.83 & 3160 & 1442 \\
+W7BI-tube2-1800.DAT & 50 & 2 & 61 & 12.37 & 1560 & 526 & 12.07 & 1560 & 526 & 12.15 & 1560 & 526 & 11.94 & 1560 & 526 &  \textcolor{blue2}{11.88} & 1560 & 526 & 12.54 & 1560 & 526 \\
+Wcollage-tube.DAT & 50 & 2 & 105 & 87.32 & 7040 & 1813 & 89.33 & 7040 & 1813 & 87.27 & 7040 & 1813 &  \textcolor{blue2}{86.62} & 7040 & 1813 & 87.58 & 7040 & 1813 & 87.0 & 7040 & 1813 \\
+\cline{1-22} \textbf{avg} & \textbf{50} & \textbf{2} & \textbf{52} & \textbf{21.87} & \textbf{1950.57} & \textbf{636.86} & \textbf{22.07} & \textbf{1950.57} & \textbf{636.86} & \textbf{21.79} & \textbf{1950.57} & \textbf{636.86} & \textbf{21.75} & \textbf{1950.57} & \textbf{636.86} & \textbf{21.91} & \textbf{1950.57} & \textbf{636.86} & \textbf{21.88} & \textbf{1950.57} & \textbf{636.86} \\ \cline{1-22}
+\bottomrule
+\end{tabular}
+}%
+\caption{EPB B\&C(cplex) LBS non-exhaustive dichotomic concave-convex like algo on instances momhMKPstu/MOBKP/set3 ($\lambda$ fixed) .}
+\label{tab:table_lambda_EPB_momhMKPstu/MOBKP/set3 }
+\end{sidewaystable}

@@ -208,6 +208,16 @@ function updateLBSwithEPB(node::Node)
             break
         end
     end
+
+    if length(ptl.y) != 2 || ptl.y[1] == Inf || ptl.y[2] == Inf
+        # println("\n --------------------- ")
+        # println("ptl ", ptl )
+        # println("nadri ", node.nadirPt, " \t boundz2 ", node.duplicationBound)
+        # println("LBS ", node.RBS.natural_order_vect.sols)
+        # error("EPB bounding error ! ")
+        empty!(node.RBS.natural_order_vect.sols) ; return
+
+    end
     
     # 2-th bounding 
     pt.λ = [1.0, 0.0] ; updateCT(pt)
@@ -279,10 +289,10 @@ function updateLBSwithEPB(node::Node)
         end
     end
 
-    # todo verify if bugs exist 
+    # # todo verify if bugs exist 
     if length(ptr.y) != 2 || ptr.y[1] == Inf || ptr.y[2] == Inf
         # println("\n --------------------- ")
-        # println("ptr ", ptr )
+        # println("ptr 2 ", ptr )
         # println("nadri ", node.nadirPt, " \t boundz2 ", node.duplicationBound)
         # println("LBS ", node.RBS.natural_order_vect.sols)
         # error("EPB bounding error ! ")
@@ -293,8 +303,8 @@ function updateLBSwithEPB(node::Node)
     # remove all points under current line 
     to_delete = Int64[] ; i = 1
     for s in node.RBS.natural_order_vect.sols
-        if s.y'*ptl.λ ≤ ptl.y'*ptl.λ -TOL || s.y'*ptr.λ ≤ ptr.y'*ptr.λ -TOL ||
-            s.y[2] ≥ ptl.y[2] + TOL || s.y[1] ≥ ptr.y[1] + TOL
+        if s.y'*ptl.λ < ptl.y'*ptl.λ -TOL || s.y'*ptr.λ < ptr.y'*ptr.λ -TOL ||
+            s.y[2] > ptl.y[2]  || s.y[1] > ptr.y[1] 
             push!(to_delete, i) 
         end
         i += 1

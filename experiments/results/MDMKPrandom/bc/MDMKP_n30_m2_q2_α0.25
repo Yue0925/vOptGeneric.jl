@@ -1,34 +1,38 @@
 vars = 30 ; constr = 2 
  # informations of B&B algorithm : 
-total_times_used = 657.11 
-total_nodes = 181003 
-pruned_nodes = 90502 
+total_times_used = 864.16 
+total_nodes = 205329 
+pruned_nodes = 102665 
 GAP = 0.0 
-relaxation_time = 603.77 
-test_dominance_time = 0.88 
-update_incumbent_time = 0.13 
-tree_size = 770.448 
+relaxation_time = 796.31 
+test_dominance_time = 0.6 
+update_incumbent_time = 0.03 
+tree_size = 808.203 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 181002 
+nb_nodes_VB = 205328 
 root_relax = false 
 TO = false 
+rootLBS = 40 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_limit = 1048576 
+ 
 
 
  # ----------- info about cuts : 
-ite_total = 153124 
-cuts_applied = 274836 
-sp_cuts = 173331 
-mp_cuts = 101505 
-cuts_total = 274836 
-times_calling_dicho = 603.77 
-times_calling_separators = 20.52 
-times_oper_cutPool = 4.37 
-times_total_for_cuts = 642.65 
-times_add_retrieve_cuts = 14.01 
+ite_total = 161702 
+cuts_applied = 276053 
+sp_cuts = 161399 
+mp_cuts = 114654 
+cuts_total = 276053 
+times_calling_dicho = 796.31 
+times_calling_separators = 24.59 
+times_oper_cutPool = 4.78 
+times_total_for_cuts = 842.33 
+times_add_retrieve_cuts = 17.68 
 
 
 
 size_Y_N = 44
 Y_N = [[3718.5, 14591.5], [3931.5, 14167.0], [4073.0, 14128.5], [4254.0, 14105.5], [4313.5, 13732.0], [4504.0, 13607.0], [4505.5, 13595.0], [4542.0, 13509.5], [4696.0, 13470.0], [4718.5, 13170.5], [4746.0, 13156.5], [4858.5, 13144.0], [4860.0, 13132.0], [4900.0, 13024.5], [5003.5, 13009.0], [5050.5, 13007.0], [5195.5, 12872.0], [5240.0, 12352.5], [5495.0, 12343.5], [5506.0, 12051.0], [5560.0, 11910.0], [5593.0, 11867.0], [5687.5, 11830.5], [5822.0, 11056.0], [5893.5, 10978.5], [6015.0, 10859.5], [6024.5, 9973.5], [6034.5, 9836.0], [6109.5, 9831.5], [6192.5, 9792.0], [6226.5, 9699.0], [6266.5, 9627.5], [6280.5, 9558.0], [6300.5, 9534.5], [6332.0, 9462.0], [6339.5, 9418.0], [6393.5, 9277.0], [6445.5, 8952.5], [6461.5, 8909.0], [6551.5, 8552.5], [6555.0, 8510.0], [6570.0, 8493.5], [6710.5, 8349.0], [6712.5, 8308.0]]
 
-size_X_E = 44

@@ -24,7 +24,7 @@ function comparisons(instances::String)
     methods = ["epsilon", "bb", "bc", "bc_rootRelax", "bb_EPB", "bc_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCP", "bc_rootRelaxCPEPB"]
 
     # ∀ file in dicho
-    for file in readdir(work_dir * "/bc_rootRelaxCPEPB/")
+    for file in readdir(work_dir * "/bc_rootRelax/")
         if split(file, ".")[end] == "png"
             continue
         end
@@ -37,7 +37,7 @@ function comparisons(instances::String)
         times = [] ; pts = []
 
         # write dichotomy result 
-        include(work_dir * "/bc_rootRelaxCPEPB/" * file)
+        include(work_dir * "/bc_rootRelax/" * file)
         print(fout, string(vars) * " & " * string(constr) * " & ")
 
         # ∀ method 
@@ -70,7 +70,7 @@ function comparisons(instances::String)
         end
 
         if times[end] == minimum(filter(x -> x > 0 ,times))
-            times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, " \\textcolor{blue2}{" * string(times[end]) * " & ")
+            times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
         else
             times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[end]) * " & ")
         end
@@ -88,6 +88,8 @@ function comparisons(instances::String)
     close(fout)
 
 end
+
+
 
 
 comparisons("MDMKPrandom")

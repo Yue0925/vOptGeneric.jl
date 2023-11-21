@@ -10,7 +10,7 @@
 #SBATCH --output=BOSCP_rootrelax_param.txt
 #SBATCH --error=BOSCP_rootrelax_param.txt
 
-methodes=("bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB")
+methodes=("bc_rootRelax" "bc_rootRelaxEPB")
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do

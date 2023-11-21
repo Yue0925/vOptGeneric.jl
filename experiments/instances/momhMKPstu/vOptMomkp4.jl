@@ -77,8 +77,17 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method, strategy, limit)
 #     mkdir(folder)
 #   end
 
-  folder_str = ["lambda_chordal", "lambda_dynamic" ]
-  folder = result_dir * "/" * string(folder_str[strategy]) * "/" * string(limit) * "/" * string(method)
+  folder_str = ["lambda_limit" , "lambda_chordal", "lambda_dynamic" ]
+
+  if !isdir(result_dir * "/" * string(folder_str[strategy+1]) )
+    mkdir(result_dir * "/" * string(folder_str[strategy+1]) )
+  end
+  
+  if !isdir(result_dir * "/" * string(folder_str[strategy+1]) * "/" * string(limit) )
+    mkdir(result_dir * "/" * string(folder_str[strategy+1]) * "/" * string(limit) )
+  end
+
+  folder = result_dir * "/" * string(folder_str[strategy+1]) * "/" * string(limit) * "/" * string(method)
   if !isdir(folder)
     mkdir(folder)
   end
@@ -188,10 +197,10 @@ function main(fname::String)
   end
 
   solverSelected = CPLEX.Optimizer
-    for strategy = 1:2
-        for limit in [2, 4, 6]
+    for strategy = 0:0 # 0:2
+        for limit in [0, 2, 3, 4, 6, 8] #[2, 4, 6]
             for method in [
-                :bc_rootRelax , 
+                # :bc_rootRelax , 
                 :bc_rootRelaxEPB,
                 # :bc_rootRelaxCP, #
                 # :bc_rootRelaxCPEPB,

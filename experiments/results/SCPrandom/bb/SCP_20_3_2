@@ -13,9 +13,10 @@ nb_nodes_VB = 46
 root_relax = false 
 TO = false 
 rootLBS = 3 
-LBSexhaustive = true
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_limit = 1048576 
+ 
 
 size_Y_N = 3
 Y_N = [[9.0, 37.0], [17.0, 23.0], [21.0, 20.0]]
-
-size_X_E = 3
