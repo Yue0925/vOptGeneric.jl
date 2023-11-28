@@ -172,7 +172,7 @@ function comparisonsEPBLambdaLimits(instances::String)
     \end{tabular}
     }%"""
     println(fout, latex)
-    println(fout, "\\caption{\\textbf{EPB B\\&C(cplex) }LBS non-exhaustive dichotomic concave-convex like algo on instances $instances (\$\\lambda\$ unlimited in EPBranched nodes) .}")
+    println(fout, "\\caption{\\textbf{EPB B\\&C(cplex) }LBS non-exhaustive dichotomic concave-convex like algo on instances $instances .}")
     println(fout, "\\label{tab:table_lambda_EPB_$instances }")
     println(fout, "\\end{sidewaystable}")
     close(fout)
@@ -182,7 +182,7 @@ function comparisonsEPBLambdaLimits(instances::String)
     \end{tabular}
     }%"""
     println(fout2, latex)
-    println(fout2, "\\caption{\\textbf{EPB B\\&C(cplex) }LBS non-exhaustive dichotomic concave-convex like algo on instances $instances (\$\\lambda\$ unlimited in EPBranched nodes) .}")
+    println(fout2, "\\caption{\\textbf{EPB B\\&C(cplex) }LBS non-exhaustive dichotomic concave-convex like algo on instances $instances .}")
     println(fout2, "\\label{tab:table2_lambda_EPB_$instances }")
     println(fout2, "\\end{sidewaystable}")
     close(fout2)
