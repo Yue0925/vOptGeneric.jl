@@ -16,6 +16,9 @@ Compute the lower bound set of the LP polyhedron by dichotomy method.
 Return `true` if this node is fathomed by infeasibility.
 """
 function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
+    # todo : analyse to be deleted 
+    pb.info.λ_iter = 0.0 
+
     #------------------------------------------------------------------------------
     # solve the LP relaxation by dichotomy method including the partial assignment
     #------------------------------------------------------------------------------
@@ -28,7 +31,6 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
         # end
 
         # todo (option) : λ limit tuning decreasing in depth (adaptive)
-        # !node.EPB && # λ_limit does not apply on EPB nodes
         if !pb.info.LBSexhaustive && !isRoot(node) && length(pb.varArray)- length(node.assignment) >10
             limits = pb.info.λ_limit
             # limits = round(Int, max(3, ceil(Int64 , pb.info.rootLBS / 5 ) ) )
@@ -55,6 +57,14 @@ function compute_LBS(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round
             @warn("λ searching strategy unknown with $(pb.info.λ_strategy)")
         end
 
+        # todo : analyse to be deleted 
+        pb.info.λ_acc += pb.info.λ_iter
+        if isRoot(node)
+            pb.info.λ_max = pb.info.λ_iter ; pb.info.λ_min = pb.info.λ_iter 
+        else
+            pb.info.λ_min = pb.info.λ_min < pb.info.λ_iter ? pb.info.λ_min : pb.info.λ_iter
+            pb.info.λ_max = pb.info.λ_max > pb.info.λ_iter ? pb.info.λ_max : pb.info.λ_iter 
+        end
 
         start = time()
         for i = 1:length(Y_integer) 

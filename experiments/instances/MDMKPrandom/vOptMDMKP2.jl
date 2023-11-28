@@ -40,7 +40,8 @@ function vopt_solve(method, outputName, limit; step=0.5)
     @constraint(model, [i in 1:m], A[i, :]'*x ≤ b[i])
     @constraint(model, [i in 1+m:m+q], A[i, :]'*x ≥ b[i])
 
-
+    exhaustive = !(limit > 0) 
+    if limit == 0 limit = 2^20 end 
 
     if method == :bb
         infos = vSolve( model, method=:bb, verbose=false )
@@ -61,19 +62,19 @@ function vopt_solve(method, outputName, limit; step=0.5)
         println(" total_time = $total_time ")
 
     elseif method == :bc_rootRelax 
-        infos = vSolve( model, method=:bc_rootRelax, verbose=false , λ_limit = limit)
+        infos = vSolve( model, method=:bc_rootRelax, verbose=false , LBSexhaustive = exhaustive, λ_limit = limit)
         println(infos)
     elseif method == :bc_rootRelaxCP  
-        infos = vSolve( model, method=:bc_rootRelaxCP , verbose=false , λ_limit = limit )
+        infos = vSolve( model, method=:bc_rootRelaxCP , verbose=false , LBSexhaustive = exhaustive,  λ_limit = limit )
         println(infos)    
     elseif method == :bb_EPB 
         infos = vSolve( model, method=:bb_EPB, verbose=false )
         println(infos)
     elseif method == :bc_rootRelaxEPB
-        infos = vSolve( model, method=:bc_rootRelaxEPB, verbose=false , λ_limit = limit)
+        infos = vSolve( model, method=:bc_rootRelaxEPB, verbose=false , LBSexhaustive = exhaustive,  λ_limit = limit)
         println(infos)
     elseif method == :bc_rootRelaxCPEPB
-        infos = vSolve( model, method=:bc_rootRelaxCPEPB, verbose=false , λ_limit = limit)
+        infos = vSolve( model, method=:bc_rootRelaxCPEPB, verbose=false , LBSexhaustive = exhaustive, λ_limit = limit)
         println(infos)
     elseif method == :bc_EPB
         infos = vSolve( model, method=:bc_EPB, verbose=false )
@@ -130,7 +131,7 @@ function solve(fname::String, method::String)
         return 
     end
 
-    for limit in [0, 2, 3, 6, 8, 10, 13, 17]
+    for limit in [0, 2, 3, 6, 8, 10, 13, 17] # 
 
         println("\n -----------------------------")
         println(" solving $(name) by $method λ_limit = $limit ... ")

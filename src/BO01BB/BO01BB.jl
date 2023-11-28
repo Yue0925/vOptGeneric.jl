@@ -355,6 +355,7 @@ function solve_branchboundcut(m::JuMP.Model;
         problem.info.LBSexhaustive = LBSexhaustive
         problem.info.λ_strategy = λ_strategy
         problem.info.λ_limit = λ_limit
+        println("LBSexhaustive ? $LBSexhaustive ; λ_strategy : $λ_strategy ; λ_limit : $λ_limit \n")
     end
 
     if cp
@@ -412,7 +413,8 @@ function solve_branchboundcut(m::JuMP.Model;
     end
     
     problem.info.total_times = round(time() - start, digits = 2)
-    problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time
+    problem.info.cuts_infos.times_calling_dicho = problem.info.relaxation_time 
+    problem.info.λ_acc /= problem.info.nb_nodes
 
     if converted
         reversion(m, f, incumbent)
