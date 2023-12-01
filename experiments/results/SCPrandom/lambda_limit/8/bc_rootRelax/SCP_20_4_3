@@ -1,22 +1,26 @@
 vars = 20 ; constr = 4 
  # informations of B&B algorithm : 
-total_times_used = 0.38 
+total_times_used = 0.39 
 total_nodes = 193 
 pruned_nodes = 97 
 GAP = 0.0 
 relaxation_time = 0.36 
 test_dominance_time = 0.0 
 update_incumbent_time = 0.0 
-tree_size = 0.43 
+tree_size = 0.439 
 nb_nodes_EPB = 0 
 nb_nodes_VB = 192 
 root_relax = true 
 TO = false 
 rootLBS = 5 
-LBSexhaustive = true 
+LBSexhaustive = false 
  λ_strategy = 0 
- λ_limit = 8 
- 
+ λ_min = 2 
+ λ_max = 7 
+λ_acc = 3.3575129533678756 
+total_time_cplex = 0.25208473205566406 
+total_time_fusion = 0.0047359466552734375 
+
 
 size_Y_N = 6
 Y_N = [[13.0, 57.0], [15.0, 56.0], [18.0, 45.0], [19.0, 44.0], [20.0, 27.0], [31.0, 10.0]]

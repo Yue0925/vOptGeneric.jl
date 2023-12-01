@@ -13,10 +13,14 @@ nb_nodes_VB = 46
 root_relax = true 
 TO = false 
 rootLBS = 5 
-LBSexhaustive = true 
+LBSexhaustive = false 
  λ_strategy = 0 
- λ_limit = 17 
- 
+ λ_min = 1 
+ λ_max = 5 
+λ_acc = 3.2708333333333335 
+total_time_cplex = 0.05392765998840332 
+total_time_fusion = 0.0010738372802734375 
+
 
 size_Y_N = 3
 Y_N = [[9.0, 37.0], [17.0, 23.0], [21.0, 20.0]]

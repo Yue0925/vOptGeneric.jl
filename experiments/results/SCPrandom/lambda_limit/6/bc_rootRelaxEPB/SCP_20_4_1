@@ -7,16 +7,20 @@ GAP = 0.0
 relaxation_time = 0.08 
 test_dominance_time = 0.0 
 update_incumbent_time = 0.0 
-tree_size = 0.086 
+tree_size = 0.087 
 nb_nodes_EPB = 8 
 nb_nodes_VB = 32 
 root_relax = true 
 TO = false 
 rootLBS = 5 
-LBSexhaustive = true 
+LBSexhaustive = false 
  λ_strategy = 0 
- λ_limit = 6 
- 
+ λ_min = 1 
+ λ_max = 6 
+λ_acc = 3.707317073170732 
+total_time_cplex = 0.057730674743652344 
+total_time_fusion = 0.0012481212615966797 
+
 
 size_Y_N = 6
 Y_N = [[24.0, 31.0], [27.0, 29.0], [28.0, 26.0], [29.0, 14.0], [33.0, 9.0], [34.0, 5.0]]

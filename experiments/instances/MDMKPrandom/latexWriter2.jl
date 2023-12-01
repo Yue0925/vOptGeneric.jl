@@ -1,4 +1,6 @@
 
+using PyPlot
+import PyPlot; const plt = PyPlot
 
 function comparisonsEPBLambdaLimits(instances::String)
     work_dir = "../../results/" * instances * "/lambda_limit"
@@ -242,6 +244,16 @@ function comparisonsLambdaLimits(instances::String)
 
     methods = ["bc_rootRelax", "bc_rootRelaxEPB"] ; record_n = []
 
+    # method => n => (λ -> time)                     method => n => (λ -> nodes)
+    avg_time = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
+    avg_node = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
+    count_per_n = Dict{Int64, Int64}()
+
+    for m in methods
+        avg_time[m] = Dict{Int64, Dict{Int64, Float64}}()
+        avg_node[m] = Dict{Int64, Dict{Int64, Float64}}()
+    end
+
     λ_limits = [] ;
     for folder_λ in readdir(work_dir)
         if split(folder_λ, ".")[end] == "tex" continue end
@@ -256,6 +268,8 @@ function comparisonsLambdaLimits(instances::String)
             push!(keys_combo, string(λ) * "_" * m)
         end
     end
+
+    println("λ_limits : ", λ_limits) ; println("keys_combo : ", keys_combo)
 
 
     # ∀ file each line 
@@ -277,11 +291,38 @@ function comparisonsLambdaLimits(instances::String)
         print(fout, string(vars) * " & " * string(constr) * " & " * string(size_Y_N) * " & ")
         print(fout2, string(vars) * " & " * string(constr) * " & " * string(size_Y_N) * " & ")
 
+        if !haskey(count_per_n, vars)
+            count_per_n[vars] = 0
+        end
+
+        for m in methods
+            if !haskey(avg_time[m], vars)
+                avg_time[m][vars] = Dict{Int64, Float64}()
+            end
+            if !haskey(avg_node[m], vars)
+                avg_node[m][vars] = Dict{Int64, Float64}()
+            end
+        end
+
+        count_per_n[vars] += 1
+
         for folder_λ in λ_limits
+            for m in methods
+                if !haskey(avg_time[m][vars], folder_λ)
+                    avg_time[m][vars][folder_λ] = 0.0
+                end
+                if !haskey(avg_node[m][vars], folder_λ)
+                    avg_node[m][vars][folder_λ] = 0.0
+                end
+            end
+
             for m in methods
                 if isfile(work_dir * "/" * string(folder_λ) * "/" * m * "/" * file)
                     include(work_dir * "/" * string(folder_λ) * "/" * m * "/" * file)
                     push!(times, total_times_used); push!(pts, total_nodes)
+
+                    avg_time[m][vars][folder_λ] += total_times_used
+                    avg_node[m][vars][folder_λ] += total_nodes
     
                 else
                     push!(times, -1); push!(pts, -1)
@@ -372,6 +413,52 @@ function comparisonsLambdaLimits(instances::String)
     println(fout2, "\\label{tab:table2_lambda_limits_$instances }")
     println(fout2, "\\end{sidewaystable}")
     close(fout2)
+
+
+
+    for m in methods
+        for n in keys(count_per_n)
+            for λ in λ_limits
+                avg_node[m][n][λ] = round(avg_node[m][n][λ]/count_per_n[n], digits = 1)
+                avg_time[m][n][λ] = round(avg_time[m][n][λ]/count_per_n[n], digits = 1)
+            end
+            println("$m  $n  nodes " , [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])] )
+            println("$m  $n  times " , [p[2] for p in sort(collect(avg_time[m][n]), by = x->x[1])] )
+
+        end
+    end
+
+    println("λ_limits : ", λ_limits)
+    println("avg_node : ", avg_node)
+    println("avg_time : ", avg_time)
+
+
+
+    # plot for each method, for each n 
+    for m in methods
+        for n in keys(count_per_n)
+    
+            fig, ax = plt.subplots()
+            ax.plot(λ_limits,  [p[2] for p in sort(collect(avg_time[m][n]), by = x->x[1])] ,
+                    color="red", marker="o", linewidth=2.0, linestyle="--"
+            )
+            ax.set_xlabel("|λ|", fontsize=14)
+            ax.set_ylabel("Average time(s)", color="red", fontsize=14)
+            ax.set_title(instances * " avg n = $n ($m)", fontsize=14)
+        
+            ax2=ax.twinx()
+            ax2.plot(λ_limits, [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])], 
+                    color="blue", marker="o", linewidth=2.0, linestyle="--"
+            )
+            ax2.set_ylabel("Average explored nodes", color="blue", fontsize=14)
+            # plt.show()
+        
+            savefig(work_dir * "/$(m)_$(n)_times_nodes.png")
+            plt.close()
+
+        end
+    end
+
 end
 
 
