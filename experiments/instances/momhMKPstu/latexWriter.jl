@@ -623,16 +623,16 @@ function comparisons_bis(instances::String)
     latex = raw"""\begin{table}[!ht]
     \centering
     \resizebox{\columnwidth}{!}{%
-    \hspace*{-1cm}\begin{tabular}{lccccccc}
+    \hspace*{-1cm}\begin{tabular}{lcccccccc}
     \toprule
-    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{B\&B}}  & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \textbf{$|\mathcal{Y}_N|$}
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$\epsilon$-constraint} & \multicolumn{2}{c}{\textbf{B\&B}}  & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \textbf{$|\mathcal{Y}_N|$}
     \\
-    \cmidrule(r){4-5} \cmidrule(r){6-7} 
-    ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & ~ \\
+    \cmidrule(r){5-6} \cmidrule(r){7-8} 
+    ~ & ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & ~ \\
     \midrule
     """
     println(fout, latex)
-    methods = ["bb", "bb_EPB"] ; record_n = []
+    methods = ["epsilon", "bb", "bb_EPB"] ; record_n = []
     record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods[2:end])
 
     # ∀ filder_n
@@ -663,9 +663,14 @@ function comparisons_bis(instances::String)
             for m in methods
                 if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
-                    push!(times, total_times_used); push!(pts, total_nodes)
-    
-                    avgT[m] += total_times_used ; avgY[m] += total_nodes
+                    push!(times, total_times_used); avgT[m] += total_times_used
+                    
+                    if m == "epsilon"
+                        push!(pts, 0) ; avgY[m] += 0
+                    else
+                        push!(pts, total_nodes) ; avgY[m] += total_nodes
+                    end
+
                 else
                     push!(times, -1); push!(pts, -1)
                 end
@@ -681,6 +686,7 @@ function comparisons_bis(instances::String)
                     print(fout, string(times[i]) * " & ")
                 end
     
+                if i==1 continue end 
                 if pts[i] == -1
                     print(fout, " - & ")
                 else
@@ -704,13 +710,14 @@ function comparisons_bis(instances::String)
             avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
         end
 
-        print(fout, "\\cline{1-8} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+        print(fout, "\\cline{1-9} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
 
-        for m in methods
+        print(fout, "} & \\textbf{" * string(avgT[methods[1]]) )
+        for m in methods[2:end]
             print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
         end
 
-        println(fout, "} & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-8}")
+        println(fout, "} & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
     end
 
     latex = raw"""\bottomrule
@@ -1282,11 +1289,11 @@ end
 
 
 # -------------------------------------------------
-comparisons("momhMKPstu/MOBKP/set3")
-comparisonsTree("momhMKPstu/MOBKP/set3")
+# comparisons("momhMKPstu/MOBKP/set3")
+# comparisonsTree("momhMKPstu/MOBKP/set3")
 # comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
-# comparisons_bis("momhMKPstu/MOBKP/set3")
+comparisons_bis("momhMKPstu/MOBKP/set3")
 # comparisonsCP("momhMKPstu/MOBKP/set3")
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 # comparisons_tri("momhMKPstu/MOBKP/set3")
