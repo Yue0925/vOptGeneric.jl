@@ -1,0 +1,13 @@
+DIM = 17
+
+LOWER_BOUNDS
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+UPPER_BOUNDS
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+
+INEQUALITIES_SECTION
+47x1 + 25x2 + 13x3 + 30x4 + 50x5 + 45x6 + 35x7 + 6x8 + 32x9 + 24x10 + 8x11 + 21x12 + 39x13 + 1x14 + 43x15 + 49x16 + 23x17 <= 67
+
+x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + x12 + x13 + x14 + x15 + x16 + x17 == 3
+
+END

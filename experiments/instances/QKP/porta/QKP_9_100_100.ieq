@@ -1,0 +1,13 @@
+DIM = 9
+
+LOWER_BOUNDS
+0 0 0 0 0 0 0 0 0 
+UPPER_BOUNDS
+1 1 1 1 1 1 1 1 1 
+
+INEQUALITIES_SECTION
+16x1 + 32x2 + 30x3 + 3x4 + 6x5 + 40x6 + 36x7 + 12x8 + 28x9 <= 58
+
+x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 == 2
+
+END

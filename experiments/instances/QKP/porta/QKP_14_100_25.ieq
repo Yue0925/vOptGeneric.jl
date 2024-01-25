@@ -1,0 +1,13 @@
+DIM = 14
+
+LOWER_BOUNDS
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+UPPER_BOUNDS
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+
+INEQUALITIES_SECTION
+27x1 + 37x2 + 45x3 + 29x4 + 42x5 + 1x6 + 36x7 + 13x8 + 5x9 + 40x10 + 30x11 + 29x12 + 11x13 + 32x14 <= 53
+
+x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + x12 + x13 + x14 == 2
+
+END

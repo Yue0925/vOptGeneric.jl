@@ -1,0 +1,13 @@
+DIM = 6
+
+LOWER_BOUNDS
+0 0 0 0 0 0 
+UPPER_BOUNDS
+1 1 1 1 1 1 
+
+INEQUALITIES_SECTION
+26x1 + 43x2 + 21x3 + 20x4 + 8x5 + 6x6 <= 56
+
+x1 + x2 + x3 + x4 + x5 + x6 == 2
+
+END
