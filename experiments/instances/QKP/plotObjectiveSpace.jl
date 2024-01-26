@@ -80,14 +80,15 @@ function polyhedron_Y_supp(fname::String)
             for x3 in dom
                 for x4 in dom
                     for x5 in dom
-                        # for x6 in dom
-                            x = [x1 x2 x3 x4 x5]
-                            if sum(x) == k || sum(x.*w) <= W 
-                                push!(Y_1, dot(x, x*Q1))
-                                push!(Y_2, dot(x, x*Q2))
-                            end 
-
-                        # end
+                        for x6 in dom
+                            for x7 in dom
+                                x = [x1, x2, x3, x4, x5, x6, x7]
+                                if sum(x) == k && sum(x.*w) <= W 
+                                    push!(Y_1, dot(x, Q1*x))
+                                    push!(Y_2, dot(x, Q2*x))
+                                end  
+                            end
+                        end
                     end
                 end
             end
@@ -100,6 +101,7 @@ function polyhedron_Y_supp(fname::String)
     println(fout, "Y_2 = ", Y_2)
 
     close(fout)
+    plot_polyY(f)
 end
 
 function feasible_set_Y(fname::String)
@@ -155,6 +157,27 @@ function plot_Y(fname::String)
 
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     savefig("./setY/" * inst_name * ".png")
+    PyPlot.close()
+
+end
+
+
+
+function plot_polyY(fname::String)
+    include(fname)
+
+    # scatter points Y 
+    inst_name = split(fname, "/")[end]
+
+
+    figure(inst_name) #  figsize=(6.5,5)
+    xlabel(L"z^1(x)")
+    ylabel(L"z^2(x)")
+    PyPlot.title("BO-kQKP")
+    scatter(Y_1, Y_2, color="blue", marker="+", label = L"\tilde{\mathcal{Y}}")
+
+    legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
+    savefig("./continousY/" * inst_name * ".png")
     PyPlot.close()
 
 end
