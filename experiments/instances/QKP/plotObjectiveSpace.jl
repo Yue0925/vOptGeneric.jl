@@ -6,6 +6,12 @@ using PyPlot
 # include("../../../src/vOptGeneric.jl")
 # using .vOptGeneric 
 
+function is_SDP(fname::String)
+    include(fname)
+    println("Q1 is SDP ? ", isposdef(Q1))
+    println("Q2 is SDP ? ", isposdef(Q2))
+end
+
 
 function write_ieq(fname::String)
     include(fname)
@@ -60,8 +66,40 @@ function write_ieq(fname::String)
 
 end
 
-function polyhedron_Y(fname::String)
-    
+# nonconvex QP continous relaxation using cplex 
+function polyhedron_Y_supp(fname::String)
+    include(fname)
+
+    # x = zeros(n)
+    dom = [i for i in 0:0.1:1]
+    Y_1 = []
+    Y_2 = []
+
+    for x1 in dom
+        for x2 in dom
+            for x3 in dom
+                for x4 in dom
+                    for x5 in dom
+                        # for x6 in dom
+                            x = [x1 x2 x3 x4 x5]
+                            if sum(x) == k || sum(x.*w) <= W 
+                                push!(Y_1, dot(x, x*Q1))
+                                push!(Y_2, dot(x, x*Q2))
+                            end 
+
+                        # end
+                    end
+                end
+            end
+        end
+    end
+
+    f = "./continousY/" * inst_name
+    fout = open(f, "w")
+    println(fout, "Y_1 = ", Y_1)
+    println(fout, "Y_2 = ", Y_2)
+
+    close(fout)
 end
 
 function feasible_set_Y(fname::String)
@@ -121,57 +159,59 @@ function plot_Y(fname::String)
 
 end
 
-function solve(fname::String, method::String)
-    include(fname)
+# function solve(fname::String, method::String)
+#     include(fname)
 
-    folder = "../../results/QKP"
-    if !isdir(folder)
-        mkdir(folder)
-    end
-    result_folder = folder * "/" * string(method)
-    if !isdir(result_folder)
-        mkdir(result_folder)
-    end
+#     folder = "../../results/QKP"
+#     if !isdir(folder)
+#         mkdir(folder)
+#     end
+#     result_folder = folder * "/" * string(method)
+#     if !isdir(result_folder)
+#         mkdir(result_folder)
+#     end
 
-    # if n%3 != 0 return end # todo : 
-    println("\n -----------------------------")
-    println(" solving mono $(inst_name) ... ")
-    println(" -----------------------------")
+#     # if n%3 != 0 return end # todo : 
+#     println("\n -----------------------------")
+#     println(" solving mono $(inst_name) ... ")
+#     println(" -----------------------------")
 
-    model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
-    @variable(model, x[i=1:n, j=1:i], Bin )
-    @variable(model, y[1:n], Bin)
+#     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
+#     @variable(model, x[i=1:n, j=1:i], Bin )
+#     @variable(model, y[1:n], Bin)
 
-    @objective(model, Max, sum([Q1[i, j]*x[i, j] for i=1:n for j=1:i]))
+#     @objective(model, Max, sum([Q1[i, j]*x[i, j] for i=1:n for j=1:i]))
 
-    @constraint(model, y'*w ≤ W)
-    @constraint(model, [i=1:n, j=1:i], x[i, j] ≥ y[i] + y[j] -1 )
-    @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[i])
-    @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[j])
-    @constraint(model, sum(y) == k)
+#     @constraint(model, y'*w ≤ W)
+#     @constraint(model, [i=1:n, j=1:i], x[i, j] ≥ y[i] + y[j] -1 )
+#     @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[i])
+#     @constraint(model, [i=1:n, j=1:i], x[i, j] ≤ y[j])
+#     @constraint(model, sum(y) == k)
 
-    # optimize
-    optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
-    println(" n = $(n*(n+1)/2 + n)")
-    println("solved time $(solved_time)" )
+#     # optimize
+#     optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
+#     println(" n = $(n*(n+1)/2 + n)")
+#     println("solved time $(solved_time)" )
 
-    status = termination_status(model)
-    if status != MOI.OPTIMAL
-        @info "mono instance is not feasible"
-        return 
-    end
+#     status = termination_status(model)
+#     if status != MOI.OPTIMAL
+#         @info "mono instance is not feasible"
+#         return 
+#     end
 
-    println("\n -----------------------------")
-    println(" solving $(inst_name) by $method  ... ")
-    println(" -----------------------------")
-    # solve bo-pb 
-    outputName = result_folder * "/" * inst_name
-    # if isfile(outputName) return end
-    vopt_solve(Symbol(method), outputName)
+#     println("\n -----------------------------")
+#     println(" solving $(inst_name) by $method  ... ")
+#     println(" -----------------------------")
+#     # solve bo-pb 
+#     outputName = result_folder * "/" * inst_name
+#     # if isfile(outputName) return end
+#     vopt_solve(Symbol(method), outputName)
 
-end
+# end
 
 
 # write_ieq(ARGS[1])
 # feasible_set_Y(ARGS[1])
-plot_Y(ARGS[1])
+# plot_Y(ARGS[1])
+# is_SDP(ARGS[1])
+polyhedron_Y_supp(ARGS[1])
