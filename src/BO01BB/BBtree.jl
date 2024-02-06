@@ -186,14 +186,26 @@ function setVarObjBounds(actual::Node, pb::BO01Problem)
     # set actual objective/variable bounds in predecessors
     while !isRoot(predecessor)     
         actual = predecessor ; predecessor = actual.pred
-        if actual.EPB
+        if actual.EPB # todo : seems to be redundant
             cons_obj, cons_obj_copied = setObjBound(pb, actual.nadirPt, actual.duplicationBound)
             append!(con_cuts, cons_obj) ; append!(con_cuts_copied, cons_obj_copied)
         else
+        # if !actual.EPB
             setVarBound(pb, actual.var, actual.var_bound)
         end
     end
     return con_cuts, con_cuts_copied
+end
+
+function isNadirPointDuplicated(actual::Node, np::Vector{Float64})::Bool
+    if isRoot(actual) return false end 
+
+    predecessor = actual.pred
+    while !isRoot(actual)
+        if actual.nadirPt == np return true end 
+        actual = predecessor ; predecessor = actual.pred
+    end
+    return false 
 end
 
 

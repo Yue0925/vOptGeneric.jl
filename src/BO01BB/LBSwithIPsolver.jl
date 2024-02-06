@@ -81,7 +81,7 @@ function next_direc(idx::Int64, L::RelaxedBoundSet, todo)
         if length(L.natural_order_vect.sols[j].xEquiv[1]) > 0 r = j ; break end 
     end
 
-    # prepare next directions # todo : !! verify deepcopy !! 
+    # prepare next directions # todo : !! improv verify deepcopy !! 
     l ≥ 1 ? push!(todo, [[L.natural_order_vect.sols[l].y[1], L.natural_order_vect.sols[l].y[2] ], 
                         [L.natural_order_vect.sols[idx].y[1], L.natural_order_vect.sols[idx].y[2]] ] ) : nothing 
 
@@ -350,10 +350,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
     λ = [1.0, 0.0] ; newPt = false
-    # todo : analyse 
-    start = time()
+    # # todo : analyse 
+    # start = time()
     JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
-    pb.info.total_time_cplex += (time() - start)
+    # pb.info.total_time_cplex += (time() - start)
 
     iter_count += 1 ; pb.info.λ_iter += 1
 
@@ -377,14 +377,14 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
                         ) ; updateCT(ext_l)
         roundSol(pb, ext_l) ; val = λ'*ext_l.y
 
-        # todo : analyse 
-        start = time()
+        # # todo : analyse 
+        # start = time()
         idx, newPt = push!(L.natural_order_vect, ext_l) 
         updateLBS(L, idx, val, [λ[1], λ[2]], ext_l.y) 
 
         idx, newPt = push!(pureL.natural_order_vect, ext_l) 
         updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_l.y)
-        pb.info.total_time_fusion += (time() - start)
+        # pb.info.total_time_fusion += (time() - start)
 
     # otherwise, take the best primal sol so far 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
@@ -398,10 +398,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         else
             best_bound = objective_bound(pb.m)
             ctr_bound = JuMP.@constraint(pb.lp_copied, f1_copied >= best_bound)
-            # todo : analyse 
-            start = time()
+            # # todo : analyse 
+            # start = time()
             JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
-            pb.info.total_time_cplex += (time() - start)
+            # pb.info.total_time_cplex += (time() - start)
 
             x_star = JuMP.value.(varArray_copied) 
 
@@ -415,14 +415,14 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
                         ) ; updateCT(ext_l)
         roundSol(pb, ext_l) ; val = λ'*ext_l.y
 
-        # todo : analyse 
-        start = time()
+        # # todo : analyse 
+        # start = time()
         idx, newPt = push!(L.natural_order_vect, ext_l)
         updateLBS(L, idx, val, [λ[1], λ[2]], ext_l.y)
 
         idx, newPt = push!(pureL.natural_order_vect, ext_l)
         updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_l.y)
-        pb.info.total_time_fusion += (time() - start)
+        # pb.info.total_time_fusion += (time() - start)
 
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -439,10 +439,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
     λ = [0.0, 1.0] ; newPt = false
-    # todo : analyse 
-    start = time()
+    # # todo : analyse 
+    # start = time()
     JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
-    pb.info.total_time_cplex += (time() - start)
+    # pb.info.total_time_cplex += (time() - start)
     iter_count += 1 ; pb.info.λ_iter += 1
 
     ext_r = Solution()
@@ -466,14 +466,14 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
         roundSol(pb, ext_r) ; val = λ'*ext_r.y
 
-        # todo : analyse 
-        start = time()
+        # # todo : analyse 
+        # start = time()
         idx, newPt = push!(L.natural_order_vect, ext_r)
         updateLBS(L, idx, val, [λ[1], λ[2]], ext_r.y)
 
         idx, newPt = push!(pureL.natural_order_vect, ext_r) 
         updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_r.y)
-        pb.info.total_time_fusion += (time() - start)
+        # pb.info.total_time_fusion += (time() - start)
 
     elseif status == MOI.NODE_LIMIT || status == TIME_LIMIT
         if has_values(pb.m)
@@ -486,10 +486,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
         else
             best_bound = objective_bound(pb.m)
             ctr_bound = JuMP.@constraint(pb.lp_copied, f2_copied >= best_bound)
-            # todo : analyse 
-            start = time()
+            # # todo : analyse 
+            # start = time()
             JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
-            pb.info.total_time_cplex += (time() - start)
+            # pb.info.total_time_cplex += (time() - start)
 
             x_star = JuMP.value.(varArray_copied)
             if JuMP.is_valid(pb.lp_copied, ctr_bound)
@@ -503,14 +503,14 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
         roundSol(pb, ext_r) ; val = λ'*ext_r.y
 
-        # todo : analyse 
-        start = time()
+        # # todo : analyse 
+        # start = time()
         idx, newPt = push!(L.natural_order_vect, ext_r) 
         updateLBS(L, idx, val, [λ[1], λ[2]], ext_r.y) 
 
         idx, newPt = push!(pureL.natural_order_vect, ext_r)
         updateLBS(pureL, idx, val, [λ[1], λ[2]], ext_r.y)
-        pb.info.total_time_fusion += (time() - start)
+        # pb.info.total_time_fusion += (time() - start)
 
     else
         println("has primal ? $(JuMP.has_values(m))")
@@ -564,10 +564,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
         x_star = [] ; bst_val = -Inf 
         newPt = false 
-        # todo : analyse 
-        start = time()
+        # # todo : analyse 
+        # start = time()
         JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
-        pb.info.total_time_cplex += (time() - start)
+        # pb.info.total_time_cplex += (time() - start)
 
         val = -Inf ; idx = -1
         idxL = -1 ; newPtL = false 
@@ -608,10 +608,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             else
                 best_bound = objective_bound(pb.m)
                 ctr_bound = JuMP.@constraint(pb.lp_copied, λ[1]*f1_copied + λ[2]*f2_copied >= best_bound)
-                # todo : analyse 
-                start = time()
+                # # todo : analyse 
+                # start = time()
                 JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
-                pb.info.total_time_cplex += (time() - start)
+                # pb.info.total_time_cplex += (time() - start)
 
                 x_star = JuMP.value.(varArray_copied) 
     
@@ -640,18 +640,18 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             println("has primal ? $(JuMP.has_values(m))")
             error("Condition  status $status ")
         end
-        # todo : analyse 
-        start = time()
+        # # todo : analyse 
+        # start = time()
         updateLBS(L, idxL, val, [λ[1], λ[2]], pt.y)
-        pb.info.total_time_fusion += (time() - start)
+        # pb.info.total_time_fusion += (time() - start)
 
         # -----------------------------
         # case : equality    
         # -----------------------------
         if !newPt continue end 
 
-        # todo : analyse 
-        start = time()
+        # # todo : analyse 
+        # start = time()
         # find point intersection 
         intersection = intersectionPts(pureL, idx,)
 
@@ -661,10 +661,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
                 valid = false ; break
             end
         end
-        pb.info.total_time_fusion += (time() - start)
+        # pb.info.total_time_fusion += (time() - start)
 
-        # todo : analyse
-        start = time()
+        # # todo : analyse
+        # start = time()
         # under the current LBS 
         if !valid 
             deleteat!(pureL.natural_order_vect.sols, idx)
@@ -674,12 +674,12 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             for s in intersection
                 push!(pureL.natural_order_vect, s)
             end
-            pb.info.total_time_fusion += (time() - start)
+            # pb.info.total_time_fusion += (time() - start)
             continue 
         end 
 
-        # todo : analyse
-        start = time()
+        # # todo : analyse
+        # start = time()
         bckp = pureL.natural_order_vect.sols[idx].y 
         # filter lower bounds under current line 
         filtering(val, pureL, [λ[1], λ[2] ])
@@ -696,7 +696,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             if s.y[1] == bckp[1] && s.y[2] == bckp[2] located = true ; break end
         end
         located ? next_direc(idx, pureL, todo) : nothing 
-        pb.info.total_time_fusion += (time() - start)
+        # pb.info.total_time_fusion += (time() - start)
 
     end
 

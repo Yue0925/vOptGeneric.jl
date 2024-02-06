@@ -206,6 +206,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
     end
 
     # test range condition necessary 1 : LBS ⊆ UBS 
+    # i.e. UBS includes the LP lexico-optimum
     u_l = incumbent.natural_order_vect.sols[1] ; u_r = incumbent.natural_order_vect.sols[end]
 
     sufficient = (u_l.y[1] < ptl.y[1] && u_r.y[2] < ptr.y[2])
@@ -229,8 +230,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             sol_l = node.RBS.natural_order_vect.sols[i] ; sol_r = node.RBS.natural_order_vect.sols[i+1]
 
-            # --------------------------------------
-            #todo : complete ? 
+            # -------------------------------------- spacial case LBS 
             if sol_l.y[2] == sol_r.y[2] # horizon line 
                 if u.y[1] < sol_l.y[1] || u.y[1] > sol_r.y[1]
                     continue
@@ -270,11 +270,15 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         # case 4 : condition dominance violated, then stock the non-dominated local nadir pts to prepare EPB
         if compared && !existence 
             fathomed = false
-            if EPB
+            # todo : verify 
+            # todo : 1) local nadir points in all ancestors 
+            # todo : 2) continue to branch on the non-dominated and non redundant nadir points 
+            if EPB      # todo : peer impossible !! 
                 if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 
-                elseif (u.y[2] ≥ ptl.y[2] && u.y[1] ≥ ptr.y[1])
+                # don't do EPB branching if the local nadir point is worse than the LBS's nadir point 
+                elseif (u.y[2] ≥ ptl.y[2] && u.y[1] ≥ ptr.y[1]) 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed   
 
                 else 
