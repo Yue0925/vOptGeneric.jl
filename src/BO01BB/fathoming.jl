@@ -270,11 +270,11 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         # case 4 : condition dominance violated, then stock the non-dominated local nadir pts to prepare EPB
         if compared && !existence 
             fathomed = false
-            # todo : 1) local nadir points in all ancestors 
             # todo : 2) continue to branch on the non-dominated and non redundant nadir points 
-            if EPB      # todo : peer impossible !! isNadirPointDuplicated
-                if !isRoot(node) && ( u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
-                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
+            if EPB
+                if !isRoot(node) && isNadirPointDuplicated(node, u.y)   # the current local nadir pt is already branched 
+                    # node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
+                    nothing
 
                 # don't do EPB branching if the local nadir point is worse than the LBS's nadir point 
                 elseif (u.y[2] ≥ ptl.y[2] && u.y[1] ≥ ptr.y[1]) 
@@ -289,7 +289,6 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
             
         end
 
-        # todo : check ???
         if !compared && (u.y[1] ≥ ptl.y[1] && u.y[2] ≥ ptr.y[2] )
             if EPB node.localNadirPts = Vector{Vector{Float64}}() end               # no need to (extended) pareto branching
             return false
