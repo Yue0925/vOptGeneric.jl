@@ -262,7 +262,7 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
 
             compared = true
 
-            if λ'*u.y < λ'*sol_r.y -TOL # todo : - TOL
+            if λ'*u.y < λ'*sol_r.y -TOL 
                 existence = true ; break
             end
         end
@@ -270,11 +270,10 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         # case 4 : condition dominance violated, then stock the non-dominated local nadir pts to prepare EPB
         if compared && !existence 
             fathomed = false
-            # todo : verify 
             # todo : 1) local nadir points in all ancestors 
             # todo : 2) continue to branch on the non-dominated and non redundant nadir points 
-            if EPB      # todo : peer impossible !! 
-                if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
+            if EPB      # todo : peer impossible !! isNadirPointDuplicated
+                if !isRoot(node) && ( u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 
                 # don't do EPB branching if the local nadir point is worse than the LBS's nadir point 
