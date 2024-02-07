@@ -27,6 +27,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                         violationₗ = maximum([ (xₗ_star'*α[2:end] - α[1]), 0.0 ])
                         if violationₗ > 0.0
                             # ineq = Cut(α)
+                            pb.info.cuts_infos.cuts_applied += 1 ; pb.info.cuts_infos.sp_cuts += 1
                             if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), violationₗ, k))
                                 con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
                                 con = JuMP.@constraint(pb.lp_copied, α[2:end]'*pb.varArray_copied ≤ α[1]) ; push!(node.con_cuts_copied, con)
@@ -51,6 +52,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
                         if viol > 0.0
                             applied = true
                             # ineq = Cut(α)
+                            pb.info.cuts_infos.cuts_applied += 1 ; pb.info.cuts_infos.mp_cuts += 1
                             if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), viol, k))
                                 con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
                                 con = JuMP.@constraint(pb.lp_copied, α[2:end]'*pb.varArray_copied ≤ α[1]) ; push!(node.con_cuts_copied, con)
@@ -87,8 +89,15 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
 
         # step 2 : add valid cuts constraints then re-optimize 
         start_processing = time()
-        loadingCutInPool( node, pb)         # complexity O(pt ⋅ cuts)
+        loadingCutInPool( node, pb)      # complexity O(pt ⋅ cuts)
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
+
+        # todo : test re-opt
+        if !pb.param.EPB && length(node.cutpool.hashMap) > 0
+            pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+            if pruned return true end
+        end
+        # ---------------------------
 
         pruned = MP_cutting_planes(node, pb, incumbent, round_results, verbose ; args...)
 
@@ -270,11 +279,9 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         # case 4 : condition dominance violated, then stock the non-dominated local nadir pts to prepare EPB
         if compared && !existence 
             fathomed = false
-            # todo : 2) continue to branch on the non-dominated and non redundant nadir points 
             if EPB
                 if !isRoot(node) && isNadirPointDuplicated(node, u.y)   # the current local nadir pt is already branched 
-                    # node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
-                    nothing
+                    node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 
                 # don't do EPB branching if the local nadir point is worse than the LBS's nadir point 
                 elseif (u.y[2] ≥ ptl.y[2] && u.y[1] ≥ ptr.y[1]) 

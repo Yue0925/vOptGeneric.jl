@@ -10,11 +10,20 @@
 #SBATCH --output=aleaMDMKP_lambda_test.txt
 #SBATCH --error=aleaMDMKP_lambda_test.txt
 
-methodes=("bc_rootRelax" "bc_rootRelaxEPB")
+# methodes=("bc_rootRelax" "bc_rootRelaxEPB")
+
+# for file in ./instances/PCC/*; do
+#     for mthd in ${methodes[@]}; do
+#         echo "$file ... " $mthd
+#         srun julia vOptMDMKP2.jl "$file" $mthd
+#     done
+# done
+
+methodes=("bc_rootRelaxCP" "bc_rootRelaxCPEPB")
 
 for file in ./instances/PCC/*; do
     for mthd in ${methodes[@]}; do
         echo "$file ... " $mthd
-        srun julia vOptMDMKP2.jl "$file" $mthd
+        srun julia vOptMDMKP.jl "$file" $mthd
     done
 done

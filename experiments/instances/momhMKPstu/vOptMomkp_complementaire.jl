@@ -54,9 +54,9 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
   println(fout, "Y_N = ", Y_N)
   println(fout)
   println(fout, "size_X_E = ", length(X_E))
-  # todo : ignore
-  println(fout, "X_E = ", X_E)
-
+  # # todo : ignore
+  # println(fout, "X_E = ", X_E)
+  
   close(fout)
 
   displayGraphics(fname,Y_N, outputName)
@@ -79,7 +79,7 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
 
   m, n_before = size(A)
   # scale test
-  for n in [ 50] # , 50
+  for n in [10, 10, 20, 30, 40, 50] #
     println("n=$n")
     ratio = n/n_before
 
@@ -97,7 +97,6 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
     # ---- setting the model
     println("Building...")
     Bi01IP = vModel( solverSelected ) ; JuMP.set_silent(Bi01IP)
-    # JuMP.set_optimizer_attribute(Bi01IP, "CPX_PARAM_EPINT", 1e-4) 
     @variable( Bi01IP, x[1:n], Bin )
     @addobjective( Bi01IP, Max, sum(C[1,j] * x[j] for j=1:n) )
     @addobjective( Bi01IP, Max, sum(C[2,j] * x[j] for j=1:n) )
@@ -107,11 +106,11 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
     println("Solving...")
     if method == :dicho
       start = time()
-      vSolve( Bi01IP, method=:dicho, round_results=false, verbose=false)
+      vSolve( Bi01IP, method=:dicho, round_results=true,verbose=false)
       total_time = round(time() - start, digits = 2)
     elseif method == :epsilon
       start = time()
-      vSolve( Bi01IP, method=:epsilon, step=0.01, round_results = false, verbose=false )
+      vSolve( Bi01IP, method=:epsilon, step=0.01, round_results=true,verbose=false )
       total_time = round(time() - start, digits = 2)
     elseif method == :bb
       infos = vSolve( Bi01IP, method=:bb, verbose=false )
@@ -184,10 +183,10 @@ function main(fname::String)
 
   solverSelected = CPLEX.Optimizer
   for method in [
-    :bc_rootRelax , 
+    # :bc_rootRelax , 
     # :bc_rootRelaxEPB,
-    # :bc_rootRelaxCP, 
-    # :bc_rootRelaxCPEPB,
+    :bc_rootRelaxCP, #
+    :bc_rootRelaxCPEPB,
 
     # :dicho, 
     # :epsilon, 

@@ -10,7 +10,7 @@
 #SBATCH --output=aleaMDMKP_basic_param.txt
 #SBATCH --error=aleaMDMKP_basic_param.txt
 
-methodes=("epsilon" "bb" "bc")
+methodes=("bb" "bc")
 
 for file in ./instances/PCC/*; do
     for mthd in ${methodes[@]}; do
