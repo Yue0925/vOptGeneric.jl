@@ -191,7 +191,7 @@ function main(fname::String)
     # :dicho, 
     # :epsilon, 
     # :bb, 
-    # :bc, 
+    :bc, 
     :bc_EPB,
     :bb_EPB,
     ] # 

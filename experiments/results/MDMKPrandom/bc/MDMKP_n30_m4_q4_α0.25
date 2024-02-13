@@ -1,38 +1,42 @@
 vars = 30 ; constr = 4 
  # informations of B&B algorithm : 
-total_times_used = 578.97 
-total_nodes = 155863 
-pruned_nodes = 77932 
+total_times_used = 661.08 
+total_nodes = 66237 
+pruned_nodes = 33119 
 GAP = 0.0 
-relaxation_time = 524.78 
-test_dominance_time = 0.21 
-update_incumbent_time = 0.02 
-tree_size = 549.486 
+relaxation_time = 621.58 
+test_dominance_time = 0.09 
+update_incumbent_time = 0.01 
+tree_size = 259.367 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 155862 
+nb_nodes_VB = 66236 
 root_relax = false 
 TO = false 
 rootLBS = 37 
 LBSexhaustive = true 
  λ_strategy = 0 
- λ_limit = 1048576 
- 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+
 
 
  # ----------- info about cuts : 
-ite_total = 115690 
-cuts_applied = 170644 
-sp_cuts = 103355 
-mp_cuts = 67289 
-cuts_total = 170644 
-times_calling_dicho = 524.78 
-times_calling_separators = 25.26 
-times_oper_cutPool = 3.03 
-times_total_for_cuts = 561.15 
-times_add_retrieve_cuts = 11.69 
+ite_total = 44158 
+cuts_applied = 334554 
+sp_cuts = 81817 
+mp_cuts = 252737 
+cuts_total = 334554 
+times_calling_dicho = 621.58 
+times_calling_separators = 22.49 
+times_oper_cutPool = 2.23 
+times_total_for_cuts = 647.2 
+times_add_retrieve_cuts = 7.9 
 
 
 
-size_Y_N = 25
-Y_N = [[3202.75, 10813.25], [3283.0, 10781.0], [3356.0, 10776.0], [3452.25, 10766.75], [3529.75, 10670.25], [4394.75, 10570.5], [4652.0, 10498.75], [4762.25, 9976.0], [4858.5, 9966.75], [4879.0, 9910.0], [4975.25, 9900.75], [5012.75, 9734.25], [5109.0, 9725.0], [5697.0, 9717.75], [5922.0, 8540.0], [5934.25, 7971.75], [5997.5, 7852.25], [6134.0, 7819.25], [6216.75, 7545.25], [6344.25, 7377.75], [6462.0, 5946.0], [6510.75, 5419.5], [6523.5, 5144.25], [6700.75, 5128.0], [6730.25, 5020.5]]
+size_Y_N = 24
+Y_N = [[3654.5, 10244.5], [3817.75, 10014.5], [3917.25, 9854.0], [3956.25, 9743.0], [4180.0, 9662.75], [4342.5, 9566.75], [4438.5, 9453.75], [4491.5, 9400.75], [4625.75, 9303.25], [4715.25, 9224.0], [4897.5, 8961.25], [4915.0, 8508.0], [5013.0, 8383.25], [5289.5, 8049.75], [5386.25, 7442.0], [5479.75, 7382.75], [5653.75, 7105.0], [5693.75, 6708.0], [5768.0, 6592.75], [5770.5, 6498.75], [5904.25, 6323.0], [6113.0, 5591.75], [6138.25, 5582.75], [6224.75, 5470.75]]
 

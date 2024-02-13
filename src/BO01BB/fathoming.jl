@@ -87,6 +87,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     if pb.param.cp_activated && !pruned #&& node.depth < num_var/3
         @assert length(node.RBS.natural_order_vect) > 0 "valid LBS is empty !"
 
+        loop_limit = 5
         # step 2 : add valid cuts constraints then re-optimize 
         start_processing = time()
         loadingCutInPool( node, pb)      # complexity O(pt ⋅ cuts)
@@ -96,10 +97,11 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         if !pb.param.EPB && length(node.cutpool.hashMap) > 0
             pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
             if pruned return true end
+            loop_limit -= 1
         end
         # ---------------------------
 
-        pruned = MP_cutting_planes(node, pb, incumbent, round_results, verbose ; args...)
+        pruned = MP_cutting_planes(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
 
         # step 3 : retrieve applied valid cuts 
         start_processing = time()
@@ -280,7 +282,8 @@ function fullyExplicitDominanceTest(node::Node, incumbent::IncumbentSet, worst_n
         if compared && !existence 
             fathomed = false
             if EPB
-                if !isRoot(node) && isNadirPointDuplicated(node, u.y)   # the current local nadir pt is already branched 
+                # if !isRoot(node) && isNadirPointDuplicated(node, u.y)   # the current local nadir pt is already branched 
+                if !isRoot(node) && (u.y in node.pred.localNadirPts || u.y == node.pred.nadirPt || u.y == node.nadirPt)    # the current local nadir pt is already branched 
                     node.localNadirPts = Vector{Vector{Float64}}() ; return fathomed 
 
                 # don't do EPB branching if the local nadir point is worse than the LBS's nadir point 

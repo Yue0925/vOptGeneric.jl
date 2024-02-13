@@ -1,38 +1,42 @@
 vars = 30 ; constr = 6 
  # informations of B&B algorithm : 
-total_times_used = 157.98 
-total_nodes = 26529 
-pruned_nodes = 13265 
+total_times_used = 275.11 
+total_nodes = 34243 
+pruned_nodes = 17122 
 GAP = 0.0 
-relaxation_time = 138.95 
-test_dominance_time = 0.04 
-update_incumbent_time = 0.0 
-tree_size = 119.524 
+relaxation_time = 245.6 
+test_dominance_time = 0.08 
+update_incumbent_time = 0.01 
+tree_size = 140.03 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 26528 
+nb_nodes_VB = 34242 
 root_relax = false 
 TO = false 
 rootLBS = 32 
 LBSexhaustive = true 
  λ_strategy = 0 
- λ_limit = 1048576 
- 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+
 
 
  # ----------- info about cuts : 
-ite_total = 20769 
-cuts_applied = 23775 
-sp_cuts = 9252 
-mp_cuts = 14523 
-cuts_total = 23775 
-times_calling_dicho = 138.95 
-times_calling_separators = 12.56 
-times_oper_cutPool = 0.75 
-times_total_for_cuts = 154.62 
-times_add_retrieve_cuts = 2.58 
+ite_total = 24687 
+cuts_applied = 137596 
+sp_cuts = 21975 
+mp_cuts = 115621 
+cuts_total = 137596 
+times_calling_dicho = 245.6 
+times_calling_separators = 21.19 
+times_oper_cutPool = 0.96 
+times_total_for_cuts = 269.67 
+times_add_retrieve_cuts = 3.17 
 
 
 
-size_Y_N = 10
-Y_N = [[13485.333333333332, 12158.333333333334], [13594.833333333334, 12139.333333333334], [13701.833333333334, 11997.333333333334], [13833.833333333334, 11842.333333333334], [13904.666666666666, 11700.333333333334], [14036.0, 11627.333333333334], [14259.0, 11527.333333333334], [14317.5, 11160.833333333334], [14536.333333333334, 10940.333333333334], [14580.666666666666, 9834.5]]
+size_Y_N = 9
+Y_N = [[13485.333333333332, 12158.333333333334], [13701.833333333334, 11997.333333333334], [13833.833333333334, 11842.333333333334], [13904.666666666666, 11700.333333333334], [13934.833333333334, 11550.333333333334], [13959.166666666666, 11180.833333333334], [14081.833333333332, 11176.833333333334], [14317.5, 11160.833333333334], [14536.333333333334, 10940.333333333334]]
 

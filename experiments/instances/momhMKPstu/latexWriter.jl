@@ -1290,7 +1290,7 @@ end
 
 # -------------------------------------------------
 comparisons("momhMKPstu/MOBKP/set3")
-# comparisonsTree("momhMKPstu/MOBKP/set3")
+comparisonsTree("momhMKPstu/MOBKP/set3")
 # comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
 # comparisons_bis("momhMKPstu/MOBKP/set3")

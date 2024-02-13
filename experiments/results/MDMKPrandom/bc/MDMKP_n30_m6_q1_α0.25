@@ -1,38 +1,42 @@
 vars = 30 ; constr = 6 
  # informations of B&B algorithm : 
-total_times_used = 825.25 
-total_nodes = 261515 
-pruned_nodes = 130758 
+total_times_used = 1180.9 
+total_nodes = 105131 
+pruned_nodes = 52566 
 GAP = 0.0 
-relaxation_time = 727.88 
-test_dominance_time = 0.2 
-update_incumbent_time = 0.02 
-tree_size = 770.039 
+relaxation_time = 1105.04 
+test_dominance_time = 0.14 
+update_incumbent_time = 0.01 
+tree_size = 401.813 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 261514 
+nb_nodes_VB = 105130 
 root_relax = false 
 TO = false 
 rootLBS = 15 
 LBSexhaustive = true 
  λ_strategy = 0 
- λ_limit = 1048576 
- 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+
 
 
  # ----------- info about cuts : 
-ite_total = 177722 
-cuts_applied = 238590 
-sp_cuts = 140779 
-mp_cuts = 97811 
-cuts_total = 238590 
-times_calling_dicho = 727.88 
-times_calling_separators = 51.71 
-times_oper_cutPool = 4.87 
-times_total_for_cuts = 792.67 
-times_add_retrieve_cuts = 17.89 
+ite_total = 77159 
+cuts_applied = 600681 
+sp_cuts = 151511 
+mp_cuts = 449170 
+cuts_total = 600681 
+times_calling_dicho = 1105.04 
+times_calling_separators = 45.09 
+times_oper_cutPool = 4.09 
+times_total_for_cuts = 1154.69 
+times_add_retrieve_cuts = 16.16 
 
 
 
-size_Y_N = 17
-Y_N = [[5223.333333333333, 6724.166666666666], [5223.666666666667, 6722.166666666666], [5401.333333333334, 6442.166666666666], [5733.166666666667, 5853.666666666666], [5777.666666666667, 5307.833333333333], [5787.333333333333, 5298.166666666666], [5826.0, 5136.333333333333], [5844.5, 5000.333333333333], [5844.833333333333, 4998.333333333333], [5952.833333333333, 4984.333333333333], [6004.0, 4854.333333333333], [6004.5, 4840.166666666666], [6023.333333333333, 4744.333333333333], [6037.666666666667, 4612.333333333333], [6072.333333333333, 4607.666666666666], [6137.833333333333, 4274.666666666666], [6211.666666666667, 4220.666666666666]]
+size_Y_N = 11
+Y_N = [[5223.666666666667, 6722.166666666666], [5401.333333333334, 6442.166666666666], [5733.166666666667, 5853.666666666666], [5826.0, 5136.333333333333], [5844.5, 5000.333333333333], [5952.833333333333, 4984.333333333333], [6004.0, 4854.333333333333], [6004.5, 4840.166666666666], [6023.333333333333, 4744.333333333333], [6072.333333333333, 4607.666666666666], [6157.166666666667, 4164.666666666666]]
 

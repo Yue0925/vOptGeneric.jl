@@ -213,9 +213,9 @@ one corresponding vector `x` in decision space.
 
 Return ture if the node is infeasible after adding cuts.
 """
-function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet, round_results, verbose ; args...)
+function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet, loop_limit::Int64, round_results, verbose ; args...)
     numVars = length(pb.varArray) ; numRows = size(pb.A, 1)
-    LBS = node.RBS.natural_order_vect.sols ; loop_limit = 5
+    LBS = node.RBS.natural_order_vect.sols #; loop_limit = 5
 
     # ------------------------------------------------------------------------------
     # 1. generate multi-point cuts if has any, or single-point cut off
