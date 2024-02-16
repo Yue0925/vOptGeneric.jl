@@ -3,6 +3,155 @@
 # import PyPlot; const plt = PyPlot
 
 
+
+function comparisons_eps_BB_EPB(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonEpsBBTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \hspace*{-1cm}\begin{tabular}{lcccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$\epsilon$-constraint} & \multicolumn{2}{c}{\textbf{B\&B}}  & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \textbf{$|\mathcal{Y}_N|$}
+    \\
+    \cmidrule(r){5-6} \cmidrule(r){7-8} 
+    ~ & ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & ~ \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["epsilon", "bb", "bb_EPB"] 
+
+    n = 0
+    count = 0
+    avg_n = 0 ; avg_m = 0
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+    countY_N = 0
+
+    # ∀ file in dicho
+    for file in readdir(work_dir * "/epsilon/")
+        if split(file, ".")[end] == "png"
+            continue
+        end
+
+        times = [] ; pts = []
+
+        include(work_dir * "/epsilon/" * file)
+
+        # new n folder 
+        if n!= vars
+            if n!= 0  
+                avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+                for m in methods
+                    avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+                end
+
+                print(fout, "\\cline{1-9} avg & " * string(avg_n) * " & " * string(avg_m) )
+
+                print(fout, " & " * string(avgT[methods[1]]) )
+                for m in methods[2:end]
+                    print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
+                end
+
+                println(fout, " & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
+            end
+
+            n = vars 
+            count = 0
+            avg_n = 0 ; avg_m = 0
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+            countY_N = 0
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+            countY_N += size_Y_N
+        end
+        count += 1
+        avg_n += vars ; avg_m += constr
+        countY_N += size_Y_N
+
+        name_seg = split(file, "_")
+        for s in name_seg[1:end-1]
+            print(fout, s * "\\_")
+        end
+        print(fout, name_seg[end] * " & ")
+        print(fout, string(vars) * " & " * string(constr) * " & ")
+
+
+        # ∀ method 
+        for m in methods
+            if isfile(work_dir * "/" * m * "/" * file)
+                include(work_dir * "/" * m * "/" * file)
+                push!(times, total_times_used); avgT[m] += total_times_used
+                
+                if m == "epsilon"
+                    push!(pts, 0) ; avgY[m] += 0
+                else
+                    push!(pts, total_nodes) ; avgY[m] += total_nodes
+                end
+                
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+        end
+
+        # ------------------
+        for i=1:length(methods)-1
+            if times[i] == -1
+                print(fout, " - & ")
+            elseif times[i] == minimum(filter(x -> x > 0 ,times))
+                times[i] >= 3600.0 ? print(fout, "TO & ") : print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+            else
+                times[i] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[i]) * " & ")
+            end
+
+            if i==1 continue end 
+            if pts[i] == -1
+                print(fout, " - & ")
+            else
+                print(fout, string(pts[i]) * " & ")
+            end
+
+        end
+
+        if times[end] == minimum(filter(x -> x > 0 ,times))
+            times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+        else
+            times[end] >= 3600.0 ? print(fout, "TO & ") : print(fout, string(times[end]) * " & ")
+        end
+        
+        println(fout, string(pts[end]) * " & " * string(size_Y_N) * " \\\\")
+
+    end
+
+    avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+    for m in methods
+        avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+    end
+
+    print(fout, "\\cline{1-9} avg & " * string(avg_n) * " & " * string(avg_m) )
+
+    print(fout, " & " * string(avgT[methods[1]]) )
+    for m in methods[2:end]
+        print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
+    end
+
+    println(fout, " & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
+
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the B\\&B algorithms performances for instances $instances .}")
+    println(fout, "\\label{tab:table_EPSILONvsBBvsEPBBB_$instances }")
+    println(fout, "\\end{table}")
+    close(fout)
+end
+
+
 function comparisons(instances::String)
     work_dir = "../../results/" * instances
     @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
@@ -91,3 +240,4 @@ end
 
 
 comparisons("SCPrandom")
+comparisons_eps_BB_EPB("SCPrandom")

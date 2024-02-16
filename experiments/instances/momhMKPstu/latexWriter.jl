@@ -614,11 +614,11 @@ end
 
 
 
-function comparisons_bis(instances::String)
+function comparisons_eps_BB_EPB(instances::String)
     work_dir = "../../results/" * instances
     @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
 
-    fout = open(work_dir * "/comparisonBBTable.tex", "w")
+    fout = open(work_dir * "/comparisonEpsBBTable.tex", "w")
 
     latex = raw"""\begin{table}[!ht]
     \centering
@@ -632,7 +632,7 @@ function comparisons_bis(instances::String)
     \midrule
     """
     println(fout, latex)
-    methods = ["epsilon", "bb", "bb_EPB"] ; record_n = []
+    methods = ["epsilon", "bb", "bb_EPB"] 
     record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods[2:end])
 
     # ∀ filder_n
@@ -701,7 +701,7 @@ function comparisons_bis(instances::String)
                 print(fout, string(times[end]) * " & ") 
             end
             
-            println(fout, string(pts[end]) * " & " * string(countY_N) * " \\\\")
+            println(fout, string(pts[end]) * " & " * string(size_Y_N) * " \\\\")
     
         end
 
@@ -710,14 +710,14 @@ function comparisons_bis(instances::String)
             avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
         end
 
-        print(fout, "\\cline{1-9} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+        print(fout, "\\cline{1-9} avg & " * string(avg_n) * " & " * string(avg_m) )
 
-        print(fout, "} & \\textbf{" * string(avgT[methods[1]]) )
+        print(fout, " & " * string(avgT[methods[1]]) )
         for m in methods[2:end]
-            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+            print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
         end
 
-        println(fout, "} & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
+        println(fout, " & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
     end
 
     latex = raw"""\bottomrule
@@ -725,7 +725,7 @@ function comparisons_bis(instances::String)
     }%"""
     println(fout, latex)
     println(fout, "\\caption{Comparison of the B\\&B algorithms performances for instances $instances .}")
-    println(fout, "\\label{tab:table_compareBB_$instances }")
+    println(fout, "\\label{tab:table_EPSILONvsBBvsEPBBB_$instances }")
     println(fout, "\\end{table}")
     close(fout)
 
@@ -1291,9 +1291,9 @@ end
 # -------------------------------------------------
 comparisons("momhMKPstu/MOBKP/set3")
 comparisonsTree("momhMKPstu/MOBKP/set3")
+comparisons_eps_BB_EPB("momhMKPstu/MOBKP/set3")
 # comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
-# comparisons_bis("momhMKPstu/MOBKP/set3")
 # comparisonsCP("momhMKPstu/MOBKP/set3")
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 # comparisons_tri("momhMKPstu/MOBKP/set3")

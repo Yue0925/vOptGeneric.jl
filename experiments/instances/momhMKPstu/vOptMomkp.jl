@@ -79,7 +79,7 @@ function vSolveBi01IP(solverSelected, C, A, B, fname, method)
 
   m, n_before = size(A)
   # scale test
-  for n in [10, 20, 30, 40, 50] # , 50
+  for n in [10, 10] # , 50 20, 30, 40, 50
     println("n=$n")
     ratio = n/n_before
 
@@ -189,7 +189,7 @@ function main(fname::String)
     # :bc_rootRelaxCP, 
     # :bc_rootRelaxCPEPB,
 
-    :dicho, 
+    # :dicho, 
     :epsilon, 
     # :bb, 
     # :bc, 

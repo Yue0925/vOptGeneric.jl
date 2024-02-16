@@ -1,0 +1,82 @@
+\begin{table}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\hspace*{-1cm}\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$\epsilon$-constraint} & \multicolumn{2}{c}{\textbf{B\&B}}  & \multicolumn{2}{c}{\textbf{EPB B\&B}} & \textbf{$|\mathcal{Y}_N|$}
+\\
+\cmidrule(r){5-6} \cmidrule(r){7-8} 
+~ & ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} & ~ \\
+\midrule
+
+MDMKP\_n20\_m2\_q1\_α0.25 & 20 & 2 &  \textcolor{blue2}{5.4} & 19.12 & 34877 & 20.11 & 34864 & 13 \\
+MDMKP\_n20\_m2\_q1\_α0.5 & 20 & 2 &  \textcolor{blue2}{8.05} & 94.6 & 139437 & 97.97 & 143138 & 23 \\
+MDMKP\_n20\_m2\_q1\_α0.75 & 20 & 2 & 5.69 &  \textcolor{blue2}{3.99} & 1903 & 4.78 & 2297 & 12 \\
+MDMKP\_n20\_m2\_q2\_α0.25 & 20 & 2 & 6.77 &  \textcolor{blue2}{6.27} & 10379 & 7.14 & 10352 & 17 \\
+MDMKP\_n20\_m2\_q2\_α0.5 & 20 & 2 &  \textcolor{blue2}{5.4} & 20.7 & 26139 & 23.33 & 28260 & 13 \\
+MDMKP\_n20\_m2\_q2\_α0.75 & 20 & 2 & 4.03 &  \textcolor{blue2}{3.13} & 1751 & 4.05 & 1832 & 7 \\
+MDMKP\_n20\_m4\_q1\_α0.25 & 20 & 4 &  \textcolor{blue2}{4.82} & 9.28 & 13611 & 10.08 & 13490 & 10 \\
+MDMKP\_n20\_m4\_q1\_α0.5 & 20 & 4 &  \textcolor{blue2}{5.62} & 19.3 & 23193 & 20.1 & 23056 & 16 \\
+MDMKP\_n20\_m4\_q1\_α0.75 & 20 & 4 &  \textcolor{blue2}{5.46} & 8.25 & 10037 & 9.91 & 11680 & 10 \\
+MDMKP\_n20\_m4\_q2\_α0.25 & 20 & 4 &  \textcolor{blue2}{4.44} & 5.56 & 7043 & 6.42 & 7040 & 10 \\
+MDMKP\_n20\_m4\_q2\_α0.5 & 20 & 4 &  \textcolor{blue2}{5.77} & 30.73 & 29217 & 31.34 & 29234 & 13 \\
+MDMKP\_n20\_m4\_q2\_α0.75 & 20 & 4 &  \textcolor{blue2}{4.22} & 7.85 & 5611 & 8.88 & 5611 & 5 \\
+MDMKP\_n20\_m4\_q4\_α0.25 & 20 & 4 & 5.89 &  \textcolor{blue2}{5.15} & 5011 & 6.11 & 5034 & 17 \\
+MDMKP\_n20\_m4\_q4\_α0.5 & 20 & 4 &  \textcolor{blue2}{6.57} & 19.54 & 18213 & 20.89 & 18254 & 15 \\
+MDMKP\_n20\_m4\_q4\_α0.75 & 20 & 4 & 4.98 &  \textcolor{blue2}{3.36} & 2063 & 4.49 & 2114 & 8 \\
+\cline{1-9} avg & 20 & 3 & 5.19 & 16.05& 20530.31 & 17.23& 21016.0 & 12.62\\ \cline{1-9}
+MDMKP\_n30\_m2\_q1\_α0.25 & 30 & 2 &  \textcolor{blue2}{9.31} & 3549.99 & 2553847 & TO & 2586047 & 14 \\
+MDMKP\_n30\_m2\_q1\_α0.5 & 30 & 2 &  \textcolor{blue2}{13.1} & 1953.31 & 793651 & 3301.34 & 2356723 & 45 \\
+MDMKP\_n30\_m2\_q1\_α0.75 & 30 & 2 &  \textcolor{blue2}{7.26} & 175.81 & 108371 & 305.32 & 311577 & 28 \\
+MDMKP\_n30\_m2\_q2\_α0.25 & 30 & 2 &  \textcolor{blue2}{12.92} & 536.24 & 333799 & 618.16 & 578634 & 44 \\
+MDMKP\_n30\_m2\_q2\_α0.5 & 30 & 2 &  \textcolor{blue2}{10.12} & 1783.2 & 1062045 & 2011.61 & 1453885 & 33 \\
+MDMKP\_n30\_m2\_q2\_α0.75 & 30 & 2 &  \textcolor{blue2}{6.94} & 17.12 & 8905 & 18.0 & 11905 & 18 \\
+MDMKP\_n30\_m4\_q1\_α0.25 & 30 & 4 &  \textcolor{blue2}{7.11} & 689.02 & 468263 & 998.04 & 978463 & 20 \\
+MDMKP\_n30\_m4\_q1\_α0.5 & 30 & 4 &  \textcolor{blue2}{9.05} & TO & 1000901 & TO & 1503307 & 6 \\
+MDMKP\_n30\_m4\_q1\_α0.75 & 30 & 4 &  \textcolor{blue2}{5.84} & 330.69 & 141019 & 388.74 & 325044 & 15 \\
+MDMKP\_n30\_m4\_q2\_α0.25 & 30 & 4 &  \textcolor{blue2}{9.15} & 766.61 & 746357 & 813.66 & 782448 & 33 \\
+MDMKP\_n30\_m4\_q2\_α0.5 & 30 & 4 &  \textcolor{blue2}{5.54} & 3375.34 & 1960679 & 3479.86 & 1969473 & 14 \\
+MDMKP\_n30\_m4\_q2\_α0.75 & 30 & 4 &  \textcolor{blue2}{7.7} & 284.83 & 122047 & 310.66 & 186133 & 22 \\
+MDMKP\_n30\_m4\_q4\_α0.25 & 30 & 4 &  \textcolor{blue2}{7.14} & 416.02 & 330739 & 454.57 & 361182 & 25 \\
+MDMKP\_n30\_m4\_q4\_α0.5 & 30 & 4 &  \textcolor{blue2}{11.14} & 2342.68 & 830987 & TO & 2347384 & 28 \\
+MDMKP\_n30\_m4\_q4\_α0.75 & 30 & 4 &  \textcolor{blue2}{6.13} & 166.88 & 155613 & 212.15 & 226667 & 17 \\
+MDMKP\_n30\_m6\_q1\_α0.25 & 30 & 6 &  \textcolor{blue2}{6.3} & 639.99 & 630457 & 650.36 & 629735 & 17 \\
+MDMKP\_n30\_m6\_q1\_α0.5 & 30 & 6 &  \textcolor{blue2}{12.78} & TO & 982945 & TO & 973481 & 7 \\
+MDMKP\_n30\_m6\_q1\_α0.75 & 30 & 6 &  \textcolor{blue2}{7.33} & 414.99 & 210013 & 560.9 & 501981 & 19 \\
+MDMKP\_n30\_m6\_q3\_α0.25 & 30 & 6 &  \textcolor{blue2}{12.1} & 239.2 & 207343 & 245.18 & 207868 & 41 \\
+MDMKP\_n30\_m6\_q3\_α0.5 & 30 & 6 &  \textcolor{blue2}{14.47} & TO & 1259961 & TO & 1501466 & 16 \\
+MDMKP\_n30\_m6\_q3\_α0.75 & 30 & 6 &  \textcolor{blue2}{4.73} & 168.85 & 99497 & 173.08 & 104095 & 10 \\
+MDMKP\_n30\_m6\_q6\_α0.25 & 30 & 6 &  \textcolor{blue2}{4.68} & 98.74 & 92555 & 100.0 & 92555 & 9 \\
+MDMKP\_n30\_m6\_q6\_α0.5 & 30 & 6 &  \textcolor{blue2}{6.95} & 772.88 & 771663 & 777.65 & 772457 & 14 \\
+MDMKP\_n30\_m6\_q6\_α0.75 & 30 & 6 &  \textcolor{blue2}{4.49} & 81.99 & 46695 & 84.43 & 47406 & 7 \\
+\cline{1-9} avg & 30 & 4 & 8.09 & 1184.32& 596734.08 & 1340.59& 832396.64 & 25.96\\ \cline{1-9}
+MDMKP\_n40\_m2\_q1\_α0.25 & 40 & 2 &  \textcolor{blue2}{14.97} & TO & 831953 & -1 & -1 & 3 \\
+MDMKP\_n40\_m2\_q1\_α0.5 & 40 & 2 &  \textcolor{blue2}{14.13} & TO & 446961 & -1 & -1 & 6 \\
+MDMKP\_n40\_m2\_q1\_α0.75 & 40 & 2 &  \textcolor{blue2}{6.81} & 596.88 & 225357 & -1 & -1 & 17 \\
+MDMKP\_n40\_m2\_q2\_α0.25 & 40 & 2 &  \textcolor{blue2}{11.57} & TO & 1109117 & -1 & -1 & 0 \\
+MDMKP\_n40\_m2\_q2\_α0.5 & 40 & 2 &  \textcolor{blue2}{15.74} & TO & 511587 & -1 & -1 & 0 \\
+MDMKP\_n40\_m2\_q2\_α0.75 & 40 & 2 &  \textcolor{blue2}{13.04} & 2432.32 & 631379 & -1 & -1 & 41 \\
+MDMKP\_n40\_m4\_q1\_α0.25 & 40 & 4 &  \textcolor{blue2}{7.0} & TO & 975883 & -1 & -1 & 4 \\
+MDMKP\_n40\_m4\_q1\_α0.5 & 40 & 4 &  \textcolor{blue2}{13.08} & TO & 354801 & -1 & -1 & 1 \\
+MDMKP\_n40\_m4\_q1\_α0.75 & 40 & 4 &  \textcolor{blue2}{12.94} & TO & 552825 & -1 & -1 & 21 \\
+MDMKP\_n40\_m4\_q2\_α0.25 & 40 & 4 &  \textcolor{blue2}{13.95} & TO & 882711 & -1 & -1 & 0 \\
+MDMKP\_n40\_m4\_q2\_α0.5 & 40 & 4 &  \textcolor{blue2}{18.66} & TO & 336359 & -1 & -1 & 3 \\
+MDMKP\_n40\_m4\_q2\_α0.75 & 40 & 4 &  \textcolor{blue2}{20.32} & TO & 792199 & -1 & -1 & 8 \\
+MDMKP\_n40\_m4\_q4\_α0.25 & 40 & 4 &  \textcolor{blue2}{14.3} & TO & 729233 & -1 & -1 & 4 \\
+MDMKP\_n40\_m4\_q4\_α0.5 & 40 & 4 &  \textcolor{blue2}{30.4} & TO & 378969 & -1 & -1 & 0 \\
+MDMKP\_n40\_m4\_q4\_α0.75 & 40 & 4 &  \textcolor{blue2}{9.79} & TO & 825709 & -1 & -1 & 13 \\
+MDMKP\_n40\_m6\_q1\_α0.25 & 40 & 6 &  \textcolor{blue2}{10.76} & TO & 970291 & -1 & -1 & 2 \\
+MDMKP\_n40\_m6\_q1\_α0.5 & 40 & 6 &  \textcolor{blue2}{15.95} & TO & 292635 & -1 & -1 & 0 \\
+MDMKP\_n40\_m6\_q1\_α0.75 & 40 & 6 &  \textcolor{blue2}{6.98} & TO & 738565 & -1 & -1 & 6 \\
+MDMKP\_n40\_m6\_q3\_α0.25 & 40 & 6 &  \textcolor{blue2}{29.7} & TO & 725313 & -1 & -1 & 0 \\
+MDMKP\_n40\_m6\_q3\_α0.5 & 40 & 6 &  \textcolor{blue2}{44.46} & TO & 276821 & -1 & -1 & 2 \\
+MDMKP\_n40\_m6\_q3\_α0.75 & 40 & 6 &  \textcolor{blue2}{9.44} & TO & 678851 & -1 & -1 & 12 \\
+MDMKP\_n40\_m6\_q6\_α0.25 & 40 & 6 &  \textcolor{blue2}{14.96} & TO & 1002325 & -1 & -1 & 0 \\
+MDMKP\_n40\_m6\_q6\_α0.5 & 40 & 6 &  \textcolor{blue2}{34.22} &  - &  - & -1 & -1 & 55 \\
+\cline{1-9} avg & 40 & 4 & 15.97 & 3127.27& 594576.83 & 0.0& 0.0 & 41.46\\ \cline{1-9}
+\bottomrule
+\end{tabular}
+}%
+\caption{Comparison of the B\&B algorithms performances for instances MDMKPrandom .}
+\label{tab:table_EPSILONvsBBvsEPBBB_MDMKPrandom }
+\end{table}
