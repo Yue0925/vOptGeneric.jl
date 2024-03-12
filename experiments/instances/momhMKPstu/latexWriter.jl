@@ -736,7 +736,7 @@ end
 
 
 
-
+# compare SP and MP cuts 
 function comparisonsCP(instances::String)
     work_dir = "../../results/" * instances
     @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
@@ -784,9 +784,9 @@ function comparisonsCP(instances::String)
             for m in methods
                 if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
-                    push!(sp, mp_cuts); push!(mp, sp_cuts)
+                    push!(sp, sp_cuts); push!(mp, mp_cuts)
     
-                    avgSP[m] += mp_cuts ; avgMP[m] += sp_cuts
+                    avgSP[m] += sp_cuts ; avgMP[m] += mp_cuts
                 else
                     push!(sp, -1); push!(mp, -1)
                 end
@@ -841,7 +841,7 @@ function comparisonsCP(instances::String)
 end
 
 
-
+# compare B&B/B&C vs EPB B&B B&C 
 function comparisons4(instances::String)
     work_dir = "../../results/" * instances
     @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
@@ -1289,12 +1289,14 @@ end
 
 
 # -------------------------------------------------
-comparisons("momhMKPstu/MOBKP/set3")
-comparisonsTree("momhMKPstu/MOBKP/set3")
-comparisons_eps_BB_EPB("momhMKPstu/MOBKP/set3")
+# comparisons("momhMKPstu/MOBKP/set3")
+# comparisonsTree("momhMKPstu/MOBKP/set3")
+# comparisons_eps_BB_EPB("momhMKPstu/MOBKP/set3")
+
+
 # comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
-# comparisonsCP("momhMKPstu/MOBKP/set3")
+comparisonsCP("momhMKPstu/MOBKP/set3")
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 # comparisons_tri("momhMKPstu/MOBKP/set3")
 # -------------------------------------------------

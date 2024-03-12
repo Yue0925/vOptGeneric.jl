@@ -108,13 +108,20 @@ function solve(fname::String, method::String)
     if !isdir(result_folder)
         mkdir(result_folder)
     end
+    outputName = result_folder * "/" * inst_name
+
+    # todo : 
+    if n!=40 return end
+    # todo : if the output file already exists 
+    if isfile(outputName)
+        return
+    end
+
 
     println("\n -----------------------------")
     println(" solving mono $(name) ... ")
     println(" -----------------------------")
 
-    # todo : 
-    if !(n==10) return end
         
     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[1:n], Bin )
@@ -138,8 +145,6 @@ function solve(fname::String, method::String)
     println(" solving $(name) by $method  ... ")
     println(" -----------------------------")
     # solve bo-pb 
-    outputName = result_folder * "/" * inst_name
-    # if isfile(outputName) return end
     vopt_solve(Symbol(method), outputName)
 
 end
