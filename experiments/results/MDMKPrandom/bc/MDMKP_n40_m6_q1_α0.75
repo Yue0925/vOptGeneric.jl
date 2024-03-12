@@ -1,38 +1,42 @@
 vars = 40 ; constr = 6 
  # informations of B&B algorithm : 
-total_times_used = 3601.42 
-total_nodes = 285423 
-pruned_nodes = 86877 
+total_times_used = 3601.4 
+total_nodes = 214573 
+pruned_nodes = 61628 
 GAP = 0.0 
-relaxation_time = 3056.16 
-test_dominance_time = 0.94 
-update_incumbent_time = 0.05 
-tree_size = 2655.485 
+relaxation_time = 3111.17 
+test_dominance_time = 0.69 
+update_incumbent_time = 0.04 
+tree_size = 1978.659 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 285422 
+nb_nodes_VB = 214572 
 root_relax = false 
 TO = true 
 rootLBS = 39 
 LBSexhaustive = true 
  λ_strategy = 0 
- λ_limit = 1048576 
- 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+
 
 
  # ----------- info about cuts : 
-ite_total = 282446 
-cuts_applied = 532246 
-sp_cuts = 201345 
-mp_cuts = 330901 
-cuts_total = 532246 
-times_calling_dicho = 3056.16 
-times_calling_separators = 442.08 
-times_oper_cutPool = 16.41 
-times_total_for_cuts = 3581.04 
-times_add_retrieve_cuts = 49.1 
+ite_total = 211827 
+cuts_applied = 1299797 
+sp_cuts = 224288 
+mp_cuts = 1075509 
+cuts_total = 1299797 
+times_calling_dicho = 3111.17 
+times_calling_separators = 411.02 
+times_oper_cutPool = 13.15 
+times_total_for_cuts = 3585.67 
+times_add_retrieve_cuts = 33.85 
 
 
 
-size_Y_N = 10
-Y_N = [[20801.333333333332, 14434.16666666666], [20896.166666666664, 14385.16666666666], [20898.333333333332, 14268.16666666666], [21104.333333333332, 14240.16666666666], [21307.666666666664, 14199.16666666666], [21342.5, 13116.333333333328], [21396.833333333332, 12630.66666666666], [21445.5, 12552.499999999995], [21480.0, 12543.499999999995], [21498.333333333336, 12511.499999999995]]
+size_Y_N = 9
+Y_N = [[20801.333333333332, 14434.16666666666], [20896.166666666664, 14385.16666666666], [20898.333333333332, 14268.16666666666], [21104.333333333332, 14240.16666666666], [21307.666666666664, 14199.16666666666], [21342.5, 13116.333333333328], [21396.833333333332, 12630.66666666666], [21445.5, 12552.499999999995], [21480.0, 12543.499999999995]]
 

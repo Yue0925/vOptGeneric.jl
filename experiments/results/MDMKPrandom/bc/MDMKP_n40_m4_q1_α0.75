@@ -1,38 +1,42 @@
 vars = 40 ; constr = 4 
  # informations of B&B algorithm : 
 total_times_used = 3601.46 
-total_nodes = 200719 
-pruned_nodes = 54548 
+total_nodes = 138645 
+pruned_nodes = 40586 
 GAP = 0.0 
-relaxation_time = 3276.19 
-test_dominance_time = 1.24 
-update_incumbent_time = 0.07 
-tree_size = 2539.314 
+relaxation_time = 3280.45 
+test_dominance_time = 0.97 
+update_incumbent_time = 0.06 
+tree_size = 1866.706 
 nb_nodes_EPB = 0 
-nb_nodes_VB = 200718 
+nb_nodes_VB = 138644 
 root_relax = false 
 TO = true 
 rootLBS = 57 
 LBSexhaustive = true 
  λ_strategy = 0 
- λ_limit = 1048576 
- 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+
 
 
  # ----------- info about cuts : 
-ite_total = 198900 
-cuts_applied = 571131 
-sp_cuts = 172252 
-mp_cuts = 398879 
-cuts_total = 571131 
-times_calling_dicho = 3276.19 
-times_calling_separators = 213.19 
-times_oper_cutPool = 19.08 
-times_total_for_cuts = 3585.62 
-times_add_retrieve_cuts = 53.92 
+ite_total = 137743 
+cuts_applied = 1530153 
+sp_cuts = 199162 
+mp_cuts = 1330991 
+cuts_total = 1530153 
+times_calling_dicho = 3280.45 
+times_calling_separators = 238.94 
+times_oper_cutPool = 11.8 
+times_total_for_cuts = 3590.95 
+times_add_retrieve_cuts = 37.37 
 
 
 
 size_Y_N = 22
-Y_N = [[16494.25, 17237.5], [16504.0, 17096.5], [16536.75, 17063.5], [16559.0, 17041.5], [16832.75, 16918.5], [17178.5, 16760.5], [17182.75, 16686.5], [17254.0, 16588.0], [17465.5, 16535.0], [17678.5, 16461.5], [17706.25, 15865.75], [17748.0, 15249.0], [17781.0, 15081.5], [17828.5, 14990.75], [17884.0, 14931.5], [17898.5, 14925.75], [17919.75, 14790.5], [17920.0, 14677.5], [17923.75, 14644.25], [17948.0, 14633.25], [18100.0, 14527.25], [18285.5, 14327.5]]
+Y_N = [[16494.25, 17237.5], [16504.0, 17096.5], [16559.0, 17041.5], [16573.75, 16898.25], [16702.75, 16822.5], [16732.25, 16801.5], [17178.5, 16760.5], [17254.0, 16588.0], [17465.5, 16535.0], [17678.5, 16461.5], [17706.25, 15865.75], [17748.0, 15249.0], [17828.5, 14990.75], [17884.0, 14931.5], [17898.5, 14925.75], [17919.75, 14790.5], [17920.0, 14677.5], [17923.75, 14644.25], [17948.0, 14633.25], [18100.0, 14527.25], [18285.5, 14327.5], [18418.25, 12843.75]]
 

@@ -114,7 +114,7 @@ function solve(fname::String, method::String)
     println(" -----------------------------")
 
     # todo : 
-    if !(n==10 || n == 40) return end
+    if !(n==10) return end
         
     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[1:n], Bin )
