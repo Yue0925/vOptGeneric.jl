@@ -43,7 +43,7 @@ function comparisons_eps_BB_EPB(instances::String)
         # new n folder 
         if n!= vars
             if n!= 0  
-                avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+                avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
                 for m in methods
                     avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
                 end
@@ -126,7 +126,7 @@ function comparisons_eps_BB_EPB(instances::String)
 
     end
 
-    avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+    avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
     for m in methods
         avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
     end
