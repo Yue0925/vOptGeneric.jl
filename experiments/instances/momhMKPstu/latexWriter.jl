@@ -1076,21 +1076,20 @@ function comparisons_tri(instances::String)
     \resizebox{\columnwidth}{!}{%
     \begin{tabular}{lcccccccc}
     \toprule
-    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{$\epsilon$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}}
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$\epsilon$-constraint}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}}
     \\
-    \cmidrule(r){4-5} \cmidrule(r){6-7} \cmidrule(r){8-9} 
-    ~ & ~ & ~ & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} & \textbf{Time(s)} &\textbf{$|\mathcal{Y}_N|$} \\
+    \cmidrule(r){6-7} \cmidrule(r){8-9} 
+    ~ & ~ & ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} \\
     \midrule
     """
     println(fout, latex)
-    methods = ["epsilon", "bb", "bc_rootRelaxEPB"] ; record_n = []
+    methods = ["epsilon", "bb", "bc_rootRelaxEPB"] 
 
     # ∀ filder_n
     for folder_n in readdir(work_dir * "/epsilon") 
         count = 0
         avg_n = 0 ; avg_m = 0
         avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
-        countY_N = 0
 
         # ∀ file in dicho
         for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
@@ -1109,23 +1108,41 @@ function comparisons_tri(instances::String)
             avg_n += vars ; avg_m += constr
 
             # ∀ method 
-            for m in methods
+            m = methods[1]
+            if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
+                push!(times, total_times_used); push!(pts, size_Y_N)
+
+                avgT[m] += total_times_used ; avgY[m] += size_Y_N
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+            for m in methods[2:end]
                 if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
-                    push!(times, total_times_used); push!(pts, size_Y_N)
+                    push!(times, total_times_used); push!(pts, total_nodes)
     
-                    avgT[m] += total_times_used ; avgY[m] += size_Y_N
+                    avgT[m] += total_times_used ; avgY[m] += total_nodes
                 else
                     push!(times, -1); push!(pts, -1)
                 end
             end
 
             # ------------------
-            for i=1:length(methods)-1
+            if pts[1] == -1
+                print(fout, " - & ")
+            else
+                print(fout, string(pts[1]) * " & ")
+            end
+            if times[1] == -1
+                print(fout, " - & ")
+            else
+                print(fout, string(times[1]) * " & ")
+            end
+
+            for i=2:length(methods)-1
                 if times[i] == -1
                     print(fout, " - & ")
-                elseif times[i] == minimum(filter(x -> x > 0 ,times))
-                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
                 else
                     print(fout, string(times[i]) * " & ")
                 end
@@ -1138,12 +1155,8 @@ function comparisons_tri(instances::String)
 
             end
 
-            if times[end] == minimum(filter(x -> x > 0 ,times))
-                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
-            else
-                print(fout, string(times[end]) * " & ") 
-            end
-            
+
+            print(fout, string(times[end]) * " & ") 
             println(fout, string(pts[end]) * " \\\\")
     
         end
@@ -1153,13 +1166,15 @@ function comparisons_tri(instances::String)
             avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
         end
 
-        print(fout, "\\cline{1-9} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+        print(fout, "\\hline \\textbf{avg} & " * string(avg_n) * " & " * string(avg_m) )
 
-        for m in methods
-            print(fout, "} & \\textbf{" * string(avgT[m]) * "} & \\textbf{" * string(avgY[m]))
+        m = methods[1]
+        print(fout, " & " * string(avgY[m]) * " & " * string(avgT[m]))
+        for m in methods[2:end]
+            print(fout, " & " * string(avgT[m]) * " & " * string(avgY[m]))
         end
 
-        println(fout, "} " * "\\\\ \\cline{1-9}")
+        println(fout, " " * "\\\\ \\hline")
     end
 
     latex = raw"""\bottomrule
@@ -1294,11 +1309,11 @@ end
 # comparisons_eps_BB_EPB("momhMKPstu/MOBKP/set3")
 
 
-comparisons5("momhMKPstu/MOBKP/set3")
+# comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
 # comparisonsCP("momhMKPstu/MOBKP/set3")
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
-# comparisons_tri("momhMKPstu/MOBKP/set3")
+comparisons_tri("momhMKPstu/MOBKP/set3")
 # -------------------------------------------------
 
 

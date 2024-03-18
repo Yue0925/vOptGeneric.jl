@@ -4,6 +4,161 @@
 
 
 
+
+function comparisons_tri(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonTable2.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{lcccccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$\epsilon$-constraint}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}}
+    \\
+    \cmidrule(r){6-7} \cmidrule(r){8-9} 
+    ~ & ~ & ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["epsilon", "bb", "bc_rootRelaxEPB"] 
+
+    n = 0
+    count = 0
+    avg_n = 0 ; avg_m = 0
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+
+    # ∀ file in dicho
+    for file in readdir(work_dir * "/epsilon/")
+        if split(file, ".")[end] == "png"
+            continue
+        end
+
+        times = [] ; pts = []
+        include(work_dir * "/epsilon/" * file)
+
+        # new n folder 
+        if n!= vars
+            if n!= 0  
+                avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+                for m in methods
+                    avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+                end
+
+                print(fout, "\\hline avg & " * string(avg_n) * " & " * string(avg_m) )
+
+                m = methods[1]
+                print(fout, " & " * string(avgY[m]) * "& " * string(avgT[m]))
+                for m in methods[2:end]
+                    print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
+                end
+
+                println(fout, "\\\\ \\hline")
+            end
+
+            n = vars 
+            count = 0
+            avg_n = 0 ; avg_m = 0
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+        end
+        count += 1
+        avg_n += vars ; avg_m += constr
+
+        name_seg = split(file, "_")
+        for s in name_seg[1:end-1]
+            print(fout, s * "\\_")
+        end
+        print(fout, name_seg[end] * " & ")
+        print(fout, string(vars) * " & " * string(constr) * " & ")    
+
+
+
+        # ∀ method 
+        m = methods[1]
+        if isfile(work_dir * "/" * m * "/" * file)
+            include(work_dir * "/" * m * "/" * file)
+            push!(times, total_times_used); push!(pts, size_Y_N)
+
+            avgT[m] += total_times_used ; avgY[m] += size_Y_N
+        else
+            push!(times, -1); push!(pts, -1)
+        end
+        for m in methods[2:end]
+            if isfile(work_dir * "/" * m * "/" * file)
+                include(work_dir * "/" * m * "/" * file)
+                push!(times, total_times_used); push!(pts, total_nodes)
+
+                avgT[m] += total_times_used ; avgY[m] += total_nodes
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+        end
+
+        # ------------------
+        if pts[1] == -1
+            print(fout, " - & ")
+        else
+            print(fout, string(pts[1]) * " & ")
+        end
+        if times[1] == -1
+            print(fout, " - & ")
+        else
+            print(fout, string(times[1]) * " & ")
+        end
+
+        for i=2:length(methods)-1
+            if times[i] == -1
+                print(fout, " - & ")
+            else
+                print(fout, string(times[i]) * " & ")
+            end
+
+            if pts[i] == -1
+                print(fout, " - & ")
+            else
+                print(fout, string(pts[i]) * " & ")
+            end
+
+        end
+
+
+        print(fout, string(times[end]) * " & ") 
+        println(fout, string(pts[end]) * " \\\\")
+
+    end
+
+    avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+    for m in methods
+        avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+    end
+
+    print(fout, "\\hline \\textbf{avg} & " * string(avg_n) * " & " * string(avg_m) )
+
+    m = methods[1]
+    print(fout, " & " * string(avgY[m]) * " & " * string(avgT[m]))
+    for m in methods[2:end]
+        print(fout, " & " * string(avgT[m]) * " & " * string(avgY[m]))
+    end
+
+    println(fout, " " * "\\\\ \\hline")
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{ instances $instances .}")
+    println(fout, "\\label{tab:table_compareBB_$instances }")
+    println(fout, "\\end{table}")
+    close(fout)
+
+end
+
+
 """
 Comparison tree table time & nodes explored (all B&C methodes)
 """
@@ -114,7 +269,7 @@ function comparisons5(instances::String)
 
     end
 
-    avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+    avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
     for m in methods
         avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
     end
@@ -648,4 +803,5 @@ end
 # comparisonsCP("MDMKPrandom")
 
 # comparisons4("MDMKPrandom")
-comparisons5("MDMKPrandom")
+# comparisons5("MDMKPrandom")
+comparisons_tri("MDMKPrandom")

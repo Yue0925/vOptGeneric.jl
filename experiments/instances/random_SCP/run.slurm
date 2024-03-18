@@ -10,7 +10,7 @@
 #SBATCH --output=BOSCP_basic_param.txt
 #SBATCH --error=BOSCP_basic_param.txt
 
-methodes=("epsilon" "bb" "bc")
+methodes=("epsilon") # "bb" "bc"
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do

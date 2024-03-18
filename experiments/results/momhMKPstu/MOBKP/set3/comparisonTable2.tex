@@ -1,0 +1,57 @@
+\begin{table}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$|\mathcal{Y}_N|$} & \textbf{$\epsilon$-constraint}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}}
+\\
+\cmidrule(r){6-7} \cmidrule(r){8-9} 
+~ & ~ & ~ & ~ & ~ & \textbf{Time(s)} &\textbf{Nodes} & \textbf{Time(s)} &\textbf{Nodes} \\
+\midrule
+
+W7BI-rnd1-1800.DAT & 10 & 2 & 8 & 0.98 & 0.11 & 235 & 0.1 & 38 \\
+W7BI-rnd1-3000.DAT & 10 & 2 & 7 & 0.2 & 0.05 & 137 & 0.09 & 34 \\
+W7BI-tube1-1800.DAT & 10 & 2 & 8 & 0.76 & 0.05 & 219 & 0.08 & 33 \\
+W7BI-tube1-3000.DAT & 10 & 2 & 5 & 0.19 & 0.03 & 115 & 0.04 & 19 \\
+W7BI-tube1-asyn.DAT & 10 & 2 & 5 & 0.2 & 0.06 & 115 & 0.04 & 19 \\
+W7BI-tube2-1800.DAT & 10 & 2 & 7 & 0.55 & 0.04 & 221 & 0.07 & 32 \\
+Wcollage-tube.DAT & 10 & 2 & 2 & 0.24 & 0.08 & 183 & 0.03 & 11 \\
+\hline \textbf{avg} & 10 & 2 & 6.0 & 0.45 & 0.06 & 175.0 & 0.06 & 26.57 \\ \hline
+W7BI-rnd1-1800.DAT & 20 & 2 & 7 & 0.84 & 0.35 & 1153 & 0.25 & 60 \\
+W7BI-rnd1-3000.DAT & 20 & 2 & 4 & 0.24 & 0.12 & 213 & 0.15 & 23 \\
+W7BI-tube1-1800.DAT & 20 & 2 & 5 & 0.7 & 0.69 & 1075 & 0.32 & 66 \\
+W7BI-tube1-3000.DAT & 20 & 2 & 14 & 2.1 & 0.14 & 255 & 0.8 & 83 \\
+W7BI-tube1-asyn.DAT & 20 & 2 & 14 & 1.61 & 0.14 & 255 & 0.85 & 83 \\
+W7BI-tube2-1800.DAT & 20 & 2 & 5 & 0.77 & 0.72 & 1035 & 0.21 & 55 \\
+Wcollage-tube.DAT & 20 & 2 & 27 & 4.47 & 1.56 & 1925 & 2.0 & 260 \\
+\hline \textbf{avg} & 20 & 2 & 10.86 & 1.53 & 0.53 & 844.43 & 0.65 & 90.0 \\ \hline
+W7BI-rnd1-1800.DAT & 30 & 2 & 8 & 0.92 & 91.49 & 276391 & 0.48 & 92 \\
+W7BI-rnd1-3000.DAT & 30 & 2 & 2 & 0.48 & 0.67 & 1229 & 0.12 & 28 \\
+W7BI-tube1-1800.DAT & 30 & 2 & 31 & 6.45 & 8.5 & 12407 & 1.54 & 358 \\
+W7BI-tube1-3000.DAT & 30 & 2 & 12 & 2.15 & 0.99 & 1423 & 0.35 & 130 \\
+W7BI-tube1-asyn.DAT & 30 & 2 & 12 & 1.81 & 91.6 & 77969 & 0.48 & 86 \\
+W7BI-tube2-1800.DAT & 30 & 2 & 28 & 4.97 & 7.44 & 13095 & 1.47 & 376 \\
+Wcollage-tube.DAT & 30 & 2 & 46 & 8.6 & 85.96 & 38343 & 8.47 & 947 \\
+\hline \textbf{avg} & 30 & 2 & 19.86 & 3.63 & 40.95 & 60122.43 & 1.84 & 288.14 \\ \hline
+W7BI-rnd1-1800.DAT & 40 & 2 & 11 & 1.86 & 87.25 & 129415 & 1.08 & 173 \\
+W7BI-rnd1-3000.DAT & 40 & 2 & 7 & 1.11 & 10.77 & 9751 & 0.46 & 74 \\
+W7BI-tube1-1800.DAT & 40 & 2 & 51 & 8.54 & 38.45 & 23131 & 6.16 & 1037 \\
+W7BI-tube1-3000.DAT & 40 & 2 & 8 & 1.75 & 6.39 & 5173 & 0.99 & 128 \\
+W7BI-tube1-asyn.DAT & 40 & 2 & 49 & 9.84 & 1187.19 & 321073 & 14.97 & 1698 \\
+W7BI-tube2-1800.DAT & 40 & 2 & 43 & 8.19 & 39.12 & 24767 & 4.78 & 777 \\
+Wcollage-tube.DAT & 40 & 2 & 80 & 18.42 & 3600.04 & 605729 & 101.26 & 8626 \\
+\hline \textbf{avg} & 40 & 2 & 35.57 & 7.1 & 709.89 & 159862.71 & 18.53 & 1787.57 \\ \hline
+W7BI-rnd1-1800.DAT & 50 & 2 & 16 & 3.68 & 314.42 & 231489 & 1.81 & 261 \\
+W7BI-rnd1-3000.DAT & 50 & 2 & 6 & 1.03 & 12.76 & 9983 & 0.56 & 89 \\
+W7BI-tube1-1800.DAT & 50 & 2 & 67 & 12.61 & 442.73 & 184043 & 13.57 & 2068 \\
+W7BI-tube1-3000.DAT & 50 & 2 & 28 & 4.36 & 9.55 & 4041 & 1.63 & 360 \\
+W7BI-tube1-asyn.DAT & 50 & 2 & 81 & 15.51 & 3600.02 & 302061 & 43.87 & 4952 \\
+W7BI-tube2-1800.DAT & 50 & 2 & 61 & 11.97 & 370.9 & 180445 & 12.71 & 2031 \\
+Wcollage-tube.DAT & 50 & 2 & 102 & 26.03 & 3600.04 & 249343 & 98.79 & 9063 \\
+\hline \textbf{avg} & 50 & 2 & 51.57 & 10.74 & 1192.92 & 165915.0 & 24.71 & 2689.14 \\ \hline
+\bottomrule
+\end{tabular}
+}%
+\caption{ instances momhMKPstu/MOBKP/set3 .}
+\label{tab:table_compareBB_momhMKPstu/MOBKP/set3 }
+\end{table}
