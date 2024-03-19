@@ -242,7 +242,7 @@ function comparisonsLambdaLimits(instances::String)
     println(fout2, latex)
 
 
-    methods = ["bc_rootRelax", "bc_rootRelaxEPB"] ; record_n = []
+    methods = ["bc_rootRelaxEPB"] # "bc_rootRelax",   
 
     # method => n => (λ -> time)                     method => n => (λ -> nodes)
     avg_time = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
@@ -428,9 +428,11 @@ function comparisonsLambdaLimits(instances::String)
         end
     end
 
+    println("   --------------------   ")
     println("λ_limits : ", λ_limits)
     println("avg_node : ", avg_node)
     println("avg_time : ", avg_time)
+    println("   --------------------   ")
 
 
 
@@ -463,4 +465,4 @@ end
 
 
 comparisonsLambdaLimits("MDMKPrandom")
-comparisonsEPBLambdaLimits("MDMKPrandom")
+# comparisonsEPBLambdaLimits("MDMKPrandom")

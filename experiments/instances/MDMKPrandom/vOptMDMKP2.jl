@@ -106,12 +106,12 @@ function solve(fname::String, method::String)
         mkdir(folder)
     end
 
+    # todo : 
+    if !(n == 10 || n==20 || n== 30 || n== 40 ) return end
+
     println("\n -----------------------------")
     println(" solving mono $(name) ... ")
     println(" -----------------------------")
-
-    # todo : 
-    if !(n==20 || n== 30) return end
         
     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[1:n], Bin )
@@ -131,7 +131,7 @@ function solve(fname::String, method::String)
         return 
     end
 
-    for limit in [0, 2, 3, 6, 8, 10, 13, 17] # 
+    for limit in [2, 3, 6, 8, 10, 13, 17] # 
 
         println("\n -----------------------------")
         println(" solving $(name) by $method λ_limit = $limit ... ")

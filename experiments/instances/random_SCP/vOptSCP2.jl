@@ -102,11 +102,12 @@ function solve(fname::String, method::String)
         mkdir(folder)
     end
 
+    if !(n==20 || n==40 || n==60 || n==80 || n==100) return end # todo 
+
     println("\n -----------------------------")
     println(" solving mono $(inst_name) ... ")
     println(" -----------------------------")
 
-    if !(n==20 || n==40 || n==60 || n==80 || n==100) return end # todo 
 
     model = Model(CPLEX.Optimizer) ; JuMP.set_silent(model)
     @variable(model, x[1:n], Bin )
@@ -127,7 +128,7 @@ function solve(fname::String, method::String)
 
 
     # if isfile(outputName) return end
-    for limit in [0, 2, 3, 6, 8, 10, 13, 17]
+    for limit in [2, 3, 6, 8, 10, 13, 17]
 
         println("\n -----------------------------")
         println(" solving $(inst_name) by $method λ_limit = $limit ... ")
