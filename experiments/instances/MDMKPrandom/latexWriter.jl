@@ -186,7 +186,7 @@ function comparisons5(instances::String)
     n = 0
     count = 0
     avg_n = 0 ; avg_m = 0
-    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods)
 
 
     # ∀ file in dicho
@@ -214,15 +214,17 @@ function comparisons5(instances::String)
                 end
 
                 println(fout, "\\\\ \\hline")
+                println("n = $n , count = $count TO = $avgTO")
+
             end
 
             n = vars 
             count = 0
             avg_n = 0 ; avg_m = 0
-            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods) 
 
-            count += 1
-            avg_n += vars ; avg_m += constr
+            # count += 1
+            # avg_n += vars ; avg_m += constr
         end
         count += 1
         avg_n += vars ; avg_m += constr
@@ -240,6 +242,7 @@ function comparisons5(instances::String)
             if isfile(work_dir * "/" * m * "/" * file)
                 include(work_dir * "/" * m * "/" * file)
                 push!(times, total_times_used); push!(pts, total_nodes)
+                total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
 
                 avgT[m] += total_times_used ; avgY[m] += total_nodes
             else
@@ -281,6 +284,7 @@ function comparisons5(instances::String)
     end
 
     println(fout, " \\\\ \\hline")
+    println("n = $n , count = $count TO = $avgTO")
 
 
     latex = raw"""\bottomrule
@@ -320,7 +324,7 @@ function comparisons4(instances::String)
     n = 0
     count = 0
     avg_n = 0 ; avg_m = 0
-    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods);  avgTO = Dict(k => 0 for k in methods)
 
     # ∀ file in dicho
     for file in readdir(work_dir * "/epsilon/")
@@ -346,15 +350,17 @@ function comparisons4(instances::String)
                 end
 
                 println(fout, "\\\\ \\hline")
+                println("n = $n , count = $count TO = $avgTO")
+
             end
 
             n = vars 
             count = 0
             avg_n = 0 ; avg_m = 0
-            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods)
 
-            count += 1
-            avg_n += vars ; avg_m += constr
+            # count += 1
+            # avg_n += vars ; avg_m += constr
         end
         count += 1
         avg_n += vars ; avg_m += constr
@@ -372,6 +378,7 @@ function comparisons4(instances::String)
             if isfile(work_dir * "/" * m * "/" * file)
                 include(work_dir * "/" * m * "/" * file)
                 push!(times, total_times_used); push!(pts, total_nodes)
+                total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
 
                 avgT[m] += total_times_used ; avgY[m] += total_nodes
             else
@@ -413,6 +420,8 @@ function comparisons4(instances::String)
     end
 
     println(fout, " \\\\ \\hline")
+    println("n = $n , count = $count TO = $avgTO")
+
 
     latex = raw"""\bottomrule
     \end{tabular}
@@ -583,7 +592,7 @@ function comparisons_eps_BB_EPB(instances::String)
     n = 0
     count = 0
     avg_n = 0 ; avg_m = 0
-    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods)
     countY_N = 0
 
 
@@ -613,17 +622,18 @@ function comparisons_eps_BB_EPB(instances::String)
                 end
 
                 println(fout, " & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
+                println("n = $n , count = $count TO = $avgTO")
             end
 
             n = vars 
             count = 0
             avg_n = 0 ; avg_m = 0
-            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods); avgTO = Dict(k => 0 for k in methods) 
             countY_N = 0
 
-            count += 1
-            avg_n += vars ; avg_m += constr
-            countY_N += size_Y_N
+            # count += 1
+            # avg_n += vars ; avg_m += constr
+            # countY_N += size_Y_N
         end
         count += 1
         avg_n += vars ; avg_m += constr
@@ -641,7 +651,8 @@ function comparisons_eps_BB_EPB(instances::String)
         for m in methods
             if isfile(work_dir * "/" * m * "/" * file)
                 include(work_dir * "/" * m * "/" * file)
-                push!(times, total_times_used); avgT[m] += total_times_used
+                push!(times, total_times_used); avgT[m] += total_times_used ;
+                total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
                 
                 if m == "epsilon"
                     push!(pts, 0) ; avgY[m] += 0
@@ -696,6 +707,7 @@ function comparisons_eps_BB_EPB(instances::String)
     end
 
     println(fout, " & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
+    println("n = $n , count = $count TO = $avgTO")
 
 
     latex = raw"""\bottomrule
@@ -803,5 +815,5 @@ end
 # comparisonsCP("MDMKPrandom")
 
 # comparisons4("MDMKPrandom")
-# comparisons5("MDMKPrandom")
-comparisons_tri("MDMKPrandom")
+comparisons5("MDMKPrandom")
+# comparisons_tri("MDMKPrandom")

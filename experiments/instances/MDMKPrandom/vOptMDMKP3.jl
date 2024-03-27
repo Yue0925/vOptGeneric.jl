@@ -131,7 +131,7 @@ function solve(fname::String, method::String)
         return 
     end
 
-    for limit in [2, 3, 6, 8] # 
+    for limit in [10, 13, 17] # 
 
         println("\n -----------------------------")
         println(" solving $(name) by $method λ_limit = $limit ... ")

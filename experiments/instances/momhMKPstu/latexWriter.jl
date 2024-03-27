@@ -639,7 +639,7 @@ function comparisons_eps_BB_EPB(instances::String)
     for folder_n in readdir(work_dir * "/epsilon") 
         count = 0
         avg_n = 0 ; avg_m = 0
-        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods)
         countY_N = 0
 
         # ∀ file in dicho
@@ -664,6 +664,8 @@ function comparisons_eps_BB_EPB(instances::String)
                 if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     push!(times, total_times_used); avgT[m] += total_times_used
+                    total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
+
                     
                     if m == "epsilon"
                         push!(pts, 0) ; avgY[m] += 0
@@ -681,7 +683,7 @@ function comparisons_eps_BB_EPB(instances::String)
                 if times[i] == -1
                     print(fout, " - & ")
                 elseif times[i] == minimum(filter(x -> x > 0 ,times))
-                    print(fout, " \\textcolor{blue2}{" * string(times[i]) * "} & ")
+                    print(fout,  string(times[i]) * " & ")
                 else
                     print(fout, string(times[i]) * " & ")
                 end
@@ -696,7 +698,7 @@ function comparisons_eps_BB_EPB(instances::String)
             end
 
             if times[end] == minimum(filter(x -> x > 0 ,times))
-                print(fout, " \\textcolor{blue2}{" * string(times[end]) * "} & ")
+                print(fout,  string(times[end]) * " & ")
             else
                 print(fout, string(times[end]) * " & ") 
             end
@@ -718,6 +720,8 @@ function comparisons_eps_BB_EPB(instances::String)
         end
 
         println(fout, " & " * string(round(countY_N/count, digits = 2))* "\\\\ \\cline{1-9}")
+        println("n = $folder_n , count = $count TO = $avgTO")
+
     end
 
     latex = raw"""\bottomrule
@@ -867,7 +871,7 @@ function comparisons4(instances::String)
     for folder_n in readdir(work_dir * "/epsilon") 
         count = 0
         avg_n = 0 ; avg_m = 0
-        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ;  avgTO = Dict(k => 0 for k in methods)
 
         # ∀ file in dicho
         for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
@@ -890,7 +894,8 @@ function comparisons4(instances::String)
                 if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     push!(times, total_times_used); push!(pts, total_nodes)
-    
+                    total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
+
                     avgT[m] += total_times_used ; avgY[m] += total_nodes
                 else
                     push!(times, -1); push!(pts, -1)
@@ -937,6 +942,8 @@ function comparisons4(instances::String)
         end
 
         println(fout, "} \\\\ \\cline{1-11}")
+        println("n = $folder_n , count = $count TO = $avgTO")
+
     end
 
     latex = raw"""\bottomrule
@@ -980,7 +987,7 @@ function comparisons5(instances::String)
     for folder_n in readdir(work_dir * "/epsilon") 
         count = 0
         avg_n = 0 ; avg_m = 0
-        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ;  avgTO = Dict(k => 0 for k in methods)
 
         # ∀ file in dicho
         for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
@@ -1003,7 +1010,8 @@ function comparisons5(instances::String)
                 if isfile(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     include(work_dir * "/" * m * "/" * string(folder_n) * "/" * file)
                     push!(times, total_times_used); push!(pts, total_nodes)
-    
+                    total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
+
                     avgT[m] += total_times_used ; avgY[m] += total_nodes
                 else
                     push!(times, -1); push!(pts, -1)
@@ -1050,6 +1058,8 @@ function comparisons5(instances::String)
         end
 
         println(fout, "} \\\\ \\cline{1-15}")
+        println("n = $folder_n , count = $count TO = $avgTO")
+
     end
 
     latex = raw"""\bottomrule
@@ -1309,11 +1319,11 @@ end
 # comparisons_eps_BB_EPB("momhMKPstu/MOBKP/set3")
 
 
-# comparisons5("momhMKPstu/MOBKP/set3")
+comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
 # comparisonsCP("momhMKPstu/MOBKP/set3")
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
-comparisons_tri("momhMKPstu/MOBKP/set3")
+# comparisons_tri("momhMKPstu/MOBKP/set3")
 # -------------------------------------------------
 
 

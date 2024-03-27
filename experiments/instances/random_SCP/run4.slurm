@@ -10,7 +10,7 @@
 #SBATCH --output=BOSCP_lambda_test2.txt
 #SBATCH --error=BOSCP_lambda_test2.txt
 
-methodes=("bc_rootRelaxEPB")
+methodes=("bc_rootRelax")
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do
