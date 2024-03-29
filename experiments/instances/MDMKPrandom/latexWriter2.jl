@@ -269,7 +269,7 @@ function comparisonsLambdaLimits(instances::String)
         end
     end
 
-    println("λ_limits : ", λ_limits) ; println("keys_combo : ", keys_combo)
+    # println("λ_limits : ", λ_limits) ; println("keys_combo : ", keys_combo)
 
 
     # ∀ file each line 
@@ -422,17 +422,17 @@ function comparisonsLambdaLimits(instances::String)
                 avg_node[m][n][λ] = round(avg_node[m][n][λ]/count_per_n[n], digits = 1)
                 avg_time[m][n][λ] = round(avg_time[m][n][λ]/count_per_n[n], digits = 1)
             end
-            println("$m  $n  nodes " , [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])] )
-            println("$m  $n  times " , [p[2] for p in sort(collect(avg_time[m][n]), by = x->x[1])] )
+            println("$m  $n  nodes " ,  avg_node[m][n])  
+            println("$m  $n  times " ,  avg_time[m][n]) 
 
         end
     end
 
-    println("   --------------------   ")
-    println("λ_limits : ", λ_limits)
-    println("avg_node : ", avg_node)
-    println("avg_time : ", avg_time)
-    println("   --------------------   ")
+    # println("   --------------------   ")
+    # println("λ_limits : ", λ_limits)
+    # println("avg_node : ", avg_node)
+    # println("avg_time : ", avg_time)
+    # println("   --------------------   ")
 
 
 
@@ -446,7 +446,7 @@ function comparisonsLambdaLimits(instances::String)
             )
             ax.set_xlabel("|λ|", fontsize=14)
             ax.set_ylabel("Average time(s)", color="red", fontsize=14)
-            ax.set_title(instances * " avg n = $n ($m)", fontsize=14)
+            ax.set_title("BOMDMKP avg n = $n", fontsize=14)
         
             ax2=ax.twinx()
             ax2.plot(λ_limits, [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])], 

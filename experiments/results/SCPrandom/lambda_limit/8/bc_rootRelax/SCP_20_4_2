@@ -15,11 +15,11 @@ TO = false
 rootLBS = 5 
 LBSexhaustive = false 
  λ_strategy = 0 
- λ_min = 1 
- λ_max = 8 
-λ_acc = 3.8702290076335877 
-total_time_cplex = 0.18009376525878906 
-total_time_fusion = 0.004370927810668945 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
 
 
 size_Y_N = 7

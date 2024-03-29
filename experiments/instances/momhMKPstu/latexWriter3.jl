@@ -1,4 +1,7 @@
 
+using PyPlot
+import PyPlot; const plt = PyPlot
+
 function comparisonsLambdaLimits(instances::String)
     work_dir = "../../results/" * instances * "/lambda_limit"
     @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
@@ -25,17 +28,27 @@ function comparisonsLambdaLimits(instances::String)
     """
     println(fout, latex)
 
-    methods = ["bc_rootRelax", "bc_rootRelaxEPB"] ; record_n = []
+    methods = ["bc_rootRelaxEPB"] # "bc_rootRelax", bc_rootRelaxEPB
+    # method => n => (λ -> time)                     method => n => (λ -> nodes)
+    avg_time = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
+    avg_node = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
+    count_per_n = Dict{Int64, Int64}()
+
+    for m in methods
+        avg_time[m] = Dict{Int64, Dict{Int64, Float64}}()
+        avg_node[m] = Dict{Int64, Dict{Int64, Float64}}()
+    end
+
 
     λ_limits = [] ; 
     for folder_λ in readdir(work_dir)
         if split(folder_λ, ".")[end] == "tex" continue end
-        push!(λ_limits, folder_λ)
+        push!(λ_limits, parse(Int64 , folder_λ ) )
     end
     keys_combo = [] ; 
     for λ in λ_limits
         for m in methods
-            push!(keys_combo, λ * "_" * m)
+            push!(keys_combo, string(λ) * "_" * m)
         end
     end
 
@@ -46,6 +59,7 @@ function comparisonsLambdaLimits(instances::String)
 
         count = 0
         avg_n = 0 ; avg_m = 0 ; avg_Y_N = 0
+
 
         # ∀ file each line 
         for file in readdir(work_dir * "/" * string(λ_limits[1]) * "/" * string(methods[1]) * "/" * string(folder_n))
@@ -63,13 +77,41 @@ function comparisonsLambdaLimits(instances::String)
             count += 1
             avg_n += vars ; avg_m += constr ; avg_Y_N += size_Y_N
 
+            for m in methods
+                if !haskey(avg_time[m], vars)
+                    avg_time[m][vars] = Dict{Int64, Float64}()
+                end
+                if !haskey(avg_node[m], vars)
+                    avg_node[m][vars] = Dict{Int64, Float64}()
+                end
+            end
+            if !haskey(count_per_n, vars)
+                count_per_n[vars] = 0
+            end
+
+            count_per_n[vars] += 1
+
+
             for folder_λ in λ_limits
+                for m in methods
+                    if !haskey(avg_time[m][vars], folder_λ)
+                        avg_time[m][vars][folder_λ] = 0.00
+                    end
+                    if !haskey(avg_node[m][vars], folder_λ)
+                        avg_node[m][vars][folder_λ] = 0.00
+                    end
+                end
+
+
                 for m in methods
                     if isfile(work_dir * "/" * string(folder_λ) * "/" * m * "/" * string(folder_n) * "/" * file)
                         include(work_dir * "/" * string(folder_λ) * "/" * m * "/" * string(folder_n) * "/" * file)
                         push!(times, total_times_used); push!(pts, total_nodes)
         
-                        avgT[folder_λ * "_" * m] += total_times_used ; avgY[folder_λ * "_" * m] += total_nodes
+                        avgT[string(folder_λ) * "_" * m] += total_times_used ; avgY[string(folder_λ) * "_" * m] += total_nodes
+                            
+                        avg_time[m][vars][folder_λ] += total_times_used
+                        avg_node[m][vars][folder_λ] += total_nodes
                     else
                         push!(times, -1); push!(pts, -1)
                     end
@@ -134,6 +176,48 @@ function comparisonsLambdaLimits(instances::String)
     println(fout, "\\label{tab:table_lambda_limits_$instances }")
     println(fout, "\\end{sidewaystable}")
     close(fout)
+
+
+    for m in methods
+        for n in keys(count_per_n)
+            for λ in λ_limits
+                avg_node[m][n][λ] = round(avg_node[m][n][λ]/count_per_n[n], digits = 2)
+                avg_time[m][n][λ] = round(avg_time[m][n][λ]/count_per_n[n], digits = 2)
+            end
+            println("$m  $n  nodes " , avg_node[m][n] )
+            println("$m  $n  times " , avg_time[m][n] )
+
+        end
+    end
+
+
+
+
+    # plot for each method, for each n 
+    for m in methods
+        for n in keys(count_per_n)
+    
+            fig, ax = plt.subplots()
+            ax.plot(λ_limits,  [p[2] for p in sort(collect(avg_time[m][n]), by = x->x[1])] ,
+                    color="red", marker="o", linewidth=2.0, linestyle="--"
+            )
+            ax.set_xlabel("|λ|", fontsize=14)
+            ax.set_ylabel("Average time(s)", color="red", fontsize=14)
+            ax.set_title("BOBKP avg n = $n", fontsize=14)
+        
+            ax2=ax.twinx()
+            ax2.plot(λ_limits, [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])], 
+                    color="blue", marker="o", linewidth=2.0, linestyle="--"
+            )
+            ax2.set_ylabel("Average explored nodes", color="blue", fontsize=14)
+            # plt.show()
+        
+            savefig(work_dir * "/$(m)_$(n)_times_nodes.png")
+            plt.close()
+
+        end
+    end
+
 
 end
 
@@ -983,7 +1067,7 @@ end
 
 
 
-# comparisonsLambdaLimits("momhMKPstu/MOBKP/set3")
+comparisonsLambdaLimits("momhMKPstu/MOBKP/set3")
 # comparisonsLBSFactor2("momhMKPstu/MOBKP/set3")
 # comparisonsLBSFactor3("momhMKPstu/MOBKP/set3")
 
@@ -991,7 +1075,7 @@ end
 # comparisonsLambdaDynamic("momhMKPstu/MOBKP/set3")
 
 
-comparisonsEPBLambdaLimits("momhMKPstu/MOBKP/set3")
+# comparisonsEPBLambdaLimits("momhMKPstu/MOBKP/set3")
 
 
 # comparisonPredLBSFactor("momhMKPstu/MOBKP/set3")

@@ -4,7 +4,7 @@ total_times_used = 0.91
 total_nodes = 213 
 pruned_nodes = 117 
 GAP = 0.0 
-relaxation_time = 0.87 
+relaxation_time = 0.88 
 test_dominance_time = 0.0 
 update_incumbent_time = 0.0 
 tree_size = 0.394 
@@ -15,11 +15,11 @@ TO = false
 rootLBS = 7 
 LBSexhaustive = false 
  λ_strategy = 0 
- λ_min = 1 
- λ_max = 8 
-λ_acc = 2.1220657276995305 
-total_time_cplex = 0.805487871170044 
-total_time_fusion = 0.0035903453826904297 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
 
 
 size_Y_N = 13
