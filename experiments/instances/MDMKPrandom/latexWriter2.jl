@@ -242,7 +242,7 @@ function comparisonsLambdaLimits(instances::String)
     println(fout2, latex)
 
 
-    methods = ["bc_rootRelaxEPB"] # "bc_rootRelax",   
+    methods = ["bc_rootRelax", "bc_rootRelaxEPB"] #    
 
     # method => n => (λ -> time)                     method => n => (λ -> nodes)
     avg_time = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
@@ -419,8 +419,8 @@ function comparisonsLambdaLimits(instances::String)
     for m in methods
         for n in keys(count_per_n)
             for λ in λ_limits
-                avg_node[m][n][λ] = round(avg_node[m][n][λ]/count_per_n[n], digits = 1)
-                avg_time[m][n][λ] = round(avg_time[m][n][λ]/count_per_n[n], digits = 1)
+                avg_node[m][n][λ] = round(avg_node[m][n][λ]/count_per_n[n], digits = 2)
+                avg_time[m][n][λ] = round(avg_time[m][n][λ]/count_per_n[n], digits = 2)
             end
             println("$m  $n  nodes " ,  avg_node[m][n])  
             println("$m  $n  times " ,  avg_time[m][n]) 
