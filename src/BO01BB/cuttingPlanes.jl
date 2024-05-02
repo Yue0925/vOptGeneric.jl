@@ -217,6 +217,12 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
     numVars = length(pb.varArray) ; numRows = size(pb.A, 1)
     LBS = node.RBS.natural_order_vect.sols #; loop_limit = 5
 
+    # # todo : 
+    # println("-----------------------")
+    # println("---- node $(node.num) ----")
+    # println("-----------------------")
+
+
     # ------------------------------------------------------------------------------
     # 1. generate multi-point cuts if has any, or single-point cut off
     # ------------------------------------------------------------------------------
@@ -226,6 +232,10 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
 
         l = 1 ; cut_counter = 0
         cut_off = []
+
+        # # todo : 
+        # TEST_MC = false
+        # println(" iter $ite \n")
 
         while l ≤ length(LBS)
             if LBS[l].is_binary || length(LBS[l].xEquiv[1]) == 0 
@@ -237,10 +247,15 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
                     if new_cut 
                         cut_counter += 1 ; push!(cut_off, l) 
+                        # # todo : example 
+                        # TEST_MC = true
+                        # if TEST_MC @info "sp-cut (pts $l ) " end
                     end 
                     l += 1
                 else 
                     r = l+∇
+                    continue
+                    
                     if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv[1]) == 0 continue end
 
                     if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
@@ -251,6 +266,10 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
 
                     if length(cuts) > 0
                         cut_counter += (∇+1) 
+                        # # todo : example 
+                        # TEST_MC = true
+                        # if TEST_MC @info "multi-cut ($cut_counter pts $l to $r) " end
+
                         for i=l:r push!(cut_off, i) end 
                         for cut in cuts
                             start_pool = time()
@@ -292,11 +311,22 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
         # 3. otherwise, re-optimize by solving dicho -> LBS
         # ---------------------------------------------------
         if cut_counter > 0
+            # # todo : 
+            # if TEST_MC
+            #     println("--------------- before cut")
+            #     println(LBS)
+            # end
 
             if pb.param.root_relax
                 reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
             else
                 pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+                # # todo : 
+                # if TEST_MC
+                #     println("--------------- after cut")
+                #     LBS = node.RBS.natural_order_vect.sols
+                #     println(LBS)
+                # end
                 if pruned return true end
             end
 
