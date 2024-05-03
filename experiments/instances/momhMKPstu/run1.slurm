@@ -12,9 +12,10 @@
 #SBATCH --error=basic_param.txt
 
 
-for file in ./MOBKP/set3/*; do
-    echo "$file"
-    srun julia vOptMomkp.jl "$file"
-done
+# for file in ./MOBKP/set3/*; do
+#     echo "$file"
+#     srun julia vOptMomkp.jl "$file"
+# done
 
 # srun julia latexWriter.jl
+srun julia vOptMomkp.jl ./MOBKP/set3/Wcollage-tube.DAT

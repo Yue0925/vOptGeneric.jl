@@ -4,6 +4,7 @@ include("BBtree.jl")
 include("branching.jl")
 include("fathoming.jl")
 include("displayGraphic.jl")
+include("GM.jl")
 
 using TimerOutputs, JuMP, CPLEX
 tmr = TimerOutput()
@@ -362,8 +363,29 @@ function solve_branchboundcut(m::JuMP.Model;
         problem.param.cp_activated = cp ; problem.info.cp_activated = cp 
     end
 
+    # ----------------------------------------------------------
+    # todo : heuristics Gravity machine
+    # println("A : ", problem.A)
+    # println("b : ", problem.b)
+    # println("c : ", problem.c)
+
+    GMtime = time()
+    vg, nbgen = GM(problem.A, problem.b, problem.c, 10, 10, 10)
+    GMtime = time() - GMtime
+
+    println(" GMtime = $GMtime \n total try = $nbgen ")
+    # ----------------------------------------------------------
+
     # initialize the incumbent list by heuristics or with Inf
     incumbent = IncumbentSet() 
+
+    for k = 1:nbgen 
+        if vg[k].sFea
+            push!(incumbent.natural_order_vect, Solution(vg[k].sInt.x .*1.0, vg[k].sInt.y .* 1.0), filtered=true)
+        end
+    end
+
+    println("incumbent ", incumbent)
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)
