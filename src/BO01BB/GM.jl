@@ -32,7 +32,7 @@ include("../../../GravityMachine/src/GMquality.jl")        # quality indicator o
 # ==============================================================================
 # Ajout d'une solution relachee initiale a un generateur
 
-function ajouterX0!(vg::Vector{tGenerateur}, k::Int64, s::tSolution{Float64})
+function ajouterX0!(vg::Vector{tGenerateur}, k::Int64, s::tSolution)
 
     vg[k].sRel = deepcopy(s) # met en place le generateur \bar{x}^k
     vg[k].sPrj = deepcopy(s) # le generateur est la premiere projection \bar{x}^{k,0}
@@ -43,7 +43,7 @@ end
 # ==============================================================================
 # Ajout d'une solution entiere (arrondie ou perturbee) a un generateur
 
-function ajouterXtilde!(vg::Vector{tGenerateur}, k::Int64, x::Vector{Int64}, y::Vector{Float64})
+function ajouterXtilde!(vg::Vector{tGenerateur}, k::Int64, x::Vector{Float64}, y::Vector{Float64})
 
     vg[k].sInt.x = copy(x)
     vg[k].sInt.y = copy(y)
@@ -65,13 +65,13 @@ end
 # ==============================================================================
 # Elabore 2 ensembles d'indices selon que xTilde[i] vaut 0 ou 1
 
-function split01(xTilde::Array{Int,1})
+function split01(xTilde::Array{Float64,1})
 
    indices0 = (Int64)[]
    indices1 = (Int64)[]
 
    for i=1:length(xTilde)
-       if xTilde[i] == 0
+       if isapprox(xTilde[i], 0.0, atol=1e-3)
            push!(indices0,i)
        else
            push!(indices1,i)
@@ -285,7 +285,7 @@ end
 
 # ==============================================================================
 # Calcule la direction d'interet du nadir vers le milieu de segment reliant deux points generateurs
-function calculerDirections(L::Vector{tSolution{Float64}}, vg::Vector{tGenerateur})
+function calculerDirections(L::Vector{tSolution}, vg::Vector{tGenerateur})
    # function calculerDirections(L, vg::Vector{tGenerateur})
 
     nbgen = size(vg,1)
@@ -319,7 +319,7 @@ end
 
 # ==============================================================================
 # Calcule la direction d'interet du nadir vers un point generateur
-function calculerDirections2(L::Vector{tSolution{Float64}}, vg::Vector{tGenerateur})
+function calculerDirections2(L::Vector{tSolution}, vg::Vector{tGenerateur})
     #function calculerDirections2(L, vg::Vector{tGenerateur})
 
     nbgen = size(vg,1)
@@ -422,7 +422,7 @@ ajouterX0!(vg, k, L[k])
 
 # test d'admissibilite et marquage de la solution le cas echeant -------
 if estAdmissible(vg[k].sRel.x)
-   ajouterXtilde!(vg, k, convert.(Int, vg[k].sRel.x), L[k].y)
+   ajouterXtilde!(vg, k, vg[k].sRel.x, L[k].y)
    vg[k].sFea   = true
    verbose ? @printf("→ Admissible \n") : nothing
    # archive le point obtenu pour les besoins d'affichage    
@@ -455,7 +455,7 @@ verbose ? @printf("4) terraformation generateur par generateur \n\n") : nothing
 for k in [i for i in 1:nbgen if !isFeasible(vg,i)]
 temps = time()
 trial = 0
-H =(Vector{Int64})[]
+H =(Vector{Float64})[]
 
 #perturbSolution30!(vg,k,c1,c2,d)
 

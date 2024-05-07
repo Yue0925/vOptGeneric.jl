@@ -110,12 +110,12 @@ function solve(fname::String, method::String)
     end
     outputName = result_folder * "/" * inst_name
 
-    # todo : 
-    if n!=40 return end
-    # todo : if the output file already exists 
-    if isfile(outputName)
-        return
-    end
+    # # todo : 
+    # if n!=40 return end
+    # # todo : if the output file already exists 
+    # if isfile(outputName)
+    #     return
+    # end
 
 
     println("\n -----------------------------")

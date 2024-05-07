@@ -10,11 +10,19 @@
 #SBATCH --output=BOSCP_basic_param.txt
 #SBATCH --error=BOSCP_basic_param.txt
 
-methodes=("epsilon") # "bb" "bc"
+# methodes=("epsilon") # "bb" "bc"
 
-for file in ./instances/*; do
-    for mthd in ${methodes[@]}; do
-        echo "$file ... " $mthd
-        srun julia vOptSCP.jl "$file" $mthd
-    done
+# for file in ./instances/*; do
+#     for mthd in ${methodes[@]}; do
+#         echo "$file ... " $mthd
+#         srun julia vOptSCP.jl "$file" $mthd
+#     done
+# done
+
+
+methodes=("bb" "bc" "bb_EPB" "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB")
+
+for mthd in ${methodes[@]}; do
+    echo " ... " $mthd
+    srun julia vOptSCP.jl ./instances/SCP_80_15_2 $mthd
 done

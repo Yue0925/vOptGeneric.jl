@@ -104,7 +104,7 @@ function solve(fname::String, method::String)
         mkdir(result_folder)
     end
 
-    if !(n==20 || n==40 || n==60 || n==80 || n==100) return end # todo 
+    # if !(n==20 || n==40 || n==60 || n==80 || n==100) return end # todo 
 
     
     println("\n -----------------------------")

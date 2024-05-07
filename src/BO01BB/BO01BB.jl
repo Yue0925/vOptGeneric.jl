@@ -370,7 +370,7 @@ function solve_branchboundcut(m::JuMP.Model;
     # println("c : ", problem.c)
 
     GMtime = time()
-    vg, nbgen = GM(problem.A, problem.b, problem.c, 10, 10, 10)
+    vg, nbgen = GM(problem.A, problem.b, problem.c, 30, 50, 20)
     GMtime = time() - GMtime
 
     println(" GMtime = $GMtime \n total try = $nbgen ")
@@ -385,7 +385,7 @@ function solve_branchboundcut(m::JuMP.Model;
         end
     end
 
-    println("incumbent ", incumbent)
+    println("|incumbent| =  ", length(incumbent.natural_order_vect.sols))
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)

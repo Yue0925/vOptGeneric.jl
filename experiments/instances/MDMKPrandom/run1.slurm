@@ -10,11 +10,20 @@
 #SBATCH --output=aleaMDMKP_basic_param.txt
 #SBATCH --error=aleaMDMKP_basic_param.txt
 
-methodes=("bb" "bc")
+# methodes=("bb" "bc")
 
-for file in ./instances/PCC/*; do
-    for mthd in ${methodes[@]}; do
-        echo "$file ... " $mthd
-        srun julia vOptMDMKP.jl "$file" $mthd
-    done
+# for file in ./instances/PCC/*; do
+#     for mthd in ${methodes[@]}; do
+#         echo "$file ... " $mthd
+#         srun julia vOptMDMKP.jl "$file" $mthd
+#     done
+# done
+
+
+methodes=("bb" "bc" "bb_EPB" "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB")
+
+for mthd in ${methodes[@]}; do
+    echo " ... " $mthd
+    srun julia vOptMDMKP.jl ./instances/PCC/MDMKP_n30_m2_q2_α0.25 $mthd
 done
+
