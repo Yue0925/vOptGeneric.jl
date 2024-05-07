@@ -76,6 +76,12 @@ function split01(xTilde::Array{Float64,1})
        else
            push!(indices1,i)
        end
+    # todo : sensibility of assigning 1 
+        # if isapprox(xTilde[i], 1.0, atol=1e-3)
+        #     push!(indices1,i)
+        # else
+        #     push!(indices0,i)
+        # end
     end
 
    return indices0, indices1
@@ -361,8 +367,7 @@ function calculerDirections2(L::Vector{tSolution}, vg::Vector{tGenerateur})
 end
  
 
-function GM( A::Matrix{Float64},
-    b::Vector{Float64},
+function GM( model::JuMP.Model,  x::Array{JuMP.VariableRef}, 
     c::Matrix{Float64},
     tailleSampling::Int64,
     maxTrial::Int64,
@@ -374,8 +379,7 @@ function GM( A::Matrix{Float64},
 verbose ? @printf("0) instance et parametres \n\n") : nothing
 verbose ? println("  tailleSampling = $tailleSampling | maxTrial = $maxTrial | maxTime = $maxTime\n\n") : nothing
 
-nbctr = size(A,1)
-nbvar = size(A,2)
+nbvar = length(x)
 nbobj = 2
 
 # structure pour les points qui apparaitront dans l'affichage graphique
@@ -386,11 +390,11 @@ d = tListDisplay([],[], [],[], [],[], [],[], [],[], [],[], [],[])
 verbose ? @printf("1) calcule les etendues de valeurs sur les 2 objectifs\n\n") : nothing
 
 #todo (model): calcule la valeur optimale relachee de f1 seule et le point (z1,z2) correspondant
-f1RL, xf1RL = computeLinearRelax(nbvar, nbctr, A, b, c, -1, 1) # opt fct 1
+f1RL, xf1RL = computeLinearRelax(model, x, c, -1, 1) # opt fct 1
 minf1RL, maxf2RL = evaluerSolution(xf1RL, c)
 
 # calcule la valeur optimale relachee de f2 seule et le point (z1,z2) correspondant
-f2RL, xf2RL = computeLinearRelax(nbvar, nbctr, A, b, c, -1, 2) # opt fct 2
+f2RL, xf2RL = computeLinearRelax(model, x, c, -1, 2) # opt fct 2
 maxf1RL, minf2RL = evaluerSolution(xf2RL, c)
 
 verbose ? @printf("  f1_min=%8.2f ↔ f1_max=%8.2f (Δ=%.2f) \n",minf1RL, maxf1RL, maxf1RL-minf1RL) : nothing
@@ -401,7 +405,7 @@ verbose ? @printf("  f2_min=%8.2f ↔ f2_max=%8.2f (Δ=%.2f) \n\n",minf2RL, maxf
 # --------------------------------------------------------------------------
 verbose ? @printf("2) calcule les generateurs par e-contrainte alternant minimiser z1 et z2\n\n") : nothing
 
-nbgen, L = calculGenerateurs(A,b, c, tailleSampling, minf1RL, maxf2RL, maxf1RL, minf2RL, d)
+nbgen, L = calculGenerateurs(model, x, c, tailleSampling, minf1RL, maxf2RL, maxf1RL, minf2RL, d)
 
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
@@ -472,7 +476,7 @@ while !(t1=isFeasible(vg,k)) && !(t2=isFinished(trial, maxTrial)) && !(t3=isTime
    trial+=1
 
    # projecting solution : met a jour sPrj, sInt, sFea dans vg --------
-   projectingSolution!(vg,k,A, b, c, λ1,λ2,d)
+   projectingSolution!(model, x, vg,k, c, λ1,λ2,d)
    verbose ? println("   t=",trial,"  |  Tps=", round(time()- temps, digits=4)) : nothing
 
    if !isFeasible(vg,k)

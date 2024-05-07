@@ -370,7 +370,7 @@ function solve_branchboundcut(m::JuMP.Model;
     # println("c : ", problem.c)
 
     GMtime = time()
-    vg, nbgen = GM(problem.A, problem.b, problem.c, 30, 50, 20)
+    vg, nbgen = GM(problem.lp_copied, problem.varArray_copied, problem.c, 30, 50, 20)
     GMtime = time() - GMtime
 
     println(" GMtime = $GMtime \n total try = $nbgen ")
