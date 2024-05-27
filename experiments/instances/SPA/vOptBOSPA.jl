@@ -67,7 +67,7 @@ function computeYNfor2SPA(  nbvar::Int,
     println("length Y_N = ", length(Y_N))
 
     X_E = getX_E( model )
-    println("length X_E = ", length(X_E))
+    # println("length X_E = ", length(X_E))
 
 
     (method != :dicho && method != :epsilon) ? writeResults(nbvar, nbctr, fname, outputName, method, Y_N, X_E; infos) :
@@ -76,14 +76,42 @@ function computeYNfor2SPA(  nbvar::Int,
 end
 
 
-function solve(fname::String, method)
+function solve(fname::String, method::String)
 
     # load a numerical instance of 2SPA ----------------------------------------
     c1, c2, A = loadInstance2SPA(fname)
     nbctr = size(A,1)
     nbvar = size(A,2)
     nbobj = 2
+
+    # todo : try small instances 
     if nbvar >= 1000 return end
+
+
+    println("\n -----------------------------")
+    println(" solving mono $(fname) ... ")
+    println(" -----------------------------")
+
+    model = Model( CPLEX.Optimizer ) ; JuMP.set_silent(model)
+
+    @variable(model, x[1:nbvar], Bin)
+    @constraint(model, [i=1:nbctr],(sum((x[j]*A[i,j]) for j in 1:nbvar)) == 1)
+    @objective(model, Min, sum(c1[i]*x[i] for i in 1:nbvar))
+
+    optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
+
+    println("solved time $(solved_time)" )
+
+    status = termination_status(model)
+    if status != MOI.OPTIMAL
+        @info "mono instance is not feasible"
+        return 
+    end
+
+
+    println("\n -----------------------------")
+    println(" solving $(fname) by $method  ... ")
+    println(" -----------------------------")
 
     folder = "../../results/SPA/BOSPA"
     if !isdir(folder)
@@ -97,19 +125,8 @@ function solve(fname::String, method)
 
     println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
     # if isfile(outputName) return end #TODO : ignore existed file  
-    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, method, string(split(inst_name, ".")[1]), outputName)
+
+    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName)
 end
 
-solve(ARGS[1], :dicho)
-# solve(ARGS[1], :epsilon)
-# solve(ARGS[1], :bb)
-solve(ARGS[1], :bc)
-
-
-
-solve(ARGS[1], :bc_rootRelax)
-solve(ARGS[1], :bc_EPB)
-solve(ARGS[1], :bc_rootRelaxCPEPB)
-solve(ARGS[1], :bb_EPB)
-solve(ARGS[1], :bc_rootRelaxCP)
-solve(ARGS[1], :bc_rootRelaxEPB)
+solve(ARGS[1], ARGS[2])

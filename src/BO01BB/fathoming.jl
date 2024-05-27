@@ -72,23 +72,23 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
 end
 
 function GM_heuristic(problem::BO01Problem, incumbent::IncumbentSet)
-    # nb_feas = 0 ; null_pt = 0
+    nb_feas = 0 ; null_pt = 0
     GMtime = time()
     vg, nbgen = GM(problem.lp_copied, problem.varArray_copied, problem.c, 30, 50, 20)
     GMtime = time() - GMtime
 
-    # println(" GMtime = $GMtime \n total try = $nbgen ")
+    println(" GMtime = $GMtime \n total try = $nbgen ")
     # ----------------------------------------------------------
 
     for k = 1:nbgen 
         if vg[k].sFea
-            # nb_feas += 1
+            nb_feas += 1
             (_, flag) = push!(incumbent.natural_order_vect, Solution(vg[k].sInt.x .*1.0, vg[k].sInt.y .* 1.0), filtered=true)
-            # flag ? nothing : null_pt += 1
+            flag ? nothing : null_pt += 1
         end
     end
 
-    # println("new feas = $nb_feas \t null_pt = $null_pt")
+    println("new feas = $nb_feas \t null_pt = $null_pt")
 
 end
 
@@ -129,7 +129,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         # ----------------------------------------------------------
         # todo : heuristics Gravity machine
         if node.depth %10 == 0 && length(pb.varArray)- length(node.assignment) >10
-            # println("node $(node.depth)")
+            println("node $(node.depth)")
             GM_heuristic(pb, incumbent)
         end
 
@@ -153,7 +153,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         # ----------------------------------------------------------
         # todo : heuristics Gravity machine
         if node.depth %10 == 0 && length(pb.varArray)- length(node.assignment) >10
-            # println("node $(node.depth)")
+            println("node $(node.depth)")
             GM_heuristic(pb, incumbent)
         end
 

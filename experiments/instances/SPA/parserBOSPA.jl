@@ -15,12 +15,12 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
     end
     println(fout, "size_Y_N = ", length(Y_N))
     println(fout, "Y_N = ", Y_N)
-    println(fout)
-    println(fout, "size_X_E = ", length(X_E))
+    # println(fout)
+    # println(fout, "size_X_E = ", length(X_E))
 
     close(fout)
   
-    displayGraphics(fname,Y_N, outputName)
+    # displayGraphics(fname,Y_N, outputName)
 end
 
 

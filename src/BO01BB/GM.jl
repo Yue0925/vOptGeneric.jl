@@ -4,7 +4,7 @@
 # The gravity machine (Man of Steel) -> to terraform the world
 
 
-const verbose = false
+const verbose = true
 const graphic = false
 
 verbose ? println("""\nAlgorithme "Gravity machine" --------------------------------\n""") : nothing
@@ -71,17 +71,17 @@ function split01(xTilde::Array{Float64,1})
    indices1 = (Int64)[]
 
    for i=1:length(xTilde)
-       if isapprox(xTilde[i], 0.0, atol=1e-3)
-           push!(indices0,i)
-       else
-           push!(indices1,i)
-       end
-    # # todo : sensibility of assigning 1 
-    #     if isapprox(xTilde[i], 1.0, atol=1e-3)
-    #         push!(indices1,i)
-    #     else
-    #         push!(indices0,i)
-    #     end
+    #    if isapprox(xTilde[i], 0.0, atol=1e-3)
+    #        push!(indices0,i)
+    #    else
+    #        push!(indices1,i)
+    #    end
+    # todo : sensibility of assigning 1 
+        if isapprox(xTilde[i], 1.0, atol=1e-3)
+            push!(indices1,i)
+        else
+            push!(indices0,i)
+        end
     end
 
    return indices0, indices1
