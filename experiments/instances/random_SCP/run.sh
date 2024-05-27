@@ -10,7 +10,8 @@
 #     done
 # done
 
-methodes=("bb" "bc" "bb_EPB" "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB")
+methodes=("bb")
+# "bc" "bb_EPB" "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB"
 
 for mthd in ${methodes[@]}; do
     echo " ... " $mthd

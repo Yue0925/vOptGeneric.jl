@@ -363,29 +363,13 @@ function solve_branchboundcut(m::JuMP.Model;
         problem.param.cp_activated = cp ; problem.info.cp_activated = cp 
     end
 
-    # ----------------------------------------------------------
-    # todo : heuristics Gravity machine
-    # println("A : ", problem.A)
-    # println("b : ", problem.b)
-    # println("c : ", problem.c)
-
-    GMtime = time()
-    vg, nbgen = GM(problem.lp_copied, problem.varArray_copied, problem.c, 30, 50, 20)
-    GMtime = time() - GMtime
-
-    println(" GMtime = $GMtime \n total try = $nbgen ")
-    # ----------------------------------------------------------
-
     # initialize the incumbent list by heuristics or with Inf
     incumbent = IncumbentSet() 
 
-    for k = 1:nbgen 
-        if vg[k].sFea
-            push!(incumbent.natural_order_vect, Solution(vg[k].sInt.x .*1.0, vg[k].sInt.y .* 1.0), filtered=true)
-        end
-    end
 
-    println("|incumbent| =  ", length(incumbent.natural_order_vect.sols))
+    # ----------------------------------------------------------
+    # todo : heuristics Gravity machine
+    GM_heuristic(problem, incumbent)
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)
