@@ -66,7 +66,9 @@ function standard_form(pb::BO01Problem)
     end
 
     cstr_index = 0
-    
+
+    @variable(pb.lp_copied, var[1:numVars])
+
     # Ax=b
     for cstrRef in cstrEqualTo
         cstr_index += 1
@@ -79,6 +81,8 @@ function standard_form(pb::BO01Problem)
             pb.A[cstr_index, varIndex[term]] = coeff
         end
         pb.b[cstr_index] = rhs
+
+        @constraint(pb.lp_copied, pb.A[cstr_index, :]'*var == pb.b[cstr_index])
     end
 
     # Ax≥b
@@ -93,6 +97,8 @@ function standard_form(pb::BO01Problem)
             pb.A[cstr_index, varIndex[term]] = coeff * -1
         end
         pb.b[cstr_index] = rhs * -1
+
+        @constraint(pb.lp_copied, pb.A[cstr_index, :]'*var <= pb.b[cstr_index])
     end
 
     # Ax≤b
@@ -107,6 +113,8 @@ function standard_form(pb::BO01Problem)
             pb.A[cstr_index, varIndex[term]] = coeff
         end
         pb.b[cstr_index] = rhs
+
+        @constraint(pb.lp_copied, pb.A[cstr_index, :]'*var <= pb.b[cstr_index])
     end
     
 
@@ -123,8 +131,26 @@ function standard_form(pb::BO01Problem)
             pb.A[cstr_index, varIndex[term]] = coeff ; pb.A[cstr_index+1, varIndex[term]] = coeff * -1
         end
         pb.b[cstr_index] = ub ; pb.b[cstr_index+1] = lb * -1
+
+        @constraint(pb.lp_copied, pb.A[cstr_index, :]'*var <= pb.b[cstr_index])
+
         cstr_index += 1
+
+        @constraint(pb.lp_copied, pb.A[cstr_index, :]'*var <= pb.b[cstr_index])
     end
+
+
+    # set upper/lower bounds 
+    for i=1:numVars        
+        if has_lower_bound(pb.varArray[i])
+            set_lower_bound(var[i], lower_bound(pb.varArray[i]))
+        end
+        if has_upper_bound(pb.varArray[i])
+            set_upper_bound(var[i], upper_bound(pb.varArray[i]))
+        end
+    end
+
+    pb.varArray_copied = var
 
 end
 
@@ -286,29 +312,6 @@ function post_processing(m::JuMP.Model, problem::BO01Problem, incumbent::Incumbe
     end
 end
 
-# todo : compare relax integrity direct and copy LP model 
-function copy_model_LP(pb::BO01Problem)
-    n = size(pb.A, 2) ; numRows = size(pb.A, 1)
-
-    # build/copy constraints 
-    @variable(pb.lp_copied, var[1:n])
-    for i=1:numRows
-        @constraint(pb.lp_copied, pb.A[i, :]'*var <= pb.b[i])
-    end
-
-    # set upper/lower bounds 
-    for i=1:n         
-        if has_lower_bound(pb.varArray[i])
-            set_lower_bound(var[i], lower_bound(pb.varArray[i]))
-        end
-        if has_upper_bound(pb.varArray[i])
-            set_upper_bound(var[i], upper_bound(pb.varArray[i]))
-        end
-    end
-
-    pb.varArray_copied = var
-end
-
 
 """
 A bi-objective binary(0-1) branch and bound algorithm.
@@ -321,7 +324,8 @@ function solve_branchboundcut(m::JuMP.Model;
                                             verbose = false ,
                                             LBSexhaustive = true,       # LBS construction exhaustive at each node 
                                             λ_strategy = 0,         # λ searching strategy 0 -> dicho, 1 -> chordal, 2 -> dynamic
-                                            λ_limit = 2^20 ,        # the number of λ optimized in each node             
+                                            λ_limit = 2^20 ,        # the number of λ optimized in each node         
+                                            heuristic = false,    
                                             args...)
     converted, f = formatting(m)
 
@@ -333,16 +337,14 @@ function solve_branchboundcut(m::JuMP.Model;
         JuMP.Model(CPLEX.Optimizer), Vector{JuMP.VariableRef}()
     )
 
-    standard_form(problem) ; problem.param.EPB = EPB
-
-    # todo : strict tolerance following objective coeff (KP instance)
-    # length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
-
     # relaxation LP
     undo_relax = JuMP.relax_integrality(problem.m)
 
-    # copy alternative model
-    copy_model_LP(problem) ; set_silent(problem.lp_copied)
+    standard_form(problem) ; problem.param.EPB = EPB
+    set_silent(problem.lp_copied)
+
+    # todo : strict tolerance following objective coeff (KP instance)
+    # length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
 
     if root_relax 
         undo_relax()
@@ -367,9 +369,10 @@ function solve_branchboundcut(m::JuMP.Model;
     incumbent = IncumbentSet() 
 
 
-    # # ----------------------------------------------------------
-    # # todo : heuristics Gravity machine
-    # GM_heuristic(problem, incumbent)
+    # ----------------------------------------------------------
+    # todo : heuristics Gravity machine
+    heuristic = true
+    if heuristic GM_heuristic(problem, incumbent) end 
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)
