@@ -4,7 +4,7 @@
 # The gravity machine (Man of Steel) -> to terraform the world
 
 
-const verbose = true
+const verbose = false
 const graphic = false
 
 verbose ? println("""\nAlgorithme "Gravity machine" --------------------------------\n""") : nothing

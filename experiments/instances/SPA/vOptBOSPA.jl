@@ -85,7 +85,7 @@ function solve(fname::String, method::String)
     nbobj = 2
 
     # todo : try small instances 
-    if nbvar >= 1000 return end
+    if nbvar >= 3000 return end
 
 
     println("\n -----------------------------")

@@ -126,12 +126,12 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
 
         pruned = MP_cutting_planes(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
 
-        # ----------------------------------------------------------
-        # todo : heuristics Gravity machine
-        if node.depth %10 == 0 && length(pb.varArray)- length(node.assignment) >10
-            println("node $(node.depth)")
-            GM_heuristic(pb, incumbent)
-        end
+        # # ----------------------------------------------------------
+        # # todo : heuristics Gravity machine
+        # if node.depth %10 == 0 && length(pb.varArray)- length(node.assignment) >10
+        #     println("node $(node.depth)")
+        #     GM_heuristic(pb, incumbent)
+        # end
 
         # step 3 : retrieve applied valid cuts 
         start_processing = time()
@@ -150,12 +150,12 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         pb.info.cuts_infos.times_total_for_cuts += (time() - start)        
     end
 
-        # ----------------------------------------------------------
-        # todo : heuristics Gravity machine
-        if node.depth %10 == 0 && length(pb.varArray)- length(node.assignment) >10
-            println("node $(node.depth)")
-            GM_heuristic(pb, incumbent)
-        end
+        # # ----------------------------------------------------------
+        # # todo : heuristics Gravity machine
+        # if node.depth %10 == 0 && length(pb.varArray)- length(node.assignment) >10
+        #     println("node $(node.depth)")
+        #     GM_heuristic(pb, incumbent)
+        # end
 
     removeVarObjBounds(node, pb, objcons, objcons_copied) ; return pruned
 end

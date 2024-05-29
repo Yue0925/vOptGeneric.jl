@@ -367,9 +367,9 @@ function solve_branchboundcut(m::JuMP.Model;
     incumbent = IncumbentSet() 
 
 
-    # ----------------------------------------------------------
-    # todo : heuristics Gravity machine
-    GM_heuristic(problem, incumbent)
+    # # ----------------------------------------------------------
+    # # todo : heuristics Gravity machine
+    # GM_heuristic(problem, incumbent)
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)

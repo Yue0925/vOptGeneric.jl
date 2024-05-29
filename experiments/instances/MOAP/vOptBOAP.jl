@@ -73,7 +73,7 @@ function vOptBOAP(n :: Int64, C1 :: Matrix{Int64}, C2 :: Matrix{Int64},
 
 end
 
-function solve(fname::String, method::String)
+function solve(fname::String, method)
     ap = readAP(fname)
     n = ap.n
 
@@ -103,7 +103,11 @@ function solve(fname::String, method::String)
     println(" solving $(fname) by $method  ... ")
     println(" -----------------------------")
 
-    folder = "../../results/MOAP/AP"
+    folder = "../../results/MOAP/"
+    if !isdir(folder)
+        mkdir(folder)
+    end
+    folder = "../../results/MOAP/AP/"
     if !isdir(folder)
         mkdir(folder)
     end
@@ -117,6 +121,6 @@ function solve(fname::String, method::String)
     vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName)
 end
 
-# solve(ARGS[1], ARGS[2])
+solve(ARGS[1], ARGS[2])
 
-solve("./AP/AP_p-3_n-5_ins-1.dat", ":bb")
+# solve("./AP/AP_p-3_n-5_ins-1.dat", :bb)
