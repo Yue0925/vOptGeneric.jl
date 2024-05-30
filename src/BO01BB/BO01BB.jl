@@ -371,7 +371,7 @@ function solve_branchboundcut(m::JuMP.Model;
 
     # ----------------------------------------------------------
     # todo : heuristics Gravity machine
-    heuristic = true
+    # heuristic = true
     if heuristic GM_heuristic(problem, incumbent) end 
 
     # by default, we take the breadth-first strategy (FIFO queue)

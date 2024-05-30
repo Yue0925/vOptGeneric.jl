@@ -9,10 +9,21 @@
 
 
 
-methodes=("bb")
-# "bc" "bb_EPB" "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB" 
+# methodes=("bb")
+# # "bc" "bb_EPB" "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB" 
 
-for mthd in ${methodes[@]}; do
-    echo " ... " $mthd
-    julia vOptBOSPA.jl ./BOSPA/biosppnw12.txt $mthd
+# for mthd in ${methodes[@]}; do
+#     echo " ... " $mthd
+#     julia vOptBOSPA.jl ./BOSPA/biosppnw12.txt $mthd
+# done
+
+
+methodes=("bc_rootRelax" "bc_rootRelaxEPB")
+
+
+for file in ./BOSPA/*.txt; do
+    for mthd in ${methodes[@]}; do
+        echo "$file" " ... " $mthd
+        julia vOptBOSPA2.jl "$file" $mthd
+    done
 done
