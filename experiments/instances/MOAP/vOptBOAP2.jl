@@ -131,6 +131,7 @@ function solve(fname::String, method)
         end
 
         outputName = result_folder * "/" * ap.name * ".dat"
+        if isfile(outputName) continue end #TODO : ignore existed file  
 
         vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, limit)
     end

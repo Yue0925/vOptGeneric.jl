@@ -124,7 +124,7 @@ function solve(fname::String, method::String)
     inst_name = split(fname, "/")[end]
 
     println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    if isfile(outputName) return end #TODO : ignore existed file  
 
     computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName)
 end
