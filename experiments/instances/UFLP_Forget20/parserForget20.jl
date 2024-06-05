@@ -1,6 +1,6 @@
 mutable struct Forget
     n :: Int64
-    m :: Vector{Int64} # 0 : >= ;  1 : <= ; 2 : == ; 
+    m :: Dict{Int64, Vector{Int64}} # 0 : >= ;  1 : <= ; 2 : == ; 
     c1 :: Vector{Int64}
     c2 :: Vector{Int64}
     A0 :: Matrix{Int64}
@@ -11,14 +11,6 @@ mutable struct Forget
     b2 :: Vector{Int64}
     name :: String
 end
-
-# function Forget(n :: Int64, m :: Int64)
-#     return Forget(n, m, zeros(Int64, n), zeros(Int64, n) , 
-#                     Dict(0 => zeros(Int64, 0, 0) , 1 => zeros(Int64, 0, 0) , 2 => zeros(Int64, 0, 0) ), 
-#                     Dict(0 => Vector{Int64}() , 1 => Vector{Int64}(), 2 => Vector{Int64}()), ""
-#             )
-# end
-
 
 function readForget(fname :: String) :: Forget
     f = open(fname)
@@ -59,18 +51,68 @@ function readForget(fname :: String) :: Forget
         b[i] = parse(Int64, vec[2])
     end
 
-    println(lines)
+    # println("A : ", size(A, 1), size(A, 2))
 
-    println(b)
+    # println("b : ", size(b))
+
+    # println("lines : ", lines)
     
     l = length(lines[0]) - 1 ; A0 = zeros(Int64, l, n) ; b0 = zeros(Int64, l)
     if l >0
-        for i in 
-            
+        for i in 2:l+1
+            b0[i-1] = b[lines[0][i]]
+            for j in 1:n
+                A0[i-1, j] = A[lines[0][i], j]
+            end
+        end
+    end
+
+    l = length(lines[1]) - 1 ; A1 = zeros(Int64, l, n) ; b1 = zeros(Int64, l)
+    if l >0
+        for i in 2:l+1
+            b1[i-1] = b[lines[1][i]]
+            for j in 1:n
+                A1[i-1, j] = A[lines[1][i], j]
+            end
+        end
+    end
+
+    l = length(lines[2]) - 1 ; A2 = zeros(Int64, l, n) ; b2 = zeros(Int64, l)
+    if l >0
+        for i in 2:l+1
+            b2[i-1] = b[lines[2][i]]
+            for j in 1:n
+                A2[i-1, j] = A[lines[2][i], j]
+            end
         end
     end
 
     close(f)
+
+    return Forget(n, lines, c1, c2, A0, b0, A1, b1, A2, b2, split(split(fname, "/")[end], ".")[1])
 end
 
-readForget("./instance/Forget20-UFLP_5_3_1-1000_1-100_spheredown_1_1.raw")
+
+
+function writeResults(vars::Int64, constr::Int64, fname::String, outputName::String, method, Y_N, X_E; total_time=nothing, infos=nothing)
+
+    fout = open(outputName, "w")
+    println(fout, "vars = $vars ; constr = $constr ")
+  
+    if method != :dicho && method != :epsilon
+        println(fout, infos)
+    else
+      println(fout, "total_times_used = $total_time")
+    end
+    println(fout, "size_Y_N = ", length(Y_N))
+    println(fout, "Y_N = ", Y_N)
+    # println(fout)
+    # println(fout, "size_X_E = ", length(X_E))
+
+    close(fout)
+  
+    # displayGraphics(fname,Y_N, outputName)
+end
+
+
+# println(readForget("./instance/Forget20-UFLP_5_3_1-1000_1-100_spheredown_1_1.raw") )
