@@ -140,7 +140,7 @@ function solve(fname::String, method)
     end
 
     outputName = result_folder * "/" * forget.name * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    if isfile(outputName) return end #TODO : ignore existed file  
 
     vOptUFLP(forget, Symbol(method), forget.name, outputName)
 end
