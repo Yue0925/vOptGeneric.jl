@@ -371,8 +371,10 @@ function solve_branchboundcut(m::JuMP.Model;
 
     # ----------------------------------------------------------
     # todo : heuristics Gravity machine
-    # heuristic = true
-    if heuristic GM_heuristic(problem, incumbent) end 
+    if heuristic 
+        GM_heuristic(problem, incumbent) 
+        problem.info.heur = true
+    end 
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)
@@ -437,7 +439,7 @@ function solve_branchboundcut(m::JuMP.Model;
     show(tmr)
 
     problem.info.cuts_infos.cuts_total = problem.info.cuts_infos.cuts_applied
-    println("\n total cuts : ", problem.info.cuts_infos.cuts_applied)
+    # println("\n total cuts : ", problem.info.cuts_infos.cuts_applied)
 
     return problem.info
 end

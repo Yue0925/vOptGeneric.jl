@@ -78,6 +78,7 @@ function GM_heuristic(problem::BO01Problem, incumbent::IncumbentSet)
     GMtime = time() - GMtime
 
     println(" GMtime = $GMtime \n total try = $nbgen ")
+    problem.info.heur_time += GMtime
     # ----------------------------------------------------------
 
     for k = 1:nbgen 

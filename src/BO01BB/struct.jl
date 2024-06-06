@@ -76,12 +76,14 @@ mutable struct StatInfo
     λ_iter::Int64          
     total_time_cplex::Float64
     total_time_fusion::Float64  
+    heur :: Bool 
+    heur_time :: Float64
     # status::MOI.TerminationStatusCode 
 end
 
 function StatInfo()
     return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false, 0, true, 0, 2^20,
-                0, 0, 0.0, 0, 0.0, 0.0)
+                0, 0, 0.0, 0, 0.0, 0.0, false, 0.0)
 end
 
 function Base.:show(io::IO, info::StatInfo)
@@ -105,7 +107,9 @@ function Base.:show(io::IO, info::StatInfo)
         "λ_max = $(info.λ_max) \n", 
         "λ_acc = $(info.λ_acc) \n",
         "total_time_cplex = $(info.total_time_cplex) \n" , 
-        "total_time_fusion = $(info.total_time_fusion) \n"
+        "total_time_fusion = $(info.total_time_fusion) \n",
+        "heur = $(info.heur) \n",
+        "heur_time = $(info.heur_time) \n"
         )
     if info.cp_activated println(io, info.cuts_infos) end
 end
