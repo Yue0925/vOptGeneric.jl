@@ -1,0 +1,35 @@
+\begin{sidewaystable}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccccccccccc}
+\toprule
+% line 1 
+\textbf{Instance} & \textbf{n} & \textbf{m} & \textbf{$\mathcal{Y}_N$}
+& \multicolumn{4}{c}{\textbf{$|\lambda| = 6$}} & \multicolumn{4}{c}{\textbf{$|\lambda| = 8$}} \\
+
+%line 2 
+\cmidrule(r){5-8} \cmidrule(r){9-12} 
+~ & ~ & ~ & ~ & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{B\&C(cplex)}} & \multicolumn{2}{c}{\textbf{EPB B\&C(cplex)}} \\
+
+%line 3
+\cmidrule(r){5-6} \cmidrule(r){7-8} \cmidrule(r){9-10} \cmidrule(r){11-12}
+~ & ~ & ~ & ~ & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes} & \textbf{Time(s)} & \textbf{Nodes}  & \textbf{Time(s)} & \textbf{Nodes} \\
+\midrule
+
+biodidactic.dat & 64 & 17 & 3 & 0.33 & 157 & 0.33 & 154 & 0.37 & 157 & 0.35 & 154 \\
+biosppnw08.dat & 434 & 24 & 20 & 249.83 & 15113 &  \textcolor{blue2}{45.98} & 2829 & 252.32 & 15113 & 46.36 & 2829 \\
+biosppnw10.dat & 853 & 24 & 13 & 179.36 & 5461 & 90.78 & 2983 & 178.43 & 5461 &  \textcolor{blue2}{90.05} & 2983 \\
+biosppnw12.dat & 626 & 27 & 38 &  TO & 61419 &  \textcolor{blue2}{647.41} & 11399 &  TO & 61573 & 651.15 & 11399 \\
+biosppnw15.dat & 467 & 31 & 2 & 2.33 & 33 & 2.33 & 33 & 2.33 & 33 & 2.33 & 33 \\
+biosppnw19.dat & 2879 & 40 & 19 &  TO & 38925 & 1059.9 & 11104 &  TO & 39169 & 1057.43 & 11104 \\
+biosppnw20.dat & 685 & 22 & 9 & 97.82 & 6429 & 40.05 & 1868 & 99.47 & 6429 & 40.72 & 1868 \\
+biosppnw21.dat & 577 & 25 & 10 & 75.43 & 4565 &  \textcolor{blue2}{30.97} & 1376 & 75.15 & 4565 & 31.08 & 1376 \\
+biosppnw22.dat & 619 & 23 & 19 & 266.58 & 16691 & 79.89 & 3580 & 267.02 & 16691 & 78.65 & 3580 \\
+biosppnw23.dat & 711 & 19 & 6 & 125.63 & 6309 &  \textcolor{blue2}{88.46} & 4571 & 122.79 & 6309 & 89.46 & 4571 \\
+biosppnw24.dat & 1366 & 19 & 21 & 1287.16 & 50397 &  - &  - & 1288.24 & 50397 & -1 & -1 \\
+\bottomrule
+\end{tabular}
+}%
+\caption{cplex cutting LBS non-exhaustive dichotomic concave-convex like algo on instances SPA/BOSPA ($\lambda$ fixed except EPBranched nodes) .}
+% \label{tab:table2_lambda_limits_SPA/BOSPA }
+\end{sidewaystable}

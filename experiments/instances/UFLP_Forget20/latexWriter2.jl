@@ -256,7 +256,7 @@ function comparisonsLambdaLimits(instances::String)
             )
             ax.set_xlabel("|λ|", fontsize=14)
             ax.set_ylabel("Average time(s)", color="red", fontsize=14)
-            ax.set_title("UFLP avg n = $n", fontsize=14)
+            ax.set_title("MOAP avg n = $n", fontsize=14)
         
             ax2=ax.twinx()
             ax2.plot(λ_limits, [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])], 
