@@ -374,6 +374,7 @@ function solve_branchboundcut(m::JuMP.Model;
     if heuristic 
         GM_heuristic(problem, incumbent) 
         problem.info.heur = true
+        problem.info.total_times += round(problem.info.heur_time, digits = 2)
     end 
 
     # by default, we take the breadth-first strategy (FIFO queue)
