@@ -21,6 +21,6 @@ methodes=("bc_rootRelaxEPB")
 for file in ./instance/*.raw; do
     for mthd in ${methodes[@]}; do
         echo "$file" " ... " $mthd
-        srun julia vOptUFLP_Forget20.jl "$file" $mthd
+        srun ../../../../julia-1.7.3/bin/julia vOptUFLP_Forget20.jl "$file" $mthd
     done
 done

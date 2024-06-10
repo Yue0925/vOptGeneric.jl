@@ -27,5 +27,5 @@ methodes=("bb" "bc_rootRelax" "bc_rootRelaxEPB")
 
 for mthd in ${methodes[@]}; do
     echo " ... " $mthd
-    srun julia vOptBOSPA.jl ./BOSPA/biosppnw12.txt $mthd
+    srun ../../../../julia-1.7.3/bin/julia vOptBOSPA.jl ./BOSPA/biosppnw12.txt $mthd
 done

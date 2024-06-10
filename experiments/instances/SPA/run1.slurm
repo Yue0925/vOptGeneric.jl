@@ -21,6 +21,6 @@ methodes=("bb")
 for file in ./BOSPA/*.txt; do
     for mthd in ${methodes[@]}; do
         echo "$file" " ... " $mthd
-        srun julia vOptBOSPA.jl "$file" $mthd
+        srun ../../../../julia-1.7.3/bin/julia vOptBOSPA.jl "$file" $mthd
     done
 done

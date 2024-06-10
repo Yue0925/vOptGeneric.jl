@@ -19,6 +19,6 @@ methodes=("bc_rootRelaxCP" "bc_rootRelaxCPEPB")
 for file in ./AP/*.dat; do
     for mthd in ${methodes[@]}; do
         echo "$file" " ... " $mthd
-        srun julia vOptBOAP.jl "$file" $mthd
+        srun ../../../../julia-1.7.3/bin/julia vOptBOAP.jl "$file" $mthd
     done
 done
