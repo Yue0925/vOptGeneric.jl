@@ -134,7 +134,7 @@ function solve(fname::String, method::String)
 
     heuristic = true
 
-    folder = "../../results/SPA/BOSP/heuristic"
+    folder = "../../results/SPA/BOSPA/heuristic"
     if !isdir(folder)
         mkdir(folder)
     end
@@ -143,10 +143,12 @@ function solve(fname::String, method::String)
         mkdir(result_folder)
     end
 
-    outputName = result_folder * "/" * ap.name * ".dat"
+    inst_name = split(fname, "/")[end]
+
+    println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
     # if isfile(outputName) return end #TODO : ignore existed file  
 
-    vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic)
+    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic)
 
 
 end

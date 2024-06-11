@@ -74,7 +74,7 @@ end
 function GM_heuristic(problem::BO01Problem, incumbent::IncumbentSet)
     nb_feas = 0 ; null_pt = 0
     GMtime = time()
-    vg, nbgen = GM(problem.lp_copied, problem.varArray_copied, problem.c, 20, 30, 20)
+    vg, nbgen = GM(problem.lp_copied, problem.varArray_copied, problem.c, 30, 50, 20 ) # 30, 50, 20 # 20, 30, 20
     GMtime = time() - GMtime
 
     println(" GMtime = $GMtime \n total try = $nbgen ")

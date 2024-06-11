@@ -1,0 +1,4092 @@
+./AP/AP_p-3_n-5_ins-1.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-1.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-1.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         26.8s /   2.1%           2.53GiB /   1.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    558ms  100.0%   558ms   30.3MiB  100.0%  30.3MiB
+   iteration         42    499ms   89.5%  11.9ms   20.6MiB   68.3%   503KiB
+     relax           70   56.6ms   10.1%   808μs   5.38MiB   17.8%  78.6KiB
+     incumbent       50   3.45ms    0.6%  69.0μs   28.4KiB    0.1%     581B
+     dominance       42    129μs    0.0%  3.08μs   64.6KiB    0.2%  1.54KiB
+   next node         42   45.0ms    8.1%  1.07ms   9.36MiB   30.9%   228KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 1.5 
+total_nodes = 71 
+pruned_nodes = 36 
+GAP = 0.0 
+relaxation_time = 0.79 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.127 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 70 
+root_relax = false 
+TO = false 
+rootLBS = 4 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+ GMtime = 1.9063868522644043 
+ total try = 41 
+new feas = 41 	 null_pt = 37
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         29.3s /   2.0%           2.61GiB /   1.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    590ms  100.0%   295ms   35.4MiB  100.0%  17.7MiB
+   iteration         84    531ms   90.0%  6.32ms   25.8MiB   72.9%   315KiB
+     relax          140   88.1ms   14.9%   629μs   10.2MiB   28.9%  74.9KiB
+     incumbent      100   3.61ms    0.6%  36.1μs   52.5KiB    0.1%     537B
+     dominance       84    263μs    0.0%  3.13μs    129KiB    0.4%  1.54KiB
+   next node         84   45.0ms    7.6%   536μs   9.36MiB   26.4%   114KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.03 
+total_nodes = 71 
+pruned_nodes = 36 
+GAP = 0.0 
+relaxation_time = 0.03 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.127 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 70 
+root_relax = false 
+TO = false 
+rootLBS = 4 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.9063868522644043 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+./AP/AP_p-3_n-5_ins-1.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-1.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         27.4s /   5.7%           2.58GiB /   3.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    1.57s  100.0%   1.57s   86.2MiB  100.0%  86.2MiB
+   iteration         47    1.51s   96.3%  32.1ms   76.6MiB   88.9%  1.63MiB
+     relax           86    1.11s   70.8%  12.9ms   61.2MiB   71.1%   729KiB
+     incumbent       58   3.45ms    0.2%  59.5μs   34.2KiB    0.0%     603B
+     dominance       47    166μs    0.0%  3.53μs   75.9KiB    0.1%  1.62KiB
+   next node         47   43.9ms    2.8%   933μs   9.36MiB   10.9%   204KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 2.49 
+total_nodes = 87 
+pruned_nodes = 45 
+GAP = 0.0 
+relaxation_time = 0.77 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.149 
+nb_nodes_EPB = 4 
+nb_nodes_VB = 82 
+root_relax = false 
+TO = false 
+rootLBS = 4 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+ GMtime = 1.3108818531036377 
+ total try = 41 
+new feas = 41 	 null_pt = 37
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         29.3s /   5.6%           2.64GiB /   3.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1.64s  100.0%   820ms   93.3MiB  100.0%  46.6MiB
+   iteration         94    1.58s   96.5%  16.8ms   83.6MiB   89.7%   911KiB
+     relax          172    1.18s   72.0%  6.87ms   68.0MiB   72.9%   405KiB
+     incumbent      116   3.63ms    0.2%  31.3μs   59.5KiB    0.1%     526B
+     dominance       94    328μs    0.0%  3.49μs    152KiB    0.2%  1.62KiB
+   next node         94   43.9ms    2.7%   467μs   9.36MiB   10.0%   102KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.07 
+total_nodes = 87 
+pruned_nodes = 45 
+GAP = 0.0 
+relaxation_time = 0.06 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.149 
+nb_nodes_EPB = 4 
+nb_nodes_VB = 82 
+root_relax = false 
+TO = false 
+rootLBS = 4 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.3108818531036377 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+./AP/AP_p-3_n-5_ins-1.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-1.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         26.5s /   2.7%           2.56GiB /   1.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    710ms  100.0%   710ms   37.8MiB  100.0%  37.8MiB
+   iteration         55    651ms   91.6%  11.8ms   28.2MiB   74.6%   525KiB
+     relax           96    240ms   33.8%  2.50ms   12.8MiB   33.9%   137KiB
+     dominance       55    254μs    0.0%  4.62μs   86.5KiB    0.2%  1.57KiB
+     incumbent       65    176μs    0.0%  2.70μs   33.8KiB    0.1%     532B
+   next node         55   46.2ms    6.5%   839μs   9.36MiB   24.8%   174KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 1.55 
+total_nodes = 97 
+pruned_nodes = 49 
+GAP = 0.0 
+relaxation_time = 0.83 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.179 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 96 
+root_relax = true 
+TO = false 
+rootLBS = 7 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.183037042617798 
+ total try = 41 
+new feas = 41 	 null_pt = 37
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         29.3s /   3.1%           2.66GiB /   1.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    924ms  100.0%   462ms   51.0MiB  100.0%  25.5MiB
+   iteration        110    864ms   93.5%  7.86ms   41.4MiB   81.2%   385KiB
+     relax          192    453ms   49.0%  2.36ms   25.6MiB   50.2%   137KiB
+     dominance      110    462μs    0.0%  4.20μs    173KiB    0.3%  1.57KiB
+     incumbent      130    334μs    0.0%  2.57μs   67.6KiB    0.1%     532B
+   next node        110   46.2ms    5.0%   420μs   9.36MiB   18.3%  87.1KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.22 
+total_nodes = 97 
+pruned_nodes = 49 
+GAP = 0.0 
+relaxation_time = 0.22 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.179 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 96 
+root_relax = true 
+TO = false 
+rootLBS = 7 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.183037042617798 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+./AP/AP_p-3_n-5_ins-1.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-1.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         27.8s /   6.1%           2.61GiB /   3.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    1.69s  100.0%   1.69s   91.2MiB  100.0%  91.2MiB
+   iteration         46    1.63s   96.5%  35.4ms   81.6MiB   89.5%  1.77MiB
+     relax           84    1.23s   72.9%  14.7ms   66.3MiB   72.7%   808KiB
+     dominance       46    198μs    0.0%  4.30μs   75.1KiB    0.1%  1.63KiB
+     incumbent       57    122μs    0.0%  2.15μs   21.9KiB    0.0%     393B
+   next node         46   46.2ms    2.7%  1.01ms   9.36MiB   10.3%   208KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 2.57 
+total_nodes = 85 
+pruned_nodes = 44 
+GAP = 0.0 
+relaxation_time = 0.8 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.149 
+nb_nodes_EPB = 4 
+nb_nodes_VB = 80 
+root_relax = true 
+TO = false 
+rootLBS = 7 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.7146599292755127 
+ total try = 41 
+new feas = 41 	 null_pt = 37
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         30.2s /   6.2%           2.69GiB /   3.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1.86s  100.0%   930ms    104MiB  100.0%  51.8MiB
+   iteration         92    1.80s   96.8%  19.6ms   93.9MiB   90.7%  1.02MiB
+     relax          168    1.40s   75.3%  8.34ms   78.3MiB   75.6%   477KiB
+     dominance       92    394μs    0.0%  4.29μs    150KiB    0.1%  1.63KiB
+     incumbent      114    246μs    0.0%  2.16μs   43.8KiB    0.0%     393B
+   next node         92   46.3ms    2.5%   503μs   9.36MiB    9.0%   104KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.18 
+total_nodes = 85 
+pruned_nodes = 44 
+GAP = 0.0 
+relaxation_time = 0.17 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.149 
+nb_nodes_EPB = 4 
+nb_nodes_VB = 80 
+root_relax = true 
+TO = false 
+rootLBS = 7 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.7146599292755127 
+
+
+length Y_N = 5	 var = 25 ctr = 10
+./AP/AP_p-3_n-5_ins-10.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-10.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-10.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         26.7s /   2.0%           2.53GiB /   1.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    532ms  100.0%   532ms   33.2MiB  100.0%  33.2MiB
+   iteration         66    474ms   89.1%  7.19ms   23.6MiB   71.1%   366KiB
+     relax          120   74.0ms   13.9%   616μs   8.08MiB   24.3%  69.0KiB
+     incumbent       81   3.51ms    0.7%  43.4μs   49.5KiB    0.1%     626B
+     dominance       66    245μs    0.0%  3.71μs    124KiB    0.4%  1.87KiB
+   next node         66   44.1ms    8.3%   668μs   9.36MiB   28.2%   145KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 1.45 
+total_nodes = 121 
+pruned_nodes = 61 
+GAP = 0.0 
+relaxation_time = 0.79 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.215 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 120 
+root_relax = false 
+TO = false 
+rootLBS = 3 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+ GMtime = 1.841217041015625 
+ total try = 31 
+new feas = 31 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         29.0s /   2.0%           2.61GiB /   1.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    582ms  100.0%   291ms   41.5MiB  100.0%  20.7MiB
+   iteration        132    524ms   90.0%  3.97ms   31.9MiB   76.8%   247KiB
+     relax          240    122ms   21.0%   510μs   15.9MiB   38.2%  67.7KiB
+     incumbent      162   3.77ms    0.6%  23.2μs   94.8KiB    0.2%     599B
+     dominance      132    496μs    0.1%  3.76μs    247KiB    0.6%  1.87KiB
+   next node        132   44.1ms    7.6%   334μs   9.36MiB   22.6%  72.6KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.05 
+total_nodes = 121 
+pruned_nodes = 61 
+GAP = 0.0 
+relaxation_time = 0.04 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.215 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 120 
+root_relax = false 
+TO = false 
+rootLBS = 3 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.841217041015625 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+./AP/AP_p-3_n-5_ins-10.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-10.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-10.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         27.8s /   5.7%           2.58GiB /   3.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    1.59s  100.0%   1.59s   90.5MiB  100.0%  90.5MiB
+   iteration         66    1.53s   96.3%  23.2ms   80.9MiB   89.4%  1.23MiB
+     relax          130    1.09s   68.8%  8.40ms   65.4MiB   72.2%   515KiB
+     incumbent       81   3.40ms    0.2%  42.0μs   30.7KiB    0.0%     388B
+     dominance       66    287μs    0.0%  4.35μs    124KiB    0.1%  1.88KiB
+   next node         66   45.2ms    2.8%   684μs   9.36MiB   10.3%   145KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 2.51 
+total_nodes = 131 
+pruned_nodes = 67 
+GAP = 0.0 
+relaxation_time = 0.79 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.235 
+nb_nodes_EPB = 16 
+nb_nodes_VB = 114 
+root_relax = false 
+TO = false 
+rootLBS = 3 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+ GMtime = 1.355329990386963 
+ total try = 31 
+new feas = 31 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         29.7s /   5.6%           2.65GiB /   3.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1.65s  100.0%   826ms    102MiB  100.0%  51.2MiB
+   iteration        132    1.59s   96.4%  12.1ms   92.9MiB   90.6%   720KiB
+     relax          260    1.15s   69.9%  4.44ms   76.8MiB   75.0%   303KiB
+     incumbent      162   3.59ms    0.2%  22.2μs   57.1KiB    0.1%     361B
+     dominance      132    567μs    0.0%  4.29μs    248KiB    0.2%  1.88KiB
+   next node        132   45.2ms    2.7%   342μs   9.36MiB    9.1%  72.6KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.07 
+total_nodes = 131 
+pruned_nodes = 67 
+GAP = 0.0 
+relaxation_time = 0.05 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.235 
+nb_nodes_EPB = 16 
+nb_nodes_VB = 114 
+root_relax = false 
+TO = false 
+rootLBS = 3 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.355329990386963 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+./AP/AP_p-3_n-5_ins-10.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-10.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-10.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         27.0s /   3.2%           2.56GiB /   1.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    870ms  100.0%   870ms   46.7MiB  100.0%  46.7MiB
+   iteration         87    808ms   93.0%  9.29ms   37.1MiB   79.4%   437KiB
+     relax          160    396ms   45.6%  2.48ms   21.5MiB   45.9%   137KiB
+     dominance       87    366μs    0.0%  4.21μs    165KiB    0.3%  1.89KiB
+     incumbent      106    261μs    0.0%  2.47μs   61.6KiB    0.1%     595B
+   next node         87   47.3ms    5.4%   543μs   9.36MiB   20.0%   110KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 1.74 
+total_nodes = 161 
+pruned_nodes = 81 
+GAP = 0.0 
+relaxation_time = 1.05 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.29 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 160 
+root_relax = true 
+TO = false 
+rootLBS = 5 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.2723488807678223 
+ total try = 31 
+new feas = 31 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         30.1s /   4.1%           2.68GiB /   2.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1.24s  100.0%   621ms   69.4MiB  100.0%  34.7MiB
+   iteration        174    1.18s   95.1%  6.79ms   59.8MiB   86.2%   352KiB
+     relax          320    768ms   61.8%  2.40ms   43.4MiB   62.6%   139KiB
+     dominance      174    750μs    0.1%  4.31μs    330KiB    0.5%  1.89KiB
+     incumbent      212    532μs    0.0%  2.51μs    123KiB    0.2%     595B
+   next node        174   47.3ms    3.8%   272μs   9.36MiB   13.5%  55.1KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.38 
+total_nodes = 161 
+pruned_nodes = 81 
+GAP = 0.0 
+relaxation_time = 0.37 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.29 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 160 
+root_relax = true 
+TO = false 
+rootLBS = 5 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.2723488807678223 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+./AP/AP_p-3_n-5_ins-10.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-5_ins-10.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-5_ins-10.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         27.9s /   6.1%           2.61GiB /   3.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    1.70s  100.0%   1.70s   89.6MiB  100.0%  89.6MiB
+   iteration         34    1.64s   96.4%  48.3ms   80.0MiB   89.3%  2.35MiB
+     relax           71    1.23s   72.3%  17.3ms   64.7MiB   72.3%   934KiB
+     dominance       34    165μs    0.0%  4.84μs   61.0KiB    0.1%  1.79KiB
+     incumbent       49    110μs    0.0%  2.25μs   15.4KiB    0.0%     323B
+   next node         34   47.6ms    2.8%  1.40ms   9.36MiB   10.4%   282KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 2.55 
+total_nodes = 72 
+pruned_nodes = 38 
+GAP = 0.0 
+relaxation_time = 0.78 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.135 
+nb_nodes_EPB = 17 
+nb_nodes_VB = 54 
+root_relax = true 
+TO = false 
+rootLBS = 5 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.7658660411834717 
+ total try = 31 
+new feas = 31 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         30.3s /   6.1%           2.68GiB /   3.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1.86s  100.0%   930ms    100MiB  100.0%  50.1MiB
+   iteration         68    1.80s   96.7%  26.5ms   90.7MiB   90.4%  1.33MiB
+     relax          142    1.39s   74.6%  9.78ms   75.1MiB   74.9%   542KiB
+     dominance       68    316μs    0.0%  4.65μs    122KiB    0.1%  1.79KiB
+     incumbent       98    210μs    0.0%  2.15μs   30.9KiB    0.0%     323B
+   next node         68   47.7ms    2.6%   701μs   9.36MiB    9.3%   141KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 0.17 
+total_nodes = 72 
+pruned_nodes = 38 
+GAP = 0.0 
+relaxation_time = 0.16 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.0 
+tree_size = 0.135 
+nb_nodes_EPB = 17 
+nb_nodes_VB = 54 
+root_relax = true 
+TO = false 
+rootLBS = 5 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.7658660411834717 
+
+
+length Y_N = 6	 var = 25 ctr = 10
+./AP/AP_p-3_n-10_ins-1.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-1.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         34.2s /  23.0%           4.30GiB /  41.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    7.85s  100.0%   7.85s   1.79GiB  100.0%  1.79GiB
+   iteration      2.19k    7.79s   99.2%  3.56ms   1.78GiB   99.5%   852KiB
+     relax        3.49k    7.24s   92.2%  2.07ms   1.72GiB   96.4%   518KiB
+     dominance    2.19k   43.8ms    0.6%  20.0μs   14.4MiB    0.8%  6.75KiB
+     incumbent    2.27k   28.1ms    0.4%  12.4μs   4.64MiB    0.3%  2.10KiB
+   next node      2.19k   45.9ms    0.6%  20.9μs   9.42MiB    0.5%  4.41KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 8.78 
+total_nodes = 3491 
+pruned_nodes = 1746 
+GAP = 0.0 
+relaxation_time = 7.37 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.03 
+tree_size = 12.831 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 3490 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+ GMtime = 1.89644193649292 
+ total try = 40 
+new feas = 40 	 null_pt = 34
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         43.9s /  34.4%           6.22GiB /  57.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    15.1s  100.0%   7.55s   3.60GiB  100.0%  1.80GiB
+   iteration      4.38k    15.0s   99.5%  3.43ms   3.59GiB   99.7%   858KiB
+     relax        6.98k    14.4s   95.1%  2.06ms   3.49GiB   97.1%   524KiB
+     dominance    4.38k   93.7ms    0.6%  21.4μs   28.9MiB    0.8%  6.75KiB
+     incumbent    4.54k   53.2ms    0.4%  11.7μs   9.25MiB    0.3%  2.09KiB
+   next node      4.38k   47.1ms    0.3%  10.8μs   9.49MiB    0.3%  2.22KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 7.25 
+total_nodes = 3491 
+pruned_nodes = 1746 
+GAP = 0.0 
+relaxation_time = 6.18 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.02 
+tree_size = 12.831 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 3490 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.89644193649292 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-1.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-1.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         44.9s /  42.0%           9.55GiB /  73.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    18.9s  100.0%   18.9s   7.02GiB  100.0%  7.02GiB
+   iteration      5.55k    18.8s   99.6%  3.39ms   7.01GiB   99.9%  1.29MiB
+     relax        10.8k    18.1s   96.0%  1.67ms   6.89GiB   98.2%   666KiB
+     dominance    5.55k   71.5ms    0.4%  12.9μs   33.8MiB    0.5%  6.25KiB
+     incumbent    5.67k   16.8ms    0.1%  2.97μs   1.60MiB    0.0%     296B
+   next node      5.55k   47.7ms    0.3%  8.60μs   9.53MiB    0.1%  1.76KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 19.78 
+total_nodes = 10848 
+pruned_nodes = 5392 
+GAP = 0.0 
+relaxation_time = 8.44 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.01 
+tree_size = 32.577 
+nb_nodes_EPB = 465 
+nb_nodes_VB = 10382 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+ GMtime = 1.3635151386260986 
+ total try = 40 
+new feas = 40 	 null_pt = 34
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         67.4s /  58.2%           17.6GiB /  85.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    39.2s  100.0%   19.6s   15.0GiB  100.0%  7.49GiB
+   iteration      11.1k    39.1s   99.8%  3.53ms   15.0GiB   99.9%  1.38MiB
+     relax        21.7k    38.2s   97.3%  1.76ms   14.8GiB   98.5%   713KiB
+     dominance    11.1k    137ms    0.3%  12.4μs   67.7MiB    0.4%  6.25KiB
+     incumbent    11.3k   30.8ms    0.1%  2.71μs   3.08MiB    0.0%     285B
+   next node      11.1k   50.6ms    0.1%  4.57μs   9.69MiB    0.1%     916B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 20.35 
+total_nodes = 10848 
+pruned_nodes = 5392 
+GAP = 0.0 
+relaxation_time = 7.6 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.01 
+tree_size = 32.577 
+nb_nodes_EPB = 465 
+nb_nodes_VB = 10382 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.3635151386260986 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-1.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-1.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-1.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         68.0s /  61.4%           7.25GiB /  65.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    41.8s  100.0%   41.8s   4.71GiB  100.0%  4.71GiB
+   iteration      3.39k    41.7s   99.8%  12.3ms   4.70GiB   99.8%  1.42MiB
+     relax        5.60k    41.1s   98.5%  7.34ms   4.62GiB   98.1%   864KiB
+     dominance    3.39k   41.7ms    0.1%  12.3μs   22.4MiB    0.5%  6.77KiB
+     incumbent    3.56k   34.2ms    0.1%  9.60μs   6.92MiB    0.1%  1.99KiB
+   next node      3.39k   48.4ms    0.1%  14.3μs   9.46MiB    0.2%  2.85KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 42.6 
+total_nodes = 5605 
+pruned_nodes = 2803 
+GAP = 0.0 
+relaxation_time = 40.62 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.22 
+tree_size = 21.355 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 5604 
+root_relax = true 
+TO = false 
+rootLBS = 11 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.2429327964782715 
+ total try = 40 
+new feas = 40 	 null_pt = 34
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          113s /  74.2%           12.3GiB /  78.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    84.0s  100.0%   42.0s   9.63GiB  100.0%  4.82GiB
+   iteration      6.79k    83.9s   99.9%  12.4ms   9.62GiB   99.9%  1.45MiB
+     relax        11.2k    83.2s   99.0%  7.42ms   9.48GiB   98.4%   886KiB
+     dominance    6.79k   87.4ms    0.1%  12.9μs   44.8MiB    0.5%  6.77KiB
+     incumbent    7.12k   68.5ms    0.1%  9.62μs   13.8MiB    0.1%  1.99KiB
+   next node      6.79k   50.1ms    0.1%  7.38μs   9.56MiB    0.1%  1.44KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 42.24 
+total_nodes = 5605 
+pruned_nodes = 2803 
+GAP = 0.0 
+relaxation_time = 40.23 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.22 
+tree_size = 21.355 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 5604 
+root_relax = true 
+TO = false 
+rootLBS = 11 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.2429327964782715 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-1.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-1.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         39.3s /  34.4%           3.39GiB /  25.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    13.5s  100.0%   13.5s    881MiB  100.0%   881MiB
+   iteration        469    13.4s   99.5%  28.7ms    872MiB   98.9%  1.86MiB
+     relax          908    13.0s   96.5%  14.3ms    849MiB   96.4%   958KiB
+     dominance      469   5.07ms    0.0%  10.8μs   2.78MiB    0.3%  6.08KiB
+     incumbent      542   2.97ms    0.0%  5.49μs    528KiB    0.1%     997B
+   next node        469   46.7ms    0.3%   100μs   9.37MiB    1.1%  20.5KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 14.36 
+total_nodes = 909 
+pruned_nodes = 478 
+GAP = 0.0 
+relaxation_time = 12.18 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.03 
+tree_size = 2.594 
+nb_nodes_EPB = 116 
+nb_nodes_VB = 792 
+root_relax = true 
+TO = false 
+rootLBS = 11 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.333651065826416 
+ total try = 40 
+new feas = 40 	 null_pt = 34
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         52.1s /  46.9%           4.20GiB /  38.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    24.4s  100.0%   12.2s   1.60GiB  100.0%   817MiB
+   iteration        938    24.4s   99.7%  26.0ms   1.59GiB   99.4%  1.73MiB
+     relax        1.82k    23.9s   98.0%  13.2ms   1.56GiB   97.6%   899KiB
+     dominance      938   10.2ms    0.0%  10.9μs   5.57MiB    0.3%  6.08KiB
+     incumbent    1.08k   5.99ms    0.0%  5.53μs   1.03MiB    0.1%     997B
+   next node        938   47.1ms    0.2%  50.2μs   9.38MiB    0.6%  10.2KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 10.95 
+total_nodes = 909 
+pruned_nodes = 478 
+GAP = 0.0 
+relaxation_time = 10.39 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.02 
+tree_size = 2.594 
+nb_nodes_EPB = 116 
+nb_nodes_VB = 792 
+root_relax = true 
+TO = false 
+rootLBS = 11 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.333651065826416 
+
+
+length Y_N = 18	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-10.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-10.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-10.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         34.4s /  23.7%           4.36GiB /  42.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    8.16s  100.0%   8.16s   1.84GiB  100.0%  1.84GiB
+   iteration      2.54k    8.09s   99.2%  3.19ms   1.83GiB   99.5%   758KiB
+     relax        4.16k    7.57s   92.9%  1.82ms   1.77GiB   96.0%   446KiB
+     incumbent    2.66k   33.3ms    0.4%  12.6μs   5.07MiB    0.3%  1.96KiB
+     dominance    2.54k   28.3ms    0.3%  11.2μs   19.0MiB    1.0%  7.68KiB
+   next node      2.54k   46.0ms    0.6%  18.1μs   9.43MiB    0.5%  3.81KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 9.1 
+total_nodes = 4165 
+pruned_nodes = 2083 
+GAP = 0.0 
+relaxation_time = 7.7 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.03 
+tree_size = 14.957 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4164 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+ GMtime = 1.8890419006347656 
+ total try = 39 
+new feas = 39 	 null_pt = 30
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         44.4s /  35.5%           6.34GiB /  58.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    15.8s  100.0%   7.88s   3.72GiB  100.0%  1.86GiB
+   iteration      5.08k    15.7s   99.5%  3.09ms   3.71GiB   99.7%   766KiB
+     relax        8.33k    15.0s   95.4%  1.81ms   3.59GiB   96.7%   452KiB
+     dominance    5.08k   79.9ms    0.5%  15.7μs   38.1MiB    1.0%  7.68KiB
+     incumbent    5.31k   63.3ms    0.4%  11.9μs   10.0MiB    0.3%  1.92KiB
+   next node      5.08k   47.3ms    0.3%  9.31μs   9.51MiB    0.2%  1.92KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 7.61 
+total_nodes = 4165 
+pruned_nodes = 2083 
+GAP = 0.0 
+relaxation_time = 6.43 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.03 
+tree_size = 14.957 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4164 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.8890419006347656 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-10.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-10.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-10.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         41.3s /  36.5%           7.99GiB /  68.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    15.1s  100.0%   15.1s   5.46GiB  100.0%  5.46GiB
+   iteration      4.17k    15.0s   99.5%  3.59ms   5.45GiB   99.8%  1.34MiB
+     relax        8.09k    14.4s   95.4%  1.77ms   5.36GiB   98.1%   695KiB
+     dominance    4.17k    105ms    0.7%  25.2μs   29.8MiB    0.5%  7.31KiB
+     incumbent    4.36k   21.5ms    0.1%  4.92μs   2.39MiB    0.0%     575B
+   next node      4.17k   46.0ms    0.3%  11.0μs   9.48MiB    0.2%  2.33KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 15.97 
+total_nodes = 8090 
+pruned_nodes = 4024 
+GAP = 0.0 
+relaxation_time = 7.15 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.02 
+tree_size = 23.093 
+nb_nodes_EPB = 329 
+nb_nodes_VB = 7760 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+ GMtime = 1.3707609176635742 
+ total try = 39 
+new feas = 39 	 null_pt = 30
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         58.6s /  51.8%           14.1GiB /  81.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    30.3s  100.0%   15.2s   11.5GiB  100.0%  5.75GiB
+   iteration      8.28k    30.2s   99.7%  3.65ms   11.5GiB   99.9%  1.42MiB
+     relax        16.0k    29.4s   97.0%  1.83ms   11.3GiB   98.4%   739KiB
+     dominance    8.28k    164ms    0.5%  19.8μs   59.1MiB    0.5%  7.31KiB
+     incumbent    8.65k   39.6ms    0.1%  4.58μs   4.60MiB    0.0%     557B
+   next node      8.28k   48.7ms    0.2%  5.88μs   9.61MiB    0.1%  1.19KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 15.28 
+total_nodes = 7961 
+pruned_nodes = 3963 
+GAP = 0.0 
+relaxation_time = 6.42 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.02 
+tree_size = 22.779 
+nb_nodes_EPB = 312 
+nb_nodes_VB = 7648 
+root_relax = false 
+TO = false 
+rootLBS = 6 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.3707609176635742 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-10.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-10.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-10.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         63.4s /  58.1%           6.40GiB /  60.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    36.9s  100.0%   36.9s   3.86GiB  100.0%  3.86GiB
+   iteration      2.74k    36.8s   99.8%  13.4ms   3.85GiB   99.8%  1.44MiB
+     relax        4.51k    36.2s   98.3%  8.04ms   3.79GiB   98.0%   881KiB
+     dominance    2.74k   36.6ms    0.1%  13.4μs   20.3MiB    0.5%  7.57KiB
+     incumbent    2.86k   30.6ms    0.1%  10.7μs   5.52MiB    0.1%  1.98KiB
+   next node      2.74k   49.1ms    0.1%  17.9μs   9.44MiB    0.2%  3.53KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 37.75 
+total_nodes = 4507 
+pruned_nodes = 2254 
+GAP = 0.0 
+relaxation_time = 36.05 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.2 
+tree_size = 16.808 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4506 
+root_relax = true 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.3377909660339355 
+ total try = 39 
+new feas = 39 	 null_pt = 30
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          102s /  71.1%           10.6GiB /  74.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    72.6s  100.0%   36.3s   7.88GiB  100.0%  3.94GiB
+   iteration      5.48k    72.5s   99.9%  13.2ms   7.87GiB   99.9%  1.47MiB
+     relax        9.01k    71.8s   99.0%  7.97ms   7.75GiB   98.3%   902KiB
+     dominance    5.48k   75.1ms    0.1%  13.7μs   40.5MiB    0.5%  7.57KiB
+     incumbent    5.72k   61.1ms    0.1%  10.7μs   11.0MiB    0.1%  1.98KiB
+   next node      5.48k   50.6ms    0.1%  9.24μs   9.52MiB    0.1%  1.78KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 35.73 
+total_nodes = 4507 
+pruned_nodes = 2254 
+GAP = 0.0 
+relaxation_time = 34.34 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.18 
+tree_size = 16.808 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4506 
+root_relax = true 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.3377909660339355 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-10.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-10.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-10.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         43.9s /  40.8%           4.49GiB /  43.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    17.9s  100.0%   17.9s   1.96GiB  100.0%  1.96GiB
+   iteration      1.27k    17.8s   99.6%  14.0ms   1.95GiB   99.5%  1.58MiB
+     relax        2.36k    17.4s   97.2%  7.35ms   1.91GiB   97.6%   850KiB
+     dominance    1.27k   15.7ms    0.1%  12.3μs   9.41MiB    0.5%  7.59KiB
+     incumbent    1.37k   10.0ms    0.1%  7.27μs   1.48MiB    0.1%  1.10KiB
+   next node      1.27k   46.8ms    0.3%  36.9μs   9.39MiB    0.5%  7.58KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 18.73 
+total_nodes = 2364 
+pruned_nodes = 1198 
+GAP = 0.0 
+relaxation_time = 15.67 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.08 
+tree_size = 7.181 
+nb_nodes_EPB = 75 
+nb_nodes_VB = 2288 
+root_relax = true 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.356266975402832 
+ total try = 39 
+new feas = 39 	 null_pt = 30
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         60.9s /  54.2%           6.42GiB /  59.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    33.0s  100.0%   16.5s   3.80GiB  100.0%  1.90GiB
+   iteration      2.54k    32.9s   99.8%  13.0ms   3.79GiB   99.7%  1.53MiB
+     relax        4.73k    32.4s   98.3%  6.85ms   3.73GiB   98.1%   827KiB
+     dominance    2.54k   32.0ms    0.1%  12.6μs   18.8MiB    0.5%  7.59KiB
+     incumbent    2.74k   19.7ms    0.1%  7.18μs   2.96MiB    0.1%  1.11KiB
+   next node      2.54k   47.5ms    0.1%  18.7μs   9.43MiB    0.2%  3.80KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 15.12 
+total_nodes = 2365 
+pruned_nodes = 1198 
+GAP = 0.0 
+relaxation_time = 13.83 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.06 
+tree_size = 7.183 
+nb_nodes_EPB = 74 
+nb_nodes_VB = 2290 
+root_relax = true 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.356266975402832 
+
+
+length Y_N = 21	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-2.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-2.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-2.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         35.5s /  26.4%           4.55GiB /  44.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    9.35s  100.0%   9.35s   2.04GiB  100.0%  2.04GiB
+   iteration      2.68k    9.29s   99.3%  3.47ms   2.03GiB   99.5%   796KiB
+     relax        4.31k    8.72s   93.2%  2.02ms   1.96GiB   95.9%   477KiB
+     incumbent    2.79k   47.4ms    0.5%  17.0μs   6.62MiB    0.3%  2.43KiB
+     dominance    2.68k   42.1ms    0.5%  15.7μs   24.9MiB    1.2%  9.52KiB
+   next node      2.68k   46.1ms    0.5%  17.2μs   9.44MiB    0.5%  3.61KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 10.29 
+total_nodes = 4307 
+pruned_nodes = 2154 
+GAP = 0.0 
+relaxation_time = 8.78 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.05 
+tree_size = 15.888 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4306 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+ GMtime = 1.9039888381958008 
+ total try = 42 
+new feas = 42 	 null_pt = 32
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         46.8s /  38.8%           6.74GiB /  61.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    18.2s  100.0%   9.09s   4.11GiB  100.0%  2.06GiB
+   iteration      5.35k    18.1s   99.6%  3.38ms   4.11GiB   99.8%   804KiB
+     relax        8.61k    17.4s   95.7%  2.02ms   3.97GiB   96.6%   484KiB
+     incumbent    5.58k   91.3ms    0.5%  16.4μs   13.2MiB    0.3%  2.41KiB
+     dominance    5.35k   86.4ms    0.5%  16.2μs   49.8MiB    1.2%  9.52KiB
+   next node      5.35k   47.7ms    0.3%  8.91μs   9.52MiB    0.2%  1.82KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 8.83 
+total_nodes = 4307 
+pruned_nodes = 2154 
+GAP = 0.0 
+relaxation_time = 7.58 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.04 
+tree_size = 15.888 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 4306 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.9039888381958008 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-2.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-2.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-2.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         49.1s /  42.4%           9.40GiB /  73.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    20.8s  100.0%   20.8s   6.87GiB  100.0%  6.87GiB
+   iteration      6.05k    20.7s   99.2%  3.42ms   6.86GiB   99.9%  1.16MiB
+     relax        12.0k    19.9s   95.7%  1.67ms   6.73GiB   97.9%   590KiB
+     dominance    6.05k    105ms    0.5%  17.4μs   52.0MiB    0.7%  8.81KiB
+     incumbent    6.22k   19.3ms    0.1%  3.10μs   1.75MiB    0.0%     296B
+   next node      6.05k    127ms    0.6%  21.0μs   9.54MiB    0.1%  1.62KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 21.84 
+total_nodes = 11953 
+pruned_nodes = 5965 
+GAP = 0.0 
+relaxation_time = 9.86 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.02 
+tree_size = 33.899 
+nb_nodes_EPB = 522 
+nb_nodes_VB = 11430 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+ GMtime = 1.5528528690338135 
+ total try = 42 
+new feas = 42 	 null_pt = 32
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         71.9s /  57.2%           17.3GiB /  84.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    41.1s  100.0%   20.6s   14.6GiB  100.0%  7.32GiB
+   iteration      12.1k    40.9s   99.6%  3.39ms   14.6GiB   99.9%  1.24MiB
+     relax        23.9k    39.9s   97.0%  1.67ms   14.4GiB   98.2%   630KiB
+     dominance    12.1k    206ms    0.5%  17.1μs    104MiB    0.7%  8.81KiB
+     incumbent    12.4k   34.8ms    0.1%  2.80μs   3.25MiB    0.0%     274B
+   next node      12.1k    131ms    0.3%  10.9μs   9.73MiB    0.1%     843B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 20.31 
+total_nodes = 11953 
+pruned_nodes = 5965 
+GAP = 0.0 
+relaxation_time = 8.48 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.01 
+tree_size = 33.899 
+nb_nodes_EPB = 522 
+nb_nodes_VB = 11430 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.5528528690338135 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-2.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-2.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-2.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         70.2s /  62.5%           7.33GiB /  65.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    43.8s  100.0%   43.8s   4.79GiB  100.0%  4.79GiB
+   iteration      3.46k    43.7s   99.8%  12.7ms   4.78GiB   99.8%  1.41MiB
+     relax        5.64k    43.1s   98.4%  7.65ms   4.69GiB   97.9%   872KiB
+     dominance    3.46k   77.0ms    0.2%  22.3μs   31.7MiB    0.6%  9.38KiB
+     incumbent    3.61k   52.5ms    0.1%  14.5μs   8.57MiB    0.2%  2.43KiB
+   next node      3.46k   49.4ms    0.1%  14.3μs   9.46MiB    0.2%  2.80KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 44.71 
+total_nodes = 5637 
+pruned_nodes = 2819 
+GAP = 0.0 
+relaxation_time = 42.72 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.28 
+tree_size = 21.498 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 5636 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.2476799488067627 
+ total try = 42 
+new feas = 42 	 null_pt = 32
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          116s /  74.8%           12.5GiB /  78.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    86.7s  100.0%   43.3s   9.78GiB  100.0%  4.89GiB
+   iteration      6.92k    86.6s   99.9%  12.5ms   9.77GiB   99.9%  1.45MiB
+     relax        11.3k    85.7s   98.9%  7.61ms   9.60GiB   98.2%   893KiB
+     dominance    6.92k    159ms    0.2%  22.9μs   63.4MiB    0.6%  9.38KiB
+     incumbent    7.22k    108ms    0.1%  15.0μs   17.1MiB    0.2%  2.43KiB
+   next node      6.92k   51.5ms    0.1%  7.44μs   9.57MiB    0.1%  1.42KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 42.9 
+total_nodes = 5637 
+pruned_nodes = 2819 
+GAP = 0.0 
+relaxation_time = 41.03 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.27 
+tree_size = 21.498 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 5636 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.2476799488067627 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+./AP/AP_p-3_n-10_ins-2.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-10_ins-2.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-10_ins-2.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         37.9s /  31.9%           3.25GiB /  22.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    12.1s  100.0%   12.1s    745MiB  100.0%   745MiB
+   iteration        407    12.1s   99.5%  29.6ms    736MiB   98.7%  1.81MiB
+     relax          809    11.6s   96.1%  14.4ms    714MiB   95.8%   903KiB
+     dominance      407   5.82ms    0.0%  14.3μs   3.21MiB    0.4%  8.08KiB
+     incumbent      500   3.18ms    0.0%  6.36μs    474KiB    0.1%     971B
+   next node        407   45.9ms    0.4%   113μs   9.37MiB    1.3%  23.6KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 13.0 
+total_nodes = 810 
+pruned_nodes = 436 
+GAP = 0.0 
+relaxation_time = 10.9 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.02 
+tree_size = 2.129 
+nb_nodes_EPB = 117 
+nb_nodes_VB = 692 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.358901023864746 
+ total try = 42 
+new feas = 42 	 null_pt = 32
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         49.4s /  43.9%           3.96GiB /  34.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    21.7s  100.0%   10.8s   1.34GiB  100.0%   688MiB
+   iteration        814    21.6s   99.7%  26.6ms   1.33GiB   99.3%  1.68MiB
+     relax        1.62k    21.2s   97.7%  13.1ms   1.31GiB   97.2%   846KiB
+     dominance      814   11.8ms    0.1%  14.5μs   6.42MiB    0.5%  8.08KiB
+     incumbent    1.00k   6.43ms    0.0%  6.43μs    948KiB    0.1%     971B
+   next node        814   46.1ms    0.2%  56.7μs   9.38MiB    0.7%  11.8KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 9.61 
+total_nodes = 810 
+pruned_nodes = 436 
+GAP = 0.0 
+relaxation_time = 9.18 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.04 
+tree_size = 2.129 
+nb_nodes_EPB = 117 
+nb_nodes_VB = 692 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.358901023864746 
+
+
+length Y_N = 25	 var = 100 ctr = 20
+./AP/AP_p-3_n-15_ins-1.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-1.dat ... 
+ -----------------------------
+solved time 0.02
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-1.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          127s /  78.2%           37.3GiB /  93.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    99.3s  100.0%   99.3s   34.7GiB  100.0%  34.7GiB
+   iteration      13.4k    99.2s   99.9%  7.38ms   34.7GiB  100.0%  2.64MiB
+     relax        20.6k    97.8s   98.5%  4.74ms   34.3GiB   98.8%  1.70MiB
+     incumbent    13.6k    287ms    0.3%  21.2μs   43.8MiB    0.1%  3.30KiB
+     dominance    13.4k    232ms    0.2%  17.2μs    120MiB    0.3%  9.14KiB
+   next node      13.4k   88.4ms    0.1%  6.58μs   9.77MiB    0.0%     762B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 100.25 
+total_nodes = 20615 
+pruned_nodes = 10308 
+GAP = 0.0 
+relaxation_time = 92.1 
+test_dominance_time = 0.05 
+update_incumbent_time = 0.28 
+tree_size = 136.894 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 20614 
+root_relax = false 
+TO = false 
+rootLBS = 9 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+ GMtime = 1.931941032409668 
+ total try = 45 
+new feas = 45 	 null_pt = 33
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          233s /  86.8%           73.0GiB /  96.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     202s  100.0%    101s   70.1GiB  100.0%  35.1GiB
+   iteration      26.9k     202s   99.9%  7.52ms   70.1GiB  100.0%  2.67MiB
+     relax        41.2k     200s   98.8%  4.85ms   69.3GiB   98.9%  1.72MiB
+     incumbent    27.2k    571ms    0.3%  21.0μs   87.5MiB    0.1%  3.30KiB
+     dominance    26.9k    445ms    0.2%  16.6μs    240MiB    0.3%  9.14KiB
+   next node      26.9k   95.2ms    0.0%  3.54μs   10.2MiB    0.0%     397B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 103.04 
+total_nodes = 20615 
+pruned_nodes = 10308 
+GAP = 0.0 
+relaxation_time = 91.24 
+test_dominance_time = 0.05 
+update_incumbent_time = 0.28 
+tree_size = 136.894 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 20614 
+root_relax = false 
+TO = false 
+rootLBS = 9 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.931941032409668 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-1.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-1.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          326s /  89.0%            190GiB /  98.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     290s  100.0%    290s    188GiB  100.0%   188GiB
+   iteration      37.5k     290s   99.9%  7.73ms    188GiB  100.0%  5.11MiB
+     relax        73.2k     287s   98.9%  3.92ms    187GiB   99.5%  2.61MiB
+     dominance    37.5k    627ms    0.2%  16.7μs    305MiB    0.2%  8.32KiB
+     incumbent    37.9k    121ms    0.0%  3.19μs   12.5MiB    0.0%     346B
+   next node      37.5k    111ms    0.0%  2.95μs   10.5MiB    0.0%     293B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 291.32 
+total_nodes = 73231 
+pruned_nodes = 36271 
+GAP = 0.0 
+relaxation_time = 94.13 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.1 
+tree_size = 308.964 
+nb_nodes_EPB = 1966 
+nb_nodes_VB = 71264 
+root_relax = false 
+TO = false 
+rootLBS = 9 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+ GMtime = 1.6643390655517578 
+ total try = 45 
+new feas = 45 	 null_pt = 33
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          680s /  93.1%            399GiB /  99.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     633s  100.0%    317s    395GiB  100.0%   198GiB
+   iteration      75.1k     633s   99.9%  8.43ms    395GiB  100.0%  5.39MiB
+     relax         146k     626s   98.8%  4.28ms    393GiB   99.5%  2.75MiB
+     dominance    75.1k    1.24s    0.2%  16.5μs    610MiB    0.2%  8.32KiB
+     incumbent    75.8k    239ms    0.0%  3.15μs   24.4MiB    0.0%     338B
+   next node      75.1k    133ms    0.0%  1.77μs   11.6MiB    0.0%     163B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 343.21 
+total_nodes = 73231 
+pruned_nodes = 36271 
+GAP = 0.0 
+relaxation_time = 93.28 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.09 
+tree_size = 308.964 
+nb_nodes_EPB = 1966 
+nb_nodes_VB = 71264 
+root_relax = false 
+TO = false 
+rootLBS = 9 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.6643390655517578 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-1.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-1.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          578s /  95.1%           94.9GiB /  97.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     550s  100.0%    550s   92.3GiB  100.0%  92.3GiB
+   iteration      20.7k     549s  100.0%  26.6ms   92.3GiB  100.0%  4.57MiB
+     relax        32.4k     547s   99.6%  16.9ms   91.6GiB   99.3%  2.90MiB
+     incumbent    20.9k    381ms    0.1%  18.2μs   65.2MiB    0.1%  3.19KiB
+     dominance    20.7k    350ms    0.1%  16.9μs    182MiB    0.2%  9.00KiB
+   next node      20.7k   58.5ms    0.0%  2.83μs   10.0MiB    0.0%     506B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 550.52 
+total_nodes = 32355 
+pruned_nodes = 16178 
+GAP = 0.0 
+relaxation_time = 535.6 
+test_dominance_time = 0.1 
+update_incumbent_time = 2.94 
+tree_size = 231.311 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 32354 
+root_relax = true 
+TO = false 
+rootLBS = 18 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.3004369735717773 
+ total try = 45 
+new feas = 45 	 null_pt = 33
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1156s /  97.1%            191GiB /  98.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1123s  100.0%    561s    188GiB  100.0%  94.2GiB
+   iteration      41.4k    1123s  100.0%  27.1ms    188GiB  100.0%  4.66MiB
+     relax        64.7k    1119s   99.6%  17.3ms    187GiB   99.3%  2.96MiB
+     incumbent    41.9k    759ms    0.1%  18.1μs    130MiB    0.1%  3.19KiB
+     dominance    41.4k    701ms    0.1%  16.9μs    364MiB    0.2%  9.00KiB
+   next node      41.4k   70.8ms    0.0%  1.71μs   10.6MiB    0.0%     269B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 573.36 
+total_nodes = 32355 
+pruned_nodes = 16178 
+GAP = 0.0 
+relaxation_time = 551.45 
+test_dominance_time = 0.08 
+update_incumbent_time = 3.2 
+tree_size = 231.311 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 32354 
+root_relax = true 
+TO = false 
+rootLBS = 18 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.3004369735717773 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-1.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-1.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-1.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          138s /  80.8%           16.6GiB /  84.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     111s  100.0%    111s   14.1GiB  100.0%  14.1GiB
+   iteration      2.82k     111s   99.9%  39.5ms   14.1GiB   99.9%  5.10MiB
+     relax        4.87k     111s   99.4%  22.7ms   14.0GiB   99.3%  2.94MiB
+     incumbent    2.97k   46.0ms    0.0%  15.5μs   7.13MiB    0.0%  2.46KiB
+     dominance    2.82k   45.2ms    0.0%  16.0μs   22.8MiB    0.2%  8.29KiB
+   next node      2.82k   48.1ms    0.0%  17.1μs   9.44MiB    0.1%  3.43KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 112.39 
+total_nodes = 4870 
+pruned_nodes = 2505 
+GAP = 0.0 
+relaxation_time = 106.98 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.45 
+tree_size = 28.907 
+nb_nodes_EPB = 255 
+nb_nodes_VB = 4614 
+root_relax = true 
+TO = false 
+rootLBS = 18 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.4665131568908691 
+ total try = 45 
+new feas = 45 	 null_pt = 33
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          250s /  88.5%           30.9GiB /  91.0%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     222s  100.0%    111s   28.1GiB  100.0%  14.1GiB
+   iteration      5.64k     222s  100.0%  39.3ms   28.1GiB  100.0%  5.10MiB
+     relax        9.74k     221s   99.6%  22.7ms   28.0GiB   99.4%  2.94MiB
+     incumbent    5.95k    109ms    0.0%  18.2μs   14.3MiB    0.0%  2.45KiB
+     dominance    5.64k   84.2ms    0.0%  14.9μs   45.7MiB    0.2%  8.29KiB
+   next node      5.64k   50.2ms    0.0%  8.90μs   9.53MiB    0.0%  1.73KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 110.25 
+total_nodes = 4875 
+pruned_nodes = 2508 
+GAP = 0.0 
+relaxation_time = 106.14 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.42 
+tree_size = 28.945 
+nb_nodes_EPB = 260 
+nb_nodes_VB = 4614 
+root_relax = true 
+TO = false 
+rootLBS = 18 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.4665131568908691 
+
+
+length Y_N = 22	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-10.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-10.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-10.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          129s /  79.1%           37.5GiB /  93.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     102s  100.0%    102s   34.9GiB  100.0%  34.9GiB
+   iteration      13.3k     102s   99.9%  7.68ms   34.9GiB  100.0%  2.70MiB
+     relax        21.2k     100s   98.3%  4.71ms   34.4GiB   98.5%  1.66MiB
+     incumbent    13.5k    463ms    0.5%  34.3μs   55.9MiB    0.2%  4.24KiB
+     dominance    13.3k    322ms    0.3%  24.3μs    173MiB    0.5%  13.4KiB
+   next node      13.3k   50.5ms    0.0%  3.81μs   9.76MiB    0.0%     772B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 102.81 
+total_nodes = 21249 
+pruned_nodes = 10625 
+GAP = 0.0 
+relaxation_time = 93.62 
+test_dominance_time = 0.07 
+update_incumbent_time = 0.45 
+tree_size = 158.637 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 21248 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+ GMtime = 1.9662349224090576 
+ total try = 44 
+new feas = 44 	 null_pt = 31
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          238s /  87.3%           73.6GiB /  96.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     208s  100.0%    104s   70.7GiB  100.0%  35.4GiB
+   iteration      26.5k     208s   99.9%  7.84ms   70.7GiB  100.0%  2.73MiB
+     relax        42.5k     205s   98.5%  4.82ms   69.7GiB   98.5%  1.68MiB
+     incumbent    27.0k    936ms    0.5%  34.7μs    112MiB    0.2%  4.23KiB
+     dominance    26.5k    636ms    0.3%  24.0μs    346MiB    0.5%  13.4KiB
+   next node      26.5k   58.4ms    0.0%  2.20μs   10.2MiB    0.0%     402B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 106.19 
+total_nodes = 21249 
+pruned_nodes = 10625 
+GAP = 0.0 
+relaxation_time = 92.49 
+test_dominance_time = 0.06 
+update_incumbent_time = 0.46 
+tree_size = 158.637 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 21248 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.9662349224090576 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-10.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-10.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-10.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          490s /  93.4%            330GiB /  99.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     458s  100.0%    458s    327GiB  100.0%   327GiB
+   iteration      49.1k     457s   99.9%  9.32ms    327GiB  100.0%  6.82MiB
+     relax        96.6k     453s   99.0%  4.69ms    325GiB   99.6%  3.45MiB
+     dominance    49.1k    1.11s    0.2%  22.6μs    577MiB    0.2%  12.0KiB
+     incumbent    49.8k    132ms    0.0%  2.65μs   10.3MiB    0.0%     217B
+   next node      49.1k   89.5ms    0.0%  1.82μs   10.9MiB    0.0%     232B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 458.66 
+total_nodes = 96649 
+pruned_nodes = 48159 
+GAP = 0.0 
+relaxation_time = 114.4 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.09 
+tree_size = 391.656 
+nb_nodes_EPB = 3338 
+nb_nodes_VB = 93310 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+ GMtime = 1.5524499416351318 
+ total try = 44 
+new feas = 44 	 null_pt = 31
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1059s /  96.0%            696GiB /  99.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1017s  100.0%    508s    693GiB  100.0%   347GiB
+   iteration      98.3k    1016s  100.0%  10.3ms    693GiB  100.0%  7.22MiB
+     relax         194k    1006s   98.9%  5.19ms    690GiB   99.6%  3.65MiB
+     dominance    98.3k    2.26s    0.2%  23.0μs   1.13GiB    0.2%  12.0KiB
+     incumbent     100k    251ms    0.0%  2.51μs   19.8MiB    0.0%     208B
+   next node      98.3k    123ms    0.0%  1.25μs   12.4MiB    0.0%     132B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 559.01 
+total_nodes = 97017 
+pruned_nodes = 48348 
+GAP = 0.0 
+relaxation_time = 116.21 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.08 
+tree_size = 393.416 
+nb_nodes_EPB = 3360 
+nb_nodes_VB = 93656 
+root_relax = false 
+TO = false 
+rootLBS = 10 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.5524499416351318 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-10.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-10.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-10.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          511s /  94.4%           83.4GiB /  96.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     482s  100.0%    482s   80.7GiB  100.0%  80.7GiB
+   iteration      17.1k     482s  100.0%  28.2ms   80.7GiB  100.0%  4.84MiB
+     relax        27.7k     480s   99.5%  17.3ms   80.0GiB   99.1%  2.96MiB
+     incumbent    17.4k    587ms    0.1%  33.7μs   73.4MiB    0.1%  4.31KiB
+     dominance    17.1k    439ms    0.1%  25.7μs    220MiB    0.3%  13.2KiB
+   next node      17.1k   55.5ms    0.0%  3.25μs   9.88MiB    0.0%     606B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 483.12 
+total_nodes = 27681 
+pruned_nodes = 13841 
+GAP = 0.0 
+relaxation_time = 468.71 
+test_dominance_time = 0.1 
+update_incumbent_time = 3.39 
+tree_size = 218.154 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 27680 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.3550000190734863 
+ total try = 44 
+new feas = 44 	 null_pt = 31
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1013s /  96.7%            168GiB /  98.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     979s  100.0%    489s    165GiB  100.0%  82.4GiB
+   iteration      34.2k     979s  100.0%  28.6ms    165GiB  100.0%  4.94MiB
+     relax        55.4k     975s   99.6%  17.6ms    163GiB   99.2%  3.02MiB
+     incumbent    34.9k    1.16s    0.1%  33.3μs    147MiB    0.1%  4.31KiB
+     dominance    34.2k    866ms    0.1%  25.3μs    441MiB    0.3%  13.2KiB
+   next node      34.2k   65.0ms    0.0%  1.90μs   10.4MiB    0.0%     319B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 496.83 
+total_nodes = 27681 
+pruned_nodes = 13841 
+GAP = 0.0 
+relaxation_time = 476.46 
+test_dominance_time = 0.09 
+update_incumbent_time = 3.11 
+tree_size = 218.154 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 27680 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.3550000190734863 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-10.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-10.dat ... 
+ -----------------------------
+solved time 0.09
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-10.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          157s /  82.9%           13.1GiB /  80.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     130s  100.0%    130s   10.5GiB  100.0%  10.5GiB
+   iteration      2.10k     130s   99.9%  62.1ms   10.5GiB   99.9%  5.13MiB
+     relax        4.01k     130s   99.5%  32.4ms   10.4GiB   99.2%  2.67MiB
+     dominance    2.10k   43.2ms    0.0%  20.6μs   24.7MiB    0.2%  12.0KiB
+     incumbent    2.28k   31.7ms    0.0%  13.9μs   3.75MiB    0.0%  1.68KiB
+   next node      2.10k   48.4ms    0.0%  23.1μs   9.42MiB    0.1%  4.60KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 131.25 
+total_nodes = 4008 
+pruned_nodes = 2037 
+GAP = 0.0 
+relaxation_time = 123.85 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.2 
+tree_size = 16.284 
+nb_nodes_EPB = 269 
+nb_nodes_VB = 3738 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.4477081298828125 
+ total try = 44 
+new feas = 44 	 null_pt = 31
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          289s /  90.0%           24.0GiB /  88.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     260s  100.0%    130s   21.3GiB  100.0%  10.6GiB
+   iteration      4.21k     260s  100.0%  61.7ms   21.3GiB  100.0%  5.18MiB
+     relax        8.06k     259s   99.7%  32.1ms   21.1GiB   99.4%  2.69MiB
+     dominance    4.21k   90.4ms    0.0%  21.5μs   49.7MiB    0.2%  12.1KiB
+     incumbent    4.60k   63.2ms    0.0%  13.7μs   7.53MiB    0.0%  1.68KiB
+   next node      4.21k   49.8ms    0.0%  11.8μs   9.48MiB    0.0%  2.31KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 129.43 
+total_nodes = 4050 
+pruned_nodes = 2066 
+GAP = 0.0 
+relaxation_time = 123.38 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.21 
+tree_size = 16.549 
+nb_nodes_EPB = 317 
+nb_nodes_VB = 3732 
+root_relax = true 
+TO = false 
+rootLBS = 19 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.4477081298828125 
+
+
+length Y_N = 33	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-2.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-2.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-2.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          132s /  79.5%           39.2GiB /  93.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     105s  100.0%    105s   36.6GiB  100.0%  36.6GiB
+   iteration      15.2k     105s   99.9%  6.90ms   36.6GiB  100.0%  2.47MiB
+     relax        24.1k     102s   97.8%  4.26ms   36.0GiB   98.3%  1.53MiB
+     incumbent    15.4k    726ms    0.7%  47.2μs   69.4MiB    0.2%  4.62KiB
+     dominance    15.2k    470ms    0.4%  31.0μs    254MiB    0.7%  17.2KiB
+   next node      15.2k    102ms    0.1%  6.72μs   9.82MiB    0.0%     679B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 105.75 
+total_nodes = 24051 
+pruned_nodes = 12026 
+GAP = 0.0 
+relaxation_time = 95.21 
+test_dominance_time = 0.11 
+update_incumbent_time = 0.72 
+tree_size = 166.092 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 24050 
+root_relax = false 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+ GMtime = 1.9892640113830566 
+ total try = 41 
+new feas = 41 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          246s /  87.6%           77.1GiB /  96.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     216s  100.0%    108s   74.2GiB  100.0%  37.1GiB
+   iteration      30.3k     216s   99.9%  7.11ms   74.2GiB  100.0%  2.51MiB
+     relax        48.1k     212s   98.1%  4.40ms   73.0GiB   98.3%  1.55MiB
+     incumbent    30.7k    1.44s    0.7%  47.0μs    139MiB    0.2%  4.62KiB
+     dominance    30.3k    869ms    0.4%  28.7μs    509MiB    0.7%  17.2KiB
+   next node      30.3k    111ms    0.1%  3.65μs   10.3MiB    0.0%     356B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 110.98 
+total_nodes = 24051 
+pruned_nodes = 12026 
+GAP = 0.0 
+relaxation_time = 95.66 
+test_dominance_time = 0.1 
+update_incumbent_time = 0.71 
+tree_size = 166.092 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 24050 
+root_relax = false 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.9892640113830566 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-2.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-2.dat ... 
+ -----------------------------
+solved time 0.01
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-2.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          736s /  95.0%            526GiB /  99.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     699s  100.0%    699s    523GiB  100.0%   523GiB
+   iteration      66.0k     699s  100.0%  10.6ms    523GiB  100.0%  8.12MiB
+     relax         130k     693s   99.1%  5.33ms    521GiB   99.6%  4.10MiB
+     dominance    66.0k    1.91s    0.3%  29.0μs   0.97GiB    0.2%  15.4KiB
+     incumbent    66.8k    163ms    0.0%  2.44μs   12.0MiB    0.0%     189B
+   next node      66.0k   90.7ms    0.0%  1.37μs   11.4MiB    0.0%     181B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 700.45 
+total_nodes = 130065 
+pruned_nodes = 64321 
+GAP = 0.0 
+relaxation_time = 145.85 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.12 
+tree_size = 565.343 
+nb_nodes_EPB = 4636 
+nb_nodes_VB = 125428 
+root_relax = false 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+ GMtime = 1.4890990257263184 
+ total try = 41 
+new feas = 41 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1638s /  96.8%           1.09TiB /  99.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1586s  100.0%    793s   1.09TiB  100.0%   559GiB
+   iteration       134k    1586s  100.0%  11.9ms   1.09TiB  100.0%  8.56MiB
+     relax         264k    1570s   99.0%  5.95ms   1.09TiB   99.6%  4.32MiB
+     dominance     134k    3.79s    0.2%  28.4μs   1.97GiB    0.2%  15.4KiB
+     incumbent     135k    322ms    0.0%  2.38μs   23.2MiB    0.0%     180B
+   next node       134k    141ms    0.0%  1.06μs   13.4MiB    0.0%     105B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 886.73 
+total_nodes = 133644 
+pruned_nodes = 66115 
+GAP = 0.0 
+relaxation_time = 153.89 
+test_dominance_time = 0.01 
+update_incumbent_time = 0.11 
+tree_size = 583.272 
+nb_nodes_EPB = 4681 
+nb_nodes_VB = 128962 
+root_relax = false 
+TO = false 
+rootLBS = 12 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.4890990257263184 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-2.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-2.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-2.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          565s /  94.9%           93.6GiB /  97.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     536s  100.0%    536s   90.9GiB  100.0%  90.9GiB
+   iteration      22.5k     535s  100.0%  23.8ms   90.9GiB  100.0%  4.14MiB
+     relax        36.4k     532s   99.4%  14.6ms   90.0GiB   99.0%  2.53MiB
+     incumbent    22.9k    997ms    0.2%  43.6μs   98.3MiB    0.1%  4.40KiB
+     dominance    22.5k    691ms    0.1%  30.8μs    371MiB    0.4%  16.9KiB
+   next node      22.5k   65.4ms    0.0%  2.91μs   10.0MiB    0.0%     468B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 536.51 
+total_nodes = 36437 
+pruned_nodes = 18219 
+GAP = 0.0 
+relaxation_time = 517.41 
+test_dominance_time = 0.16 
+update_incumbent_time = 4.76 
+tree_size = 260.815 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 36436 
+root_relax = true 
+TO = false 
+rootLBS = 23 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.2792270183563232 
+ total try = 41 
+new feas = 41 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1129s /  97.0%            189GiB /  98.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1094s  100.0%    547s    186GiB  100.0%  92.9GiB
+   iteration      45.0k    1094s  100.0%  24.3ms    186GiB  100.0%  4.23MiB
+     relax        72.9k    1088s   99.4%  14.9ms    184GiB   99.0%  2.59MiB
+     incumbent    45.8k    1.98s    0.2%  43.3μs    197MiB    0.1%  4.40KiB
+     dominance    45.0k    1.35s    0.1%  30.1μs    743MiB    0.4%  16.9KiB
+   next node      45.0k   84.3ms    0.0%  1.88μs   10.7MiB    0.0%     250B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 558.8 
+total_nodes = 36437 
+pruned_nodes = 18219 
+GAP = 0.0 
+relaxation_time = 531.6 
+test_dominance_time = 0.15 
+update_incumbent_time = 4.55 
+tree_size = 260.815 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 36436 
+root_relax = true 
+TO = false 
+rootLBS = 23 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.2792270183563232 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+./AP/AP_p-3_n-15_ins-2.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-15_ins-2.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-15_ins-2.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          155s /  82.9%           12.5GiB /  79.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     128s  100.0%    128s   10.0GiB  100.0%  10.0GiB
+   iteration      2.09k     128s   99.9%  61.5ms   9.95GiB   99.9%  4.88MiB
+     relax        4.07k     128s   99.5%  31.4ms   9.88GiB   99.2%  2.49MiB
+     dominance    2.09k   56.7ms    0.0%  27.2μs   28.9MiB    0.3%  14.2KiB
+     incumbent    2.31k   37.5ms    0.0%  16.2μs   3.78MiB    0.0%  1.67KiB
+   next node      2.09k   47.7ms    0.0%  22.9μs   9.42MiB    0.1%  4.62KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 129.27 
+total_nodes = 4069 
+pruned_nodes = 2108 
+GAP = 0.0 
+relaxation_time = 121.94 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.25 
+tree_size = 15.536 
+nb_nodes_EPB = 378 
+nb_nodes_VB = 3690 
+root_relax = true 
+TO = false 
+rootLBS = 23 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.4635820388793945 
+ total try = 41 
+new feas = 41 	 null_pt = 28
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          280s /  89.8%           22.4GiB /  87.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     252s  100.0%    126s   19.7GiB  100.0%  9.84GiB
+   iteration      4.16k     252s  100.0%  60.5ms   19.7GiB  100.0%  4.84MiB
+     relax        8.11k     251s   99.7%  30.9ms   19.5GiB   99.3%  2.47MiB
+     dominance    4.16k    115ms    0.0%  27.6μs   57.7MiB    0.3%  14.2KiB
+     incumbent    4.61k   75.1ms    0.0%  16.3μs   7.56MiB    0.0%  1.68KiB
+   next node      4.16k   49.3ms    0.0%  11.8μs   9.48MiB    0.0%  2.33KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 123.44 
+total_nodes = 4045 
+pruned_nodes = 2095 
+GAP = 0.0 
+relaxation_time = 117.88 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.24 
+tree_size = 15.443 
+nb_nodes_EPB = 366 
+nb_nodes_VB = 3678 
+root_relax = true 
+TO = false 
+rootLBS = 23 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.4635820388793945 
+
+
+length Y_N = 42	 var = 225 ctr = 30
+./AP/AP_p-3_n-20_ins-1.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-1.dat ... 
+ -----------------------------
+solved time 0.02
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-1.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          768s /  95.4%            241GiB /  98.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     733s  100.0%    733s    239GiB  100.0%   239GiB
+   iteration      47.9k     733s  100.0%  15.3ms    239GiB  100.0%  5.10MiB
+     relax        77.3k     722s   98.5%  9.33ms    235GiB   98.6%  3.12MiB
+     incumbent    48.5k    5.54s    0.8%   114μs    388MiB    0.2%  8.19KiB
+     dominance    47.9k    2.02s    0.3%  42.2μs   1.19GiB    0.5%  26.1KiB
+   next node      47.9k   75.6ms    0.0%  1.58μs   10.8MiB    0.0%     237B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 733.93 
+total_nodes = 77327 
+pruned_nodes = 38664 
+GAP = 0.0 
+relaxation_time = 671.14 
+test_dominance_time = 0.43 
+update_incumbent_time = 5.5 
+tree_size = 962.017 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 77326 
+root_relax = false 
+TO = false 
+rootLBS = 16 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 60	 var = 400 ctr = 40
+ GMtime = 2.2300331592559814 
+ total try = 45 
+new feas = 45 	 null_pt = 29
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1549s /  97.0%            487GiB /  99.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1503s  100.0%    752s    484GiB  100.0%   242GiB
+   iteration      95.8k    1503s  100.0%  15.7ms    484GiB  100.0%  5.17MiB
+     relax         155k    1482s   98.6%  9.58ms    477GiB   98.6%  3.16MiB
+     incumbent    96.9k    11.0s    0.7%   113μs    775MiB    0.2%  8.18KiB
+     dominance    95.8k    3.86s    0.3%  40.3μs   2.39GiB    0.5%  26.1KiB
+   next node      95.8k    103ms    0.0%  1.08μs   12.3MiB    0.0%     134B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 770.62 
+total_nodes = 77327 
+pruned_nodes = 38664 
+GAP = 0.0 
+relaxation_time = 672.87 
+test_dominance_time = 0.39 
+update_incumbent_time = 5.4 
+tree_size = 962.017 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 77326 
+root_relax = false 
+TO = false 
+rootLBS = 16 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.2300331592559814 
+
+
+length Y_N = 60	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-1.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-1.dat ... 
+ -----------------------------
+solved time 0.09
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-1.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1.02h /  97.7%           2.10TiB /  99.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    3600s  100.0%   3600s   2.09TiB  100.0%  2.09TiB
+   iteration       177k    3599s  100.0%  20.4ms   2.09TiB  100.0%  12.4MiB
+     relax         350k    3569s   99.1%  10.2ms   2.08TiB   99.5%  6.23MiB
+     dominance     177k    7.53s    0.2%  42.6μs   3.90GiB    0.2%  23.1KiB
+     incumbent     179k    678ms    0.0%  3.79μs   47.3MiB    0.0%     278B
+   next node       177k    202ms    0.0%  1.14μs   14.7MiB    0.0%    87.5B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.87 
+total_nodes = 350108 
+pruned_nodes = 173193 
+GAP = 0.0 
+relaxation_time = 656.52 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.56 
+tree_size = 2902.467 
+nb_nodes_EPB = 6673 
+nb_nodes_VB = 343434 
+root_relax = false 
+TO = true 
+rootLBS = 16 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+ GMtime = 1.5646469593048096 
+ total try = 45 
+new feas = 45 	 null_pt = 29
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         2.04h /  98.0%           4.09TiB /  99.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    2.00h  100.0%   1.00h   4.09TiB  100.0%  2.04TiB
+   iteration       332k    2.00h  100.0%  21.7ms   4.09TiB  100.0%  12.9MiB
+     relax         657k    1.98h   99.2%  10.9ms   4.07TiB   99.5%  6.49MiB
+     dominance     332k    14.0s    0.2%  42.3μs   7.29GiB    0.2%  23.0KiB
+     incumbent     336k    1.29s    0.0%  3.83μs   88.9MiB    0.0%     278B
+   next node       332k    344ms    0.0%  1.04μs   19.5MiB    0.0%    61.6B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.3 
+total_nodes = 307320 
+pruned_nodes = 151814 
+GAP = 0.0 
+relaxation_time = 579.2 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.5 
+tree_size = 2466.418 
+nb_nodes_EPB = 6021 
+nb_nodes_VB = 301298 
+root_relax = false 
+TO = true 
+rootLBS = 16 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.5646469593048096 
+
+
+length Y_N = 58	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-1.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-1.dat ... 
+ -----------------------------
+solved time 0.07
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-1.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         3531s /  98.6%            587GiB /  99.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    3482s  100.0%   3482s    584GiB  100.0%   584GiB
+   iteration      67.9k    3482s  100.0%  51.3ms    584GiB  100.0%  8.81MiB
+     relax         111k    3465s   99.5%  31.1ms    580GiB   99.2%  5.32MiB
+     incumbent    68.8k    7.54s    0.2%   110μs    524MiB    0.1%  7.80KiB
+     dominance    67.9k    3.18s    0.1%  46.8μs   1.67GiB    0.3%  25.8KiB
+   next node      67.9k    102ms    0.0%  1.50μs   11.4MiB    0.0%     177B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3483.19 
+total_nodes = 111463 
+pruned_nodes = 55732 
+GAP = 0.0 
+relaxation_time = 3366.33 
+test_dominance_time = 0.59 
+update_incumbent_time = 35.47 
+tree_size = 1393.514 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 111462 
+root_relax = true 
+TO = false 
+rootLBS = 33 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 60	 var = 400 ctr = 40
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.4820289611816406 
+ total try = 45 
+new feas = 45 	 null_pt = 29
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1.98h /  99.2%           1.08TiB /  99.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1.97h  100.0%   3541s   1.08TiB  100.0%   552GiB
+   iteration       113k    1.97h  100.0%  62.9ms   1.08TiB  100.0%  10.0MiB
+     relax         181k    1.96h   99.6%  38.9ms   1.07TiB   99.3%  6.19MiB
+     incumbent     114k    13.9s    0.2%   122μs   0.94GiB    0.1%  8.68KiB
+     dominance     113k    5.08s    0.1%  45.2μs   2.77GiB    0.3%  25.8KiB
+   next node       113k    152ms    0.0%  1.35μs   12.8MiB    0.0%     119B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.31 
+total_nodes = 69957 
+pruned_nodes = 34520 
+GAP = 0.0 
+relaxation_time = 3500.66 
+test_dominance_time = 0.44 
+update_incumbent_time = 28.94 
+tree_size = 944.887 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 69956 
+root_relax = true 
+TO = true 
+rootLBS = 33 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.4820289611816406 
+
+
+length Y_N = 60	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-1.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-1.dat ... 
+ -----------------------------
+solved time 0.07
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-1.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          682s /  96.0%           69.7GiB /  96.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     655s  100.0%    655s   67.1GiB  100.0%  67.1GiB
+   iteration      7.11k     655s  100.0%  92.1ms   67.1GiB  100.0%  9.67MiB
+     relax        13.5k     653s   99.8%  48.5ms   66.7GiB   99.4%  5.08MiB
+     incumbent    7.52k    421ms    0.1%  56.1μs   28.9MiB    0.0%  3.94KiB
+     dominance    7.11k    270ms    0.0%  37.9μs    163MiB    0.2%  23.5KiB
+   next node      7.11k   52.9ms    0.0%  7.45μs   9.57MiB    0.0%  1.38KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 655.72 
+total_nodes = 13459 
+pruned_nodes = 6862 
+GAP = 0.0 
+relaxation_time = 616.15 
+test_dominance_time = 0.03 
+update_incumbent_time = 2.23 
+tree_size = 102.096 
+nb_nodes_EPB = 798 
+nb_nodes_VB = 12660 
+root_relax = true 
+TO = false 
+rootLBS = 33 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 60	 var = 400 ctr = 40
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.5026440620422363 
+ total try = 45 
+new feas = 45 	 null_pt = 29
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1338s /  97.8%            137GiB /  97.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1308s  100.0%    654s    134GiB  100.0%  66.8GiB
+   iteration      14.2k    1308s  100.0%  92.1ms    134GiB  100.0%  9.64MiB
+     relax        26.9k    1306s   99.8%  48.5ms    133GiB   99.4%  5.06MiB
+     incumbent    15.0k    834ms    0.1%  55.5μs   57.9MiB    0.0%  3.95KiB
+     dominance    14.2k    527ms    0.0%  37.1μs    325MiB    0.2%  23.5KiB
+   next node      14.2k   61.5ms    0.0%  4.33μs   9.79MiB    0.0%     723B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 654.16 
+total_nodes = 13447 
+pruned_nodes = 6854 
+GAP = 0.0 
+relaxation_time = 616.83 
+test_dominance_time = 0.02 
+update_incumbent_time = 2.2 
+tree_size = 101.914 
+nb_nodes_EPB = 786 
+nb_nodes_VB = 12660 
+root_relax = true 
+TO = false 
+rootLBS = 33 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.5026440620422363 
+
+
+length Y_N = 60	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-2.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-2.dat ... 
+ -----------------------------
+solved time 0.07
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-2.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1054s /  96.2%            333GiB /  99.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    1014s  100.0%   1014s    330GiB  100.0%   330GiB
+   iteration      62.3k    1014s  100.0%  16.3ms    330GiB  100.0%  5.43MiB
+     relax         100k    1001s   98.7%  10.1ms    326GiB   98.8%  3.35MiB
+     incumbent    62.7k    6.32s    0.6%   101μs    497MiB    0.1%  8.11KiB
+     dominance    62.3k    2.17s    0.2%  34.8μs   1.37GiB    0.4%  23.0KiB
+   next node      62.3k   85.2ms    0.0%  1.37μs   11.3MiB    0.0%     189B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 1015.41 
+total_nodes = 99601 
+pruned_nodes = 49801 
+GAP = 0.0 
+relaxation_time = 938.71 
+test_dominance_time = 0.53 
+update_incumbent_time = 6.28 
+tree_size = 1286.456 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 99600 
+root_relax = false 
+TO = false 
+rootLBS = 15 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+ GMtime = 2.3507721424102783 
+ total try = 46 
+new feas = 46 	 null_pt = 27
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         2129s /  97.5%            672GiB /  99.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    2076s  100.0%   1038s    668GiB  100.0%   334GiB
+   iteration       125k    2076s  100.0%  16.7ms    668GiB  100.0%  5.49MiB
+     relax         199k    2050s   98.8%  10.3ms    660GiB   98.8%  3.39MiB
+     incumbent     125k    12.7s    0.6%   101μs   0.97GiB    0.1%  8.10KiB
+     dominance     125k    4.82s    0.2%  38.7μs   2.74GiB    0.4%  23.0KiB
+   next node       125k    124ms    0.0%   993ns   13.2MiB    0.0%     111B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 1061.76 
+total_nodes = 99569 
+pruned_nodes = 49785 
+GAP = 0.0 
+relaxation_time = 942.74 
+test_dominance_time = 0.46 
+update_incumbent_time = 6.32 
+tree_size = 1286.349 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 99568 
+root_relax = false 
+TO = false 
+rootLBS = 15 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.3507721424102783 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-2.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-2.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-2.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1.02h /  97.8%           2.04TiB /  99.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    3600s  100.0%   3600s   2.04TiB  100.0%  2.04TiB
+   iteration       212k    3599s  100.0%  17.0ms   2.04TiB  100.0%  10.1MiB
+     relax         418k    3567s   99.1%  8.54ms   2.03TiB   99.4%  5.09MiB
+     dominance     212k    7.92s    0.2%  37.4μs   4.15GiB    0.2%  20.6KiB
+     incumbent     213k    873ms    0.0%  4.09μs   60.1MiB    0.0%     296B
+   next node       212k    220ms    0.0%  1.04μs   15.8MiB    0.0%    78.3B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.91 
+total_nodes = 417878 
+pruned_nodes = 206762 
+GAP = 0.0 
+relaxation_time = 781.07 
+test_dominance_time = 0.04 
+update_incumbent_time = 0.74 
+tree_size = 3188.511 
+nb_nodes_EPB = 7265 
+nb_nodes_VB = 410612 
+root_relax = false 
+TO = true 
+rootLBS = 15 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+ GMtime = 3.1454989910125732 
+ total try = 46 
+new feas = 46 	 null_pt = 27
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         2.04h /  98.1%           3.98TiB /  99.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    2.00h  100.0%   3600s   3.98TiB  100.0%  1.99TiB
+   iteration       398k    2.00h  100.0%  18.1ms   3.98TiB  100.0%  10.5MiB
+     relax         784k    1.98h   99.1%  9.09ms   3.96TiB   99.5%  5.29MiB
+     dominance     398k    15.1s    0.2%  38.0μs   7.76GiB    0.2%  20.5KiB
+     incumbent     401k    1.61s    0.0%  4.02μs    109MiB    0.0%     286B
+   next node       398k    377ms    0.0%   949ns   21.5MiB    0.0%    56.7B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.06 
+total_nodes = 366590 
+pruned_nodes = 180900 
+GAP = 0.0 
+relaxation_time = 692.24 
+test_dominance_time = 0.04 
+update_incumbent_time = 0.62 
+tree_size = 2659.009 
+nb_nodes_EPB = 6547 
+nb_nodes_VB = 360042 
+root_relax = false 
+TO = true 
+rootLBS = 15 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 3.1454989910125732 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-2.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-2.dat ... 
+ -----------------------------
+solved time 0.07
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-2.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1.01h /  99.0%            553GiB /  99.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    3600s  100.0%   3600s    550GiB  100.0%   550GiB
+   iteration      41.4k    3600s  100.0%  87.0ms    550GiB  100.0%  13.6MiB
+     relax        62.0k    3590s   99.7%  57.9ms    548GiB   99.5%  9.05MiB
+     incumbent    41.7k    5.41s    0.2%   130μs    447MiB    0.1%  11.0KiB
+     dominance    41.4k    1.66s    0.0%  40.2μs    918MiB    0.2%  22.7KiB
+   next node      41.4k   82.5ms    0.0%  1.99μs   10.6MiB    0.0%     269B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3601.03 
+total_nodes = 62017 
+pruned_nodes = 30714 
+GAP = 0.0 
+relaxation_time = 3539.36 
+test_dominance_time = 0.5 
+update_incumbent_time = 28.55 
+tree_size = 916.084 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 62016 
+root_relax = true 
+TO = true 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.5882668495178223 
+ total try = 46 
+new feas = 46 	 null_pt = 27
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         2.01h /  99.4%           1.05TiB /  99.7%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    2.00h  100.0%   1.00h   1.05TiB  100.0%   537GiB
+   iteration      77.4k    2.00h  100.0%  93.0ms   1.05TiB  100.0%  14.2MiB
+     relax         115k    1.99h   99.7%  62.3ms   1.04TiB   99.6%  9.50MiB
+     incumbent    78.0k    10.3s    0.1%   132μs    853MiB    0.1%  11.2KiB
+     dominance    77.4k    3.20s    0.0%  41.3μs   1.67GiB    0.2%  22.7KiB
+   next node      77.4k    115ms    0.0%  1.49μs   11.7MiB    0.0%     159B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.34 
+total_nodes = 53265 
+pruned_nodes = 26340 
+GAP = 0.0 
+relaxation_time = 3531.92 
+test_dominance_time = 0.47 
+update_incumbent_time = 25.74 
+tree_size = 799.868 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 53264 
+root_relax = true 
+TO = true 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.5882668495178223 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-2.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-2.dat ... 
+ -----------------------------
+solved time 0.07
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-2.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          854s /  96.6%           73.8GiB /  96.5%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     824s  100.0%    824s   71.2GiB  100.0%  71.2GiB
+   iteration      8.48k     824s  100.0%  97.2ms   71.2GiB  100.0%  8.60MiB
+     relax        15.8k     823s   99.8%  51.9ms   70.8GiB   99.4%  4.58MiB
+     incumbent    8.90k    411ms    0.0%  46.1μs   28.2MiB    0.0%  3.25KiB
+     dominance    8.48k    356ms    0.0%  42.0μs    175MiB    0.2%  21.1KiB
+   next node      8.48k   54.7ms    0.0%  6.45μs   9.61MiB    0.0%  1.16KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 825.5 
+total_nodes = 15838 
+pruned_nodes = 8023 
+GAP = 0.0 
+relaxation_time = 785.63 
+test_dominance_time = 0.03 
+update_incumbent_time = 2.19 
+tree_size = 109.976 
+nb_nodes_EPB = 709 
+nb_nodes_VB = 15128 
+root_relax = true 
+TO = false 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.695127010345459 
+ total try = 46 
+new feas = 46 	 null_pt = 27
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1682s /  98.1%            145GiB /  97.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1650s  100.0%    825s    142GiB  100.0%  70.8GiB
+   iteration      16.9k    1650s  100.0%  97.8ms    142GiB  100.0%  8.59MiB
+     relax        31.5k    1647s   99.8%  52.3ms    141GiB   99.4%  4.58MiB
+     incumbent    17.7k    813ms    0.0%  45.9μs   56.4MiB    0.0%  3.27KiB
+     dominance    16.9k    648ms    0.0%  38.4μs    348MiB    0.2%  21.1KiB
+   next node      16.9k   60.1ms    0.0%  3.56μs   9.87MiB    0.0%     613B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 825.64 
+total_nodes = 15662 
+pruned_nodes = 7924 
+GAP = 0.0 
+relaxation_time = 788.44 
+test_dominance_time = 0.03 
+update_incumbent_time = 2.12 
+tree_size = 109.232 
+nb_nodes_EPB = 663 
+nb_nodes_VB = 14998 
+root_relax = true 
+TO = false 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.695127010345459 
+
+
+length Y_N = 53	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-3.dat  ...  bb
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-3.dat ... 
+ -----------------------------
+solved time 0.06
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-3.dat by bb  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          633s /  94.7%            199GiB /  98.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     599s  100.0%    599s    196GiB  100.0%   196GiB
+   iteration      41.6k     599s  100.0%  14.4ms    196GiB  100.0%  4.82MiB
+     relax        66.7k     590s   98.5%  8.85ms    193GiB   98.6%  2.97MiB
+     incumbent    41.9k    4.42s    0.7%   105μs    317MiB    0.2%  7.75KiB
+     dominance    41.6k    1.54s    0.3%  37.1μs   1.02GiB    0.5%  25.7KiB
+   next node      41.6k   71.8ms    0.0%  1.72μs   10.6MiB    0.0%     268B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 599.85 
+total_nodes = 66665 
+pruned_nodes = 33333 
+GAP = 0.0 
+relaxation_time = 553.33 
+test_dominance_time = 0.33 
+update_incumbent_time = 4.38 
+tree_size = 782.266 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 66664 
+root_relax = false 
+TO = false 
+rootLBS = 14 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+ GMtime = 2.0949289798736572 
+ total try = 43 
+new feas = 43 	 null_pt = 26
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1276s /  96.5%            400GiB /  99.1%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1231s  100.0%    615s    396GiB  100.0%   198GiB
+   iteration      83.2k    1230s  100.0%  14.8ms    396GiB  100.0%  4.87MiB
+     relax         133k    1213s   98.6%  9.10ms    391GiB   98.7%  3.00MiB
+     incumbent    83.9k    8.88s    0.7%   106μs    634MiB    0.2%  7.74KiB
+     dominance    83.2k    3.21s    0.3%  38.6μs   2.04GiB    0.5%  25.7KiB
+   next node      83.2k   96.3ms    0.0%  1.16μs   11.9MiB    0.0%     150B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 631.8 
+total_nodes = 66665 
+pruned_nodes = 33333 
+GAP = 0.0 
+relaxation_time = 559.94 
+test_dominance_time = 0.39 
+update_incumbent_time = 4.43 
+tree_size = 782.266 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 66664 
+root_relax = false 
+TO = false 
+rootLBS = 14 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.0949289798736572 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-3.dat  ...  bb_EPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-3.dat ... 
+ -----------------------------
+solved time 0.02
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-3.dat by bb_EPB  ... 
+ -----------------------------
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1.02h /  97.7%           2.13TiB /  99.8%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    3600s  100.0%   3600s   2.13TiB  100.0%  2.13TiB
+   iteration       161k    3599s  100.0%  22.4ms   2.13TiB  100.0%  13.9MiB
+     relax         316k    3572s   99.2%  11.3ms   2.12TiB   99.6%  7.04MiB
+     dominance     161k    6.75s    0.2%  42.0μs   3.57GiB    0.2%  23.3KiB
+     incumbent     162k    780ms    0.0%  4.80μs   54.0MiB    0.0%     349B
+   next node       161k    221ms    0.0%  1.38μs   14.3MiB    0.0%    93.1B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.84 
+total_nodes = 316326 
+pruned_nodes = 156510 
+GAP = 0.0 
+relaxation_time = 630.67 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.67 
+tree_size = 2318.247 
+nb_nodes_EPB = 8759 
+nb_nodes_VB = 307566 
+root_relax = false 
+TO = true 
+rootLBS = 14 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+ GMtime = 1.5517489910125732 
+ total try = 43 
+new feas = 43 	 null_pt = 26
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         2.04h /  98.0%           4.17TiB /  99.9%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    2.00h  100.0%   3600s   4.16TiB  100.0%  2.08TiB
+   iteration       310k    2.00h  100.0%  23.2ms   4.16TiB  100.0%  14.1MiB
+     relax         610k    1.98h   99.2%  11.7ms   4.15TiB   99.6%  7.13MiB
+     dominance     310k    13.0s    0.2%  41.9μs   6.88GiB    0.2%  23.3KiB
+     incumbent     313k    1.52s    0.0%  4.86μs    104MiB    0.0%     347B
+   next node       310k    348ms    0.0%  1.12μs   18.8MiB    0.0%    63.7B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3600.05 
+total_nodes = 293614 
+pruned_nodes = 145034 
+GAP = 0.0 
+relaxation_time = 578.52 
+test_dominance_time = 0.03 
+update_incumbent_time = 0.64 
+tree_size = 2108.518 
+nb_nodes_EPB = 7987 
+nb_nodes_VB = 285626 
+root_relax = false 
+TO = true 
+rootLBS = 14 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.5517489910125732 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-3.dat  ...  bc_rootRelax
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-3.dat ... 
+ -----------------------------
+solved time 0.07
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-3.dat by bc_rootRelax  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         3154s /  98.6%            482GiB /  99.4%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1    3110s  100.0%   3110s    479GiB  100.0%   479GiB
+   iteration      57.0k    3109s  100.0%  54.6ms    479GiB  100.0%  8.62MiB
+     relax        92.0k    3097s   99.6%  33.7ms    476GiB   99.2%  5.29MiB
+     incumbent    57.5k    5.96s    0.2%   104μs    434MiB    0.1%  7.73KiB
+     dominance    57.0k    2.46s    0.1%  43.1μs   1.38GiB    0.3%  25.4KiB
+   next node      57.0k   85.1ms    0.0%  1.49μs   11.1MiB    0.0%     204B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3110.63 
+total_nodes = 92027 
+pruned_nodes = 46014 
+GAP = 0.0 
+relaxation_time = 3027.14 
+test_dominance_time = 0.51 
+update_incumbent_time = 27.78 
+tree_size = 1101.978 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 92026 
+root_relax = true 
+TO = false 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 2.5318899154663086 
+ total try = 43 
+new feas = 43 	 null_pt = 26
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:         1.81h /  99.0%           0.96TiB /  99.6%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2    1.79h  100.0%   3229s   0.96TiB  100.0%   490GiB
+   iteration       114k    1.79h  100.0%  56.7ms   0.96TiB  100.0%  8.81MiB
+     relax         184k    1.79h   99.6%  35.0ms   0.95TiB   99.3%  5.41MiB
+     incumbent     115k    12.0s    0.2%   105μs    868MiB    0.1%  7.73KiB
+     dominance     114k    4.92s    0.1%  43.2μs   2.76GiB    0.3%  25.4KiB
+   next node       114k    138ms    0.0%  1.21μs   12.8MiB    0.0%     118B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 3349.52 
+total_nodes = 92027 
+pruned_nodes = 46014 
+GAP = 0.0 
+relaxation_time = 3227.07 
+test_dominance_time = 0.5 
+update_incumbent_time = 28.45 
+tree_size = 1101.978 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 92026 
+root_relax = true 
+TO = false 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 2.5318899154663086 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+./AP/AP_p-3_n-20_ins-3.dat  ...  bc_rootRelaxEPB
+
+ -----------------------------
+ solving mono ./AP/AP_p-3_n-20_ins-3.dat ... 
+ -----------------------------
+solved time 0.07
+
+ -----------------------------
+ solving ./AP/AP_p-3_n-20_ins-3.dat by bc_rootRelaxEPB  ... 
+ -----------------------------
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          494s /  94.6%           55.4GiB /  95.3%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              1     467s  100.0%    467s   52.8GiB  100.0%  52.8GiB
+   iteration      6.57k     467s  100.0%  71.1ms   52.7GiB  100.0%  8.23MiB
+     relax        12.3k     465s   99.7%  37.7ms   52.4GiB   99.3%  4.35MiB
+     incumbent    6.99k    361ms    0.1%  51.6μs   23.7MiB    0.0%  3.47KiB
+     dominance    6.57k    272ms    0.1%  41.5μs    152MiB    0.3%  23.6KiB
+   next node      6.57k   49.2ms    0.0%  7.49μs   9.56MiB    0.0%  1.49KiB
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 468.01 
+total_nodes = 12335 
+pruned_nodes = 6312 
+GAP = 0.0 
+relaxation_time = 435.9 
+test_dominance_time = 0.02 
+update_incumbent_time = 1.84 
+tree_size = 91.911 
+nb_nodes_EPB = 690 
+nb_nodes_VB = 11644 
+root_relax = true 
+TO = false 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+length Y_N = 59	 var = 400 ctr = 40
+LBSexhaustive ? true ; λ_strategy : 0 ; λ_limit : 1048576 
+
+ GMtime = 1.5486738681793213 
+ total try = 43 
+new feas = 43 	 null_pt = 26
+ ──────────────────────────────────────────────────────────────────────────
+                                  Time                    Allocations      
+                         ───────────────────────   ────────────────────────
+    Tot / % measured:          960s /  96.9%            109GiB /  97.2%    
+
+ Section         ncalls     time    %tot     avg     alloc    %tot      avg
+ ──────────────────────────────────────────────────────────────────────────
+ BB loop              2     930s  100.0%    465s    106GiB  100.0%  52.8GiB
+   iteration      13.1k     930s  100.0%  70.8ms    106GiB  100.0%  8.23MiB
+     relax        24.7k     928s   99.7%  37.6ms    105GiB   99.3%  4.35MiB
+     incumbent    14.0k    722ms    0.1%  51.6μs   47.4MiB    0.0%  3.47KiB
+     dominance    13.1k    508ms    0.1%  38.6μs    303MiB    0.3%  23.6KiB
+   next node      13.1k   53.2ms    0.0%  4.05μs   9.76MiB    0.0%     779B
+ ────────────────────────────────────────────────────────────────────────── # informations of B&B algorithm : 
+total_times_used = 463.44 
+total_nodes = 12345 
+pruned_nodes = 6316 
+GAP = 0.0 
+relaxation_time = 433.11 
+test_dominance_time = 0.02 
+update_incumbent_time = 1.79 
+tree_size = 91.96 
+nb_nodes_EPB = 686 
+nb_nodes_VB = 11658 
+root_relax = true 
+TO = false 
+rootLBS = 29 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = true 
+heur_time = 1.5486738681793213 
+
+
+length Y_N = 59	 var = 400 ctr = 40
