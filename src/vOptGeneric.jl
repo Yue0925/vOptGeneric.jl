@@ -49,6 +49,8 @@ function vSolve(m::JuMP.Model ; relax=false,    # LP relaxation
                                 λ_strategy = 0,         # λ searching strategy 0 -> dicho, 1 -> chordal, 2 -> dynamic
                                 λ_limit = 2^20 ,        # the number of λ optimized in each node 
                                 heuristic = false,      # if apply GM heuristic global before root node 
+                                mixed = false,
+                                mixed2 = false,
                                 args...)
 
     vd = getvOptData(m)
@@ -70,13 +72,13 @@ function vSolve(m::JuMP.Model ; relax=false,    # LP relaxation
     elseif method == :bb_EPB || method == :branchboundEPB
         return solve_branchboundcut(m, EPB = true, heuristic = heuristic)
     elseif method == :bc_rootRelax || method == :branchcutRootRelax
-        return solve_branchboundcut(m, root_relax = true, LBSexhaustive = LBSexhaustive , λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic)
+        return solve_branchboundcut(m, root_relax = true, LBSexhaustive = LBSexhaustive , λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic, mixed = mixed, mixed2 = mixed2)
     elseif method == :bc_rootRelaxEPB || method == :branchcutRootRelaxEPB
-        return solve_branchboundcut(m, root_relax = true, EPB = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic)
+        return solve_branchboundcut(m, root_relax = true, EPB = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic, mixed = mixed, mixed2 = mixed2)
     elseif method == :bc_rootRelaxCP || method == :branchcutRootRelaxCP
-        return solve_branchboundcut(m, cp = true, root_relax = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic)
+        return solve_branchboundcut(m, cp = true, root_relax = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic, mixed = mixed, mixed2 = mixed2)
     elseif method == :bc_rootRelaxCPEPB || method == :branchcutRootRelaxCPEPB
-        return solve_branchboundcut(m, cp = true, root_relax = true, EPB = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic)
+        return solve_branchboundcut(m, cp = true, root_relax = true, EPB = true, LBSexhaustive = LBSexhaustive, λ_strategy = λ_strategy, λ_limit = λ_limit, heuristic = heuristic, mixed = mixed, mixed2= mixed2)
     elseif method == :bc || method == :branchcut
         return solve_branchboundcut(m, cp = true, heuristic = heuristic )
     elseif method == :bc_EPB || method == :branchcutEPB

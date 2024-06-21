@@ -78,12 +78,14 @@ mutable struct StatInfo
     total_time_fusion::Float64  
     heur :: Bool 
     heur_time :: Float64
+    mixed :: Bool
+    mixed2 :: Bool
     # status::MOI.TerminationStatusCode 
 end
 
 function StatInfo()
     return StatInfo(0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false, CutsInfo(), 0, 0, false, false, 0, true, 0, 2^20,
-                0, 0, 0.0, 0, 0.0, 0.0, false, 0.0)
+                0, 0, 0.0, 0, 0.0, 0.0, false, 0.0, false, false)
 end
 
 function Base.:show(io::IO, info::StatInfo)
@@ -109,7 +111,9 @@ function Base.:show(io::IO, info::StatInfo)
         "total_time_cplex = $(info.total_time_cplex) \n" , 
         "total_time_fusion = $(info.total_time_fusion) \n",
         "heur = $(info.heur) \n",
-        "heur_time = $(info.heur_time) \n"
+        "heur_time = $(info.heur_time) \n",
+        "mixed = $(info.mixed) \n",
+        "mixed2 = $(info.mixed2) \n"
         )
     if info.cp_activated println(io, info.cuts_infos) end
 end

@@ -350,10 +350,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
     λ = [1.0, 0.0] ; newPt = false
-    # # todo : analyse 
-    # start = time()
+    # todo : analyse 
+    start = time()
     JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
-    # pb.info.total_time_cplex += (time() - start)
+    pb.info.total_time_cplex += (time() - start)
 
     iter_count += 1 ; pb.info.λ_iter += 1
 
@@ -401,7 +401,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             # # todo : analyse 
             # start = time()
             JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
-            # pb.info.total_time_cplex += (time() - start)
+            # pb.info.total_time_cplex += (time() - start) ; pb.info.λ_iter += 1
 
             x_star = JuMP.value.(varArray_copied) 
 
@@ -439,10 +439,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
     x_star = [] ; bst_val = -Inf 
     idx = -1 ; val = -Inf
     λ = [0.0, 1.0] ; newPt = false
-    # # todo : analyse 
-    # start = time()
+    # todo : analyse 
+    start = time()
     JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
-    # pb.info.total_time_cplex += (time() - start)
+    pb.info.total_time_cplex += (time() - start)
     iter_count += 1 ; pb.info.λ_iter += 1
 
     ext_r = Solution()
@@ -489,7 +489,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
             # # todo : analyse 
             # start = time()
             JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
-            # pb.info.total_time_cplex += (time() - start)
+            # pb.info.total_time_cplex += (time() - start) ; pb.info.λ_iter += 1
 
             x_star = JuMP.value.(varArray_copied)
             if JuMP.is_valid(pb.lp_copied, ctr_bound)
@@ -564,10 +564,10 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
 
         x_star = [] ; bst_val = -Inf 
         newPt = false 
-        # # todo : analyse 
-        # start = time()
+        # todo : analyse 
+        start = time()
         JuMP.optimize!(pb.m, ignore_optimize_hook=true) ; status = JuMP.termination_status(pb.m)
-        # pb.info.total_time_cplex += (time() - start)
+        pb.info.total_time_cplex += (time() - start)
 
         val = -Inf ; idx = -1
         idxL = -1 ; newPtL = false 
@@ -611,7 +611,7 @@ function LBSinvokingIPsolver(pb::BO01Problem , L::RelaxedBoundSet , K::Int64, ec
                 # # todo : analyse 
                 # start = time()
                 JuMP.optimize!(pb.lp_copied, ignore_optimize_hook=true)
-                # pb.info.total_time_cplex += (time() - start)
+                # pb.info.total_time_cplex += (time() - start) ; pb.info.λ_iter += 1
 
                 x_star = JuMP.value.(varArray_copied) 
     

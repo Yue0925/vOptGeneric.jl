@@ -325,7 +325,9 @@ function solve_branchboundcut(m::JuMP.Model;
                                             LBSexhaustive = true,       # LBS construction exhaustive at each node 
                                             λ_strategy = 0,         # λ searching strategy 0 -> dicho, 1 -> chordal, 2 -> dynamic
                                             λ_limit = 2^20 ,        # the number of λ optimized in each node         
-                                            heuristic = false,    
+                                            heuristic = false,   
+                                            mixed = false, 
+                                            mixed2 = false,
                                             args...)
     converted, f = formatting(m)
 
@@ -346,10 +348,16 @@ function solve_branchboundcut(m::JuMP.Model;
     # todo : strict tolerance following objective coeff (KP instance)
     # length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
 
-    if root_relax 
+    if root_relax && mixed2
+        undo_relax()
+        println("param in root_relax && mixed2")
+    elseif root_relax 
+        println("param in root_relax")
         undo_relax()
         problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+        if !mixed
+            JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+        end
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Strategy_HeuristicEffort", 0) # todo disable heur 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_Preprocessing_Presolve", 0) # todo disable preprocessing 
         # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", 0.01) # todo : time limit in sec 
@@ -404,6 +412,34 @@ function solve_branchboundcut(m::JuMP.Model;
     ptl = root.RBS.natural_order_vect.sols[1].y ; ptr = root.RBS.natural_order_vect.sols[end].y
     worst_nadir_pt = [ptr[1], ptl[2]] 
 
+    # todo 
+    if root_relax && mixed
+        tl = round((problem.info.total_time_cplex/problem.info.λ_iter) *3/4, digits = 4)
+        println("\t root cplex avg time $tl (s) ... " )
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", tl) # todo : time limit in sec 
+
+    elseif root_relax && mixed2
+        # println("\t root \n", problem.m)
+        root_relax = false ; undo_relax = JuMP.relax_integrality(problem.m)
+        # problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
+
+        for sol in root.RBS.natural_order_vect.sols
+            if length(sol.xEquiv) > 0
+                JuMP.@constraint(problem.m, 
+                sol.λ[1] * (problem.c[1, 1] + problem.c[1, 2:end]'*problem.varArray) +
+                sol.λ[2] * (problem.c[2, 1] + problem.c[2, 2:end]'*problem.varArray) ≥ sol.λ'* sol.y
+                )
+                JuMP.@constraint(problem.lp_copied, 
+                sol.λ[1] * (problem.c[1, 1] + problem.c[1, 2:end]'*problem.varArray_copied) +
+                sol.λ[2] * (problem.c[2, 1] + problem.c[2, 2:end]'*problem.varArray_copied) ≥ sol.λ'* sol.y
+                )
+            end
+        end
+        # println("\t after root \n", problem.m)
+
+    # elseif root_relax
+    #     JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+    end
 
     # continue to fathom the node until todo list is empty
     time_acc = time()
