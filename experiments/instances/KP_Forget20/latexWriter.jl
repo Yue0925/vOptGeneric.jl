@@ -1,3 +1,135 @@
+# compare SP and MP cuts 
+function comparisonsCP(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/comparisonBCTable.tex", "w")
+
+    latex = raw"""\begin{table}[!ht]
+    \centering
+    % \resizebox{\columnwidth}{!}{%
+    \hspace*{-1cm}\begin{tabular}{lcccccc}
+    \toprule
+    \textbf{Instance} & \textbf{n} & \textbf{m} & \multicolumn{2}{c}{\textbf{B\&C}}  & \multicolumn{2}{c}{\textbf{EPB B\&C}}
+    \\
+    \cmidrule(r){4-5} \cmidrule(r){6-7} 
+    ~ & ~ & ~ & \textbf{SP cuts} &\textbf{MP cuts} & \textbf{SP cuts} &\textbf{MP cuts} \\
+    \midrule
+    """
+    println(fout, latex)
+    methods = ["bc", "bc_EPB"] ;  
+
+    n = 0
+    count = 0
+    avg_n = 0 ; avg_m = 0
+    avgSP = Dict(k => 0.0 for k in methods) ; avgMP = Dict(k => 0.0 for k in methods)
+
+
+    # ∀ file in dicho
+    for file in readdir(work_dir * "/epsilon/")
+        if split(file, ".")[end] == "png"
+            continue
+        end
+
+        sp = [] ; mp = []
+
+        include(work_dir * "/epsilon/" * file)
+
+
+        # new n folder 
+        if n!= vars
+            if n!= 0  
+                avg_n = round( avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+                for m in methods
+                    avgSP[m] = round(avgSP[m]/count, digits = 2); avgMP[m] = round(avgMP[m]/count, digits = 2) 
+                end
+
+                print(fout, "\\cline{1-9} avg & " * string(avg_n) * " & " * string(avg_m) )
+
+                for m in methods
+                    print(fout, " & " * string(avgSP[m]) * "& " * string(avgMP[m]))
+                end
+
+                println(fout, "\\\\ \\hline")
+            end
+
+            n = vars 
+            count = 0
+            avg_n = 0 ; avg_m = 0
+            avgSP = Dict(k => 0.0 for k in methods) ; avgMP = Dict(k => 0.0 for k in methods)
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+        end
+        count += 1
+        avg_n += vars ; avg_m += constr
+
+        name_seg = split(file, "_")
+        for s in name_seg[1:end-1]
+            print(fout, s * "\\_")
+        end
+        print(fout, name_seg[end] * " & ")
+        print(fout, string(vars) * " & " * string(constr) * " & ")
+
+        # ∀ method 
+        for m in methods
+            if isfile(work_dir * "/" * m * "/" * file)
+                include(work_dir * "/" * m * "/" * file)
+                push!(sp, sp_cuts); push!(mp, mp_cuts)
+
+                avgSP[m] += sp_cuts ; avgMP[m] += mp_cuts
+            else
+                push!(sp, -1); push!(mp, -1)
+            end
+        end
+
+        # ------------------
+        for i=1:length(methods)-1
+            if sp[i] == -1
+                print(fout, " - & ")
+            else
+                print(fout, string(sp[i]) * " & ")
+            end
+
+            if mp[i] == -1
+                print(fout, " - & ")
+            else
+                print(fout, string(mp[i]) * " & ")
+            end
+
+        end
+
+
+        print(fout, string(sp[end]) * " & ") 
+        
+        println(fout, string(mp[end]) * " \\\\")
+
+    end
+
+    avg_n = round( avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+    for m in methods
+        avgSP[m] = round(avgSP[m]/count, digits = 2); avgMP[m] = round(avgMP[m]/count, digits = 2) 
+    end
+
+    print(fout, "\\cline{1-7} \\textbf{avg} & \\textbf{" * string(avg_n) * "} & \\textbf{" * string(avg_m) )
+
+    for m in methods
+        print(fout, "} & \\textbf{" * string(avgSP[m]) * "} & \\textbf{" * string(avgMP[m]))
+    end
+
+    println(fout, "} " * "\\\\ \\cline{1-7}")
+
+    latex = raw"""\bottomrule
+    \end{tabular}
+    }%"""
+    println(fout, latex)
+    println(fout, "\\caption{Comparison of the B\\&B algorithms performances for instances $instances .}")
+    println(fout, "%\\label{tab:table_compareBB_$instances }")
+    println(fout, "\\end{table}")
+    close(fout)
+
+end
+
 
 function comparisons(instances::String)
     work_dir = "../../results/" * instances
@@ -146,4 +278,5 @@ function comparisons(instances::String)
 
 end
 
-comparisons("KP_Forget")
+# comparisons("KP_Forget")
+comparisonsCP("KP_Forget")

@@ -57,11 +57,12 @@ function comparisonsLambdaLimits(instances::String)
     # method => n => (λ -> time)                     method => n => (λ -> nodes)
     avg_time = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
     avg_node = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
-    count_per_n = Dict{Int64, Int64}()
+    avg_n = [100, 500, 1000, 1500, 2000, 2500, 3000]
+    count_per_n = Dict{Int64, Int64}(n=> 0 for n in avg_n)
 
     for m in methods
-        avg_time[m] = Dict{Int64, Dict{Int64, Float64}}()
-        avg_node[m] = Dict{Int64, Dict{Int64, Float64}}()
+        avg_time[m] = Dict{Int64, Dict{Int64, Float64}}(n=> Dict{Int64, Float64}() for n in avg_n)
+        avg_node[m] = Dict{Int64, Dict{Int64, Float64}}(n=> Dict{Int64, Float64}() for n in avg_n)
     end
 
     λ_limits = [] ;
@@ -81,6 +82,16 @@ function comparisonsLambdaLimits(instances::String)
 
     # println("λ_limits : ", λ_limits) ; println("keys_combo : ", keys_combo)
 
+    for folder_λ in λ_limits
+        for m in methods
+
+            for n in avg_n
+                avg_time[m][n][folder_λ] = 0.0
+                avg_node[m][n][folder_λ] = 0.0
+            end
+
+        end
+    end
 
     # ∀ file each line 
     for file in readdir(work_dir * "/" * string(λ_limits[1]) * "/" * string(methods[1]) )
@@ -101,39 +112,28 @@ function comparisonsLambdaLimits(instances::String)
         print(fout, string(vars) * " & " * string(constr) * " & " * string(size_Y_N) * " & ")
         print(fout2, string(vars) * " & " * string(constr) * " & " * string(size_Y_N) * " & ")
 
-        if !haskey(count_per_n, vars)
-            count_per_n[vars] = 0
-        end
-
-        for m in methods
-            if !haskey(avg_time[m], vars)
-                avg_time[m][vars] = Dict{Int64, Float64}()
-            end
-            if !haskey(avg_node[m], vars)
-                avg_node[m][vars] = Dict{Int64, Float64}()
+        for n in avg_n
+            if vars <= n
+                count_per_n[n] += 1
+                break
             end
         end
-
-        count_per_n[vars] += 1
 
         for folder_λ in λ_limits
-            for m in methods
-                if !haskey(avg_time[m][vars], folder_λ)
-                    avg_time[m][vars][folder_λ] = 0.0
-                end
-                if !haskey(avg_node[m][vars], folder_λ)
-                    avg_node[m][vars][folder_λ] = 0.0
-                end
-            end
 
             for m in methods
                 if isfile(work_dir * "/" * string(folder_λ) * "/" * m * "/" * file)
                     include(work_dir * "/" * string(folder_λ) * "/" * m * "/" * file)
                     push!(times, total_times_used); push!(pts, total_nodes)
 
-                    avg_time[m][vars][folder_λ] += total_times_used
-                    avg_node[m][vars][folder_λ] += total_nodes
-    
+                    for n in avg_n
+                        if vars <= n
+                            avg_time[m][n][folder_λ] += total_times_used
+                            avg_node[m][n][folder_λ] += total_nodes
+                            break
+                        end
+                    end
+
                 else
                     push!(times, -1); push!(pts, -1)
                 end
@@ -227,7 +227,7 @@ function comparisonsLambdaLimits(instances::String)
 
 
     for m in methods
-        for n in keys(count_per_n)
+        for n in avg_n
             for λ in λ_limits
                 avg_node[m][n][λ] = round(avg_node[m][n][λ]/count_per_n[n], digits = 2)
                 avg_time[m][n][λ] = round(avg_time[m][n][λ]/count_per_n[n], digits = 2)
@@ -248,7 +248,7 @@ function comparisonsLambdaLimits(instances::String)
 
     # plot for each method, for each n 
     for m in methods
-        for n in keys(count_per_n)
+        for n in avg_n
     
             fig, ax = plt.subplots()
             ax.plot(λ_limits,  [p[2] for p in sort(collect(avg_time[m][n]), by = x->x[1])] ,
@@ -256,7 +256,7 @@ function comparisonsLambdaLimits(instances::String)
             )
             ax.set_xlabel("|λ|", fontsize=14)
             ax.set_ylabel("Average time(s)", color="red", fontsize=14)
-            ax.set_title("MOAP avg n = $n", fontsize=14)
+            ax.set_title("SPA avg n = $n", fontsize=14)
         
             ax2=ax.twinx()
             ax2.plot(λ_limits, [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])], 
