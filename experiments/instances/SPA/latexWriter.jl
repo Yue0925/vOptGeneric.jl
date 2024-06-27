@@ -22,9 +22,12 @@ function comparisons(instances::String)
 
 
     n = 0
-    count = 0
-    # avg_n = 0 ; avg_m = 0
-    # avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods)
+    avg_n = [100, 500, 1000, 1500, 2000, 2500, 3000]
+    avg_count = Dict(n=> 0 for n in avg_n)
+    avg_m = Dict(n => 0.0 for n in avg_n)
+    avgT = Dict(n => Dict(k => 0.0 for k in methods) for n in avg_n ); 
+    avgY = Dict(n=> Dict(k => 0.0 for k in methods) for n in avg_n); 
+    avgTO = Dict(n=> Dict(k => 0 for k in methods) for n in avg_n)
 
 
     # ∀ file in epsilon
@@ -36,37 +39,12 @@ function comparisons(instances::String)
         times = [] ; pts = []
         include(work_dir * "/epsilon/" * file)
 
-
-        # # new n folder 
-        # if n!= vars
-        #     if n!= 0  
-        #         avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
-        #         for m in methods
-        #             avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
-        #         end
-
-        #         print(fout, "\\hline avg & " * string(avg_n) * " & " * string(avg_m) )
-
-        #         for m in methods
-        #             print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
-        #         end
-
-        #         println(fout, "\\\\ \\hline")
-        #         println("n = $n , count = $count TO = $avgTO")
-
-        #     end
-
-        #     n = vars 
-        #     count = 0
-        #     avg_n = 0 ; avg_m = 0
-        #     avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods) 
-
-        #     # count += 1
-        #     # avg_n += vars ; avg_m += constr
-        # end
-
-        count += 1
-        # avg_n += vars ; avg_m += constr
+        for seg in avg_n
+            if vars <= seg
+                avg_count[seg] += 1 ; avg_m[seg] += constr
+                break
+            end
+        end
 
         name_seg = split(file, "_")
         for s in name_seg[1:end-1]
@@ -81,9 +59,15 @@ function comparisons(instances::String)
         if isfile(work_dir * "/" * m * "/" * file)
             include(work_dir * "/" * m * "/" * file)
             push!(times, total_times_used); push!(pts, size_Y_N)
-            # total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
 
-            # avgT[m] += total_times_used ; avgY[m] += size_Y_N
+            for seg in avg_n
+                if vars <= seg
+                    total_times_used > 3600.0 ? avgTO[seg][m] += 1 : nothing
+                    avgT[seg][m] += total_times_used ; avgY[seg][m] += size_Y_N
+                    break
+                end
+            end
+
         else
             push!(times, -1); push!(pts, -1)
         end
@@ -91,9 +75,15 @@ function comparisons(instances::String)
             if isfile(work_dir * "/" * m * "/" * file)
                 include(work_dir * "/" * m * "/" * file)
                 push!(times, total_times_used); push!(pts, total_nodes)
-                # total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
 
-                # avgT[m] += total_times_used ; avgY[m] += total_nodes
+                for seg in avg_n
+                    if vars <= seg
+                        total_times_used > 3600.0 ? avgTO[seg][m] += 1 : nothing
+                        avgT[seg][m] += total_times_used ; avgY[seg][m] += total_nodes
+                        break
+                    end
+                end
+                
             else
                 push!(times, -1); push!(pts, -1)
             end
@@ -121,19 +111,27 @@ function comparisons(instances::String)
 
     end
 
-    # avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
-    # for m in methods
-    #     avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
-    # end
+    for seg in avg_n
+        avg_m[seg] = round(avg_m[seg]/avg_count[seg], digits = 2)
+        for m in methods
+            avgT[seg][m] = round(avgT[seg][m]/avg_count[seg], digits = 2); avgY[seg][m] = round(avgY[seg][m]/avg_count[seg], digits = 2) 
+        end
+    end
 
-    # print(fout, "\\hline avg & " * string(avg_n) * " & " * string(avg_m) )
+    for seg in avg_n
+        print(fout, "\\hline avg & " * string(seg) * " & " * string(avg_m[seg]) )
 
-    # for m in methods
-    #     print(fout, " &  " * string(avgT[m]) * " & " * string(avgY[m]))
-    # end
+        for m in methods
+            print(fout, " &  " * string(avgT[seg][m]) * " & " * string(avgY[seg][m]))
+            println("n = $seg , count = $(avg_count[seg]) TO = $(avgTO[seg][m])")
 
-    # println(fout, " \\\\ \\hline")
-    # println("n = $n , count = $count TO = $avgTO")
+        end
+    
+        println(fout, " \\\\ \\hline")
+    end
+
+
+
 
 
     latex = raw"""\bottomrule

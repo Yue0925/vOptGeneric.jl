@@ -1,0 +1,4 @@
+vars = 10 ; constr = 1 
+total_times_used = 3.27
+size_Y_N = 3
+Y_N = [[38.0, 38.0], [43.0, 36.0], [44.0, 32.0]]

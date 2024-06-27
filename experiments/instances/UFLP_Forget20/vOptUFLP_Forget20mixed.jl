@@ -153,9 +153,12 @@ function solve(fname::String, method)
     end
 
     outputName = result_folder * "/" * forget.name * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    if isfile(outputName) #TODO : ignore existed file  
+        nothing
+    else
+        vOptUFLP(forget, Symbol(method), forget.name, outputName, heuristic, mixed,  mixed2)
+    end 
 
-    vOptUFLP(forget, Symbol(method), forget.name, outputName, heuristic, mixed,  mixed2)
 
 
     heuristic = true
@@ -173,10 +176,12 @@ function solve(fname::String, method)
 
 
     outputName = result_folder * "/" * forget.name * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    if isfile(outputName) #TODO : ignore existed file  
+        nothing
+    else
+        vOptUFLP(forget, Symbol(method), forget.name, outputName, heuristic, mixed,  mixed2)
 
-    vOptUFLP(forget, Symbol(method), forget.name, outputName, heuristic, mixed,  mixed2)
-
+    end 
 
 
 end

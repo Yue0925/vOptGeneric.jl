@@ -30,12 +30,12 @@
 
 
 methodes=("bc_rootRelaxEPB") # "bb" "bc_rootRelax" 
-files=("./BOSPA/biosppnw10.txt" "./BOSPA/biosppnw20.txt")
+# files=("./BOSPA/biosppnw24.txt")
 
 # for file in ${files[@]}; do
     for mthd in ${methodes[@]}; do
-        echo " ./BOSPA/biosppnw20.txt ... " $mthd
-        julia vOptBOSPAmixed.jl ./BOSPA/biosppnw20.txt $mthd
+        echo " ./BOSPA/biosppnw24.txt ... " $mthd
+        julia vOptBOSPA.jl ./BOSPA/biosppnw24.txt $mthd
     done
 # done
 

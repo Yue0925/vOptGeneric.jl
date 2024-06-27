@@ -1,0 +1,43 @@
+vars = 20 ; constr = 1 
+ # informations of B&B algorithm : 
+total_times_used = 4.4 
+total_nodes = 124 
+pruned_nodes = 70 
+GAP = 0.0 
+relaxation_time = 2.58 
+test_dominance_time = 0.0 
+update_incumbent_time = 0.01 
+tree_size = 0.333 
+nb_nodes_EPB = 33 
+nb_nodes_VB = 90 
+root_relax = true 
+TO = false 
+rootLBS = 8 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 0.0 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+
+
+
+ # ----------- info about cuts : 
+ite_total = 99 
+cuts_applied = 14 
+sp_cuts = 14 
+mp_cuts = 0 
+cuts_total = 14 
+times_calling_dicho = 2.58 
+times_calling_separators = 0.0 
+times_oper_cutPool = 0.11 
+times_total_for_cuts = 3.01 
+times_add_retrieve_cuts = 0.36 
+
+
+
+size_Y_N = 13
+Y_N = [[5944.0, 8967.0], [6434.0, 8838.0], [6693.0, 8661.0], [6781.0, 8651.0], [6868.0, 8566.0], [6875.0, 8386.0], [7003.0, 8385.0], [7075.0, 8368.0], [7141.0, 8289.0], [7148.0, 8109.0], [7169.0, 8103.0], [7442.0, 7826.0], [7496.0, 7073.0]]

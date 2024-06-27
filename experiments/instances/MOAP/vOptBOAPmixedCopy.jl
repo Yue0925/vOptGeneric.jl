@@ -237,9 +237,12 @@ function solve2(fname::String, method)
     end
 
     outputName = result_folder * "/" * ap.name * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    if isfile(outputName) 
+        nothing
+    else
+        vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed,  mixed2)
+    end #TODO : ignore existed file  
 
-    vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed,  mixed2)
 
 
     heuristic = true
@@ -254,9 +257,13 @@ function solve2(fname::String, method)
     end
 
     outputName = result_folder * "/" * ap.name * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    if isfile(outputName) #TODO : ignore existed file  
+        nothing
+    else
+        vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed, mixed2)
 
-    vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed, mixed2)
+    end 
+
 
 end
 

@@ -1,0 +1,4 @@
+vars = 20 ; constr = 1 
+total_times_used = 3.72
+size_Y_N = 2
+Y_N = [[21088.0, 19411.0], [21275.0, 19402.0]]
