@@ -10,11 +10,11 @@
 #SBATCH --output=BOSCP_rootrelax_param.txt
 #SBATCH --error=BOSCP_rootrelax_param.txt
 
-methodes=("bc_rootRelax" "bc_rootRelaxEPB")
+methodes=("bc_rootRelax")
 
 for file in ./instances/*; do
     for mthd in ${methodes[@]}; do
         echo "$file ... " $mthd
-        srun julia vOptSCP.jl "$file" $mthd
+        srun ../../../../julia-1.7.3/bin/julia vOptSCPmixed.jl "$file" $mthd
     done
 done

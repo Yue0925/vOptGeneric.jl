@@ -1,0 +1,45 @@
+vars = 50 ; constr = 1 
+ # informations of B&B algorithm : 
+total_times_used = 67.32 
+total_nodes = 3411 
+pruned_nodes = 1706 
+GAP = 0.0 
+relaxation_time = 66.09 
+test_dominance_time = 0.04 
+update_incumbent_time = 0.4 
+tree_size = 17.367 
+nb_nodes_EPB = 0 
+nb_nodes_VB = 3410 
+root_relax = true 
+TO = false 
+rootLBS = 17 
+LBSexhaustive = true 
+ λ_strategy = 0 
+ λ_min = 0 
+ λ_max = 0 
+λ_acc = 0.0 
+total_time_cplex = 51.61337900161743 
+total_time_fusion = 0.0 
+heur = false 
+heur_time = 0.0 
+mixed = false 
+mixed2 = false 
+
+
+
+ # ----------- info about cuts : 
+ite_total = 3411 
+cuts_applied = 2181 
+sp_cuts = 1726 
+mp_cuts = 455 
+cuts_total = 2181 
+times_calling_dicho = 66.09 
+times_calling_separators = 0.05 
+times_oper_cutPool = 0.07 
+times_total_for_cuts = 66.64 
+times_add_retrieve_cuts = 0.1 
+
+
+
+size_Y_N = 37
+Y_N = [[13284.0, 19093.0], [13418.0, 19065.0], [13784.0, 18954.0], [13918.0, 18926.0], [14054.0, 18847.0], [14171.0, 18786.0], [14358.0, 18759.0], [14414.0, 18678.0], [14498.0, 18665.0], [14858.0, 18620.0], [14896.0, 18498.0], [15047.0, 18481.0], [15203.0, 18389.0], [15354.0, 18372.0], [15435.0, 18173.0], [15526.0, 18134.0], [15581.0, 18099.0], [15603.0, 18098.0], [15754.0, 18081.0], [15842.0, 17856.0], [16099.0, 17850.0], [16183.0, 17837.0], [16212.0, 17513.0], [16243.0, 17357.0], [16264.0, 17320.0], [16300.0, 17288.0], [16384.0, 17275.0], [16524.0, 17132.0], [16596.0, 17073.0], [16605.0, 16615.0], [16677.0, 16556.0], [16694.0, 16391.0], [16725.0, 16235.0], [16755.0, 16028.0], [16804.0, 15545.0], [16836.0, 15511.0], [16844.0, 15204.0]]

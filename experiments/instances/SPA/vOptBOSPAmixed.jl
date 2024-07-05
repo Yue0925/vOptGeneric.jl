@@ -76,107 +76,107 @@ function computeYNfor2SPA(  nbvar::Int,
 end
 
 
-function solve(fname::String, method::String)
+# function solve(fname::String, method::String)
 
-    # load a numerical instance of 2SPA ----------------------------------------
-    c1, c2, A = loadInstance2SPA(fname)
-    nbctr = size(A,1)
-    nbvar = size(A,2)
-    nbobj = 2
+#     # load a numerical instance of 2SPA ----------------------------------------
+#     c1, c2, A = loadInstance2SPA(fname)
+#     nbctr = size(A,1)
+#     nbvar = size(A,2)
+#     nbobj = 2
 
-    # todo : try small instances 
-    if nbvar >= 3000 return end
-
-
-    println("\n -----------------------------")
-    println(" solving mono $(fname) ... ")
-    println(" -----------------------------")
-
-    model = Model( CPLEX.Optimizer ) ; JuMP.set_silent(model)
-
-    @variable(model, x[1:nbvar], Bin)
-    @constraint(model, [i=1:nbctr],(sum((x[j]*A[i,j]) for j in 1:nbvar)) == 1)
-    @objective(model, Min, sum((c1[i]+c2[i])/2*x[i] for i in 1:nbvar))
-
-    optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
-
-    println("solved time $(solved_time)" )
-
-    status = termination_status(model)
-    if status != MOI.OPTIMAL
-        @info "mono instance is not feasible"
-        return 
-    end
+#     # todo : try small instances 
+#     if nbvar >= 3000 return end
 
 
-    println("\n -----------------------------")
-    println(" solving $(fname) by $method  ... ")
-    println(" -----------------------------")
+#     println("\n -----------------------------")
+#     println(" solving mono $(fname) ... ")
+#     println(" -----------------------------")
 
-    folder = "../../results/SPA/BOSPA"
-    if !isdir(folder)
-        mkdir(folder)
-    end
+#     model = Model( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 
-    mixed = false ; mixed2 = false
+#     @variable(model, x[1:nbvar], Bin)
+#     @constraint(model, [i=1:nbctr],(sum((x[j]*A[i,j]) for j in 1:nbvar)) == 1)
+#     @objective(model, Min, sum((c1[i]+c2[i])/2*x[i] for i in 1:nbvar))
 
-    heuristic = false
+#     optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
 
-    result_folder = folder * "/" * string(method)
-    if !isdir(result_folder)
-        mkdir(result_folder)
-    end
-    inst_name = split(fname, "/")[end]
+#     println("solved time $(solved_time)" )
 
-    println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
-
-    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
+#     status = termination_status(model)
+#     if status != MOI.OPTIMAL
+#         @info "mono instance is not feasible"
+#         return 
+#     end
 
 
+#     println("\n -----------------------------")
+#     println(" solving $(fname) by $method  ... ")
+#     println(" -----------------------------")
 
-    if Symbol(method) == :bb return end 
+#     folder = "../../results/SPA/BOSPA"
+#     if !isdir(folder)
+#         mkdir(folder)
+#     end
 
+#     mixed = false ; mixed2 = false
 
-    mixed = true
+#     heuristic = false
 
-    folder = "../../results/SPA/BOSPA/mixed"
-    if !isdir(folder)
-        mkdir(folder)
-    end
-    result_folder = folder * "/" * string(method)
-    if !isdir(result_folder)
-        mkdir(result_folder)
-    end
+#     result_folder = folder * "/" * string(method)
+#     if !isdir(result_folder)
+#         mkdir(result_folder)
+#     end
+#     inst_name = split(fname, "/")[end]
 
-    inst_name = split(fname, "/")[end]
+#     println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
+#     # if isfile(outputName) return end #TODO : ignore existed file  
 
-    println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
-
-    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
-
-
-    heuristic = true
-
-    folder = "../../results/SPA/BOSPA/mixedheuristic"
-    if !isdir(folder)
-        mkdir(folder)
-    end
-    result_folder = folder * "/" * string(method)
-    if !isdir(result_folder)
-        mkdir(result_folder)
-    end
-
-    inst_name = split(fname, "/")[end]
-
-    println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
-
-    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
+#     computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
 
 
-end
+
+#     if Symbol(method) == :bb return end 
+
+
+#     mixed = true
+
+#     folder = "../../results/SPA/BOSPA/mixed"
+#     if !isdir(folder)
+#         mkdir(folder)
+#     end
+#     result_folder = folder * "/" * string(method)
+#     if !isdir(result_folder)
+#         mkdir(result_folder)
+#     end
+
+#     inst_name = split(fname, "/")[end]
+
+#     println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
+#     # if isfile(outputName) return end #TODO : ignore existed file  
+
+#     computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
+
+
+#     heuristic = true
+
+#     folder = "../../results/SPA/BOSPA/mixedheuristic"
+#     if !isdir(folder)
+#         mkdir(folder)
+#     end
+#     result_folder = folder * "/" * string(method)
+#     if !isdir(result_folder)
+#         mkdir(result_folder)
+#     end
+
+#     inst_name = split(fname, "/")[end]
+
+#     println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
+#     # if isfile(outputName) return end #TODO : ignore existed file  
+
+#     computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
+
+
+# end
 
 
 function solve2(fname::String, method::String)
@@ -221,24 +221,9 @@ function solve2(fname::String, method::String)
         mkdir(folder)
     end
 
-    mixed = false ; mixed2 = false
+    mixed = false
 
     heuristic = false
-
-    result_folder = folder * "/" * string(method)
-    if !isdir(result_folder)
-        mkdir(result_folder)
-    end
-    inst_name = split(fname, "/")[end]
-
-    println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
-
-    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
-
-
-
-    if Symbol(method) == :bb return end 
 
 
     mixed2 = true
@@ -255,32 +240,32 @@ function solve2(fname::String, method::String)
     inst_name = split(fname, "/")[end]
 
     println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    if isfile(outputName) return end #TODO : ignore existed file  
 
     computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
 
 
-    heuristic = true
+    # heuristic = true
 
-    folder = "../../results/SPA/BOSPA/mixed2heuristic"
-    if !isdir(folder)
-        mkdir(folder)
-    end
-    result_folder = folder * "/" * string(method)
-    if !isdir(result_folder)
-        mkdir(result_folder)
-    end
+    # folder = "../../results/SPA/BOSPA/mixed2heuristic"
+    # if !isdir(folder)
+    #     mkdir(folder)
+    # end
+    # result_folder = folder * "/" * string(method)
+    # if !isdir(result_folder)
+    #     mkdir(result_folder)
+    # end
 
-    inst_name = split(fname, "/")[end]
+    # inst_name = split(fname, "/")[end]
 
-    println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
-    # if isfile(outputName) return end #TODO : ignore existed file  
+    # println("n=$nbvar m=$nbctr ") ; outputName = result_folder * "/" * split(inst_name, ".")[1] * ".dat"
+    # # if isfile(outputName) return end #TODO : ignore existed file  
 
-    computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
+    # computeYNfor2SPA(nbvar, nbctr, A, c1, c2, Symbol(method), string(split(inst_name, ".")[1]), outputName, heuristic, mixed, mixed2)
 
 
 end
 
-solve(ARGS[1], ARGS[2])
+# solve(ARGS[1], ARGS[2])
 
-# solve2(ARGS[1], ARGS[2])
+solve2(ARGS[1], ARGS[2])

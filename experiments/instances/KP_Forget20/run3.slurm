@@ -13,14 +13,14 @@
 
 
 
-methodes=("bc_rootRelax" "bc_rootRelaxEPB" "epsilon")
-#   "bc_rootRelaxCP" "bc_rootRelaxCPEPB" 
+methodes=("bc_rootRelax")
+#   "bc_rootRelaxCP" "bc_rootRelaxCPEPB" "bc_rootRelaxEPB" "epsilon"
 
 
 
 for file in ./KP/*.raw; do
     for mthd in ${methodes[@]}; do
         echo "$file" " ... " $mthd
-        srun ../../../../julia-1.7.3/bin/julia vOptKP_Forget20.jl "$file" $mthd
+        srun ../../../../julia-1.7.3/bin/julia vOptKP_Forgetmixed.jl "$file" $mthd
     done
 done

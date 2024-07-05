@@ -21,6 +21,6 @@ methodes=("bc_rootRelax")
 for file in ./AP/*.dat; do
     for mthd in ${methodes[@]}; do
         echo "$file" " ... " $mthd
-        srun ../../../../julia-1.7.3/bin/julia vOptBOAPmixedCopy.jl "$file" $mthd
+        srun ../../../../julia-1.7.3/bin/julia vOptBOAPmixed.jl "$file" $mthd
     done
 done

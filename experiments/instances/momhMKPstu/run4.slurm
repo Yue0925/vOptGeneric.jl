@@ -14,7 +14,7 @@
 
 for file in ./MOBKP/set3/*; do
     echo "$file"
-    srun julia vOptMomkp3.jl "$file"
+    srun ../../../../julia-1.7.3/bin/julia vOptMomkpMixed.jl "$file"
 done
 
 # srun julia latexWriter.jl

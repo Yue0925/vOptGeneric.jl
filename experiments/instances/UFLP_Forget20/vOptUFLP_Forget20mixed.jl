@@ -136,7 +136,7 @@ function solve(fname::String, method)
 
 
 
-    mixed2 = false ; mixed = false
+    mixed = false
 
     heuristic = false
 
@@ -160,28 +160,6 @@ function solve(fname::String, method)
     end 
 
 
-
-    heuristic = true
-
-
-    folder = "../../results/UFLP_Forget/mixed2heuristic"
-    if !isdir(folder)
-        mkdir(folder)
-    end
-
-    result_folder = folder * "/" * string(method)
-    if !isdir(result_folder)
-        mkdir(result_folder)
-    end
-
-
-    outputName = result_folder * "/" * forget.name * ".dat"
-    if isfile(outputName) #TODO : ignore existed file  
-        nothing
-    else
-        vOptUFLP(forget, Symbol(method), forget.name, outputName, heuristic, mixed,  mixed2)
-
-    end 
 
 
 end
