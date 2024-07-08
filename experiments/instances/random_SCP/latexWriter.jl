@@ -330,27 +330,75 @@ function comparisons(instances::String)
     println(fout, latex)
     methods = ["epsilon", "bb", "bc", "bc_rootRelax", "bb_EPB", "bc_EPB", "bc_rootRelaxEPB", "bc_rootRelaxCP", "bc_rootRelaxCPEPB"]
 
+    n = 0
+    count = 0
+    avg_n = 0 ; avg_m = 0
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+    avgTO = Dict(k => 0 for k in methods)
+
+
     # ∀ file in dicho
     for file in readdir(work_dir * "/bb/")
         if split(file, ".")[end] == "png"
             continue
         end
 
+        times = [] ; pts = []
+        include(work_dir * "/bb/" * file)
+
+        # new n folder 
+        if n!= vars
+            if n!= 0  
+                avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+                for m in methods
+                    avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+                end
+
+                print(fout, "\\hline avg & " * string(avg_n) * " & " * string(avg_m) )
+
+                m = methods[1]
+                print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
+                for m in methods[2:end]
+                    print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
+                end
+
+                println(fout, "\\\\ \\hline")
+                println("n = $n , count = $count TO = $avgTO")
+
+            end
+
+            n = vars 
+            count = 0
+            avg_n = 0 ; avg_m = 0
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods)
+            avgTO = Dict(k => 0 for k in methods)
+
+        end
+        count += 1
+        avg_n += vars ; avg_m += constr
+
+
         name_seg = split(file, "_")
         for s in name_seg[1:end-1]
             print(fout, s * "\\_")
         end
         print(fout, name_seg[end] * " & ")
-        times = [] ; pts = []
-
-        include(work_dir * "/bb/" * file)
         print(fout, string(vars) * " & " * string(constr) * " & ")
 
         # ∀ method 
         for m in methods
             if isfile(work_dir * "/" * m * "/" * file)
                 include(work_dir * "/" * m * "/" * file)
-                push!(times, total_times_used); push!(pts, size_Y_N)
+                push!(times, total_times_used)
+                avgT[m] += total_times_used
+                total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
+
+                if m == "epsilon"
+                    push!(pts, size_Y_N) ; avgY[m] += size_Y_N
+                else
+                    push!(pts, total_nodes) ; avgY[m] += total_nodes
+                end
+
 
             else
                 push!(times, -1); push!(pts, -1)
@@ -385,6 +433,23 @@ function comparisons(instances::String)
 
     end
 
+    avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+    for m in methods
+        avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+    end
+
+    print(fout, "\\hline avg & " * string(avg_n) * " & " * string(avg_m) )
+
+    for m in methods
+        print(fout, " & " * string(avgT[m]) * "& " * string(avgY[m]))
+    end
+
+    println(fout, " \\\\ \\hline")
+    println("n = $n , count = $count TO = $avgTO")
+
+
+
+
     latex = raw"""\bottomrule
     \end{tabular}
     }%"""
@@ -398,5 +463,5 @@ end
 
 
 comparisons("SCPrandom")
-comparisons_eps_BB_EPB("SCPrandom")
-comparisons_tri("SCPrandom")
+# comparisons_eps_BB_EPB("SCPrandom")
+# comparisons_tri("SCPrandom")

@@ -123,7 +123,7 @@ function comparisons(instances::String)
 
         for m in methods
             print(fout, " &  " * string(avgT[seg][m]) * " & " * string(avgY[seg][m]))
-            println("n = $seg , count = $(avg_count[seg]) TO = $(avgTO[seg][m])")
+            println("n = $seg , count = $(avg_count[seg]) $m TO = $(avgTO[seg][m])")
 
         end
     

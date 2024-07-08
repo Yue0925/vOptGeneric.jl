@@ -255,6 +255,7 @@ function comparisonsLambdaLimits(instances::String)
     λ_limits = [] ;
     for folder_λ in readdir(work_dir)
         if split(folder_λ, ".")[end] == "tex" continue end
+        if parse(Int64 , folder_λ ) ==0 continue end # todo :
         push!(λ_limits, parse(Int64 , folder_λ ) )
     end
     sort!(λ_limits)
