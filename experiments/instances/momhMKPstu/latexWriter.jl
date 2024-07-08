@@ -1312,14 +1312,73 @@ end
 
 
 
+function Cut_Branch(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir * "/mixed2") "This directory doesn't exist $work_dir !"
+
+    methods = ["bc_rootRelax"] ; record_n = []
+    record_times = Dict(k => [] for k in methods) ; record_nodes = Dict(k => [] for k in methods)
+
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+        count = 0
+        avg_n = 0 ; avg_m = 0
+        avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ;avgTO = Dict(k => 0 for k in methods) 
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            times = [] ; pts = []
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+
+            count += 1
+            avg_n += vars ; avg_m += constr
+
+            # ∀ method 
+            for m in methods
+                if isfile(work_dir * "/mixed2" * "/" * m * "/" * string(folder_n) * "/" * file)
+                    include(work_dir * "/mixed2" * "/" * m * "/" * string(folder_n) * "/" * file)
+                    push!(times, total_times_used); push!(pts, size_Y_N)
+    
+                    avgT[m] += total_times_used ; avgY[m] += size_Y_N
+                    if total_times_used >= 3600.0 avgTO[m] += 1 end 
+
+                else
+                    push!(times, -1); push!(pts, -1)
+                end
+            end
+
+
+                
+        end
+
+        avg_n = round(Int, avg_n/count) ; avg_m = round(Int, avg_m/count)
+        for m in methods
+            avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2)
+            println("n $avg_n , m $avg_m , m $m , time $(avgT[m]) , node $(avgY[m]) , TO $(avgTO[m])")
+ 
+        end
+
+    end
+
+
+
+end
+
 
 # -------------------------------------------------
 # comparisons("momhMKPstu/MOBKP/set3")
 # comparisonsTree("momhMKPstu/MOBKP/set3")
 # comparisons_eps_BB_EPB("momhMKPstu/MOBKP/set3")
 
+Cut_Branch("momhMKPstu/MOBKP/set3")
 
-comparisons5("momhMKPstu/MOBKP/set3")
+# comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
 # comparisonsCP("momhMKPstu/MOBKP/set3")
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")

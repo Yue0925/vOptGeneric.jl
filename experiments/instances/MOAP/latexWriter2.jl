@@ -57,11 +57,13 @@ function comparisonsLambdaLimits(instances::String)
     # method => n => (λ -> time)                     method => n => (λ -> nodes)
     avg_time = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
     avg_node = Dict{String , Dict{Int64, Dict{Int64, Float64}}}()
+    avg_TO = Dict{String , Dict{Int64, Dict{Int64, Int64}}}()
     count_per_n = Dict{Int64, Int64}()
 
     for m in methods
         avg_time[m] = Dict{Int64, Dict{Int64, Float64}}()
         avg_node[m] = Dict{Int64, Dict{Int64, Float64}}()
+        avg_TO[m] = Dict{Int64, Dict{Int64, Int64}}()
     end
 
     λ_limits = [] ;
@@ -112,6 +114,7 @@ function comparisonsLambdaLimits(instances::String)
             if !haskey(avg_node[m], vars)
                 avg_node[m][vars] = Dict{Int64, Float64}()
             end
+            avg_TO[m][vars] = Dict{Int64, Int64}()
         end
 
         count_per_n[vars] += 1
@@ -124,6 +127,7 @@ function comparisonsLambdaLimits(instances::String)
                 if !haskey(avg_node[m][vars], folder_λ)
                     avg_node[m][vars][folder_λ] = 0.0
                 end
+                avg_TO[m][vars][folder_λ] = 0
             end
 
             for m in methods
@@ -133,6 +137,7 @@ function comparisonsLambdaLimits(instances::String)
 
                     avg_time[m][vars][folder_λ] += total_times_used
                     avg_node[m][vars][folder_λ] += total_nodes
+                    total_times_used >= 3600.0 ? avg_TO[m][vars][folder_λ] += 1 : nothing
     
                 else
                     push!(times, -1); push!(pts, -1)
@@ -234,15 +239,16 @@ function comparisonsLambdaLimits(instances::String)
             end
             println("$m  $n  nodes " ,  avg_node[m][n])  
             println("$m  $n  times " ,  avg_time[m][n]) 
+            println("$m  $n  TO " ,  avg_TO[m][n])
 
         end
     end
 
-    println("   --------------------   ")
-    println("λ_limits : ", λ_limits)
-    println("avg_node : ", avg_node)
-    println("avg_time : ", avg_time)
-    println("   --------------------   ")
+    # println("   --------------------   ")
+    # println("λ_limits : ", λ_limits)
+    # println("avg_node : ", avg_node)
+    # println("avg_time : ", avg_time)
+    # println("   --------------------   ")
 
 
 

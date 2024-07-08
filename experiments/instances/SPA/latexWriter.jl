@@ -145,5 +145,80 @@ function comparisons(instances::String)
 
 end
 
+function Cut_Branch(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir *"/mixed2") "This directory doesn't exist $work_dir !"
 
-comparisons("SPA/BOSPA")
+    methods = ["bc_rootRelax"] 
+
+
+    n = 0
+    avg_n = [100, 500, 1000, 1500, 2000, 2500, 3000]
+    avg_count = Dict(n=> 0 for n in avg_n)
+    avg_m = Dict(n => 0.0 for n in avg_n)
+    avgT = Dict(n => Dict(k => 0.0 for k in methods) for n in avg_n ); 
+    avgY = Dict(n=> Dict(k => 0.0 for k in methods) for n in avg_n); 
+    avgTO = Dict(n=> Dict(k => 0 for k in methods) for n in avg_n)
+
+
+    # ∀ file in epsilon
+    for file in readdir(work_dir * "/epsilon/")
+        if split(file, ".")[end] == "png"
+            continue
+        end
+
+        times = [] ; pts = []
+        include(work_dir * "/epsilon/" * file)
+
+        for seg in avg_n
+            if vars <= seg
+                avg_count[seg] += 1 ; avg_m[seg] += constr
+                break
+            end
+        end
+
+        # ∀ method 
+        for m in methods
+            if isfile(work_dir *"/mixed2"* "/" * m * "/" * file)
+                include(work_dir *"/mixed2"* "/" * m * "/" * file)
+                push!(times, total_times_used); push!(pts, total_nodes)
+
+                for seg in avg_n
+                    if vars <= seg
+                        total_times_used > 3600.0 ? avgTO[seg][m] += 1 : nothing
+                        avgT[seg][m] += total_times_used ; avgY[seg][m] += total_nodes
+                        break
+                    end
+                end
+                
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+        end
+
+
+    end
+
+    for seg in avg_n
+        avg_m[seg] = round(avg_m[seg]/avg_count[seg], digits = 2)
+        for m in methods
+            avgT[seg][m] = round(avgT[seg][m]/avg_count[seg], digits = 2); avgY[seg][m] = round(avgY[seg][m]/avg_count[seg], digits = 2) 
+        end
+    end
+
+    for seg in avg_n
+
+        for m in methods
+            println("n = $seg , count = $(avg_count[seg]) $m TO = $(avgTO[seg][m]) , time $(avgT[seg][m]) , node $(avgY[seg][m])")
+
+        end
+    
+    end
+
+
+end
+
+
+
+# comparisons("SPA/BOSPA")
+Cut_Branch("SPA/BOSPA")

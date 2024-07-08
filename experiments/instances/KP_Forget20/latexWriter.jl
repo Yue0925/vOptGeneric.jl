@@ -555,7 +555,89 @@ function comparisons(instances::String)
 
 end
 
+
+
+function Cut_Branch(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir *"/mixed2") "This directory doesn't exist $work_dir !"
+
+    methods = ["bc_rootRelax"] 
+
+
+    n = 0
+    count = 0
+    avg_n = 0 ; avg_m = 0
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods)
+
+
+    # ∀ file in epsilon
+    for file in readdir(work_dir * "/bb/")
+        if split(file, ".")[end] == "png"
+            continue
+        end
+
+        times = [] ; pts = []
+        include(work_dir * "/bb/" * file)
+
+
+        # new n folder 
+        if n!= vars
+            if n!= 0  
+                avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+                for m in methods
+                    avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+                    println("n = $n , count = $count TO = $avgTO $m time $(avgT[m]) , node $(avgY[m])")
+
+                end
+            end
+
+            n = vars 
+            count = 0
+            avg_n = 0 ; avg_m = 0
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods) 
+
+        end
+
+        count += 1
+        avg_n += vars ; avg_m += constr
+
+        for m in methods
+            if isfile(work_dir * "/" * m * "/" * file)
+                include(work_dir * "/" * m * "/" * file)
+                push!(times, total_times_used); push!(pts, total_nodes)
+                total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
+
+                avgT[m] += total_times_used ; avgY[m] += total_nodes
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+        end
+
+
+    end
+
+    avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+    for m in methods
+        avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+        println("n = $n , count = $count TO = $avgTO $m time $(avgT[m]) , node $(avgY[m])")
+
+    end
+
+
+
+end
+
 # comparisons("KP_Forget")
 # comparisonsCP("KP_Forget")
 # comparisons4("KP_Forget")
-comparisons5("KP_Forget")
+# comparisons5("KP_Forget")
+
+Cut_Branch("KP_Forget")
+
+n = 10 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 2.95 , node 72.63
+n = 15 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 4.64 , node 350.12
+n = 20 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 8.22 , node 754.09
+n = 25 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 18.66 , node 1692.87
+n = 30 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 38.92 , node 3088.27
+n = 35 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 97.82 , node 6410.53
+n = 40 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 162.85 , node 8781.2
