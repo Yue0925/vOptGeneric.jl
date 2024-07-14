@@ -154,6 +154,7 @@ function Cut_Branch(instances::String)
 
     n = 0
     avg_n = [100, 500, 1000, 1500, 2000, 2500, 3000]
+    avg_N = Dict(n => 0.0 for n in avg_n)
     avg_count = Dict(n=> 0 for n in avg_n)
     avg_m = Dict(n => 0.0 for n in avg_n)
     avgT = Dict(n => Dict(k => 0.0 for k in methods) for n in avg_n ); 
@@ -172,7 +173,7 @@ function Cut_Branch(instances::String)
 
         for seg in avg_n
             if vars <= seg
-                avg_count[seg] += 1 ; avg_m[seg] += constr
+                avg_count[seg] += 1 ; avg_m[seg] += constr ; avg_N[seg] += vars
                 break
             end
         end
@@ -201,6 +202,8 @@ function Cut_Branch(instances::String)
 
     for seg in avg_n
         avg_m[seg] = round(avg_m[seg]/avg_count[seg], digits = 2)
+        avg_N[seg] = round(avg_N[seg]/avg_count[seg], digits = 2)
+        
         for m in methods
             avgT[seg][m] = round(avgT[seg][m]/avg_count[seg], digits = 2); avgY[seg][m] = round(avgY[seg][m]/avg_count[seg], digits = 2) 
         end
@@ -209,7 +212,7 @@ function Cut_Branch(instances::String)
     for seg in avg_n
 
         for m in methods
-            println("n = $seg , count = $(avg_count[seg]) $m TO = $(avgTO[seg][m]) , time $(avgT[seg][m]) , node $(avgY[seg][m])")
+            println("n = $seg $(avg_N[seg]), count = $(avg_count[seg]) $m TO = $(avgTO[seg][m]) , time $(avgT[seg][m]) , node $(avgY[seg][m])")
 
         end
     

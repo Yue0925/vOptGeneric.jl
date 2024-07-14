@@ -147,4 +147,81 @@ function comparisons(instances::String)
 
 end
 
-comparisons("UFLP_Forget")
+
+
+function Cut_Branch(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir *"/mixed2") "This directory doesn't exist $work_dir !"
+
+    methods = ["bc_rootRelax"] 
+
+    n = 0
+    count = 0
+    avg_n = 0 ; avg_m = 0
+    avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods)
+
+
+    # ∀ file in epsilon
+    for file in readdir(work_dir * "/bb/")
+        if split(file, ".")[end] == "png"
+            continue
+        end
+
+        times = [] ; pts = []
+        include(work_dir * "/bb/" * file)
+
+
+        # new n folder 
+        if n!= vars
+            if n!= 0  
+                avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+                for m in methods
+                    avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+                end
+
+                for m in methods
+                    println("n = $n , count = $count TO = $avgTO time $(avgT[m]) , node $(avgY[m])")
+                end
+            end
+
+            n = vars 
+            count = 0
+            avg_n = 0 ; avg_m = 0
+            avgT = Dict(k => 0.0 for k in methods) ; avgY = Dict(k => 0.0 for k in methods) ; avgTO = Dict(k => 0 for k in methods) 
+
+            # count += 1
+            # avg_n += vars ; avg_m += constr
+        end
+
+        count += 1
+        avg_n += vars ; avg_m += constr
+
+        # ∀ method 
+        for m in methods
+            if isfile(work_dir * "/mixed2" * "/" * m * "/" * file)
+                include(work_dir * "/mixed2" * "/" * m * "/" * file)
+                push!(times, total_times_used); push!(pts, total_nodes)
+                total_times_used > 3600.0 ? avgTO[m] += 1 : nothing
+
+                avgT[m] += total_times_used ; avgY[m] += total_nodes
+            else
+                push!(times, -1); push!(pts, -1)
+            end
+        end
+
+    end
+
+    avg_n = round(avg_n/count, digits = 2) ; avg_m = round(avg_m/count, digits = 2)
+    for m in methods
+        avgT[m] = round(avgT[m]/count, digits = 2); avgY[m] = round(avgY[m]/count, digits = 2) 
+    end
+
+    for m in methods
+        println("n = $n , count = $count TO = $avgTO time $(avgT[m]) , node $(avgY[m])")
+    end
+
+end
+
+# comparisons("UFLP_Forget")
+
+Cut_Branch("UFLP_Forget")

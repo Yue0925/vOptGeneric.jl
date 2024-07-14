@@ -634,10 +634,10 @@ end
 
 Cut_Branch("KP_Forget")
 
-n = 10 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 2.95 , node 72.63
-n = 15 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 4.64 , node 350.12
-n = 20 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 8.22 , node 754.09
-n = 25 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 18.66 , node 1692.87
-n = 30 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 38.92 , node 3088.27
-n = 35 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 97.82 , node 6410.53
-n = 40 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 162.85 , node 8781.2
+# n = 10 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 2.95 , node 72.63
+# n = 15 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 4.64 , node 350.12
+# n = 20 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 8.22 , node 754.09
+# n = 25 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 18.66 , node 1692.87
+# n = 30 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 38.92 , node 3088.27
+# n = 35 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 97.82 , node 6410.53
+# n = 40 , count = 30 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 162.85 , node 8781.2

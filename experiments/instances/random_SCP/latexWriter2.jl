@@ -439,9 +439,9 @@ function comparisonsLambdaLimits(instances::String)
             ax.plot(λ_limits,  [p[2] for p in sort(collect(avg_time[m][n]), by = x->x[1])] ,
                     color="red", marker="o", linewidth=2.0, linestyle="--"
             )
-            ax.set_xlabel("|λ|", fontsize=14)
+            ax.set_xlabel("|Λ|", fontsize=14)
             ax.set_ylabel("Average time(s)", color="red", fontsize=14)
-            ax.set_title("BOSCP avg n = $n", fontsize=14)
+            ax.set_title("BOSCP n = $n", fontsize=14)
         
             ax2=ax.twinx()
             ax2.plot(λ_limits, [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])], 
