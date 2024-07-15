@@ -348,7 +348,7 @@ function solve_branchboundcut(m::JuMP.Model;
     # todo : strict tolerance following objective coeff (KP instance)
     # length(varArray)>40 ? JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Tolerances_MIPGap", 1e-5) : nothing
 
-    if root_relax && mixed2
+    if root_relax && (mixed2 || mixed )
         undo_relax()
         println("param in root_relax && mixed2")
     elseif root_relax 
@@ -414,9 +414,15 @@ function solve_branchboundcut(m::JuMP.Model;
 
     # todo 
     if root_relax && mixed
-        tl = round((problem.info.total_time_cplex/problem.info.λ_iter) *3/4, digits = 4)
-        println("\t root cplex avg time $tl (s) ... " )
-        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", tl) # todo : time limit in sec 
+        # tl = round((problem.info.total_time_cplex/problem.info.λ_iter) *3/4, digits = 4)
+        # println("\t root cplex avg time $tl (s) ... " )
+        # JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_TimeLimit", tl) # todo : time limit in sec
+
+        problem.param.root_relax = root_relax ; problem.info.root_relax = root_relax 
+        JuMP.set_optimizer_attribute(problem.m, "CPXPARAM_MIP_Limits_Nodes", 0) # todo : root limit 
+        problem.info.LBSexhaustive = LBSexhaustive
+        problem.info.λ_strategy = λ_strategy
+        problem.info.λ_limit = λ_limit
 
     elseif root_relax && mixed2
         # println("\t root \n", problem.m)

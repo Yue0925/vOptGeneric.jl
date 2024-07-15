@@ -73,98 +73,69 @@ function vOptBOAP(n :: Int64, C1 :: Matrix{Int64}, C2 :: Matrix{Int64},
 
 end
 
-# function solve(fname::String, method)
-#     ap = readAP(fname)
-#     n = ap.n
 
-#     println("\n -----------------------------")
-#     println(" solving mono $(fname) ... ")
-#     println(" -----------------------------")
+function solve2(fname::String, method)
+    ap = readAP(fname)
+    n = ap.n
 
-#     model = Model( CPLEX.Optimizer ) ; JuMP.set_silent(model)
+    println("\n -----------------------------")
+    println(" solving mono $(fname) ... ")
+    println(" -----------------------------")
 
-#     @variable(model, x[1:n, 1:n], Bin)
-#     @constraint(model, [i = 1:n], sum(x[i, j] for j in 1:n) == 1)
-#     @constraint(model, [j = 1:n], sum(x[i, j] for i in 1:n) == 1)
-#     @objective(model, Min, sum((ap.C1[i, j] + ap.C2[i, j] )/2 * x[i, j] for i in 1:n for j in 1:n))
+    model = Model( CPLEX.Optimizer ) ; JuMP.set_silent(model)
 
-#     optimize!(model) ; solved_time = round(solve_time(model), digits = 4)
+    @variable(model, x[1:n, 1:n], Bin)
+    @constraint(model, [i = 1:n], sum(x[i, j] for j in 1:n) == 1)
+    @constraint(model, [j = 1:n], sum(x[i, j] for i in 1:n) == 1)
+    @objective(model, Min, sum((ap.C1[i, j] + ap.C2[i, j] )/2 * x[i, j] for i in 1:n for j in 1:n))
 
-#     println("solved time $(solved_time)" )
+    optimize!(model) ; solved_time = round(solve_time(model), digits = 4)
 
-#     status = termination_status(model)
-#     if status != MOI.OPTIMAL
-#         @info "mono instance is not feasible"
-#         return 
-#     end
+    println("solved time $(solved_time)" )
 
-
-#     println("\n -----------------------------")
-#     println(" solving $(fname) by $method  ... ")
-#     println(" -----------------------------")
-
-#     folder = "../../results/MOAP/"
-#     if !isdir(folder)
-#         mkdir(folder)
-#     end
-#     folder = "../../results/MOAP/AP/"
-#     if !isdir(folder)
-#         mkdir(folder)
-#     end
+    status = termination_status(model)
+    if status != MOI.OPTIMAL
+        @info "mono instance is not feasible"
+        return 
+    end
 
 
-#     mixed = false ; mixed2 = false
+    println("\n -----------------------------")
+    println(" solving $(fname) by $method  ... ")
+    println(" -----------------------------")
 
-#     heuristic = false
-
-#     result_folder = folder * "/" * string(method)
-#     if !isdir(result_folder)
-#         mkdir(result_folder)
-#     end
-
-#     outputName = result_folder * "/" * ap.name * ".dat"
-#     # if isfile(outputName) return end #TODO : ignore existed file  
-
-#     vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed, mixed2)
-
-#     if Symbol(method) == :bb return end 
+    folder = "../../results/MOAP/"
+    if !isdir(folder)
+        mkdir(folder)
+    end
+    folder = "../../results/MOAP/AP/"
+    if !isdir(folder)
+        mkdir(folder)
+    end
 
 
-#     mixed = true
+    mixed = true
 
-#     folder = "../../results/MOAP/AP/mixed"
-#     if !isdir(folder)
-#         mkdir(folder)
-#     end
-#     result_folder = folder * "/" * string(method)
-#     if !isdir(result_folder)
-#         mkdir(result_folder)
-#     end
+    heuristic = false
 
-#     outputName = result_folder * "/" * ap.name * ".dat"
-#     # if isfile(outputName) return end #TODO : ignore existed file  
+    mixed2 = false
 
-#     vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed, mixed2)
+    folder = "../../results/MOAP/AP/mixed"
+    if !isdir(folder)
+        mkdir(folder)
+    end
+    result_folder = folder * "/" * string(method)
+    if !isdir(result_folder)
+        mkdir(result_folder)
+    end
 
+    outputName = result_folder * "/" * ap.name * ".dat"
+    if isfile(outputName) return end #TODO : ignore existed file  
 
-#     heuristic = true
+    vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed,  mixed2)
 
-#     folder = "../../results/MOAP/AP/mixedheuristic"
-#     if !isdir(folder)
-#         mkdir(folder)
-#     end
-#     result_folder = folder * "/" * string(method)
-#     if !isdir(result_folder)
-#         mkdir(result_folder)
-#     end
-
-#     outputName = result_folder * "/" * ap.name * ".dat"
-#     # if isfile(outputName) return end #TODO : ignore existed file  
-
-#     vOptBOAP(ap.n, ap.C1, ap.C2, Symbol(method), ap.name, outputName, heuristic, mixed, mixed2)
-
-# end
-
+    
+end
 
 function solve2(fname::String, method)
     ap = readAP(fname)
@@ -231,6 +202,6 @@ end
 
 # solve(ARGS[1], ARGS[2])
 
-solve2(ARGS[1], ARGS[2])
+solve(ARGS[1], ARGS[2])
 
 # solve("./AP/AP_p-3_n-5_ins-1.dat", :bb)

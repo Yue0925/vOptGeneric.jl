@@ -87,7 +87,7 @@ function vOptUFLP(forget::Forget,
 end
 
 
-function solve(fname::String, method)
+function solve2(fname::String, method)
     forget = readForget(fname)
     n = forget.n ; m = length(forget.m[0])-1 + length(forget.m[1])-1 + length(forget.m[2])-1
 
@@ -143,6 +143,84 @@ function solve(fname::String, method)
     mixed2 = true
 
     folder = "../../results/UFLP_Forget/mixed2"
+    if !isdir(folder)
+        mkdir(folder)
+    end
+
+    result_folder = folder * "/" * string(method)
+    if !isdir(result_folder)
+        mkdir(result_folder)
+    end
+
+    outputName = result_folder * "/" * forget.name * ".dat"
+    if isfile(outputName) #TODO : ignore existed file  
+        nothing
+    else
+        vOptUFLP(forget, Symbol(method), forget.name, outputName, heuristic, mixed,  mixed2)
+    end 
+
+
+
+
+end
+
+
+function solve(fname::String, method)
+    forget = readForget(fname)
+    n = forget.n ; m = length(forget.m[0])-1 + length(forget.m[1])-1 + length(forget.m[2])-1
+
+    println("\n -----------------------------")
+    println(" solving mono $(fname) with n=$n m=$m ... ")
+    println(" -----------------------------")
+
+    model = Model( CPLEX.Optimizer ) ; JuMP.set_silent(model)
+
+    @variable(model, x[1:n], Bin)
+
+    if length(forget.m[0]) > 1
+        @constraint(model, [i = 1:size(forget.A0, 1)], forget.A0[i, :]'* x >= forget.b0[i])
+    end
+
+    if length(forget.m[1]) > 1
+        @constraint(model, [i = 1:size(forget.A1, 1)], forget.A1[i, :]'* x <= forget.b1[i])
+    end
+
+    if length(forget.m[2]) > 1
+        @constraint(model,  [i = 1:size(forget.A2, 1)], forget.A2[i, :]'* x == forget.b2[i])
+    end
+
+    @objective(model, Min, forget.c1'* x)
+
+    optimize!(model) ; solved_time = round(solve_time(model), digits = 2)
+
+    println("solved time $(solved_time)" )
+
+    status = termination_status(model)
+    if status != MOI.OPTIMAL
+        @info "mono instance is not feasible"
+        return 
+    end
+
+
+
+    println("\n -----------------------------")
+    println(" solving $(fname) by $method  ... ")
+    println(" -----------------------------")
+
+    folder = "../../results/UFLP_Forget"
+    if !isdir(folder)
+        mkdir(folder)
+    end
+
+
+
+    mixed = true
+
+    heuristic = false
+
+    mixed2 = false
+
+    folder = "../../results/UFLP_Forget/mixed"
     if !isdir(folder)
         mkdir(folder)
     end
