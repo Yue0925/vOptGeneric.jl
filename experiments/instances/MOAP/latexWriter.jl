@@ -218,8 +218,127 @@ function Cut_Branch(instances::String)
 
 end
 
+
+function final_table(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/FinalTable.tex", "w")
+
+    latex = raw"""\begin{center}
+\begin{scriptsize}
+\begin{longtable}{lrrrrrrrrr}
+\caption{A performance comparison between the $\epsilon$-constraint and BOBLB\&B\&C algorithms.} \\
+
+\toprule
+~& ~& ~ & \textbf{\tiny{$\epsilon$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C (ISC) ($|\Lambda|$)}} &  \multicolumn{2}{c}{\textbf{Cut\&Branch}} 
+\\
+\cmidrule(r){4-4} \cmidrule(r){5-6} \cmidrule(r){7-8} \cmidrule(r){9-10} 
+\textbf{Instance} & \textbf{n} & \textbf{m}  &\textbf{Time(s)}  & \textbf{Time(s)} &\textbf{\#Nodes} & \textbf{Time(s)} &\textbf{\#Nodes}& \textbf{Time(s)} &\textbf{\#Nodes} \\
+\midrule
+
+\endfirsthead
+    """
+    println(fout, latex)
+
+    # ∀ file in dicho
+    for file in readdir(work_dir * "/epsilon/")
+        if split(file, ".")[end] == "png"
+            continue
+        end
+
+        include(work_dir * "/epsilon/" * file)
+        name_seg = split(file, "_")
+        for s in name_seg[1:end-1]
+            print(fout, s * "\\_")
+        end
+        name_ = split(name_seg[end], ".")
+        print(fout, name_[1] * " & ")
+        print(fout, string(vars) * " & " * string(constr) * " & ")
+        
+
+        # epsilon method 
+        if isfile(work_dir * "/epsilon/" * file)
+            include(work_dir * "/epsilon/" * file)
+            if total_times_used >= 3600.0
+                print(fout, " TL & ")
+            else
+                print(fout, total_times_used, " & ")
+            end
+
+        else
+            print(fout, " - & ")
+        end
+
+        # bb method 
+        if isfile(work_dir * "/bb/" * file)
+            include(work_dir * "/bb/" * file)
+            if total_times_used >= 3600.0
+                print(fout, " TL & ")
+            else
+                print(fout, total_times_used, " & ")
+            end
+            print(fout, total_nodes, " & ")
+            
+        else
+            print(fout, " - & - & ")
+        end
+    
+
+        # BC λ
+        if isfile(work_dir * "/lambda_limit/2/bc_rootRelaxEPB/"  * file)
+            include(work_dir * "/lambda_limit/2/bc_rootRelaxEPB/" * file)
+
+            if total_times_used >= 3600.0
+                print(fout, " TL & ")
+            else
+                print(fout, total_times_used, " & ")
+            end
+            print(fout, total_nodes, " & ")
+
+        else
+            print(fout, " - & - & ")
+        end
+    
+        # cut&branch 
+        if isfile(work_dir * "/mixed2/bc_rootRelax/"  * file)
+            include(work_dir * "/mixed2/bc_rootRelax/" * file)
+            if total_times_used >= 3600.0
+                print(fout, " TL & ")
+            else
+                print(fout, total_times_used, " & ")
+            end
+            print(fout, total_nodes)
+
+        else
+            print(fout, " - & -")
+        end
+
+        println(fout, "\\\\")
+
+
+    end
+
+    latex = raw"""\bottomrule
+\end{longtable}
+\end{scriptsize}
+\end{center}
+"""
+    println(fout, latex)
+
+    
+    close(fout)
+
+end
+
+
+
 # comparisons("MOAP/AP")
-Cut_Branch("MOAP/AP")
+# Cut_Branch("MOAP/AP")
+
+final_table("MOAP/AP")
+
+
 # n = 100 , count = 10 TO = Dict("bc_rootRelax" => 0, "bb" => 0, "epsilon" => 0, "bc_rootRelaxEPB" => 0, "bb_EPB" => 0)
 # n = 225 , count = 10 TO = Dict("bc_rootRelax" => 0, "bb" => 0, "epsilon" => 0, "bc_rootRelaxEPB" => 0, "bb_EPB" => 0)
 # n = 400 , count = 10 TO = Dict("bc_rootRelax" => 7, "bb" => 0, "epsilon" => 0, "bc_rootRelaxEPB" => 0, "bb_EPB" => 6)

@@ -14,7 +14,7 @@
 # srun julia latexWriter.jl
 
 
-methodes=("bc_rootRelax")
+methodes=("bc_rootRelaxEPB")
 #  "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB" 
 
 

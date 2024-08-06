@@ -1371,12 +1371,126 @@ function Cut_Branch(instances::String)
 end
 
 
+
+
+function final_table(instances::String)
+    work_dir = "../../results/" * instances
+    @assert isdir(work_dir) "This directory doesn't exist $work_dir !"
+
+    fout = open(work_dir * "/FinalTable.tex", "w")
+
+    latex = raw"""\begin{center}
+\begin{footnotesize}
+    
+\begin{longtable}{lrrrrrrrrr}
+\caption{A performance comparison between the $\epsilon$-constraint and BOBLB\&B\&C algorithms.} \\
+
+\toprule
+~& ~& ~ & \textbf{\tiny{$\epsilon$-constraint}}  & \multicolumn{2}{c}{\textbf{B\&B}} & \multicolumn{2}{c}{\textbf{EPB B\&C (ISC) ($|\Lambda|$)}} &  \multicolumn{2}{c}{\textbf{Cut\&Branch}} 
+\\
+\cmidrule(r){4-4} \cmidrule(r){5-6} \cmidrule(r){7-8} \cmidrule(r){9-10} 
+\textbf{Instance} & \textbf{n} & \textbf{m}  &\textbf{Time(s)}  & \textbf{Time(s)} &\textbf{\#Nodes} & \textbf{Time(s)} &\textbf{\#Nodes}& \textbf{Time(s)} &\textbf{\#Nodes} \\
+\midrule
+
+\endfirsthead
+    """
+    println(fout, latex)
+    
+    # ∀ filder_n
+    for folder_n in readdir(work_dir * "/epsilon") 
+
+        # ∀ file in dicho
+        for file in readdir(work_dir * "/epsilon/" * string(folder_n) * "/")
+            if split(file, ".")[end] == "png"
+                continue
+            end
+
+            print(fout, file * " & ")
+
+            # write dichotomy result 
+            include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+            print(fout, string(vars) * " & " * string(constr) * " & ")
+
+            # epsilon method 
+            if isfile(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+                include(work_dir * "/epsilon/" * string(folder_n) * "/" * file)
+
+                if total_times_used >= 3600.0
+                    print(fout, " TL & ")
+                else
+                    print(fout, total_times_used, " & ")
+                end
+            else
+                print(fout, " - & ")
+            end
+
+            # bb method 
+            if isfile(work_dir * "/bb/" * string(folder_n) * "/" * file)
+                include(work_dir * "/bb/" * string(folder_n) * "/" * file)
+
+                if total_times_used >= 3600.0
+                    print(fout, " TL & ")
+                else
+                    print(fout, total_times_used, " & ")
+                end
+                print(fout, total_nodes, " & ")
+                
+            else
+                print(fout, " - & - & ")
+            end
+
+            # BC λ
+            if isfile(work_dir * "/lambda_limit/2/bc_rootRelaxEPB/" * string(folder_n) * "/" * file)
+                include(work_dir * "/lambda_limit/2/bc_rootRelaxEPB/" * string(folder_n) * "/" * file)
+
+                if total_times_used >= 3600.0
+                    print(fout, " TL & ")
+                else
+                    print(fout, total_times_used, " & ")
+                end
+                print(fout, total_nodes, " & ")
+
+            else
+                print(fout, " - & - & ")
+            end
+
+            # cut&branch 
+            if isfile(work_dir * "/mixed2/bc_rootRelax/" * string(folder_n) * "/" * file)
+                include(work_dir * "/mixed2/bc_rootRelax/" * string(folder_n) * "/" * file)
+                if total_times_used >= 3600.0
+                    print(fout, " TL & ")
+                else
+                    print(fout, total_times_used, " & ")
+                end
+                print(fout, total_nodes)
+
+            else
+                print(fout, " - & -")
+            end
+
+            println(fout, "\\\\")
+    
+        end
+
+    end
+
+    latex = raw"""\bottomrule
+\end{longtable}
+\end{footnotesize}
+\end{center}"""
+    println(fout, latex)
+    close(fout)
+
+end
+
+
+
 # -------------------------------------------------
 # comparisons("momhMKPstu/MOBKP/set3")
 # comparisonsTree("momhMKPstu/MOBKP/set3")
 # comparisons_eps_BB_EPB("momhMKPstu/MOBKP/set3")
 
-Cut_Branch("momhMKPstu/MOBKP/set3")
+# Cut_Branch("momhMKPstu/MOBKP/set3")
 
 # comparisons5("momhMKPstu/MOBKP/set3")
 # comparisons4("momhMKPstu/MOBKP/set3")
@@ -1385,7 +1499,7 @@ Cut_Branch("momhMKPstu/MOBKP/set3")
 # comparisons_tri("momhMKPstu/MOBKP/set3")
 # -------------------------------------------------
 
-
+final_table("momhMKPstu/MOBKP/set3")
 
 
 # detailedMOBB_perform("momhMKPstu/MOBKP/set3")
