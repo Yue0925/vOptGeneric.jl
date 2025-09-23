@@ -1,7 +1,6 @@
 ## This file contains functions related to node fathoming.
 
 include("cuttingPlanes.jl")
-include("GM.jl")
 
 TOL = 1e-4
 """
@@ -108,7 +107,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
     # ------------------------
     # apply valid cuts 
     # ------------------------
-    if pb.param.cp_activated && !pruned #&& node.depth < num_var/3
+    if pb.param.cp_activated && !pruned 
         @assert length(node.RBS.natural_order_vect) > 0 "valid LBS is empty !"
 
         loop_limit = 5
@@ -125,7 +124,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         end
         # ---------------------------
 
-        pruned = MP_cutting_planes(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
+        pruned = MP_cutting_planes2(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
 
         # # ----------------------------------------------------------
         # # todo : heuristics Gravity machine

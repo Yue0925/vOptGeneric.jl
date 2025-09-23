@@ -59,7 +59,7 @@ function writeResults(vars::Int64, constr::Int64, fname::String, outputName::Str
 
   close(fout)
 
-  displayGraphics(fname,Y_N, outputName)
+  # displayGraphics(fname,Y_N, outputName)
 end
 
 
@@ -191,8 +191,8 @@ function main(fname::String)
 
     # :dicho, 
     # :epsilon, 
-    :bb, 
-    # :bc, 
+    # :bb, 
+    :bc, 
     # :bc_EPB,
     # :bb_EPB,
     ] # 

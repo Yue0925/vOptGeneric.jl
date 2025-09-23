@@ -4,7 +4,6 @@ include("BBtree.jl")
 include("branching.jl")
 include("fathoming.jl")
 include("displayGraphic.jl")
-include("GM.jl")
 
 using TimerOutputs, JuMP, CPLEX
 tmr = TimerOutput()
@@ -378,12 +377,12 @@ function solve_branchboundcut(m::JuMP.Model;
 
 
     # ----------------------------------------------------------
-    # todo : heuristics Gravity machine
-    if heuristic 
-        GM_heuristic(problem, incumbent) 
-        problem.info.heur = true
-        # problem.info.total_times += round(problem.info.heur_time, digits = 2)
-    end 
+    # # todo : heuristics Gravity machine
+    # if heuristic 
+    #     GM_heuristic(problem, incumbent) 
+    #     problem.info.heur = true
+    #     # problem.info.total_times += round(problem.info.heur_time, digits = 2)
+    # end 
 
     # by default, we take the breadth-first strategy (FIFO queue)
     todo = initQueue(problem)

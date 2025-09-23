@@ -4,7 +4,7 @@ include("../algorithms.jl")
 include("separators.jl")
 include("cutPool.jl")
 
-using JuMP 
+using JuMP , Random
 include("LBSwithIPsolver.jl")
 
 const max_step = 2
@@ -197,7 +197,7 @@ function SP_cut_off(i::Int64, node::Node, pb::BO01Problem, round_results, verbos
 end
 
 
-function isCutable(node::Node, i::Int64, j::Int64, incumbent::IncumbentSet)::Bool
+function isCutable(node::Node, i::Int64, j::Int64)::Bool
     for t = i+1:j-1 
         l = node.RBS.natural_order_vect.sols[t] 
         if l.is_binary
@@ -212,6 +212,7 @@ Cutting planes scheme for the multi-point cuts. For now we assume that every poi
 one corresponding vector `x` in decision space. 
 
 Return ture if the node is infeasible after adding cuts.
+# todo : change strategy !!!
 """
 function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet, loop_limit::Int64, round_results, verbose ; args...)
     numVars = length(pb.varArray) ; numRows = size(pb.A, 1)
@@ -243,7 +244,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                     r = l+∇
                     if r > length(LBS) || LBS[r].is_binary || length(LBS[r].xEquiv[1]) == 0 continue end
 
-                    if ∇ > 1 && !isCutable(node, l, r, incumbent) continue end 
+                    if ∇ > 1 && !isCutable(node, l, r) continue end 
 
                     start_sep = time()
                     cuts = MP_KP_heurSeparator2(LBS[l].xEquiv[1], LBS[r].xEquiv[1], pb.A, pb.b, node.assignment)
@@ -313,5 +314,115 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
             return false 
         end
     end
+    return false 
+end
+
+
+"""
+Strategy : measuring points in decision space in l_0 (sum_i=0^n |x_i - x'_i|)
+"""
+function MP_cutting_planes2(node::Node, pb::BO01Problem, incumbent::IncumbentSet, loop_limit::Int64, round_results, verbose ; args...)
+    numVars = length(pb.varArray) ; numRows = size(pb.A, 1)
+    LBS = node.RBS.natural_order_vect.sols 
+
+    # ------------------------------------------------------------------------------
+    # 1. generate multi-point cuts if has any, or single-point cut off
+    # ------------------------------------------------------------------------------
+    ite = 0 ; if !isRoot(node) loop_limit = 1 end 
+
+    while ite < loop_limit 
+        ite += 1 ; pb.info.cuts_infos.ite_total += 1 
+
+        cut_counter = 0
+        # l = 1 # position of point to be cut 
+        cut_off = [] # list of idx poits cut off
+
+        is_cut = [(LBS[l].is_binary || length(LBS[l].xEquiv[1]) == 0) ? true : false  for l in 1:length(LBS)]
+        visiting_pts = [is_cut[l] for l in 1:length(LBS)] ; pts = shuffle!([l for l in 1:length(LBS) if !is_cut[l] ])
+
+
+        while (sum(visiting_pts) < length(LBS))
+            # randomly pick up a point
+            i = rand(1:length(pts)) 
+            l = pts[i] ; deleteat!(pts, i)
+            visiting_pts[l] = true 
+            if is_cut[l] continue end 
+
+            # sort the rest of fractional pts 
+            fract_pts = [i for i in 1:length(LBS) if !is_cut[i] ]
+            sort!(fract_pts, by = x -> sum(abs.(LBS[l].xEquiv[1] - LBS[x].xEquiv[1]) ) )
+
+
+            for ∇ = max_step:-1:0 
+                if ∇ == 0
+                    (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
+                    if new_cut 
+                        cut_counter += 1 ; push!(cut_off, l) 
+                        is_cut[l] = true
+                    end 
+
+                else 
+                    if ∇ > length(fract_pts) continue end 
+                    neighbours = fract_pts[1:∇] ; r = maximum(neighbours)
+                    if minimum(neighbours) < l
+                        l = minimum(neighbours) 
+                    end
+                    if !isCutable(node, l, r) continue end
+
+                    start_sep = time()
+                    cuts = MP_KP_heurSeparator2(LBS[l].xEquiv[1], LBS[r].xEquiv[1], pb.A, pb.b, node.assignment)
+                    pb.info.cuts_infos.times_calling_separators += (time() - start_sep)
+
+                    if length(cuts) > 0
+                        cut_counter += (r-l+1) 
+                        for i=l:r 
+                            push!(cut_off, i) ; is_cut[i] = true
+                        end 
+                        for cut in cuts
+                            start_pool = time()
+                            ineq = Cut(cut)
+                            if push!(node.cutpool, ineq)
+                                pb.info.cuts_infos.cuts_applied += 1 ; pb.info.cuts_infos.mp_cuts += 1
+                                con = JuMP.@constraint(pb.m, cut[2:end]'*pb.varArray ≤ cut[1]) ; push!(node.con_cuts, con)
+                                con = JuMP.@constraint(pb.lp_copied, cut[2:end]'*pb.varArray_copied ≤ cut[1]) ; push!(node.con_cuts_copied, con)
+                            end
+                            pb.info.cuts_infos.times_oper_cutPool += (time() - start_pool)
+
+                        end
+                        
+                        break
+                    end
+
+                end
+
+            end #for
+        end #while
+
+        # ---------------------------------------------------
+        # 3. re-optimize by solving dicho -> LBS
+        # ---------------------------------------------------
+        if cut_counter > 0
+
+            if pb.param.root_relax
+                reoptimize_LBS(node, pb, incumbent, cut_off, round_results, verbose; args)
+            else
+                pruned = compute_LBS(node, pb, incumbent, round_results, verbose; args)
+                if pruned return true end
+            end
+
+            LBS = node.RBS.natural_order_vect.sols
+
+            # in case of infeasibility
+            if length(LBS)==0 return true end
+        end
+
+        # --------------------------------------------------
+        # 2. stop if no more valid cut can be found
+        # --------------------------------------------------
+        if cut_counter/length(LBS) < 0.3
+            return false 
+        end
+
+    end #while
     return false 
 end

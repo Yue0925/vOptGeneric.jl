@@ -37,5 +37,5 @@ function readHKP(fname::String)::Vector{HKP}
     return instances
 end
 
-# readHKP("./hardinstances_pisinger/knapPI_11_20_1000.csv")
+
 
