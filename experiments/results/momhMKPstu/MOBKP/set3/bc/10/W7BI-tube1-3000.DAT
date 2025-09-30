@@ -29,10 +29,10 @@ mixed2 = false
 
  # ----------- info about cuts : 
 ite_total = 17 
-cuts_applied = 50 
-sp_cuts = 5 
-mp_cuts = 45 
-cuts_total = 50 
+cuts_applied = 58 
+sp_cuts = 58 
+mp_cuts = 0 
+cuts_total = 58 
 times_calling_dicho = 0.02 
 times_calling_separators = 0.0 
 times_oper_cutPool = 0.0 

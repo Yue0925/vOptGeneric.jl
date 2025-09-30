@@ -233,7 +233,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                 l += 1 ; continue    
             end
             
-            for ∇ = max_step:-1:0 
+            for ∇ = 0:-1:0 #max_step
                 if ∇ == 0
                     (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
                     if new_cut 
@@ -330,6 +330,7 @@ function MP_cutting_planes2(node::Node, pb::BO01Problem, incumbent::IncumbentSet
     # ------------------------------------------------------------------------------
     ite = 0 ; if !isRoot(node) loop_limit = 1 end 
 
+
     while ite < loop_limit 
         ite += 1 ; pb.info.cuts_infos.ite_total += 1 
 
@@ -363,10 +364,18 @@ function MP_cutting_planes2(node::Node, pb::BO01Problem, incumbent::IncumbentSet
 
                 else 
                     if ∇ > length(fract_pts) continue end 
-                    neighbours = fract_pts[1:∇] ; r = maximum(neighbours)
-                    if minimum(neighbours) < l
-                        l = minimum(neighbours) 
+                    neighbours = fract_pts[1:∇] 
+                    _l = minimum(neighbours) ; r = maximum(neighbours)
+                    
+                    if abs(_l - l) > abs(r - l)
+                        l = _l ; r = l 
                     end
+
+                    if ∇ == 1
+                        l = fract_pts[1] < l ? fract_pts[1] : l
+                        r = fract_pts[1] > l ? fract_pts[1] : l
+                    end
+                   
                     if !isCutable(node, l, r) continue end
 
                     start_sep = time()

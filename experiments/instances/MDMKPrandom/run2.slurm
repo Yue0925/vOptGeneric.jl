@@ -10,7 +10,7 @@
 #SBATCH --output=aleaMDMKP_EPB_param.txt
 #SBATCH --error=aleaMDMKP_EPB_param.txt
 
-methodes=("bb_EPB" "bc_EPB")
+methodes=("bc_EPB") # "bb_EPB"
 
 for file in ./instances/PCC/*; do
     for mthd in ${methodes[@]}; do

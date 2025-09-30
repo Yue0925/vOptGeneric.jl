@@ -19,7 +19,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
 
         xₗ_star = LBS[l].xEquiv[1]
 
-        for ∇ = max_step:-1:0 
+        for ∇ = 0:-1:0 #max_step
             if ∇ == 0
                 # single-point cut 
                 for (k, cuts) in node.pred.cutpool.hashMap
@@ -124,7 +124,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         end
         # ---------------------------
 
-        pruned = MP_cutting_planes2(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
+        pruned = MP_cutting_planes(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
 
         # # ----------------------------------------------------------
         # # todo : heuristics Gravity machine
