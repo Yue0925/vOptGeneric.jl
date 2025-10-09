@@ -233,7 +233,7 @@ function MP_cutting_planes(node::Node, pb::BO01Problem, incumbent::IncumbentSet,
                 l += 1 ; continue    
             end
             
-            for ∇ = 0:-1:0 #max_step
+            for ∇ = max_step:-1:0
                 if ∇ == 0
                     (_, new_cut) = SP_cut_off(l, node, pb, round_results, verbose ; args...) 
                     if new_cut 
@@ -368,7 +368,7 @@ function MP_cutting_planes2(node::Node, pb::BO01Problem, incumbent::IncumbentSet
                     _l = minimum(neighbours) ; r = maximum(neighbours)
                     
                     if abs(_l - l) > abs(r - l)
-                        l = _l ; r = l 
+                        r = l ; l = _l 
                     end
 
                     if ∇ == 1

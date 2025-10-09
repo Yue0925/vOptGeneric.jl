@@ -112,10 +112,10 @@ function solve(fname::String, method::String)
 
     # # todo : 
     # if n!=40 return end
-    # # todo : if the output file already exists 
-    # if isfile(outputName)
-    #     return
-    # end
+    # todo : if the output file already exists 
+    if isfile(outputName)
+        return
+    end
 
 
     println("\n -----------------------------")

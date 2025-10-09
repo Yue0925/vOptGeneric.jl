@@ -186,13 +186,13 @@ function main(fname::String)
     # :bc_rootRelax , 
     # :bc_rootRelaxEPB,
     # :bc_rootRelaxCP, 
-    # :bc_rootRelaxCPEPB,
+    :bc_rootRelaxCPEPB,
 
     # :dicho, 
     # :epsilon, 
     # :bb, 
     # :bc, 
-    :bc_EPB,
+    # :bc_EPB,
     # :bb_EPB,
     ] # 
 

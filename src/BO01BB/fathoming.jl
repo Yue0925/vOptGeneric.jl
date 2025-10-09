@@ -19,7 +19,7 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
 
         xₗ_star = LBS[l].xEquiv[1]
 
-        for ∇ = 0:-1:0 #max_step
+        for ∇ = max_step:-1:0 
             if ∇ == 0
                 # single-point cut 
                 for (k, cuts) in node.pred.cutpool.hashMap
@@ -70,6 +70,98 @@ function loadingCutInPool(node::Node, pb::BO01Problem)
 
 end
 
+function loadingCutInPool2(node::Node, pb::BO01Problem)
+    if isRoot(node) return end 
+
+    LBS = node.RBS.natural_order_vect.sols
+
+    is_cut = [(LBS[l].is_binary || length(LBS[l].xEquiv[1]) == 0) ? true : false  for l in 1:length(LBS)]
+    visiting_pts = [is_cut[l] for l in 1:length(LBS)] ; pts = shuffle!([l for l in 1:length(LBS) if !is_cut[l] ])
+
+    while (sum(visiting_pts) < length(LBS))
+        # randomly pick up a point
+        i = rand(1:length(pts)) 
+        l = pts[i] ; deleteat!(pts, i)
+        visiting_pts[l] = true 
+        if is_cut[l] continue end 
+
+        # sort the rest of fractional pts 
+        fract_pts = [i for i in 1:length(LBS) if !is_cut[i] ]
+        sort!(fract_pts, by = x -> sum(abs.(LBS[l].xEquiv[1] - LBS[x].xEquiv[1]) ) )
+
+
+        for ∇ = max_step:-1:0 
+            if ∇ == 0
+                xₗ_star = LBS[l].xEquiv[1]
+                # single-point cut 
+                for (k, cuts) in node.pred.cutpool.hashMap
+                    for cut in cuts
+                        α = cut.row
+                        violationₗ = maximum([ (xₗ_star'*α[2:end] - α[1]), 0.0 ])
+                        if violationₗ > 0.0
+                            # ineq = Cut(α)
+                            is_cut[l] = true
+                            pb.info.cuts_infos.cuts_applied += 1 ; pb.info.cuts_infos.sp_cuts += 1
+                            if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), violationₗ, k))
+                                con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
+                                con = JuMP.@constraint(pb.lp_copied, α[2:end]'*pb.varArray_copied ≤ α[1]) ; push!(node.con_cuts_copied, con)
+                            end
+                        end
+                    end
+                end
+
+            else 
+                if ∇ > length(fract_pts) continue end 
+
+                neighbours = fract_pts[1:∇] 
+                _l = minimum(neighbours) ; r = maximum(neighbours)
+                
+                if abs(_l - l) > abs(r - l)
+                    r = l ; l = _l 
+                end
+
+                if ∇ == 1
+                    l = fract_pts[1] < l ? fract_pts[1] : l
+                    r = fract_pts[1] > l ? fract_pts[1] : l
+                end
+                
+                if !isCutable(node, l, r) continue end
+
+                xₗ_star = LBS[l].xEquiv[1]
+                xᵣ_star = LBS[r].xEquiv[1] ; applied = false
+
+                # multi-point cut 
+                for (k, cuts) in node.pred.cutpool.hashMap
+                    for cut in cuts 
+                        α = cut.row
+                        violationₗ = maximum([ (xₗ_star'*α[2:end] - α[1]), 0.0 ])
+                        violationᵣ = maximum([ (xᵣ_star'*α[2:end] - α[1]), 0.0 ])
+                        viol = maximum([violationₗ, violationᵣ])
+                        if viol > 0.0
+                            applied = true
+                            for i=l:r 
+                                is_cut[i] = true
+                            end 
+
+                            # ineq = Cut(α)
+                            pb.info.cuts_infos.cuts_applied += 1 ; pb.info.cuts_infos.mp_cuts += 1
+                            if push!(node.cutpool, cut)# && push_cutScore(node.cuts_ref, CutScore(length(node.cutpool.hashMap[k]), viol, k))
+                                con = JuMP.@constraint(pb.m, α[2:end]'*pb.varArray ≤ α[1]) ; push!(node.con_cuts, con)
+                                con = JuMP.@constraint(pb.lp_copied, α[2:end]'*pb.varArray_copied ≤ α[1]) ; push!(node.con_cuts_copied, con)
+                            end
+                        end
+                    end
+                end
+
+                if applied break end 
+            end
+
+        end #for
+
+    end
+
+end
+
 function GM_heuristic(problem::BO01Problem, incumbent::IncumbentSet)
     nb_feas = 0 ; null_pt = 0
     GMtime = time()
@@ -113,7 +205,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         loop_limit = 5
         # step 2 : add valid cuts constraints then re-optimize 
         start_processing = time()
-        loadingCutInPool( node, pb)      # complexity O(pt ⋅ cuts)
+        loadingCutInPool2( node, pb)      # complexity O(pt ⋅ cuts)
         pb.info.cuts_infos.times_add_retrieve_cuts += (time() - start_processing)
 
         # todo : test re-opt
@@ -124,7 +216,7 @@ function LPRelaxByDicho(node::Node, pb::BO01Problem, incumbent::IncumbentSet, ro
         end
         # ---------------------------
 
-        pruned = MP_cutting_planes(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
+        pruned = MP_cutting_planes2(node, pb, incumbent, loop_limit, round_results, verbose ; args...)
 
         # # ----------------------------------------------------------
         # # todo : heuristics Gravity machine
