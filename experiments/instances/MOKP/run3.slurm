@@ -12,15 +12,14 @@
 #SBATCH --error=MOKP3Out.txt
 
 
-
-methodes=("bc_rootRelax")
-# "bc_rootRelaxCP" "bc_rootRelaxCPEPB" "bc_rootRelaxEPB" "epsilon"
+methodes=("bc_rootRelaxCP") # "bc"
+#   "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB" 
 
 
 
 for file in ./refKP/*.dat; do
     for mthd in ${methodes[@]}; do
         echo "$file" " ... " $mthd
-        srun ../../../../julia-1.7.3/bin/julia vOptMOKPmixed.jl "$file" $mthd
+        srun julia vOptMOKP.jl "$file" $mthd
     done
 done

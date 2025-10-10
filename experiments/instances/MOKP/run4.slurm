@@ -13,14 +13,14 @@
 
 
 
-methodes=("bc_rootRelaxCP" "bc_rootRelaxCPEPB")
-# 
+methodes=("bc_rootRelaxCPEPB") # "bc"
+#   "bc_EPB" "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB" 
 
 
 
 for file in ./refKP/*.dat; do
     for mthd in ${methodes[@]}; do
         echo "$file" " ... " $mthd
-        srun ../../../../julia-1.7.3/bin/julia vOptMOKP.jl "$file" $mthd
+        srun julia vOptMOKP.jl "$file" $mthd
     done
 done

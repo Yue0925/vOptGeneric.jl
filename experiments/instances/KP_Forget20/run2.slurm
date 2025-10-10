@@ -13,7 +13,7 @@
 
 
 
-methodes=("bc_EPB") # "bc" 
+methodes=("bc_rootRelaxCPEPB") # "bc" 
 #  "bc_rootRelax" "bc_rootRelaxEPB" "bc_rootRelaxCP" "bc_rootRelaxCPEPB" 
 
 

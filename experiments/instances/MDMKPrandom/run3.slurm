@@ -10,11 +10,12 @@
 #SBATCH --output=aleaMDMKP_rootrelax_param.txt
 #SBATCH --error=aleaMDMKP_rootrelax_param.txt
 
-methodes=("bc_rootRelax")
+
+methodes=("bc_rootRelaxCP") # "bb" 
 
 for file in ./instances/PCC/*; do
     for mthd in ${methodes[@]}; do
         echo "$file ... " $mthd
-        srun ../../../../julia-1.7.3/bin/julia vOptMDMKPmixed.jl "$file" $mthd
+        srun julia vOptMDMKP.jl "$file" $mthd
     done
 done
