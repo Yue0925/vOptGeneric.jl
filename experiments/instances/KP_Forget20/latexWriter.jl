@@ -752,13 +752,13 @@ end
 
 
 # comparisons("KP_Forget")
-# comparisonsCP("KP_Forget")
-# comparisons4("KP_Forget")
-# comparisons5("KP_Forget")
+comparisonsCP("KP_Forget")
+comparisons4("KP_Forget")
+comparisons5("KP_Forget")
 
 # Cut_Branch("KP_Forget")
 
-final_table("KP_Forget")
+# final_table("KP_Forget")
 
 
 # n = 10 , count = 360 TO = Dict("bc_rootRelax" => 0) bc_rootRelax time 2.95 , node 72.63

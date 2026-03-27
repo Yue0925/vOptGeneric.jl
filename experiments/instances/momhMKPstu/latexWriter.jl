@@ -1492,14 +1492,14 @@ end
 
 # Cut_Branch("momhMKPstu/MOBKP/set3")
 
-# comparisons5("momhMKPstu/MOBKP/set3")
-# comparisons4("momhMKPstu/MOBKP/set3")
-# comparisonsCP("momhMKPstu/MOBKP/set3")
+comparisons5("momhMKPstu/MOBKP/set3")
+comparisons4("momhMKPstu/MOBKP/set3")
+comparisonsCP("momhMKPstu/MOBKP/set3")
 # comparisonThreeMethods("momhMKPstu/MOBKP/set3")
 # comparisons_tri("momhMKPstu/MOBKP/set3")
 # -------------------------------------------------
 
-final_table("momhMKPstu/MOBKP/set3")
+# final_table("momhMKPstu/MOBKP/set3")
 
 
 # detailedMOBB_perform("momhMKPstu/MOBKP/set3")

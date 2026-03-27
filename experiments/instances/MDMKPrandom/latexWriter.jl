@@ -1007,9 +1007,9 @@ end
 # comparisonsCP("MDMKPrandom")
 
 # comparisons4("MDMKPrandom")
-# comparisons5("MDMKPrandom")
+comparisons5("MDMKPrandom")
 # comparisons_tri("MDMKPrandom")
 
 # CUt_Branch("MDMKPrandom")
 
-final_table("MDMKPrandom")
+# final_table("MDMKPrandom")

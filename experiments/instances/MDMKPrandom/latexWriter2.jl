@@ -441,21 +441,22 @@ function comparisonsLambdaLimits(instances::String)
         for n in keys(count_per_n)
     
             fig, ax = plt.subplots()
+            plt.size(800,1600)
             ax.plot(λ_limits,  [p[2] for p in sort(collect(avg_time[m][n]), by = x->x[1])] ,
                     color="red", marker="o", linewidth=2.0, linestyle="--"
             )
-            ax.set_xlabel("|λ|", fontsize=14)
-            ax.set_ylabel("Average time(s)", color="red", fontsize=14)
-            ax.set_title("BOMDMKP avg n = $n", fontsize=14)
+            ax.set_xlabel("|λ|", fontsize=12)
+            ax.set_ylabel("Average time(s)", color="red", fontsize=10)
+            ax.set_title("BOMDMKP avg n = $n", fontsize=12)
         
             ax2=ax.twinx()
             ax2.plot(λ_limits, [p[2] for p in sort(collect(avg_node[m][n]), by = x->x[1])], 
                     color="blue", marker="o", linewidth=2.0, linestyle="--"
             )
-            ax2.set_ylabel("Average explored nodes", color="blue", fontsize=14)
+            ax2.set_ylabel("Average explored nodes", color="blue", fontsize=10)
             # plt.show()
         
-            savefig(work_dir * "/$(m)_$(n)_times_nodes.png")
+            savefig(work_dir * "/$(m)_$(n)_times_nodes.png", bbox_inches="tight")
             plt.close()
 
         end

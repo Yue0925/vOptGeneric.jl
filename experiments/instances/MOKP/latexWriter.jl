@@ -709,12 +709,12 @@ end
 
 
 # comparisons("MOKP")
-# comparisonsCP("MOKP")
-# comparisons4("MOKP")
-# comparisons5("MOKP")
+comparisonsCP("MOKP")
+comparisons4("MOKP")
+comparisons5("MOKP")
 # Cut_Branch("MOKP")
 
-final_table("MOKP")
+# final_table("MOKP")
 
 
 # n = 10 , count = 30, (epsilon) TO = 0
